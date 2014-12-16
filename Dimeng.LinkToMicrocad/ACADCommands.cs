@@ -19,16 +19,25 @@ namespace Dimeng.LinkToMicrocad
 {
     public class Commands
     {
+        /// <summary>
+        /// Read temp.xml and popup a prompt window for product options.
+        /// Then draw a autocad block dwg file.
+        /// </summary>
         [CommandMethod("AK", "New_dm", CommandFlags.Modal)]
         public void NewBlock()
         {
-            System.Windows.MessageBox.Show("Hello World!");
+            var dmHelper = new DimengHelper();
+            dmHelper.ShowPromptAndDrawBlock();
         }
 
+        /// <summary>
+        /// Read temp.xml and then directly draw a autocad block dwg file.
+        /// </summary>
         [CommandMethod("AK", "Edit_dm", CommandFlags.Modal)]
         public void EditBlock()
         {
-            System.Windows.MessageBox.Show("Hello World!");
+            var dmHelper = new DimengHelper();
+            dmHelper.EditAndDrawBlock();
         }
 
         [CommandMethod("TestEnvironment", CommandFlags.Modal)]
