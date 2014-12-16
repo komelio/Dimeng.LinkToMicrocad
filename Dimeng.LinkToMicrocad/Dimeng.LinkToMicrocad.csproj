@@ -53,7 +53,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>Dimeng.pfx</AssemblyOriginatorKeyFile>
@@ -89,6 +89,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ACADCommands.resx</DependentUpon>
     </Compile>
+    <Compile Include="Dimeng\AKInfo.cs" />
+    <Compile Include="Dimeng\AKProduct.cs" />
+    <Compile Include="Dimeng\BlockDrawer.cs" />
     <Compile Include="Dimeng\DimengHelper.cs" />
     <Compile Include="myPlugin.cs" />
     <Compile Include="ACADCommands.cs" />
