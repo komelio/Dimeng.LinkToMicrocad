@@ -52,13 +52,19 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Dimeng.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AcDbMgd">
-      <HintPath>..\..\..\..\..\ObjectARX 2010\inc-x64\AcDbMgd.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\ObjectARX 2012\inc\AcDbMgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="AcMgd">
-      <HintPath>..\..\..\..\..\ObjectARX 2010\inc-x64\AcMgd.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\ObjectARX 2012\inc\AcMgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -78,20 +84,21 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="myCommands.Designer.cs">
+    <Compile Include="ACADCommands.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>myCommands.resx</DependentUpon>
+      <DependentUpon>ACADCommands.resx</DependentUpon>
     </Compile>
+    <Compile Include="Dimeng\DimengHelper.cs" />
     <Compile Include="myPlugin.cs" />
-    <Compile Include="myCommands.cs" />
+    <Compile Include="ACADCommands.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="myCommands.resx">
-      <DependentUpon>myCommands.cs</DependentUpon>
+    <EmbeddedResource Include="ACADCommands.resx">
+      <DependentUpon>ACADCommands.cs</DependentUpon>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>myCommands.Designer.cs</LastGenOutput>
+      <LastGenOutput>ACADCommands.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -110,6 +117,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Dimeng.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
