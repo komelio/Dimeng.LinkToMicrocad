@@ -58,6 +58,10 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>Dimeng.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="AcDbMgd">
       <HintPath>..\..\..\..\..\..\ObjectARX 2012\inc\AcDbMgd.dll</HintPath>

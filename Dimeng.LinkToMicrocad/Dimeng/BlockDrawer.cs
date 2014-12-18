@@ -1,5 +1,6 @@
 ﻿using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.Geometry;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -36,6 +37,8 @@ namespace Dimeng.LinkToMicrocad
 
                 Solid3d solid = new Solid3d();
                 solid.CreateBox(width, height, depth);
+
+                solid.TransformBy(Matrix3d.Displacement(new Vector3d(width/2,-depth/2,height/2)));
 
                 btr.AppendEntity(solid);
                 acTrans.AddNewlyCreatedDBObject(solid, true);
