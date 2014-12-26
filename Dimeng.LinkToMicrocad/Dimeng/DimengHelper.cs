@@ -29,7 +29,7 @@ namespace Dimeng.LinkToMicrocad
             string tempXMLFilePath = Path.Combine(folderPath, "temp.xml");
 
             AKProduct product = AKProduct.Load(tempXMLFilePath);
-            BlockDrawer drawer = new BlockDrawer(product.Tab.VarX, product.Tab.VarY, product.Tab.VarZ, folderPath);
+            BlockDrawer drawer = new BlockDrawer(product.Tab.VarX, product.Tab.VarZ, product.Tab.VarY, folderPath);
             drawer.DrawAndSaveAs();
         }
 

@@ -11,6 +11,7 @@ using System.Text;
 using System.IO;
 using System.Xml.Linq;
 using System.Linq;
+using System.Windows;
 
 // This line is not mandatory, but improves loading performances
 [assembly: CommandClass(typeof(Dimeng.LinkToMicrocad.Commands))]
@@ -19,6 +20,12 @@ namespace Dimeng.LinkToMicrocad
 {
     public class Commands
     {
+        [CommandMethod("AK","HelloWorld",CommandFlags.Modal)]
+        public void HelloWorld()
+        {
+            MessageBox.Show("Hello World!");
+        }
+
         /// <summary>
         /// Read temp.xml and popup a prompt window for product options.
         /// Then draw a autocad block dwg file.

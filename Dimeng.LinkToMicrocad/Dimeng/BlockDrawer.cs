@@ -36,9 +36,9 @@ namespace Dimeng.LinkToMicrocad
                 BlockTableRecord btr = (BlockTableRecord)acTrans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
 
                 Solid3d solid = new Solid3d();
-                solid.CreateBox(width, height, depth);
+                solid.CreateBox(width, depth, height);
 
-                solid.TransformBy(Matrix3d.Displacement(new Vector3d(width/2,-depth/2,height/2)));
+                solid.TransformBy(Matrix3d.Displacement(new Vector3d(width / 2, -depth / 2, height / 2)));
 
                 btr.AppendEntity(solid);
                 acTrans.AddNewlyCreatedDBObject(solid, true);

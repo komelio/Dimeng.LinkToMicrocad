@@ -22,7 +22,7 @@ namespace Dimeng.LinkToMicrocad
                 AKInfo akInfo = new AKInfo();
 
                 RegistryKey hkml = Registry.LocalMachine;
-                RegistryKey akr14 = hkml.OpenSubKey("SOFTWARE\\Microcad\\autokitchen\\R14", true);
+                RegistryKey akr14 = hkml.OpenSubKey("SOFTWARE\\Microcad\\autodecco_studio\\R11", true);
 
                 akInfo.Path = akr14.GetValue("").ToString();
                 akInfo.Country = akr14.GetValue("Country").ToString();
