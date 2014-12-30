@@ -24,8 +24,15 @@ namespace Dimeng.LinkToMicrocad
 
 
             product.Tab = new TabInfo();
+
+            var tab = from t in xml.Elements("Tab")
+                      select t;
+            product.Tab.DWG = tab.SingleOrDefault().Attribute("DWG").Value;
+
             var vars = from t in xml.Elements("Tab").Elements("Var")
                        select t;
+
+           
 
             foreach (var v in vars)
             {

@@ -16,12 +16,12 @@ namespace Dimeng.LinkToMicrocad
         double depth;
         string filePath;
 
-        public BlockDrawer(double width, double height, double depth, string folderPath)
+        public BlockDrawer(double width, double height, double depth, string filepath)
         {
             this.width = width;
             this.height = height;
             this.depth = depth;
-            filePath = Path.Combine(folderPath, "temp.dwg");
+            this.filePath = filepath;
         }
 
         public void DrawAndSaveAs()
