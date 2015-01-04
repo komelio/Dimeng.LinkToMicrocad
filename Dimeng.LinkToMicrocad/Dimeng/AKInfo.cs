@@ -11,9 +11,7 @@ namespace Dimeng.LinkToMicrocad
         public string Path { get; set; }
         public string Country { get; set; }
         public string MeterToUnit { get; set; }
-        public string Product { get; set; }
         public string SerialNumber { get; set; }
-        public string KeyNumber { get; set; }
 
         public static AKInfo GetInfo()
         {
@@ -27,9 +25,7 @@ namespace Dimeng.LinkToMicrocad
                 akInfo.Path = akr14.GetValue("").ToString();
                 akInfo.Country = akr14.GetValue("Country").ToString();
                 akInfo.MeterToUnit = akr14.GetValue("MeterToUnit").ToString();
-                akInfo.Product = akr14.GetValue("Product").ToString();
                 akInfo.SerialNumber = akr14.GetValue("SerialNumber").ToString();
-                akInfo.KeyNumber = akr14.GetValue("T").ToString();
 
                 return akInfo;
             }

@@ -97,6 +97,7 @@
     <Compile Include="Dimeng\AKProduct.cs" />
     <Compile Include="Dimeng\BlockDrawer.cs" />
     <Compile Include="Dimeng\DimengHelper.cs" />
+    <Compile Include="Dimeng\UnitConverter.cs" />
     <Compile Include="myPlugin.cs" />
     <Compile Include="ACADCommands.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
