@@ -1,0 +1,73 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Dimeng.WoodEngine.SpreadCommons;assembly=Dimeng.WoodEngine.CommonSpreadControls" 
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" x:Class="Dimeng.WoodEngine.Prompts.Calculator"
+        Title="计算器" Height="316" Width="373" Icon="/Dimeng.WoodEngine.Prompts;component/Images/Calculator.ico" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <local:BoolToOppositeConverter x:Key="BoolToOppositeConverter"/>
+        <DataTemplate x:Key="DataTemplate1">
+        	<Grid Margin="0,0,0,5">
+        		<Grid.RowDefinitions>
+        			<RowDefinition Height="auto" />
+        			<RowDefinition Height="auto" />
+        		</Grid.RowDefinitions>
+        		<Grid.ColumnDefinitions>
+        			<ColumnDefinition Width="250" />
+        			<ColumnDefinition Width="60" />
+        		</Grid.ColumnDefinitions>
+        		<TextBlock Text="{Binding Name}" HorizontalAlignment="Left" Margin="0,2"/>
+        		<TextBox Grid.Row="1" Text="{Binding Value}" Width="200" HorizontalAlignment="Left" VerticalAlignment="Top"
+        			IsEnabled="{Binding IsEqual, Converter={StaticResource BoolToOppositeConverter}}" Margin="0,2"/>
+        		<CheckBox Grid.Column="1" Grid.RowSpan="2" IsChecked="{Binding IsEqual}"
+        			VerticalAlignment="Center" Content="相等" />
+        	</Grid>
+        </DataTemplate>
+        <Style x:Key="ListBoxItemStyle1" TargetType="{x:Type ListBoxItem}">
+        	<Setter Property="Background" Value="Transparent"/>
+        	<Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+        	<Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+        	<Setter Property="Padding" Value="2,0,0,0"/>
+        	<Setter Property="Template">
+        		<Setter.Value>
+        			<ControlTemplate TargetType="{x:Type ListBoxItem}">
+        				<Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+        					<ContentPresenter x:Name="contentPresenter" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+        				</Border>
+        				<ControlTemplate.Triggers>
+        					<!--
+        					<Trigger Property="IsSelected" Value="true">
+        						<Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+        						<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+        					</Trigger>
+							-->
+        					<MultiTrigger>
+        						<MultiTrigger.Conditions>
+        							<Condition Property="IsSelected" Value="true"/>
+        							<Condition Property="Selector.IsSelectionActive" Value="false"/>
+        						</MultiTrigger.Conditions>
+        						<Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        						<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        					</MultiTrigger>
+        					<Trigger Property="IsEnabled" Value="false">
+        						<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+        					</Trigger>
+        				</ControlTemplate.Triggers>
+        			</ControlTemplate>
+        		</Setter.Value>
+        	</Setter>
+        </Style>
+      
+    </Window.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="30"/>
+		</Grid.RowDefinitions>
+		<Button Content="确定" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="Button_Click" Command="{Binding MakePromptValueCommand}"/>
+		<Button Content="取消" HorizontalAlignment="Left" Margin="90,0,0,8" Grid.Row="1" Width="75" Click="Button_Click_1"/>
+		<Button Content="计算" HorizontalAlignment="Left" Margin="279,0,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75"
+			Command="{Binding CalculateCommand}"/>
+		<ListBox ItemsSource="{Binding Items}" Margin="10" BorderThickness="0" ItemTemplate="{DynamicResource DataTemplate1}" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" />
+	</Grid>
+</Window>

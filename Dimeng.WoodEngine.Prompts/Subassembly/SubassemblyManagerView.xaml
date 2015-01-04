@@ -1,0 +1,307 @@
+﻿<Window xmlns:CommonSpreadControls="clr-namespace:Dimeng.WoodEngine.CommonSpreadControls;assembly=Dimeng.WoodEngine.CommonSpreadControls" 
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+		xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+        xmlns:GalaSoft_MvvmLight_Command="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras"
+        xmlns:local="clr-namespace:Dimeng.WoodEngine.Prompts"
+		x:Class="Dimeng.WoodEngine.Prompts.SubassemblyManagerView"
+        Title="组件管理器" Height="414" Width="690" Icon="/Dimeng.WoodEngine.Prompts;component/Images/Order.ico" 
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <local:SubImageConverter x:Key="subImageConverter" />
+    </Window.Resources>
+    <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualStateGroup.Transitions>
+                    <VisualTransition GeneratedDuration="0:0:0.2"/>
+                </VisualStateGroup.Transitions>
+                <VisualState x:Name="ShowFormulaState">
+                    <Storyboard>
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="grid">
+                            <EasingDoubleKeyFrame KeyTime="0" Value="105"/>
+                        </DoubleAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="BaseState"/>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="1" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <CommonSpreadControls:FormulaEditor Grid.Row="1" />
+            <DataGrid Name="lv" AutoGenerateColumns="False" 
+                      ItemsSource="{Binding Subassemblies}" 
+                      SelectedItem="{Binding SelectedItem}"
+                      CanUserAddRows="False"
+                      >
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="组件提示屏" Command="{Binding ShowSubassemblyPromptCommand}" />
+                        <MenuItem Header="选取关键点" Command="{Binding SelectInsertPointCommmand}" />
+                        <MenuItem Header="选取角点" Command="{Binding SelectRangeSizeCommand}" />
+                        <Separator />
+                        <MenuItem Header="转为独立组件" Command="{Binding TurnSubIntoUniqueCommand}" />
+                        <Separator />
+                        <MenuItem Header="复制组件" Command="{Binding CopySubCommand}" />
+                        <MenuItem Header="删除组件" Command="{Binding DeleteSubCommand}" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Binding="{Binding IsUnique}" ClipboardContentBinding="{x:Null}" Header="U" CanUserReorder="False" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding Name.PropertyValue}" ClipboardContentBinding="{x:Null}" Header="组件描述" CanUserReorder="False">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridTextColumn_MouseClick" />
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Qty.PropertyValue}" ClipboardContentBinding="{x:Null}" Header="数量" CanUserReorder="False">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridTextColumn_MouseClick" />
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Width.PropertyValue}" ClipboardContentBinding="{x:Null}" Header="宽度" CanUserReorder="False">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridTextColumn_MouseClick" />
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Height.PropertyValue}" ClipboardContentBinding="{x:Null}" Header="高度" CanUserReorder="False">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridTextColumn_MouseClick" />
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Depth.PropertyValue}" ClipboardContentBinding="{x:Null}" Header="深度" CanUserReorder="False">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridTextColumn_MouseClick" />
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding XOrigin.PropertyValue}" ClipboardContentBinding="{x:Null}" Header="X坐标" CanUserReorder="False">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridTextColumn_MouseClick" />
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding YOrigin.PropertyValue}" ClipboardContentBinding="{x:Null}" Header="Y坐标" CanUserReorder="False">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridTextColumn_MouseClick" />
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding ZOrigin.PropertyValue}" ClipboardContentBinding="{x:Null}" Header="Z坐标" CanUserReorder="False">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridTextColumn_MouseClick" />
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding ZRotation.PropertyValue}" ClipboardContentBinding="{x:Null}" Header="旋转角度" CanUserReorder="False">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridTextColumn_MouseClick" />
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <!--<ListView Name="lv" SelectedItem="{Binding SelectedItem}" ItemsSource="{Binding Subassemblies}">
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="组件提示屏" Command="{Binding ShowSubassemblyPromptCommand}" />
+                        <MenuItem Header="选取关键点" Command="{Binding SelectInsertPointCommmand}" />
+                        <MenuItem Header="选取角点" Command="{Binding SelectRangeSizeCommand}" />
+                        <Separator />
+                        <MenuItem Header="转为独立组件" Command="{Binding TurnSubIntoUniqueCommand}" />
+                        <Separator />
+                        <MenuItem Header="复制组件" Command="{Binding CopySubCommand}" />
+                        <MenuItem Header="删除组件" Command="{Binding DeleteSubCommand}" />
+                    </ContextMenu>
+                </ListView.ContextMenu>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="U" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsUnique}" IsEnabled="False" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="组件名称"  >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name.PropertyValue}" HorizontalAlignment="Stretch">
+                                        <TextBlock.InputBindings>
+                                            <MouseBinding Gesture="LeftDoubleClick"
+                                                          Command="{Binding ElementName=lv,Path=DataContext.ModifyFormulaCommand}" 
+                                                          CommandParameter="{Binding Name}"/>
+                                        </TextBlock.InputBindings>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="数量" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Qty.PropertyValue}" HorizontalAlignment="Stretch">
+                                        <TextBlock.InputBindings>
+                                            <MouseBinding Gesture="LeftDoubleClick" 
+                                                          Command="{Binding ElementName=lv,Path=DataContext.ModifyFormulaCommand}" 
+                                                          CommandParameter="{Binding Qty}"/>
+                                        </TextBlock.InputBindings>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="宽度" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Width.PropertyValue}" HorizontalAlignment="Stretch">
+                                        <TextBlock.InputBindings>
+                                            <MouseBinding Gesture="LeftDoubleClick" 
+                                                          Command="{Binding ElementName=lv,Path=DataContext.ModifyFormulaCommand}" 
+                                                          CommandParameter="{Binding Width}"/>
+                                        </TextBlock.InputBindings>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="高度" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Height.PropertyValue}" HorizontalAlignment="Stretch">
+                                        <TextBlock.InputBindings>
+                                            <MouseBinding Gesture="LeftDoubleClick" 
+                                                          Command="{Binding ElementName=lv,Path=DataContext.ModifyFormulaCommand}" 
+                                                          CommandParameter="{Binding Height}"/>
+                                        </TextBlock.InputBindings>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="深度" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Depth.PropertyValue}" HorizontalAlignment="Stretch">
+                                        <TextBlock.InputBindings>
+                                            <MouseBinding Gesture="LeftDoubleClick" 
+                                                          Command="{Binding ElementName=lv,Path=DataContext.ModifyFormulaCommand}" 
+                                                          CommandParameter="{Binding Depth}"/>
+                                        </TextBlock.InputBindings>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="注解" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Comments.PropertyValue}" HorizontalAlignment="Stretch">
+                                        <TextBlock.InputBindings>
+                                            <MouseBinding Gesture="LeftDoubleClick" 
+                                                          Command="{Binding ElementName=lv,Path=DataContext.ModifyFormulaCommand}" 
+                                                          CommandParameter="{Binding Comments}"/>
+                                        </TextBlock.InputBindings>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="X坐标">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding XOrigin.PropertyValue}" HorizontalAlignment="Stretch">
+                                        <TextBlock.InputBindings>
+                                            <MouseBinding Gesture="LeftDoubleClick" 
+                                                          Command="{Binding ElementName=lv,Path=DataContext.ModifyFormulaCommand}" 
+                                                          CommandParameter="{Binding XOrigin}"/>
+                                        </TextBlock.InputBindings>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Y坐标" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding YOrigin.PropertyValue}" HorizontalAlignment="Stretch">
+                                        <TextBlock.InputBindings>
+                                            <MouseBinding Gesture="LeftDoubleClick" 
+                                                          Command="{Binding ElementName=lv,Path=DataContext.ModifyFormulaCommand}" 
+                                                          CommandParameter="{Binding YOrigin}"/>
+                                        </TextBlock.InputBindings>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Z坐标" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ZOrigin.PropertyValue}" HorizontalAlignment="Stretch">
+                                        <TextBlock.InputBindings>
+                                            <MouseBinding Gesture="LeftDoubleClick" 
+                                                          Command="{Binding ElementName=lv,Path=DataContext.ModifyFormulaCommand}" 
+                                                          CommandParameter="{Binding ZOrigin}"/>
+                                        </TextBlock.InputBindings>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Z旋转">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ZRotation.PropertyValue}" HorizontalAlignment="Stretch">
+                                        <TextBlock.InputBindings>
+                                            <MouseBinding Gesture="LeftDoubleClick" 
+                                                          Command="{Binding ElementName=lv,Path=DataContext.ModifyFormulaCommand}" 
+                                                          CommandParameter="{Binding ZRotation}"/>
+                                        </TextBlock.InputBindings>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>-->
+        </Grid>
+        <Grid Margin="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="180"/>
+            </Grid.RowDefinitions>
+            <TreeView x:Name="subassemblies" ItemsSource="{Binding Categories}" >
+                <i:Interaction.Triggers >
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <GalaSoft_MvvmLight_Command:EventToCommand Command="{Binding AddNewSubassemblyCommand}" CommandParameter="{Binding SelectedValue, ElementName=subassemblies}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Subassemblies}" >
+                        <TextBlock Text="{Binding Name}" />
+                        <HierarchicalDataTemplate.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </HierarchicalDataTemplate.ItemTemplate>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+            <Image Grid.Row="1" Source="{Binding SelectedValue, ElementName=subassemblies ,Converter={StaticResource subImageConverter}}" />
+        </Grid>
+    </Grid>
+</Window>
