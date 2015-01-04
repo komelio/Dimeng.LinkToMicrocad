@@ -8,15 +8,15 @@ using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.EditorInput;
 
 // This line is not mandatory, but improves loading performances
-[assembly: ExtensionApplication(typeof(Dimeng.TestMicrocad.MyPlugin))]
+[assembly: ExtensionApplication(typeof(Dimeng.LinkToMicrocad.MyPlugin))]
 
-namespace Dimeng.TestMicrocad
+namespace Dimeng.LinkToMicrocad
 {
     public class MyPlugin : IExtensionApplication
     {
         void IExtensionApplication.Initialize()
         {
-            
+            LoggerHelper.Show();
         }
 
         void IExtensionApplication.Terminate()
