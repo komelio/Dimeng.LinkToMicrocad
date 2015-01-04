@@ -39,13 +39,13 @@ namespace Dimeng.LinkToMicrocad
                 switch (v.Attribute("Name").Value.ToString())
                 {
                     case "X":
-                        product.Tab.VarX = double.Parse(v.Attribute("Value").Value.Replace("mm",""));
+                        product.Tab.VarX = UnitConverter.GetValueFromString(v.Attribute("Value").Value);
                         break;
                     case "Y":
-                        product.Tab.VarY = double.Parse(v.Attribute("Value").Value.Replace("mm", ""));
+                        product.Tab.VarY = UnitConverter.GetValueFromString(v.Attribute("Value").Value);
                         break;
                     case "Z":
-                        product.Tab.VarZ = double.Parse(v.Attribute("Value").Value.Replace("mm", ""));
+                        product.Tab.VarZ = UnitConverter.GetValueFromString(v.Attribute("Value").Value);
                         break;
                 }
             }
