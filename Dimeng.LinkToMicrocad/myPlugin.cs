@@ -1,13 +1,11 @@
-﻿// (C) Copyright 2014 by  
-//
-using System;
+﻿using System;
 using Autodesk.AutoCAD.Runtime;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.EditorInput;
+using Dimeng.LinkToMicrocad.Logging;
 
-// This line is not mandatory, but improves loading performances
 [assembly: ExtensionApplication(typeof(Dimeng.LinkToMicrocad.MyPlugin))]
 
 namespace Dimeng.LinkToMicrocad
@@ -17,6 +15,10 @@ namespace Dimeng.LinkToMicrocad
         void IExtensionApplication.Initialize()
         {
             Dimeng.LinkToMicrocad.Logging.ConsoleHelper.Show();
+
+            Logger.GetLogger().Debug("-----------");
+            Logger.GetLogger().Debug("Program started");
+            Logger.GetLogger().Debug("-----------");
         }
 
         void IExtensionApplication.Terminate()
