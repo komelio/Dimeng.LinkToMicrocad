@@ -16,12 +16,13 @@ namespace Dimeng.LinkToMicrocad
     {
         void IExtensionApplication.Initialize()
         {
-            LoggerHelper.Show();
+            Dimeng.LinkToMicrocad.Logging.ConsoleHelper.Show();
         }
 
         void IExtensionApplication.Terminate()
         {
             // Do plug-in application clean up here
+            Dimeng.LinkToMicrocad.Logging.ConsoleHelper.Hide();
         }
 
     }
