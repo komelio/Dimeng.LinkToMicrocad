@@ -13,6 +13,9 @@ namespace Dimeng.LinkToMicrocad
 
         internal static AKProduct Load(string tempXMLFilePath)
         {
+            Logging.Logger.GetLogger().Debug("Getting cabinet information from temp.xml file...");
+            Logging.Logger.GetLogger().Debug("File path:" + tempXMLFilePath);
+
             AKProduct product = new AKProduct();
 
             XElement xml = XElement.Load(tempXMLFilePath);
@@ -27,12 +30,18 @@ namespace Dimeng.LinkToMicrocad
 
             var tab = from t in xml.Elements("Tab")
                       select t;
-            product.Tab.DWG = tab.SingleOrDefault().Attribute("DWG").Value;
+            var tabNode = tab.SingleOrDefault();
+            product.Tab.Name = tabNode.Attribute("Name").Value;
+            product.Tab.DWG = tabNode.Attribute("DWG").Value;
+            product.Tab.ID = tabNode.Attribute("ID").Value;
+            product.Tab.DMID = tabNode.Attribute("DMID").Value;
+            product.Tab.Photo = tabNode.Attribute("Photo").Value;
+            product.Tab.Description = tabNode.Attribute("Descprition") == null ? 
+                                        string.Empty : tabNode.Attribute("Description").Value;
+            product.Tab.CatalogPath = tabNode.Attribute("Path").Value;
 
             var vars = from t in xml.Elements("Tab").Elements("Var")
                        select t;
-
-           
 
             foreach (var v in vars)
             {

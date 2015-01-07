@@ -17,15 +17,26 @@ namespace Dimeng.LinkToMicrocad
         {
             try
             {
+                Logging.Logger.GetLogger().Debug("Getting current product information from registry...");
+
                 AKInfo akInfo = new AKInfo();
 
                 RegistryKey hkml = Registry.LocalMachine;
                 RegistryKey akr14 = hkml.OpenSubKey("SOFTWARE\\Microcad\\autodecco_studio\\R11", true);
 
                 akInfo.Path = akr14.GetValue("").ToString();
+                Logging.Logger.GetLogger().Debug(string.Format("Path:{0}", akInfo.Path));
+
                 akInfo.Country = akr14.GetValue("Country").ToString();
+                Logging.Logger.GetLogger().Debug(string.Format("Country:{0}", akInfo.Country));
+
                 akInfo.MeterToUnit = akr14.GetValue("MeterToUnit").ToString();
+                Logging.Logger.GetLogger().Debug(string.Format("MeterToUnit:{0}", akInfo.MeterToUnit));
+
                 akInfo.SerialNumber = akr14.GetValue("SerialNumber").ToString();
+                Logging.Logger.GetLogger().Debug(string.Format("SerialNumber:{0}", akInfo.SerialNumber));
+
+                Logging.Logger.GetLogger().Debug("Registry reading finished.");
 
                 return akInfo;
             }

@@ -9,6 +9,7 @@
  * 
  */
 
+using Dimeng.WoodEngine.Prompts;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -23,15 +24,39 @@ namespace Dimeng.LinkToMicrocad
 
         internal void ShowPromptAndDrawBlock()
         {
-            var productInfo = AKInfo.GetInfo();
+            try
+            {
+                string folderPath = getTempFolderPath(Context.GetContext().AKInfo.Path);
+                string tempXMLFilePath = Path.Combine(folderPath, "temp.xml");
 
-            string folderPath = getTempFolderPath(productInfo.Path);
-            string tempXMLFilePath = Path.Combine(folderPath, "temp.xml");
+                AKProduct product = AKProduct.Load(tempXMLFilePath);
+                string dwgFilePath = Path.Combine(folderPath, product.Tab.DWG + ".dwg");
 
-            AKProduct product = AKProduct.Load(tempXMLFilePath);
-            string dwgFilePath = Path.Combine(folderPath, product.Tab.DWG + ".dwg");
-            BlockDrawer drawer = new BlockDrawer(product.Tab.VarX, product.Tab.VarZ, product.Tab.VarY, dwgFilePath);
-            drawer.DrawAndSaveAs();
+                //Find Microvellum data and call the prompt pop out
+                //var mvLibrary = new MVLibrary(Path.Combine(productInfo.Path, "Dimeng", "Library"));
+
+                //test prompt window
+                string productCutx = @"c:\mv\di meng chan pin ku_v3\library\01-地柜\a-开门地柜.cutx";
+                string globalGvfx = @"c:\mv\di meng chan pin ku_v3\Template\GlobalV7.gvfx";
+                string edgeEdgx = @"c:\mv\di meng chan pin ku_v3\Template\封边文件.edgx";
+                string cutPartsCtpx = @"c:\mv\di meng chan pin ku_v3\Template\切割板件文件.ctpx";
+                string hardwareHwrx = @"c:\mv\di meng chan pin ku_v3\Template\五金件文件.hwrx";
+                string doorstyleDsvx = @"c:\mv\di meng chan pin ku_v3\Template\门样式文件.dsvx";
+
+                PromptsViewModel viewmodel = new PromptsViewModel(productCutx, globalGvfx, cutPartsCtpx, edgeEdgx, hardwareHwrx, doorstyleDsvx,
+                    product.Tab.Name, product.Tab.Photo, product.Tab.VarX, product.Tab.VarZ, product.Tab.VarY);
+
+                PromptWindow prompt = new PromptWindow();
+                prompt.ViewModel = viewmodel;
+                prompt.ShowDialog();
+
+                BlockDrawer drawer = new BlockDrawer(product.Tab.VarX, product.Tab.VarZ, product.Tab.VarY, dwgFilePath);
+                drawer.DrawAndSaveAs();
+            }
+            catch (Exception error)
+            {
+                throw new Exception("Error occured during drawing....", error);
+            }
         }
 
         private string getTempFolderPath(string productPath)

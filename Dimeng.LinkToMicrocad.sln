@@ -1,20 +1,102 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dimeng.LinkToMicrocad", "Dimeng.LinkToMicrocad\Dimeng.LinkToMicrocad.csproj", "{971BF3B9-1FA5-4D52-861C-D3D7E4193E72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dimeng.LinkToMicrocad.Testing", "Dimeng.LinkToMicrocad.Testing\Dimeng.LinkToMicrocad.Testing.csproj", "{D0306C1B-63AF-4F81-A7A6-2E8165408DBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dimeng.WoodEngine.Prompts", "Dimeng.WoodEngine.Prompts\Dimeng.WoodEngine.Prompts.csproj", "{AFF5A573-B7D4-463C-A239-6C013A9BA5F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dimeng.LinkToMicrocad.CatalogGenerator", "Dimeng.LinkToMicrocad.CatalogGenerator\Dimeng.LinkToMicrocad.CatalogGenerator.csproj", "{78AD4582-AB87-478F-802F-1C114D70043D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 - Main Program", "0 - Main Program", "{FF47BD61-B572-4287-B090-A2DF51E41D83}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Catalog Maintain", "1 - Catalog Maintain", "{E0DD4FC4-01A4-4866-A767-03D40D578B39}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Installation", "2 - Installation", "{747CD08B-D539-41A0-96C0-11A3BEC44B3A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dimeng.LinkToMicrocad.Logging", "Dimeng.LinkToMicrocad.Logging\Dimeng.LinkToMicrocad.Logging.csproj", "{AE2C711A-A774-4D97-A609-5EA0E05598E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dimeng.WoodEngine.SpreadCustomFunctions", "Dimeng.SpreadCustomFunctions\Dimeng.WoodEngine.SpreadCustomFunctions.csproj", "{0D5C8CFA-6490-4129-BF91-862099A62647}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dimeng.WoodEngine.Spread", "Dimeng.WoodEngine.Spread\Dimeng.WoodEngine.Spread.csproj", "{9079C1EE-9741-4335-950B-AF407878E379}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug-CAD Drawing|Any CPU = Debug-CAD Drawing|Any CPU
+		Debug-CADDrawing|Any CPU = Debug-CADDrawing|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{971BF3B9-1FA5-4D52-861C-D3D7E4193E72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{971BF3B9-1FA5-4D52-861C-D3D7E4193E72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{971BF3B9-1FA5-4D52-861C-D3D7E4193E72}.Debug-CAD Drawing|Any CPU.ActiveCfg = Debug|Any CPU
+		{971BF3B9-1FA5-4D52-861C-D3D7E4193E72}.Debug-CAD Drawing|Any CPU.Build.0 = Debug|Any CPU
+		{971BF3B9-1FA5-4D52-861C-D3D7E4193E72}.Debug-CADDrawing|Any CPU.ActiveCfg = Debug|Any CPU
+		{971BF3B9-1FA5-4D52-861C-D3D7E4193E72}.Debug-CADDrawing|Any CPU.Build.0 = Debug|Any CPU
 		{971BF3B9-1FA5-4D52-861C-D3D7E4193E72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{971BF3B9-1FA5-4D52-861C-D3D7E4193E72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0306C1B-63AF-4F81-A7A6-2E8165408DBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0306C1B-63AF-4F81-A7A6-2E8165408DBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0306C1B-63AF-4F81-A7A6-2E8165408DBC}.Debug-CAD Drawing|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0306C1B-63AF-4F81-A7A6-2E8165408DBC}.Debug-CAD Drawing|Any CPU.Build.0 = Debug|Any CPU
+		{D0306C1B-63AF-4F81-A7A6-2E8165408DBC}.Debug-CADDrawing|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0306C1B-63AF-4F81-A7A6-2E8165408DBC}.Debug-CADDrawing|Any CPU.Build.0 = Debug|Any CPU
+		{D0306C1B-63AF-4F81-A7A6-2E8165408DBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0306C1B-63AF-4F81-A7A6-2E8165408DBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFF5A573-B7D4-463C-A239-6C013A9BA5F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFF5A573-B7D4-463C-A239-6C013A9BA5F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFF5A573-B7D4-463C-A239-6C013A9BA5F7}.Debug-CAD Drawing|Any CPU.ActiveCfg = Debug-CAD Drawing|Any CPU
+		{AFF5A573-B7D4-463C-A239-6C013A9BA5F7}.Debug-CAD Drawing|Any CPU.Build.0 = Debug-CAD Drawing|Any CPU
+		{AFF5A573-B7D4-463C-A239-6C013A9BA5F7}.Debug-CADDrawing|Any CPU.ActiveCfg = Debug-CADDrawing|Any CPU
+		{AFF5A573-B7D4-463C-A239-6C013A9BA5F7}.Debug-CADDrawing|Any CPU.Build.0 = Debug-CADDrawing|Any CPU
+		{AFF5A573-B7D4-463C-A239-6C013A9BA5F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFF5A573-B7D4-463C-A239-6C013A9BA5F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78AD4582-AB87-478F-802F-1C114D70043D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78AD4582-AB87-478F-802F-1C114D70043D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78AD4582-AB87-478F-802F-1C114D70043D}.Debug-CAD Drawing|Any CPU.ActiveCfg = Debug|Any CPU
+		{78AD4582-AB87-478F-802F-1C114D70043D}.Debug-CAD Drawing|Any CPU.Build.0 = Debug|Any CPU
+		{78AD4582-AB87-478F-802F-1C114D70043D}.Debug-CADDrawing|Any CPU.ActiveCfg = Debug|Any CPU
+		{78AD4582-AB87-478F-802F-1C114D70043D}.Debug-CADDrawing|Any CPU.Build.0 = Debug|Any CPU
+		{78AD4582-AB87-478F-802F-1C114D70043D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78AD4582-AB87-478F-802F-1C114D70043D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE2C711A-A774-4D97-A609-5EA0E05598E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE2C711A-A774-4D97-A609-5EA0E05598E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE2C711A-A774-4D97-A609-5EA0E05598E4}.Debug-CAD Drawing|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE2C711A-A774-4D97-A609-5EA0E05598E4}.Debug-CAD Drawing|Any CPU.Build.0 = Debug|Any CPU
+		{AE2C711A-A774-4D97-A609-5EA0E05598E4}.Debug-CADDrawing|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE2C711A-A774-4D97-A609-5EA0E05598E4}.Debug-CADDrawing|Any CPU.Build.0 = Debug|Any CPU
+		{AE2C711A-A774-4D97-A609-5EA0E05598E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE2C711A-A774-4D97-A609-5EA0E05598E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D5C8CFA-6490-4129-BF91-862099A62647}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D5C8CFA-6490-4129-BF91-862099A62647}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D5C8CFA-6490-4129-BF91-862099A62647}.Debug-CAD Drawing|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D5C8CFA-6490-4129-BF91-862099A62647}.Debug-CAD Drawing|Any CPU.Build.0 = Debug|Any CPU
+		{0D5C8CFA-6490-4129-BF91-862099A62647}.Debug-CADDrawing|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D5C8CFA-6490-4129-BF91-862099A62647}.Debug-CADDrawing|Any CPU.Build.0 = Debug|Any CPU
+		{0D5C8CFA-6490-4129-BF91-862099A62647}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D5C8CFA-6490-4129-BF91-862099A62647}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9079C1EE-9741-4335-950B-AF407878E379}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9079C1EE-9741-4335-950B-AF407878E379}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9079C1EE-9741-4335-950B-AF407878E379}.Debug-CAD Drawing|Any CPU.ActiveCfg = Debug|Any CPU
+		{9079C1EE-9741-4335-950B-AF407878E379}.Debug-CAD Drawing|Any CPU.Build.0 = Debug|Any CPU
+		{9079C1EE-9741-4335-950B-AF407878E379}.Debug-CADDrawing|Any CPU.ActiveCfg = Debug|Any CPU
+		{9079C1EE-9741-4335-950B-AF407878E379}.Debug-CADDrawing|Any CPU.Build.0 = Debug|Any CPU
+		{9079C1EE-9741-4335-950B-AF407878E379}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9079C1EE-9741-4335-950B-AF407878E379}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{971BF3B9-1FA5-4D52-861C-D3D7E4193E72} = {FF47BD61-B572-4287-B090-A2DF51E41D83}
+		{AFF5A573-B7D4-463C-A239-6C013A9BA5F7} = {FF47BD61-B572-4287-B090-A2DF51E41D83}
+		{78AD4582-AB87-478F-802F-1C114D70043D} = {E0DD4FC4-01A4-4866-A767-03D40D578B39}
+		{AE2C711A-A774-4D97-A609-5EA0E05598E4} = {FF47BD61-B572-4287-B090-A2DF51E41D83}
+		{0D5C8CFA-6490-4129-BF91-862099A62647} = {FF47BD61-B572-4287-B090-A2DF51E41D83}
+		{9079C1EE-9741-4335-950B-AF407878E379} = {FF47BD61-B572-4287-B090-A2DF51E41D83}
 	EndGlobalSection
 EndGlobal
