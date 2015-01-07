@@ -8,10 +8,9 @@ using log4net;
 
 namespace Dimeng.LinkToMicrocad.Logging
 {
-    public  class Logger
+    public class Logger
     {
         //Singleton Mode
-
         private static readonly Logger instance = new Logger();
         public static Logger GetLogger()
         {
@@ -64,6 +63,29 @@ namespace Dimeng.LinkToMicrocad.Logging
             if (logger.IsErrorEnabled)
             {
                 logger.Error(message);
+            }
+        }
+
+        public void Error(Exception error)
+        {
+            if (logger.IsErrorEnabled)
+            {
+                logger.Error(string.Format("{0}\n {1}", error.Message, error.StackTrace));
+
+                if (error.InnerException != null)
+                {
+                    errorInnerException(error.InnerException);
+                }
+            }
+        }
+
+        private void errorInnerException(Exception error)
+        {
+            logger.Error(string.Format("{0}\n {1}", error.Message, error.StackTrace));
+
+            if (error.InnerException != null)
+            {
+                errorInnerException(error.InnerException);
             }
         }
     }
