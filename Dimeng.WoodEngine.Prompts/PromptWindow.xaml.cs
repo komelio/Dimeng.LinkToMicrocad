@@ -2,10 +2,10 @@
  * Author:谢少鹏
  * 
  * PromptWindow：不放置逻辑，仅仅呈现数据
- * PromptsManager：SpreadSheet数据读取/产品数据维护
+ * PromptsViewModel：SpreadSheet数据读取/产品数据维护
  * 
  * 逻辑：
- * 1、PromptManager读取Prompts表，获取可显变量列表
+ * 1、PromptViewModel读取Prompts表，获取可显变量列表
  * 2、Window负责渲染界面，并进行相应的数值绑定
  * 3、如果出现变量的类型改变（例如从textbox变成combobox），则进行重新渲染
  * 
@@ -31,114 +31,38 @@ namespace Dimeng.WoodEngine.Prompts
     /// </summary>
     public partial class PromptWindow : Window
     {
-        #region Field
-        protected App app;
-        protected Logger logger;
         private int tabLength = 0;//作为一个记录，记录一共用多少个tab
-        #endregion
 
-        /// <summary>
-        /// App类作为组件功能、图片功能等提供数据支持
-        /// </summary>
-        /// <param name="logger"></param>
-        /// <param name="app"></param>
         public PromptWindow()
         {
             InitializeComponent();
-
-            this.logger = logger;
-            this.app = app;
         }
-
-        #region Public Method
-        public void SetDataContext(Product product)
-        {
-            this.Manager = new PromptsViewModel(product, logger);
-        }
-
-        public void SetDataContext(string cutxFilePath, Project project)
-        {
-            this.Manager = new PromptsViewModel(cutxFilePath, project, logger);
-        }
-
-        public IWorkbook GetWorkBook()
-        {
-            return _manager.book;
-        }
-        #endregion
 
         #region Protected Method
-        protected void Init()
+        private void init()
         {
-            Manager.ControlTypeChangedAction = new Action<List<PromptItem>>(_manager_ControlTypeChanged);
+            ViewModel.ControlTypeChangedAction = new Action<List<PromptItem>>(viewModel_ControlTypeChanged);
 
-            tabLength = Manager.PromptTabs.Count;
+            tabLength = ViewModel.PromptTabs.Count;
 
-            for (int i = 0; i < _manager.PromptTabs.Count; i++)
+            for (int i = 0; i < viewModel.PromptTabs.Count; i++)
             {
-                string t = _manager.PromptTabs[i];
+                string t = viewModel.PromptTabs[i];
                 TabItem tab = new TabItem();
                 tab.Header = t;
                 tab.Tag = i;
 
                 tabAll.Items.Add(tab);
             }
-
-            for (int i = 0; i < _manager.Calcuators.Count; i++)
-            {
-                MenuItem item = new MenuItem();
-                item.Click += item_Click;
-                item.Tag = _manager.Calcuators[i];
-                item.Header = _manager.Calcuators[i].Name;
-                this.CalculatorMenuItem.Items.Add(item);
-                this.CalculatorMenuItem.IsEnabled = true;//改为可用
-            }
         }
         #endregion
 
         #region Private Method
         /// <summary>
-        /// 调用计算器的方法
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void item_Click(object sender, RoutedEventArgs e)
-        {
-            if (!(sender is MenuItem))
-                return;
-
-            var menuItem = sender as MenuItem;
-            var calItem = menuItem.Tag as CalculatorItem;
-
-            if (calItem == null)
-                return;
-
-            logger.Debug(string.Format("选中计算器:{0}/{2}/{1}",
-                                       calItem.Name,
-                                       calItem.UpperBound,
-                                       calItem.Gap));
-
-            var prompts = _manager.Prompts.Where(it => it.CalculatorIndex == calItem.Index);
-
-            if (prompts.Count() == 0)
-            {
-                MessageBox.Show("没有变量适用于当前计算器:" + calItem.Name);
-                return;
-            }
-
-            Calculator cal = new Calculator(calItem, prompts);
-            if (cal.ShowDialog() == true)
-            {
-                TabItem tab = (TabItem)tabAll.SelectedItem;
-                RefreshTabContent(tab);
-            }
-        }
-
-        /// <summary>
         /// 当出现控件类型变化时，刷新整个Tab
         /// </summary>
         /// <param name="prompts"></param>
-        private void _manager_ControlTypeChanged(List<PromptItem> prompts)
+        private void viewModel_ControlTypeChanged(List<PromptItem> prompts)
         {
             TabItem tab = tabAll.SelectedItem as TabItem;
 
@@ -186,14 +110,14 @@ namespace Dimeng.WoodEngine.Prompts
         /// <param name="tab"></param>
         private void RefreshTabContent(TabItem tab)
         {
-            logger.Debug("刷新控件ing");
+            //logger.Debug("刷新控件ing");
 
             if (tab.Tag == null)
                 return;
 
             int index = (int)tab.Tag;
 
-            var prompts = _manager.Prompts.Where(it => it.TabIndex == index)
+            var prompts = viewModel.Prompts.Where(it => it.TabIndex == index)
                                           .ToList();
 
             Grid grid = new Grid();
@@ -244,7 +168,7 @@ namespace Dimeng.WoodEngine.Prompts
                     leftSP.Children.Add(label);
 
                     TextBox tb = new TextBox();
-                    tb.MouseDoubleClick += tb_MouseDoubleClick;
+                    //tb.MouseDoubleClick += tb_MouseDoubleClick;
                     tb.AddHandler(UIElement.MouseEnterEvent, new RoutedEventHandler(tb_MouseLeftButtonDown), true);
                     tb.DataContext = prompt;
                     tb.SetBinding(TextBox.TextProperty, new Binding("PromptValue") { ValidatesOnExceptions = true, ValidatesOnDataErrors = true, NotifyOnValidationError = true });
@@ -341,32 +265,30 @@ namespace Dimeng.WoodEngine.Prompts
                     }
                 }
             }
-
-            logger.Debug("控件刷新结束");
         }
 
         void tb_MouseLeftButtonDown(object sender, RoutedEventArgs e)
         {
-            //事件：当textbox按下鼠标时，去检查是否有图片关联并显示
-            var prompt = (sender as Control).DataContext as PromptItem;
+            ////事件：当textbox按下鼠标时，去检查是否有图片关联并显示
+            //var prompt = (sender as Control).DataContext as PromptItem;
 
-            if (prompt == null)
-            {
-                return;
-            }
+            //if (prompt == null)
+            //{
+            //    return;
+            //}
 
-            if (prompt.Picture == string.Empty)
-            {
-                return;
-            }
+            //if (prompt.Picture == string.Empty)
+            //{
+            //    return;
+            //}
 
-            string picPath = System.IO.Path.Combine(app.CurrentConfiguration.PathToMicroManagerData,
-                "Graphics\\Product Prompt Pictures", prompt.Picture);//TODO: 这个路径要管理
+            //string picPath = System.IO.Path.Combine(app.CurrentConfiguration.PathToMicroViewModelData,
+            //    "Graphics\\Product Prompt Pictures", prompt.Picture);//TODO: 这个路径要管理
 
-            if (System.IO.File.Exists(picPath))
-            {
-                this.Manager.Image = new BitmapImage(new Uri(picPath));
-            }
+            //if (System.IO.File.Exists(picPath))
+            //{
+            //    this.ViewModel.Image = new BitmapImage(new Uri(picPath));
+            //}
         }
 
         /// <summary>
@@ -376,20 +298,18 @@ namespace Dimeng.WoodEngine.Prompts
         /// <param name="e"></param>
         private void tb_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            logger.Debug("跳转到图形量取两点之间的尺寸.");
+            //var prompt = (sender as TextBox).DataContext as PromptItem;
 
-            var prompt = (sender as TextBox).DataContext as PromptItem;
+            //if (prompt == null)
+            //    return;
 
-            if (prompt == null)
-                return;
-
-            Editor ed = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor;
-            PromptDoubleResult dis = ed.GetDistance("在图形中量取所需要的尺寸");
-            if (dis.Status == PromptStatus.OK)
-            {
-                logger.Debug("尺寸为:" + dis.Value.ToString());
-                prompt.PromptValue = Math.Round(dis.Value, 3).ToString();//对量取的尺寸取三位小数
-            }
+            //Editor ed = Autodesk.AutoCAD.ApplicationServices.Application.DocumentViewModel.MdiActiveDocument.Editor;
+            //PromptDoubleResult dis = ed.GetDistance("在图形中量取所需要的尺寸");
+            //if (dis.Status == PromptStatus.OK)
+            //{
+            //    logger.Debug("尺寸为:" + dis.Value.ToString());
+            //    prompt.PromptValue = Math.Round(dis.Value, 3).ToString();//对量取的尺寸取三位小数
+            //}
         }
 
         /// <summary>
@@ -401,18 +321,6 @@ namespace Dimeng.WoodEngine.Prompts
         {
             TabItem tab = (TabItem)tabAll.SelectedItem;
             RefreshTabContent(tab);
-        }
-
-        /// <summary>
-        /// 点击组件后的事件，弹出产品的组件管理器
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void SubassemblyMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            var window = app.Container.Resolve<SubassemblyManagerView>();
-            window.ViewModel.SetData(this.Manager.book, this.Manager.Project, this.Manager.ProductHandle);
-            window.ShowDialog();
         }
 
         /// <summary>
@@ -432,7 +340,7 @@ namespace Dimeng.WoodEngine.Prompts
         /// <param name="e"></param>
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false;
+            this.DialogResult = true;
         }
 
         /// <summary>
@@ -467,20 +375,20 @@ namespace Dimeng.WoodEngine.Prompts
         #endregion
 
         #region Properties
-        private PromptsViewModel _manager;
-        public PromptsViewModel Manager
+        private PromptsViewModel viewModel;
+        public PromptsViewModel ViewModel
         {
             get
             {
-                return _manager;
+                return viewModel;
             }
             set
             {
-                _manager = value;
+                viewModel = value;
 
-                Init();
+                this.DataContext = viewModel;
 
-                this.DataContext = _manager;
+                init();
             }
         }
         #endregion

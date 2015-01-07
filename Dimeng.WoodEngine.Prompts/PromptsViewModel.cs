@@ -7,6 +7,8 @@ using System.Windows.Media;
 
 using SpreadsheetGear;
 using GalaSoft.MvvmLight;
+using Dimeng.LinkToMicrocad.Logging;
+using Dimeng.WoodEngine.Spread;
 
 namespace Dimeng.WoodEngine.Prompts
 {
@@ -14,66 +16,47 @@ namespace Dimeng.WoodEngine.Prompts
     {
         private IRange PromptCells;
 
-        private PromptsViewModel(Logger logger, Project project)
+        private PromptsViewModel()
         {
-            //this.logger = logger;
-            this.Project = project;
             PromptsChangedControlType = new List<PromptItem>();
             PromptTabs = new List<string>();
             Calcuators = new List<CalculatorItem>();
         }
 
-        /// <summary>
-        /// 对应新产品的情况
-        /// </summary>
-        /// <param name="cutxFilePath">library里产品的cutx路径</param>
-        /// <param name="project">要使用产品的project</param>
-        /// <param name="logger">日志记录类</param>
-        public PromptsViewModel(string cutxFilePath, Project project, logger logger)
-            : this(logger, project)
+        public PromptsViewModel(string cutxFilePath,
+                                string globalFilePath,
+                                string cutpartsFilePath,
+                                string edgebandFilePath,
+                                string hardwareFilePath,
+                                string doorstyleFilePath,
+                                string name,
+                                string imagePath,
+                                double width,
+                                double height,
+                                double depth)
+            : this()
         {
-            var bookSet = (new WorkBookSetProvider(logger))
-                    .GetDefaultSpecificationGroupWorkBookSet(cutxFilePath, project);
+            this.Width = width;
+            Logger.GetLogger().Debug(string.Format("Width:{0}", width));
+
+            this.Height = height;
+            Logger.GetLogger().Debug(string.Format("Height:{0}", height));
+
+            this.Depth = depth;
+            Logger.GetLogger().Debug(string.Format("Depth:{0}", depth));
+
+            this.Name = name;
+            Logger.GetLogger().Debug(string.Format("Name:{0}", name));
+
+            this.ProductImagePath = imagePath + ".jpg";
+            Logger.GetLogger().Debug(string.Format("ProductImagePath:{0}.jpg", imagePath));
+
+            var bookSet = SpreadHelper.GetProductBaseicBookSet(cutxFilePath, globalFilePath, 
+                cutpartsFilePath, hardwareFilePath, doorstyleFilePath, edgebandFilePath);
 
             book = bookSet.Workbooks["L"];
             var sheet = book.Worksheets["Prompts"];
             PromptCells = sheet.Cells;
-
-            LoadCellPrompts();
-
-            if (PromptTabs.Count == 0)
-            {
-                PromptTabs.Add("主标签");
-            }
-
-            this.SpecificationGroups = project.SpecificationGroups;
-            this.SelectedSGroup = this.SpecificationGroups[0];
-            this.Qty = 1;
-
-            var fi = new FileInfo(cutxFilePath);
-            this.Description = fi.Name.Replace(fi.Extension, "");
-
-            this.ProductHandle = (new Random()).Next(1000000000, 1999999999).ToString();
-        }
-
-        /// <summary>
-        /// 供组件使用的，不需要project的信息
-        /// </summary>
-        /// <param name="cutxFilePath"></param>
-        /// <param name="books"></param>
-        /// <param name="//logger"></param>
-        public PromptsViewModel(string cutxFilePath, string w, string h, string d, IWorkbookSet books, //logger //logger) :
-            this(logger, null)
-        {
-            book = books.Workbooks.Open(cutxFilePath);
-            book.FullName = "S";
-
-            var sheet = book.Worksheets["Prompts"];
-            PromptCells = sheet.Cells;
-
-            PromptCells[0, 1].Value = w;
-            PromptCells[1, 1].Value = h;
-            PromptCells[2, 1].Value = d;
 
             loadCellPrompts();
 
@@ -81,12 +64,20 @@ namespace Dimeng.WoodEngine.Prompts
             {
                 PromptTabs.Add("主标签");
             }
+
+            //this.SpecificationGroups = project.SpecificationGroups;
+            //this.SelectedSGroup = this.SpecificationGroups[0];
+            //this.Qty = 1;
+
+            //var fi = new FileInfo(cutxFilePath);
+            //this.Description = fi.Name.Replace(fi.Extension, "");
+
+            //this.ProductHandle = (new Random()).Next(1000000000, 1999999999).ToString();
         }
+
 
         private void loadCellPrompts()
         {
-            //logger.Debug("读取Prompts表中的变量清单");
-
             //读取Tabs
             for (int i = 0; i < PromptCells.Rows.RowCount; i++)
             {
@@ -226,47 +217,14 @@ namespace Dimeng.WoodEngine.Prompts
             PromptsChangedControlType.Add(prompt);
         }
 
-        private int qty = 1;
-        public int Qty
+        private string name;
+        public string Name
         {
-            get { return qty; }
+            get { return name; }
             set
             {
-                qty = value;
-                base.RaisePropertyChanged("Qty");
-            }
-        }
-
-        private string description;
-        public string Description
-        {
-            get { return description; }
-            set
-            {
-                description = value;
-                base.RaisePropertyChanged("Description");
-            }
-        }
-
-        private SpecificationGroup selectedSGroup;
-        public SpecificationGroup SelectedSGroup
-        {
-            get { return selectedSGroup; }
-            set
-            {
-                selectedSGroup = value;
-                base.RaisePropertyChanged("SelectedSGroup");
-            }
-        }
-
-        private List<SpecificationGroup> specificationGroups;
-        public List<SpecificationGroup> SpecificationGroups
-        {
-            get { return specificationGroups; }
-            set
-            {
-                specificationGroups = value;
-                base.RaisePropertyChanged("SpecificationGroups");
+                name = value;
+                base.RaisePropertyChanged("Name");
             }
         }
 
@@ -282,7 +240,6 @@ namespace Dimeng.WoodEngine.Prompts
         }
 
         private string itemNumber;
-
         public string ItemNumber
         {
             get { return itemNumber; }
@@ -293,76 +250,53 @@ namespace Dimeng.WoodEngine.Prompts
             }
         }
 
-
+        private double width;
         public double Width
         {
-            get
-            {
-                IRange cells = book.Worksheets["Prompts"].Cells;
-
-                double width;
-                if (double.TryParse(cells[0, 1].Text, out width))
-                {
-                    return width;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-        }
-
-        public double Height
-        {
-            get
-            {
-                IRange cells = book.Worksheets["Prompts"].Cells;
-
-                double width;
-                if (double.TryParse(cells[1, 1].Text, out width))
-                {
-                    return width;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-        }
-
-        public double Depth
-        {
-            get
-            {
-                IRange cells = book.Worksheets["Prompts"].Cells;
-
-                double width;
-                if (double.TryParse(cells[2, 1].Text, out width))
-                {
-                    return width;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-        }
-
-        private ImageSource image;
-        public ImageSource Image
-        {
-            get { return image; }
+            get { return width; }
             set
             {
-                image = value;
-                base.RaisePropertyChanged("Image");
+                width = value;
+                base.RaisePropertyChanged("Width");
             }
         }
 
-        public string ProductHandle { get; private set; }
+        private double height;
+        public double Height
+        {
+            get { return height; }
+            set
+            {
+                height = value;
+                base.RaisePropertyChanged("Height");
+            }
+        }
+
+        private double depth;
+        public double Depth
+        {
+            get { return depth; }
+            set
+            {
+                depth = value;
+                base.RaisePropertyChanged("Depth");
+            }
+        }
+
+        private string productImagePath;
+
+        public string ProductImagePath
+        {
+            get { return productImagePath; }
+            set
+            {
+                productImagePath = value;
+                base.RaisePropertyChanged("ProductImagePath");
+            }
+        }
 
         public Action<List<PromptItem>> ControlTypeChangedAction { get; set; }
         public IWorkbook book { get; private set; }
-        public Project Project { get; private set; }
+        //public Project Project { get; private set; }
     }
 }

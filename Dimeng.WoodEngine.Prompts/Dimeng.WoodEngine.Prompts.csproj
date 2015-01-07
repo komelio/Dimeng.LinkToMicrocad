@@ -81,15 +81,13 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Calculators\Calculator.xaml.cs">
-      <DependentUpon>Calculator.xaml</DependentUpon>
-    </Compile>
     <Compile Include="CalculatorItem.cs" />
-    <Compile Include="Calculators\CalculatorViewModel.cs" />
-    <Compile Include="Calculators\OneCalculatorViewModel.cs" />
     <Compile Include="ControlType.cs" />
+    <Compile Include="Converter\PromptValueToCheckedConverter.cs" />
+    <Compile Include="Converter\PromptValueToIntConverter.cs" />
+    <Compile Include="Converter\PromptValueToVisibilityConverter.cs" />
     <Compile Include="PromptItem.cs" />
-    <Compile Include="PromptsManager.cs" />
+    <Compile Include="PromptsViewModel.cs" />
     <Compile Include="PromptWindow.xaml.cs">
       <DependentUpon>PromptWindow.xaml</DependentUpon>
     </Compile>
@@ -106,15 +104,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Subassembly\SubassemblyCategory.cs" />
-    <Compile Include="Subassembly\SubassemblyItem.cs" />
-    <Compile Include="Subassembly\SubassemblyManagerView.xaml.cs">
-      <DependentUpon>SubassemblyManagerView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Subassembly\SubassemblyManagerViewModel.cs" />
-    <Compile Include="Subassembly\SubassemblyViewModel.cs" />
-    <Compile Include="SubImageConverter.cs" />
-    <Compile Include="SubPromptWindow.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -128,15 +117,7 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Calculators\Calculator.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="PromptWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Subassembly\SubassemblyManagerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -149,6 +130,16 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\refresh.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dimeng.LinkToMicrocad.Logging\Dimeng.LinkToMicrocad.Logging.csproj">
+      <Project>{ae2c711a-a774-4d97-a609-5ea0e05598e4}</Project>
+      <Name>Dimeng.LinkToMicrocad.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dimeng.WoodEngine.Spread\Dimeng.WoodEngine.Spread.csproj">
+      <Project>{9079c1ee-9741-4335-950b-af407878e379}</Project>
+      <Name>Dimeng.WoodEngine.Spread</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
