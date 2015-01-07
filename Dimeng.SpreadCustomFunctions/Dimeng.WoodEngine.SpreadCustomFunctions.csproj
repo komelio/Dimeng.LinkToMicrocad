@@ -7,10 +7,11 @@
     <ProjectGuid>{0D5C8CFA-6490-4129-BF91-862099A62647}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dimeng.SpreadCustomFunctions</RootNamespace>
-    <AssemblyName>Dimeng.SpreadCustomFunctions</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <RootNamespace>Dimeng.WoodEngine.SpreadCustomFunctions</RootNamespace>
+    <AssemblyName>Dimeng.WoodEngine.SpreadCustomFunctions</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,7 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SpreadsheetGear2012, Version=7.1.1.120, Culture=neutral, PublicKeyToken=39c186f5904944ec, processorArchitecture=MSIL" />
+    <Reference Include="SpreadsheetGear2012.Core, Version=7.1.1.120, Culture=neutral, PublicKeyToken=39c186f5904944ec, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

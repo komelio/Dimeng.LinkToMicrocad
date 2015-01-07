@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的常规信息通过以下
 // 特性集控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("Dimeng.SpreadCustomFunctions")]
+[assembly: AssemblyTitle("Dimeng.WoodEngine.SpreadCustomFunctions")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Dimeng.SpreadCustomFunctions")]
+[assembly: AssemblyProduct("Dimeng.WoodEngine.SpreadCustomFunctions")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

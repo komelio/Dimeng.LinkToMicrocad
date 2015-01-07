@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Dimeng.SpreadCustomFunctions
+namespace Dimeng.WoodEngine.SpreadCustomFunctions
 {
     //命令GetEqv
     public class GetEQV : SpreadsheetGear.CustomFunctions.Function
