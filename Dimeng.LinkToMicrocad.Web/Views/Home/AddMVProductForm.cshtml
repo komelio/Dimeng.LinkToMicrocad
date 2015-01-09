@@ -1,0 +1,33 @@
+﻿@model Dimeng.LinkToMicrocad.Web.Models.MVProduct
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddMVProductForm</title>
+</head>
+<body>
+    @using (Html.BeginForm())
+    {
+    <p>Product name：@Html.TextBoxFor(x=>x.Name)</p>
+    <p>Product name：@Html.TextBoxFor(x => x.DefaultWidth)</p>
+    <p>Product name：@Html.TextBoxFor(x => x.DefaultHeight)</p>
+    <p>Product name：@Html.TextBoxFor(x => x.DefaultDepth)</p>
+        <p>
+            Sure？
+            @Html.DropDownListFor(x => x.IsEnabled, new[] { 
+                new SelectListItem(){Text="Yes",Value = bool.TrueString},
+                new SelectListItem(){Text="No",Value=bool.FalseString}},"Choose an option")
+            }
+})
+    </p>
+    }
+    <div>
+    </div>
+</body>
+</html>

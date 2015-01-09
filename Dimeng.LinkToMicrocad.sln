@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dimeng.WoodEngine.SpreadCus
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dimeng.WoodEngine.Spread", "Dimeng.WoodEngine.Spread\Dimeng.WoodEngine.Spread.csproj", "{9079C1EE-9741-4335-950B-AF407878E379}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dimeng.LinkToMicrocad.Web", "Dimeng.LinkToMicrocad.Web\Dimeng.LinkToMicrocad.Web.csproj", "{7EF988EC-D7C7-48E4-8804-858CCF6E3E81}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,14 @@ Global
 		{9079C1EE-9741-4335-950B-AF407878E379}.Debug-CADDrawing|Any CPU.Build.0 = Debug|Any CPU
 		{9079C1EE-9741-4335-950B-AF407878E379}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9079C1EE-9741-4335-950B-AF407878E379}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EF988EC-D7C7-48E4-8804-858CCF6E3E81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EF988EC-D7C7-48E4-8804-858CCF6E3E81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EF988EC-D7C7-48E4-8804-858CCF6E3E81}.Debug-CAD Drawing|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EF988EC-D7C7-48E4-8804-858CCF6E3E81}.Debug-CAD Drawing|Any CPU.Build.0 = Debug|Any CPU
+		{7EF988EC-D7C7-48E4-8804-858CCF6E3E81}.Debug-CADDrawing|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EF988EC-D7C7-48E4-8804-858CCF6E3E81}.Debug-CADDrawing|Any CPU.Build.0 = Debug|Any CPU
+		{7EF988EC-D7C7-48E4-8804-858CCF6E3E81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EF988EC-D7C7-48E4-8804-858CCF6E3E81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,5 +108,6 @@ Global
 		{AE2C711A-A774-4D97-A609-5EA0E05598E4} = {FF47BD61-B572-4287-B090-A2DF51E41D83}
 		{0D5C8CFA-6490-4129-BF91-862099A62647} = {FF47BD61-B572-4287-B090-A2DF51E41D83}
 		{9079C1EE-9741-4335-950B-AF407878E379} = {FF47BD61-B572-4287-B090-A2DF51E41D83}
+		{7EF988EC-D7C7-48E4-8804-858CCF6E3E81} = {E0DD4FC4-01A4-4866-A767-03D40D578B39}
 	EndGlobalSection
 EndGlobal
