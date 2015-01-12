@@ -9,25 +9,50 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" type="text/css" href="~/Content/Style.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap-theme.css" />
     <title>AddMVProductForm</title>
 </head>
 <body>
-    @using (Html.BeginForm())
-    {
-    <p>Product name：@Html.TextBoxFor(x=>x.Name)</p>
-    <p>Product name：@Html.TextBoxFor(x => x.DefaultWidth)</p>
-    <p>Product name：@Html.TextBoxFor(x => x.DefaultHeight)</p>
-    <p>Product name：@Html.TextBoxFor(x => x.DefaultDepth)</p>
-        <p>
-            Sure？
-            @Html.DropDownListFor(x => x.IsEnabled, new[] { 
-                new SelectListItem(){Text="Yes",Value = bool.TrueString},
-                new SelectListItem(){Text="No",Value=bool.FalseString}},"Choose an option")
+    <div class="panel panel-success">
+        <div class="panel-heading text-center"><h4>Add Product Form</h4></div>
+        <div class="panel-body">
+            @using (Html.BeginForm())
+            {
+                @Html.ValidationSummary()
+                <div class="form-group">
+                    <label>Product Name:</label>
+                    @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label>Width:</label>
+                    @Html.TextBoxFor(x => x.DefaultWidth, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label>Height:</label>
+                    @Html.TextBoxFor(x => x.DefaultHeight, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label>Depth:</label>
+                    @Html.TextBoxFor(x => x.DefaultDepth, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label>Is it enabled?</label>
+                    @Html.DropDownListFor(x => x.IsEnabled, new[] {
+                        new SelectListItem(){Text="Yes",
+                            Value = bool.TrueString},
+                        new SelectListItem(){Text="No",
+                            Value=bool.FalseString}},
+                        "是否启用",
+                        new { @class = "form-control" })
+                </div>
+                <div class="text-center">
+                    <input class="btn btn-success" type="submit" value="提交新产品" />
+                </div>
             }
-})
-    </p>
-    }
-    <div>
+        </div>
     </div>
+
 </body>
 </html>

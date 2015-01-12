@@ -1,0 +1,37 @@
+﻿@model Dimeng.LinkToMicrocad.Web.Models.MVProduct
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap-theme.css" />
+    <title>Thanks</title>
+    <style>
+        body {
+            background-color: #F1F1F1;
+        }
+    </style>
+</head>
+<body>
+    <div class="text-center">
+        <h1>Thank you,@Model.Name!</h1>
+        <div class="lead">
+            @if (@Model.IsEnabled == true)
+            {
+                @:This product is enabled!
+        }
+            else
+            {
+                @:This product is not enabled!
+        }
+        </div>
+     
+    </div>
+</body>
+</html>
