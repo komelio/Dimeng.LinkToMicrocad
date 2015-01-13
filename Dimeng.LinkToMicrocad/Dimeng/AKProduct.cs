@@ -36,7 +36,7 @@ namespace Dimeng.LinkToMicrocad
             product.Tab.ID = tabNode.Attribute("ID").Value;
             product.Tab.DMID = tabNode.Attribute("DMID").Value;
             product.Tab.Photo = tabNode.Attribute("Photo").Value;
-            product.Tab.Description = tabNode.Attribute("Descprition") == null ? 
+            product.Tab.Description = tabNode.Attribute("Descprition") == null ?
                                         string.Empty : tabNode.Attribute("Description").Value;
             product.Tab.CatalogPath = tabNode.Attribute("Path").Value;
 
@@ -91,6 +91,8 @@ namespace Dimeng.LinkToMicrocad
 
             this.Name = name;
             this.Value = value;
+
+            Logging.Logger.GetLogger().Debug(string.Format("UIVar:{0}/{1}", this.Name, this.Value));
         }
 
         public override string ToString()

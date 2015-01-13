@@ -72,6 +72,9 @@
       <HintPath>..\..\..\..\..\..\ObjectARX 2012\inc\AcMgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Dapper">
+      <HintPath>..\packages\Dapper.1.38\lib\net40\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.0.2.32240, Culture=neutral, PublicKeyToken=0e453835af4ee6ce, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\net40\GalaSoft.MvvmLight.dll</HintPath>
@@ -79,6 +82,7 @@
     <Reference Include="GalaSoft.MvvmLight.Extras">
       <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\net40\GalaSoft.MvvmLight.Extras.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
@@ -114,6 +118,10 @@
     <Compile Include="Dimeng\Context.cs" />
     <Compile Include="Dimeng\DimengHelper.cs" />
     <Compile Include="Dimeng\MVDataContext.cs" />
+    <Compile Include="Dimeng\Project.cs" />
+    <Compile Include="Dimeng\ProjectInfo.cs" />
+    <Compile Include="Dimeng\Release.cs" />
+    <Compile Include="Dimeng\SpecificationGroup.cs" />
     <Compile Include="Dimeng\UnitConverter.cs" />
     <Compile Include="Logging\ConsoleHelper.cs" />
     <Compile Include="myPlugin.cs" />
