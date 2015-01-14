@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Dimeng.LinkToMicrocad
+namespace Dimeng.WoodEngine.Entities
 {
-    internal class ProjectInfo
+    public class ProjectInfo
     {
         public string JobName { get; set; }
         public string JobNumber { get; set; }

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using Dimeng.LinkToMicrocad;
+using Dimeng.WoodEngine.Entities;
+using System.IO;
 
 namespace Dimeng.LinkToMicrocad
 {
@@ -60,6 +63,15 @@ namespace Dimeng.LinkToMicrocad
             }
 
             return product;
+        }
+
+        public string GetProjectPath()
+        {
+            string projectPath = this.UIVars.Where(it => it.Name == "ManufacturingFolder")
+                                            .SingleOrDefault()
+                                            .Value;
+
+            return projectPath;
         }
     }
 

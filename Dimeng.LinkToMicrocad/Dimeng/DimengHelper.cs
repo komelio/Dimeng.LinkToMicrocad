@@ -9,6 +9,7 @@
  * 
  */
 
+using Dimeng.WoodEngine.Entities;
 using Dimeng.WoodEngine.Prompts;
 using Microsoft.Win32;
 using System;
@@ -30,27 +31,45 @@ namespace Dimeng.LinkToMicrocad
                 string tempXMLFilePath = Path.Combine(folderPath, "temp.xml");
 
                 AKProduct product = AKProduct.Load(tempXMLFilePath);
-                string dwgFilePath = Path.Combine(folderPath, product.Tab.DWG + ".dwg");
+                var project = ProjectManager.CreateOrOpenProject(product.GetProjectPath());
 
-                //Find Microvellum data and call the prompt pop out
-                //var mvLibrary = new MVLibrary(Path.Combine(productInfo.Path, "Dimeng", "Library"));
+                SpecificationGroup specificationGroup;
+                string productCutx;
 
-                //test prompt window
-                string productCutx = @"c:\mv\di meng chan pin ku_v3\library\01-地柜\a-开门地柜.cutx";
-                string globalGvfx = @"c:\mv\di meng chan pin ku_v3\Template\GlobalV7.gvfx";
-                string edgeEdgx = @"c:\mv\di meng chan pin ku_v3\Template\封边文件.edgx";
-                string cutPartsCtpx = @"c:\mv\di meng chan pin ku_v3\Template\切割板件文件.ctpx";
-                string hardwareHwrx = @"c:\mv\di meng chan pin ku_v3\Template\五金件文件.hwrx";
-                string doorstyleDsvx = @"c:\mv\di meng chan pin ku_v3\Template\门样式文件.dsvx";
+                var mvProduct = project.Products.Find(it => it.Handle == product.Tab.DMID);
+                if (mvProduct != null)//if current project have the dmid product from its products,just open the old data
+                {
+                    productCutx = Path.Combine(project.JobPath, mvProduct.FileName);
+                    specificationGroup = project.SpecificationGroups.Find(it => it.Name == mvProduct.MatFile);
+                }
+                else//if not,find a new one and add a new product to project
+                {
+                    //Find Microvellum data and call the prompt pop out
+                    productCutx = Context.GetContext().MVDataContext.GetProduct(product.Tab.Name);
+                    specificationGroup = project.SpecificationGroups[0];
+                }
+
+                string globalGvfx = Path.Combine(project.JobPath, specificationGroup.GlobalFileName);
+                string cutPartsCtpx = Path.Combine(project.JobPath, specificationGroup.CutPartsFileName);
+                string edgeEdgx = Path.Combine(project.JobPath, specificationGroup.EdgeBandFileName);
+                string hardwareHwrx = Path.Combine(project.JobPath, specificationGroup.HardwareFileName);
+                string doorstyleDsvx = Path.Combine(project.JobPath, specificationGroup.DoorWizardFileName);
 
                 PromptsViewModel viewmodel = new PromptsViewModel(productCutx, globalGvfx, cutPartsCtpx, edgeEdgx, hardwareHwrx, doorstyleDsvx,
-                    product.Tab.Name, product.Tab.Photo, product.Tab.VarX, product.Tab.VarZ, product.Tab.VarY);
+                        product.Tab.Name, product.Tab.Photo, product.Tab.VarX, product.Tab.VarZ, product.Tab.VarY);
 
                 PromptWindow prompt = new PromptWindow();
                 prompt.ViewModel = viewmodel;
                 prompt.ShowDialog();
 
-                BlockDrawer drawer = new BlockDrawer(product.Tab.VarX, product.Tab.VarZ, product.Tab.VarY, dwgFilePath);
+                ProjectManager.AddProduct(viewmodel.Name, viewmodel.Comments, product.Tab.DMID,
+                    project.SpecificationGroups[0], viewmodel.Width, viewmodel.Height, viewmodel.Depth,
+                    viewmodel.Book, project);
+
+                BlockDrawer drawer = new BlockDrawer(product.Tab.VarX,
+                                                     product.Tab.VarZ,
+                                                     product.Tab.VarY,
+                                                     Path.Combine(folderPath, product.Tab.DWG + ".dwg"));
                 drawer.DrawAndSaveAs();
             }
             catch (Exception error)

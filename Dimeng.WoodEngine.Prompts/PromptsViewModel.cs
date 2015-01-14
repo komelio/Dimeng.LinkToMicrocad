@@ -9,6 +9,7 @@ using SpreadsheetGear;
 using GalaSoft.MvvmLight;
 using Dimeng.LinkToMicrocad.Logging;
 using Dimeng.WoodEngine.Spread;
+using Dimeng.WoodEngine.Entities;
 
 namespace Dimeng.WoodEngine.Prompts
 {
@@ -23,17 +24,12 @@ namespace Dimeng.WoodEngine.Prompts
             Calcuators = new List<CalculatorItem>();
         }
 
-        public PromptsViewModel(string cutxFilePath,
-                                string globalFilePath,
-                                string cutpartsFilePath,
-                                string edgebandFilePath,
-                                string hardwareFilePath,
-                                string doorstyleFilePath,
-                                string name,
+        public PromptsViewModel(string name,
                                 string imagePath,
                                 double width,
                                 double height,
-                                double depth)
+                                double depth,
+                                Project project)
             : this()
         {
             this.Width = width;
@@ -50,12 +46,32 @@ namespace Dimeng.WoodEngine.Prompts
 
             this.ProductImagePath = imagePath + ".jpg";
             Logger.GetLogger().Debug(string.Format("ProductImagePath:{0}.jpg", imagePath));
+        }
 
-            var bookSet = SpreadHelper.GetProductBaseicBookSet(cutxFilePath, globalFilePath, 
+        public PromptsViewModel(string cutxFilePath,
+                                string globalFilePath,
+                                string cutpartsFilePath,
+                                string edgebandFilePath,
+                                string hardwareFilePath,
+                                string doorstyleFilePath,
+                                string name,
+                                string imagePath,
+                                double width,
+                                double height,
+                                double depth)
+            : this()
+        {
+            this.Width = width;
+            this.Height = height;
+            this.Depth = depth;
+            this.Name = name;
+            this.ProductImagePath = imagePath + ".jpg";
+
+            var bookSet = SpreadHelper.GetProductBaseicBookSet(cutxFilePath, globalFilePath,
                 cutpartsFilePath, hardwareFilePath, doorstyleFilePath, edgebandFilePath);
 
-            book = bookSet.Workbooks["L"];
-            var sheet = book.Worksheets["Prompts"];
+            Book = bookSet.Workbooks["L"];
+            var sheet = Book.Worksheets["Prompts"];
             PromptCells = sheet.Cells;
 
             loadCellPrompts();
@@ -83,7 +99,7 @@ namespace Dimeng.WoodEngine.Prompts
             {
                 string TabName = PromptCells[i, 13].Text;
                 if (!string.IsNullOrEmpty(TabName))
-                {
+                {                   
                     //logger.Debug("增加Tab:" + TabName);
                     this.PromptTabs.Add(TabName);
                 }
@@ -134,6 +150,10 @@ namespace Dimeng.WoodEngine.Prompts
                     //logger.Info("空行中断读取,行号:" + i.ToString());
                     break;
                 }
+
+                //忽略宽度、高度、深度三个变量
+                if (i == 0 || i == 1 || i == 2)
+                { continue; }
 
                 string value = PromptCells[i, 1].Text;
                 string controlType = PromptCells[i, 2].Text;
@@ -257,6 +277,7 @@ namespace Dimeng.WoodEngine.Prompts
             set
             {
                 width = value;
+                Logger.GetLogger().Debug(string.Format("Width:{0}", width));
                 base.RaisePropertyChanged("Width");
             }
         }
@@ -268,6 +289,7 @@ namespace Dimeng.WoodEngine.Prompts
             set
             {
                 height = value;
+                Logger.GetLogger().Debug(string.Format("Height:{0}", height));
                 base.RaisePropertyChanged("Height");
             }
         }
@@ -279,6 +301,7 @@ namespace Dimeng.WoodEngine.Prompts
             set
             {
                 depth = value;
+                Logger.GetLogger().Debug(string.Format("Depth:{0}", depth));
                 base.RaisePropertyChanged("Depth");
             }
         }
@@ -291,12 +314,13 @@ namespace Dimeng.WoodEngine.Prompts
             set
             {
                 productImagePath = value;
+                Logger.GetLogger().Debug(string.Format("ProductImagePath:{0}", productImagePath));
                 base.RaisePropertyChanged("ProductImagePath");
             }
         }
 
         public Action<List<PromptItem>> ControlTypeChangedAction { get; set; }
-        public IWorkbook book { get; private set; }
+        public IWorkbook Book { get; private set; }
         //public Project Project { get; private set; }
     }
 }

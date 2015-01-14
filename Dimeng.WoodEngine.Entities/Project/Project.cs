@@ -6,23 +6,10 @@ using System.Linq;
 using System.Text;
 using Dapper;
 
-namespace Dimeng.LinkToMicrocad
+namespace Dimeng.WoodEngine.Entities
 {
-    internal class Project
+    public class Project
     {
-        public static Project GetProjectByPath(string path)
-        {
-            var project = new Project();
-            project.JobPath = path;
-
-            return project;
-        }
-
-        protected Project()
-        {
-
-        }
-
         private string jobPath;
         public string JobPath
         {
@@ -51,7 +38,21 @@ namespace Dimeng.LinkToMicrocad
 
             loadSpecificationGroups();
 
-            this.ProjectInfo.JobName = (new DirectoryInfo(path)).Name;
+            loadProducts();
+
+            //this.ProjectInfo.JobName = (new DirectoryInfo(path)).Name;
+        }
+
+        private void loadProducts()
+        {
+            string connectStr = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + this.ProductListMDBPath;
+            using (OleDbConnection conn = new OleDbConnection(connectStr))
+            {
+                conn.Open();
+
+                this.Products = conn.Query<Product>
+                    ("Select * from ProductList", null).ToList<Product>();
+            }
         }
 
         /// <summary>
@@ -82,7 +83,28 @@ namespace Dimeng.LinkToMicrocad
             {
                 conn.Open();
 
-                this.ProjectInfo = conn.Query<ProjectInfo>("select * from Jobs", null).SingleOrDefault();
+                var info = conn.Query<ProjectInfo>("select * from Jobs", null)
+                                           .SingleOrDefault();
+
+                //Products.ForEach(a => a.Job = job);//设定每个产品的工作任务
+
+                if (info == null)
+                {
+                    this.insertBlankProjectInfo(connectStr, (new DirectoryInfo(this.jobPath)).Name);//插入一个空的记录
+                    this.ProjectInfo = new ProjectInfo();
+                }
+            }
+        }
+
+        private void insertBlankProjectInfo(string connstr, string projectName)
+        {
+            using (OleDbConnection conn = new OleDbConnection(connstr))
+            {
+                conn.Open();
+                OleDbCommand cmd = new OleDbCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = string.Format("Insert into Jobs (JobName) values ('{0}')", projectName);
+                cmd.ExecuteNonQuery();
             }
         }
 
@@ -99,5 +121,7 @@ namespace Dimeng.LinkToMicrocad
         {
             return ProjectInfo.JobName;
         }
+
+        public List<Product> Products { get; set; }
     }
 }

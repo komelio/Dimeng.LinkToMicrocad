@@ -33,7 +33,7 @@ namespace Dimeng.LinkToMicrocad
         [CommandMethod("AK", "New_dm", CommandFlags.Modal)]
         public void NewBlock()
         {
-            Logging.Logger.GetLogger().Debug("Call command 'New_dm'");
+            Logging.Logger.GetLogger().Info("Call command 'New_dm'");
 
             try
             {
@@ -52,7 +52,7 @@ namespace Dimeng.LinkToMicrocad
         [CommandMethod("AK", "Edit_dm", CommandFlags.Modal)]
         public void EditBlock()
         {
-            Logging.Logger.GetLogger().Debug("Call command 'Edit_dm'");
+            Logging.Logger.GetLogger().Info("Call command 'Edit_dm'");
 
             try
             {

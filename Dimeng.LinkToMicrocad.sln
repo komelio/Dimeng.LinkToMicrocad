@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dimeng.LinkToMicrocad.Web",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dimeng.LinkToMicrocad.Drawing", "Dimeng.LinkToMicrocad.Drawing\Dimeng.LinkToMicrocad.Drawing.csproj", "{2716B2F9-588C-4C6A-AD7F-23150BF62229}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dimeng.WoodEngine.Entities", "Dimeng.WoodEngine.Entities\Dimeng.WoodEngine.Entities.csproj", "{10017E17-2464-4D53-8AC8-FC5575A27659}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +109,14 @@ Global
 		{2716B2F9-588C-4C6A-AD7F-23150BF62229}.Debug-CADDrawing|Any CPU.Build.0 = Debug|Any CPU
 		{2716B2F9-588C-4C6A-AD7F-23150BF62229}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2716B2F9-588C-4C6A-AD7F-23150BF62229}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10017E17-2464-4D53-8AC8-FC5575A27659}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10017E17-2464-4D53-8AC8-FC5575A27659}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10017E17-2464-4D53-8AC8-FC5575A27659}.Debug-CAD Drawing|Any CPU.ActiveCfg = Debug|Any CPU
+		{10017E17-2464-4D53-8AC8-FC5575A27659}.Debug-CAD Drawing|Any CPU.Build.0 = Debug|Any CPU
+		{10017E17-2464-4D53-8AC8-FC5575A27659}.Debug-CADDrawing|Any CPU.ActiveCfg = Debug|Any CPU
+		{10017E17-2464-4D53-8AC8-FC5575A27659}.Debug-CADDrawing|Any CPU.Build.0 = Debug|Any CPU
+		{10017E17-2464-4D53-8AC8-FC5575A27659}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10017E17-2464-4D53-8AC8-FC5575A27659}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -120,5 +130,6 @@ Global
 		{9079C1EE-9741-4335-950B-AF407878E379} = {FF47BD61-B572-4287-B090-A2DF51E41D83}
 		{7EF988EC-D7C7-48E4-8804-858CCF6E3E81} = {E0DD4FC4-01A4-4866-A767-03D40D578B39}
 		{2716B2F9-588C-4C6A-AD7F-23150BF62229} = {FF47BD61-B572-4287-B090-A2DF51E41D83}
+		{10017E17-2464-4D53-8AC8-FC5575A27659} = {FF47BD61-B572-4287-B090-A2DF51E41D83}
 	EndGlobalSection
 EndGlobal
