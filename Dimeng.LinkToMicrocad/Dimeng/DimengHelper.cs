@@ -1,14 +1,4 @@
-﻿/*
- * Steps:
- * 1. Read the current product(AK,AD,AC,etc..) information from registry
- * 2. Find the temp.xml from product installation path.
- *    Read the information from xml file.
- * 3. According to the information from temp.xml,find relative microvellum cutx file and popup the prompt dialog.
- * 4. Draw the block dwg file and refresh the temp.xml
- * 5. Done.
- * 
- */
-
+﻿using Dimeng.LinkToMicrocad.Logging;
 using Dimeng.WoodEngine.Entities;
 using Dimeng.WoodEngine.Prompts;
 using Microsoft.Win32;
@@ -27,27 +17,17 @@ namespace Dimeng.LinkToMicrocad
         {
             try
             {
-                string folderPath = getTempFolderPath(Context.GetContext().AKInfo.Path);
-                string tempXMLFilePath = Path.Combine(folderPath, "temp.xml");
+                string folderPath = getTempFolderPath(
+                    Context.GetContext().AKInfo.Path);
+                AKProduct product = AKProduct.Load(
+                    Path.Combine(folderPath, "temp.xml"));
 
-                AKProduct product = AKProduct.Load(tempXMLFilePath);
-                var project = ProjectManager.CreateOrOpenProject(product.GetProjectPath());
+                var project = ProjectManager.CreateOrOpenProject(
+                    product.GetProjectPath());
 
-                SpecificationGroup specificationGroup;
-                string productCutx;
-
-                var mvProduct = project.Products.Find(it => it.Handle == product.Tab.DMID);
-                if (mvProduct != null)//if current project have the dmid product from its products,just open the old data
-                {
-                    productCutx = Path.Combine(project.JobPath, mvProduct.FileName);
-                    specificationGroup = project.SpecificationGroups.Find(it => it.Name == mvProduct.MatFile);
-                }
-                else//if not,find a new one and add a new product to project
-                {
-                    //Find Microvellum data and call the prompt pop out
-                    productCutx = Context.GetContext().MVDataContext.GetProduct(product.Tab.Name);
-                    specificationGroup = project.SpecificationGroups[0];
-                }
+                Product mvProduct = getProductFromProject(product, project);
+                string productCutx = mvProduct.GetProductCutxFileName();
+                SpecificationGroup specificationGroup = project.SpecificationGroups.Find(it => it.Name == mvProduct.MatFile);
 
                 string globalGvfx = Path.Combine(project.JobPath, specificationGroup.GlobalFileName);
                 string cutPartsCtpx = Path.Combine(project.JobPath, specificationGroup.CutPartsFileName);
@@ -62,10 +42,6 @@ namespace Dimeng.LinkToMicrocad
                 prompt.ViewModel = viewmodel;
                 prompt.ShowDialog();
 
-                ProjectManager.AddProduct(viewmodel.Name, viewmodel.Comments, product.Tab.DMID,
-                    project.SpecificationGroups[0], viewmodel.Width, viewmodel.Height, viewmodel.Depth,
-                    viewmodel.Book, project);
-
                 BlockDrawer drawer = new BlockDrawer(product.Tab.VarX,
                                                      product.Tab.VarZ,
                                                      product.Tab.VarY,
@@ -75,6 +51,27 @@ namespace Dimeng.LinkToMicrocad
             catch (Exception error)
             {
                 throw new Exception("Error occured during drawing....", error);
+            }
+        }
+
+        private Product getProductFromProject(AKProduct akProduct, Project project)
+        {
+            if (project.HasProduct(akProduct.Tab.DMID))
+            {
+                Logger.GetLogger().Debug("Project has the product:" + akProduct.Tab.Name);
+                return project.Products
+                              .Find(it => it.Handle.ToUpper() == akProduct.Tab.DMID.ToUpper());
+            }
+            else
+            {
+                Logger.GetLogger().Debug("Project do not have the product:" + akProduct.Tab.Name);
+                Logger.GetLogger().Debug("Add product to project and copy template from library.");
+                return project.AddProduct(akProduct.Tab.Name,
+                                          akProduct.Tab.DMID,
+                                          akProduct.Tab.VarX,
+                                          akProduct.Tab.VarZ,
+                                          akProduct.Tab.VarY,
+                                          Context.GetContext().MVDataContext.GetProduct(akProduct.Tab.Name));
             }
         }
 

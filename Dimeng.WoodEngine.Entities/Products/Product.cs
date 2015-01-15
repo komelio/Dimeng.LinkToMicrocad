@@ -28,5 +28,12 @@ namespace Dimeng.WoodEngine.Entities
         public string Parent7 { get; set; }
         public string Parent8 { get; set; }
         public string Parent9 { get; set; }
+
+        public Project Project { get; set; }
+
+        public string GetProductCutxFileName()
+        {
+            return string.Format("{0}\\{1}", this.Project.JobPath, FileName);
+        }
     }
 }

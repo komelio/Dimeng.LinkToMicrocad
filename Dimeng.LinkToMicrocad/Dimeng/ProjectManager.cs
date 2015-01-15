@@ -14,6 +14,7 @@ namespace Dimeng.LinkToMicrocad
     {
         public static Project CreateOrOpenProject(string projectPath)
         {
+            Logger.GetLogger().Debug("Check project path:" + projectPath);
             if (!Directory.Exists(projectPath))
             {
                 Directory.CreateDirectory(projectPath);
@@ -37,56 +38,59 @@ namespace Dimeng.LinkToMicrocad
         private static void validateAndCopyProjectMDBFiles(string projectPath)
         {
             string opmdb = Path.Combine(projectPath, "OverdrivePro.mdb");
-            if (!File.Exists(opmdb))
+            using (FileStream fs = new FileStream(opmdb, FileMode.Create, FileAccess.Write, FileShare.Write))
             {
-                using (FileStream fs = new FileStream(opmdb, FileMode.CreateNew, FileAccess.Write, FileShare.Write))
-                {
-                    fs.Write(Properties.Resources.OverdrivePro, 0, Properties.Resources.OverdrivePro.Length);
-                }
-
-                Logger.GetLogger().Info("Copy OverDrivePro.mdb from resources.");
+                fs.Write(Properties.Resources.OverdrivePro, 0, Properties.Resources.OverdrivePro.Length);
             }
+
+            Logger.GetLogger().Info("Copy OverDrivePro.mdb from resources.");
+
+            string productList = Path.Combine(projectPath, "ProductList.mdb");
+            using (FileStream fs = new FileStream(productList, FileMode.Create, FileAccess.Write, FileShare.Write))
+            {
+                fs.Write(Properties.Resources.ProductList, 0, Properties.Resources.ProductList.Length);
+            }
+            Logger.GetLogger().Info("Copy ProductList.mdb from resources.");
+
 
             string mvmdb = Path.Combine(projectPath, "MicrovellumProject.mdb");
             if (!File.Exists(mvmdb))
             {
-                using (FileStream fs = new FileStream(mvmdb, FileMode.CreateNew, FileAccess.Write, FileShare.Write))
-                {
-                    fs.Write(Properties.Resources.MicrovellumProject, 0, Properties.Resources.MicrovellumProject.Length);
-                }
-                Logger.GetLogger().Info("Copy MicrovellumProject.mdb from resources.");
+                throw new Exception("MicrovellumProject.mdb missing!");
+                //using (FileStream fs = new FileStream(mvmdb, FileMode.CreateNew, FileAccess.Write, FileShare.Write))
+                //{
+                //    fs.Write(Properties.Resources.MicrovellumProject, 0, Properties.Resources.MicrovellumProject.Length);
+                //}
+                //Logger.GetLogger().Info("Copy MicrovellumProject.mdb from resources.");
             }
 
-            string productList = Path.Combine(projectPath, "ProductList.mdb");
-            if (!File.Exists(productList))
-            {
-                using (FileStream fs = new FileStream(productList, FileMode.CreateNew, FileAccess.Write, FileShare.Write))
-                {
-                    fs.Write(Properties.Resources.ProductList, 0, Properties.Resources.ProductList.Length);
-                }
-                Logger.GetLogger().Info("Copy ProductList.mdb from resources.");
-            }
+
         }
 
         public static bool ValidateProjectPath(string projectPath)
         {
-            string opmdb = Path.Combine(projectPath, "OverdrivePro.mdb");
-            if (!File.Exists(opmdb))
-            {
-                return false;
-            }
+            Logger.GetLogger().Debug("Start validating project`s mdb files...");
+
+            //string opmdb = Path.Combine(projectPath, "OverdrivePro.mdb");
+            //if (!File.Exists(opmdb))
+            //{
+            //    Logger.GetLogger().Warn("OverdrivePro.mdb not found");
+            //    return false;
+            //}
 
             string mvmdb = Path.Combine(projectPath, "MicrovellumProject.mdb");
             if (!File.Exists(mvmdb))
             {
+                Logger.GetLogger().Warn("MicrovellumProject.mdb not found");
                 return false;
             }
 
-            string productList = Path.Combine(projectPath, "ProductList.mdb");
-            if (!File.Exists(productList))
-            {
-                return false;
-            }
+            //string productList = Path.Combine(projectPath, "ProductList.mdb");
+            //if (!File.Exists(productList))
+            //{
+            //    Logger.GetLogger().Warn("ProductList.mdb not found");
+            //    return false;
+            //}
 
             return true;
         }
@@ -116,41 +120,6 @@ namespace Dimeng.LinkToMicrocad
                 cmd.CommandText = string.Format("Insert into Jobs (JobName) values ('{0}')", projectName);
                 cmd.ExecuteNonQuery();
             }
-        }
-
-        public static void AddProduct(string description, string comments, string dmId,
-            SpecificationGroup sgroup,
-            double width, double height, double depth,
-            IWorkbook book, Project project)
-        {
-            Logger.GetLogger().Info("Add Product to current project");
-
-            string connstr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + project.ProductListMDBPath;
-            using (OleDbConnection conn = new OleDbConnection(connstr))
-            {
-                conn.Open();
-                string cmdtext = string.Format("Insert Into ProductList (ItemNumber,Description,Qty,Width,Height,Depth,MatFile,FileName,Handle,ReleaseNumber,Parent1) Values('{0}','{1}',{2},{3},{4},{5},'{6}','{7}','{8}','{9}','{10}')",
-                    "1.00",
-                    description,
-                    1,
-                    width,
-                    height,
-                    depth,
-                    sgroup.Name,
-                    dmId + ".cutx",
-                    dmId,
-                    "UnNamed",
-                    "Phase 1");
-                var cmd = new OleDbCommand();
-                cmd.Connection = conn;
-                cmd.CommandText = cmdtext;
-                cmd.ExecuteNonQuery();
-            }
-
-            var savepath = Path.Combine(project.JobPath, dmId + ".cutx");
-            book.SaveAs(savepath, FileFormat.OpenXMLWorkbook);//因为是经过各种运算得到的L，所以是book来SaveAs，而不是FileCopy过来
-
-            return;
         }
     }
 }

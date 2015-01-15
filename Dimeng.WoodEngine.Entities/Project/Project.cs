@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Dapper;
+using SpreadsheetGear;
 
 namespace Dimeng.WoodEngine.Entities
 {
@@ -52,6 +53,11 @@ namespace Dimeng.WoodEngine.Entities
 
                 this.Products = conn.Query<Product>
                     ("Select * from ProductList", null).ToList<Product>();
+
+                if (this.Products == null)
+                {
+                    this.Products = new List<Product>();
+                }
             }
         }
 
@@ -123,5 +129,60 @@ namespace Dimeng.WoodEngine.Entities
         }
 
         public List<Product> Products { get; set; }
+
+        /// <summary>
+        /// Judge if the project has the product by handle(DMID)
+        /// </summary>
+        /// <param name="id">DMID from temp.xml</param>
+        /// <returns></returns>
+        public bool HasProduct(string id)
+        {
+            if (this.Products == null || this.Products.Count == 0)
+            { return false; }
+
+            return this.Products.Any(it => it.Handle.ToUpper() == id.ToUpper());
+        }
+
+        public Product AddProduct(string name, string id, double width, double height, double depth, string libraryProductPath)
+        {
+            string filename = id + ".cutx";
+
+            string connstr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + this.ProductListMDBPath;
+            using (OleDbConnection conn = new OleDbConnection(connstr))
+            {
+                conn.Open();
+                string cmdtext = string.Format("Insert Into ProductList (ItemNumber,Description,Qty,Width,Height,Depth,MatFile,FileName,Handle,ReleaseNumber,Parent1) Values('{0}','{1}',{2},{3},{4},{5},'{6}','{7}','{8}','{9}','{10}')",
+                    string.Format("{0}.00", Products.Count + 1),
+                    name,
+                    1,
+                    width,
+                    height,
+                    depth,
+                    this.SpecificationGroups[0].Name,
+                    filename,
+                    id,
+                    "UnNamed",
+                    "Phase 1");
+                var cmd = new OleDbCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = cmdtext;
+                cmd.ExecuteNonQuery();
+
+                Product product = conn.Query<Product>("Select * from ProductList Where Handle='" + id + "'")
+                                      .SingleOrDefault();
+                product.Project = this;
+                this.Products.Add(product);
+
+                //add product cutx file to project
+                IWorkbook book = Factory.GetWorkbook(libraryProductPath);
+                var cells = book.Worksheets["Prompts"].Cells;
+                cells[0, 1].Value = width;
+                cells[1, 1].Value = height;
+                cells[2, 1].Value = depth;
+                book.SaveAs(Path.Combine(JobPath, filename), FileFormat.OpenXMLWorkbook);
+
+                return product;
+            }
+        }
     }
 }
