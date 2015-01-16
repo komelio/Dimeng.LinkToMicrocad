@@ -67,10 +67,10 @@ namespace Dimeng.WoodEngine.Prompts
             this.Name = name;
             this.ProductImagePath = imagePath + ".jpg";
 
-            var bookSet = SpreadHelper.GetProductBaseicBookSet(cutxFilePath, globalFilePath,
+            BookSet = SpreadHelper.GetProductBaseicBookSet(cutxFilePath, globalFilePath,
                 cutpartsFilePath, hardwareFilePath, doorstyleFilePath, edgebandFilePath);
 
-            Book = bookSet.Workbooks["L"];
+            Book = BookSet.Workbooks["L"];
             var sheet = Book.Worksheets["Prompts"];
             PromptCells = sheet.Cells;
 
@@ -321,6 +321,7 @@ namespace Dimeng.WoodEngine.Prompts
 
         public Action<List<PromptItem>> ControlTypeChangedAction { get; set; }
         public IWorkbook Book { get; private set; }
+        public IWorkbookSet BookSet { get; private set; }
         //public Project Project { get; private set; }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Dimeng.LinkToMicrocad.Logging;
+using Dimeng.WoodEngine.Business;
 using Dimeng.WoodEngine.Entities;
 using Dimeng.WoodEngine.Prompts;
 using Microsoft.Win32;
+using SpreadsheetGear;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,20 +29,12 @@ namespace Dimeng.LinkToMicrocad
 
                 Product mvProduct = getProductFromProject(product, project);
                 string productCutx = mvProduct.GetProductCutxFileName();
-                SpecificationGroup specificationGroup = project.SpecificationGroups.Find(it => it.Name == mvProduct.MatFile);
+                SpecificationGroup specificationGroup =
+                    project.SpecificationGroups.Find(it => it.Name == mvProduct.MatFile);
+                var bookset = showPromptWindow(product, project, productCutx, specificationGroup);
 
-                string globalGvfx = Path.Combine(project.JobPath, specificationGroup.GlobalFileName);
-                string cutPartsCtpx = Path.Combine(project.JobPath, specificationGroup.CutPartsFileName);
-                string edgeEdgx = Path.Combine(project.JobPath, specificationGroup.EdgeBandFileName);
-                string hardwareHwrx = Path.Combine(project.JobPath, specificationGroup.HardwareFileName);
-                string doorstyleDsvx = Path.Combine(project.JobPath, specificationGroup.DoorWizardFileName);
-
-                PromptsViewModel viewmodel = new PromptsViewModel(productCutx, globalGvfx, cutPartsCtpx, edgeEdgx, hardwareHwrx, doorstyleDsvx,
-                        product.Tab.Name, product.Tab.Photo, product.Tab.VarX, product.Tab.VarZ, product.Tab.VarY);
-
-                PromptWindow prompt = new PromptWindow();
-                prompt.ViewModel = viewmodel;
-                prompt.ShowDialog();
+                ProductAnalyst analyst = new ProductAnalyst();
+                analyst.Analysis(mvProduct, bookset);
 
                 BlockDrawer drawer = new BlockDrawer(product.Tab.VarX,
                                                      product.Tab.VarZ,
@@ -52,6 +46,24 @@ namespace Dimeng.LinkToMicrocad
             {
                 throw new Exception("Error occured during drawing....", error);
             }
+        }
+
+        private static IWorkbookSet showPromptWindow(AKProduct product, Project project, string productCutx, SpecificationGroup specificationGroup)
+        {
+            string globalGvfx = Path.Combine(project.JobPath, specificationGroup.GlobalFileName);
+            string cutPartsCtpx = Path.Combine(project.JobPath, specificationGroup.CutPartsFileName);
+            string edgeEdgx = Path.Combine(project.JobPath, specificationGroup.EdgeBandFileName);
+            string hardwareHwrx = Path.Combine(project.JobPath, specificationGroup.HardwareFileName);
+            string doorstyleDsvx = Path.Combine(project.JobPath, specificationGroup.DoorWizardFileName);
+
+            PromptsViewModel viewmodel = new PromptsViewModel(productCutx, globalGvfx, cutPartsCtpx, edgeEdgx, hardwareHwrx, doorstyleDsvx,
+                    product.Tab.Name, product.Tab.Photo, product.Tab.VarX, product.Tab.VarZ, product.Tab.VarY);
+
+            PromptWindow prompt = new PromptWindow();
+            prompt.ViewModel = viewmodel;
+            prompt.ShowDialog();
+
+            return viewmodel.BookSet;
         }
 
         private Product getProductFromProject(AKProduct akProduct, Project project)

@@ -5,8 +5,17 @@ using System.Text;
 
 namespace Dimeng.WoodEngine.Entities
 {
-    public class Product
+    public class Product : IProduct
     {
+        public Product()
+        {
+            this.Parts = new List<Part>();
+            this.CombinedHardwares = new List<Hardware>();
+            this.CombinedParts = new List<Part>();
+            this.Subassemblies = new List<Subassembly>();
+            this.Hardwares = new List<Hardware>();
+        }
+
         public string Description { get; set; }
         public string Handle { get; set; }
         public string ItemNumber { get; set; }
@@ -35,5 +44,20 @@ namespace Dimeng.WoodEngine.Entities
         {
             return string.Format("{0}\\{1}", this.Project.JobPath, FileName);
         }
+
+        public void ClearData()
+        {
+            this.Parts.Clear();
+            this.Subassemblies.Clear();
+            this.Hardwares.Clear();
+            this.CombinedParts.Clear();
+            this.CombinedHardwares.Clear();
+        }
+
+        public List<Part> Parts { get; private set; }
+        public List<Part> CombinedParts { get; private set; }
+        public List<Hardware> Hardwares { get; private set; }
+        public List<Hardware> CombinedHardwares { get; private set; }
+        public List<Subassembly> Subassemblies { get; private set; }
     }
 }

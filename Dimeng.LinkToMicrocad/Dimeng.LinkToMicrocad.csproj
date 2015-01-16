@@ -171,6 +171,10 @@
       <Project>{ae2c711a-a774-4d97-a609-5ea0e05598e4}</Project>
       <Name>Dimeng.LinkToMicrocad.Logging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Dimeng.WoodEngine.Business\Dimeng.WoodEngine.Business.csproj">
+      <Project>{141c71ba-0000-4d93-85f6-5ba6180d47cf}</Project>
+      <Name>Dimeng.WoodEngine.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Dimeng.WoodEngine.Entities\Dimeng.WoodEngine.Entities.csproj">
       <Project>{10017e17-2464-4d53-8ac8-fc5575a27659}</Project>
       <Name>Dimeng.WoodEngine.Entities</Name>
