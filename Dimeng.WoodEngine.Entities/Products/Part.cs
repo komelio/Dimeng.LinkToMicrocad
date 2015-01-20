@@ -48,7 +48,7 @@ namespace Dimeng.WoodEngine.Entities
                     double zr,
                     string draw3dstr,
                     string draw2dstr,
-                    Product product)
+                    IProduct product)
             : this()
         {
             this.PartName = partname;
@@ -74,7 +74,9 @@ namespace Dimeng.WoodEngine.Entities
             this.ZRotation = zr;
             this.Draw3DToken = draw3dstr;
             this.Draw2DToken = draw2dstr;
-            this.Product = product;
+            
+            //TODO:
+            //this.Product = product;
 
             this.TXOrigin = this.XOrigin;
             this.TYOrigin = this.YOrigin;

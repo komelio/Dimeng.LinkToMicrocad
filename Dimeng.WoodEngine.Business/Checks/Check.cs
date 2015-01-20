@@ -35,16 +35,52 @@ namespace Dimeng.WoodEngine.Business
             }
         }
 
-        public int GetIntValue(string rangeText,string errorPrefix,bool needPositive,List<ModelError> errors)
+        public int GetIntValue(string rangeText, string errorPrefix, bool needPositive, List<ModelError> errors)
         {
             int value;
-            if(int.TryParse(rangeText,out value))
+            if (int.TryParse(rangeText, out value))
             {
-                if(needPositive && value<0)
+                if (needPositive && value < 0)
                 {
                     errors.Add(
                         new ModelError(
                             string.Format("{0} should not below zero!Original data:{1}", errorPrefix, value)
+                            ));
+                    return 0;
+                }
+
+                return value;
+            }
+            else
+            {
+                errors.Add(
+                        new ModelError(
+                            string.Format("{0} can not be converted to double type!Original data:{1}", errorPrefix, value)
+                                      )
+                              );
+                return 0;
+            }
+        }
+
+        public int GetIntValue(string rangeText, string errorPrefix, bool needPositive, int[] ranges, List<ModelError> errors)
+        {
+            int value;
+            if (int.TryParse(rangeText, out value))
+            {
+                if (needPositive && value < 0)
+                {
+                    errors.Add(
+                        new ModelError(
+                            string.Format("{0} can not below zero!Original data:{1}", errorPrefix, value)
+                            ));
+                    return 0;
+                }
+
+                if (!ranges.Contains(value))
+                {
+                    errors.Add(
+                        new ModelError(
+                            string.Format("{0} should be in range {2}!Original data:{1}", errorPrefix, value, ranges)
                             ));
                     return 0;
                 }

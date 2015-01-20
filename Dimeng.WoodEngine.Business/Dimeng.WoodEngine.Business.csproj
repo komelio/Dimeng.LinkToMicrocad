@@ -41,6 +41,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Checks\Check.cs" />
+    <Compile Include="Checks\CheckBasePoint.cs" />
+    <Compile Include="Checks\CheckDrawToken.cs" />
+    <Compile Include="Checks\CheckEdgebanding.cs" />
+    <Compile Include="Checks\CheckMachinePoint.cs" />
+    <Compile Include="Checks\CheckMaterial.cs" />
+    <Compile Include="Checks\CheckPartRotation.cs" />
+    <Compile Include="Checks\CheckPositions.cs" />
     <Compile Include="Checks\PartChecker.cs" />
     <Compile Include="ModelError.cs" />
     <Compile Include="PartInitializer.cs" />

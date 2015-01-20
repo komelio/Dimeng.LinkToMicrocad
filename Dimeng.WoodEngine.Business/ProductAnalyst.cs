@@ -29,6 +29,8 @@ namespace Dimeng.WoodEngine.Business
 
                 var errors = getProductParts(product);
 
+                
+
                 return errors;
             }
             catch (Exception error)

@@ -40,7 +40,7 @@ namespace Dimeng.LinkToMicrocad
                                                      product.Tab.VarZ,
                                                      product.Tab.VarY,
                                                      Path.Combine(folderPath, product.Tab.DWG + ".dwg"));
-                drawer.DrawAndSaveAs();
+                drawer.DrawAndSaveAs2(mvProduct, bookset);
             }
             catch (Exception error)
             {
@@ -71,8 +71,15 @@ namespace Dimeng.LinkToMicrocad
             if (project.HasProduct(akProduct.Tab.DMID))
             {
                 Logger.GetLogger().Debug("Project has the product:" + akProduct.Tab.Name);
-                return project.Products
-                              .Find(it => it.Handle.ToUpper() == akProduct.Tab.DMID.ToUpper());
+                var _product = project.Products
+                                     .Find(it => it.Handle.ToUpper() == akProduct.Tab.DMID.ToUpper());
+                _product.Width = akProduct.Tab.VarX;
+                _product.Height = akProduct.Tab.VarZ;
+                _product.Depth = akProduct.Tab.VarY;
+
+                //TODO:update the info in the project database
+
+                return _product;
             }
             else
             {

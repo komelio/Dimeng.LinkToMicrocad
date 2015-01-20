@@ -7,6 +7,11 @@ namespace Dimeng.WoodEngine.Entities
 {
     public struct EdgeBanding
     {
+        public static EdgeBanding Default()
+        {
+            return new EdgeBanding();
+        }
+
         public EdgeBanding(string name,double thick)
         {
             this.Name = name;

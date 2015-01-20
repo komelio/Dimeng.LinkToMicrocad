@@ -52,10 +52,13 @@ namespace Dimeng.LinkToMicrocad
             }
         }
 
-        public void DrawAndSaveAs2(Product product,IWorkbookSet bookSet)
+        public void DrawAndSaveAs2(Product product, IWorkbookSet bookSet)
         {
             if (File.Exists(filePath))
             { throw new Exception("已经存在temp.dwg，请保证已经删除"); }
+
+            //TODO:Not here
+            product.Parts.ForEach(it => it.CalculateLocationInfo(Point3d.Origin, 0));
 
             using (Database db = new Database())
             using (Transaction acTrans = db.TransactionManager.StartTransaction())
@@ -63,14 +66,21 @@ namespace Dimeng.LinkToMicrocad
                 BlockTable bt = (BlockTable)acTrans.GetObject(db.BlockTableId, OpenMode.ForRead);
                 BlockTableRecord btr = (BlockTableRecord)acTrans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
 
-                Solid3d solid = new Solid3d();
-                solid.CreateBox(width, depth, height);
+                foreach (var part in product.Parts)
+                {
+                    Solid3d panel = new Solid3d();
+                    panel.CreateBox(part.Length, part.Width, part.Thickness);
 
-                //Move the block to the left-behind origin
-                solid.TransformBy(Matrix3d.Displacement(new Vector3d(width / 2, -depth / 2, height / 2)));
+                    panel.TransformBy(Matrix3d.Rotation(part.XRotation * Math.PI / 180, Vector3d.XAxis, Point3d.Origin));
+                    panel.TransformBy(Matrix3d.Rotation(part.YRotation * Math.PI / 180, Vector3d.YAxis, Point3d.Origin));
+                    panel.TransformBy(Matrix3d.Rotation(part.ZRotation * Math.PI / 180, Vector3d.ZAxis, Point3d.Origin));
 
-                btr.AppendEntity(solid);
-                acTrans.AddNewlyCreatedDBObject(solid, true);
+                    var moveVector = new Vector3d();
+                    panel.TransformBy(Matrix3d.Displacement(part.CenterVector));
+
+                    btr.AppendEntity(panel);
+                    acTrans.AddNewlyCreatedDBObject(panel, true);
+                }
 
                 acTrans.Commit();
 
