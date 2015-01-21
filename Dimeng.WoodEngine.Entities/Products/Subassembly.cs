@@ -7,6 +7,7 @@ namespace Dimeng.WoodEngine.Entities
 {
     public class Subassembly : IProduct
     {
+        public string Description { get; set; }
         public double Width { get; set; }
         public double Height { get; set; }
         public double Depth { get; set; }
@@ -24,5 +25,7 @@ namespace Dimeng.WoodEngine.Entities
         {
             get { throw new NotImplementedException(); }
         }
+
+        public IProduct Parent { get; private set; }
     }
 }

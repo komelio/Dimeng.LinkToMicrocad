@@ -59,6 +59,7 @@
                 <TextBox Grid.Row="3" Grid.Column="1" Height="23" IsEnabled="False" Text="{Binding Height}"/>
                 <TextBox Grid.Row="4" Grid.Column="1" Height="23" IsEnabled="False" Text="{Binding Depth}"/>
                 <TextBox Grid.Row="5" Grid.Column="1" Height="23" Text="{Binding Comments}"/>
+                <Button Click="Button_Click" Content="debug" Grid.Column="2" HorizontalAlignment="Left" Margin="10,1,0,0" Grid.Row="5" VerticalAlignment="Top" Width="75"/>
             </Grid>
         </Grid>
         <Grid Grid.Row="2" Grid.ColumnSpan="3" >

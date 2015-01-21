@@ -35,7 +35,7 @@ namespace Dimeng.WoodEngine.Business
 
             if (string.IsNullOrEmpty(text.Trim()))
             {
-                //this.writeError("未填写,默认为0", "板件绕" + typeR.ToString() + "旋转角度");
+                this.PartWarn("板件绕" + typeR.ToString() + "旋转角度未填写,默认为0");
                 return 0;
             }
 

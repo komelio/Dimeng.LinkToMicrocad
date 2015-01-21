@@ -59,5 +59,7 @@ namespace Dimeng.WoodEngine.Entities
         public List<Hardware> Hardwares { get; private set; }
         public List<Hardware> CombinedHardwares { get; private set; }
         public List<Subassembly> Subassemblies { get; private set; }
+
+        public IProduct Parent { get; private set; }
     }
 }

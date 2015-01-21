@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Dimeng.WoodEngine.Business;
 
 namespace Dimeng.WoodEngine.Business
 {
@@ -11,12 +12,14 @@ namespace Dimeng.WoodEngine.Business
         {
             message = _message;
             location = string.Empty;
+            errorLevel = ErrorLevel.Warn;
         }
 
-        public ModelError(string _location, string _message)
+        public ModelError(string _location, string _message, ErrorLevel level)
         {
             message = _message;
             location = _location;
+            errorLevel = level;
         }
 
         private string message;
@@ -33,6 +36,11 @@ namespace Dimeng.WoodEngine.Business
             set { location = value; }
         }
 
-       
+        private ErrorLevel errorLevel;
+        public ErrorLevel ErrorLevel
+        {
+            get { return errorLevel; }
+            set { errorLevel = value; }
+        }
     }
 }

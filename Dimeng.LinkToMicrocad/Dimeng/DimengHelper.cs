@@ -1,4 +1,5 @@
-﻿using Dimeng.LinkToMicrocad.Logging;
+﻿using Dimeng.LinkToMicrocad.Drawing;
+using Dimeng.LinkToMicrocad.Logging;
 using Dimeng.WoodEngine.Business;
 using Dimeng.WoodEngine.Entities;
 using Dimeng.WoodEngine.Prompts;
@@ -34,17 +35,25 @@ namespace Dimeng.LinkToMicrocad
                 var bookset = showPromptWindow(product, project, productCutx, specificationGroup);
 
                 ProductAnalyst analyst = new ProductAnalyst();
-                analyst.Analysis(mvProduct, bookset);
+                var errors = analyst.Analysis(mvProduct, bookset);
 
-                BlockDrawer drawer = new BlockDrawer(product.Tab.VarX,
-                                                     product.Tab.VarZ,
-                                                     product.Tab.VarY,
-                                                     Path.Combine(folderPath, product.Tab.DWG + ".dwg"));
-                drawer.DrawAndSaveAs2(mvProduct, bookset);
+                outputErrors(errors);
+
+                ProductDrawer drawer = new ProductDrawer();
+                drawer.DrawAndSaveAsDWG(mvProduct, 
+                    bookset, Path.Combine(folderPath, product.Tab.DWG + ".dwg"));
             }
             catch (Exception error)
             {
                 throw new Exception("Error occured during drawing....", error);
+            }
+        }
+
+        private void outputErrors(IEnumerable<ModelError> errors)
+        {
+            foreach (var error in errors)
+            {
+                Logger.GetLogger().Fatal(error.Message);
             }
         }
 

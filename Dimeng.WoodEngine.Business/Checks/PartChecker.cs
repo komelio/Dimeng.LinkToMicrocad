@@ -11,11 +11,13 @@ namespace Dimeng.WoodEngine.Business
     {
         IRange range;
         List<ModelError> errors;
+        string location;
 
-        public PartChecker(IRange range, List<ModelError> errors)
+        public PartChecker(IRange range, string location, List<ModelError> errors)
         {
             this.range = range;
             this.errors = errors;
+            this.location = string.Format("{0}({1})", location, range.Row + 1);
         }
 
         public string PartName()
@@ -44,6 +46,18 @@ namespace Dimeng.WoodEngine.Business
             return GetDoubleValue(range[0, 19].Text, "Part Length", true, errors);
         }
 
-      
+        public void PartWarn(string message)
+        {
+            this.errors.Add(
+                new ModelError(location, message, ErrorLevel.Warn)
+                );
+        }
+
+        public void PartError(string message)
+        {
+            this.errors.Add(
+                new ModelError(location, message, ErrorLevel.Error)
+                );
+        }
     }
 }

@@ -115,7 +115,6 @@
     </Compile>
     <Compile Include="Dimeng\AKInfo.cs" />
     <Compile Include="Dimeng\AKProduct.cs" />
-    <Compile Include="Dimeng\BlockDrawer.cs" />
     <Compile Include="Dimeng\Context.cs" />
     <Compile Include="Dimeng\DimengHelper.cs" />
     <Compile Include="Dimeng\MVDataContext.cs" />
@@ -167,6 +166,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Dimeng.LinkToMicrocad.Drawing\Dimeng.LinkToMicrocad.Drawing.csproj">
+      <Project>{2716b2f9-588c-4c6a-ad7f-23150bf62229}</Project>
+      <Name>Dimeng.LinkToMicrocad.Drawing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Dimeng.LinkToMicrocad.Logging\Dimeng.LinkToMicrocad.Logging.csproj">
       <Project>{ae2c711a-a774-4d97-a609-5ea0e05598e4}</Project>
       <Name>Dimeng.LinkToMicrocad.Logging</Name>

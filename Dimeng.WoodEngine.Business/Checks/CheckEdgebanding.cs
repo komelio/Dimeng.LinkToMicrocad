@@ -71,7 +71,7 @@ namespace Dimeng.WoodEngine.Business
 
                 if(_name.ToUpper() == edgeName)
                 {
-                    double thick = GetDoubleValue(sheet.Cells[i, 1].Text, "封边厚度", true, errors);
+                    double thick = GetDoubleValue(sheet.Cells[i, 1].Text, "Edgebanding thickness", true, errors);
 
                     if(thick>0)
                     {

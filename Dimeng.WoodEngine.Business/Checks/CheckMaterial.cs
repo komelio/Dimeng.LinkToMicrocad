@@ -151,7 +151,10 @@ namespace Dimeng.WoodEngine.Business
         {
             if (!material.HasFitStock(length, width))
             {
-                //this.writeError(string.Format("材料[{0}]没有足够的尺寸容纳板件{1}/{2}", material.Name, length, width), "板件材料");
+                this.PartError(
+                    string.Format("材料[{0}]没有足够的尺寸容纳板件{1}/{2}", 
+                        material.Name, length, width)
+                    );
             }
         }
     }

@@ -13,7 +13,7 @@ namespace Dimeng.WoodEngine.Business
         {
             List<ModelError> errors = new List<ModelError>();
 
-            PartChecker check = new PartChecker(partRange, errors);
+            PartChecker check = new PartChecker(partRange, getLocation(product), errors);
 
             string partName = check.PartName();
             int qty = check.Qty();
@@ -32,6 +32,11 @@ namespace Dimeng.WoodEngine.Business
             EdgeBanding ebw2 = check.EBW2(books.Workbooks["E"], tempEdgebandings);
             EdgeBanding ebl1 = check.EBL1(books.Workbooks["E"], tempEdgebandings);
             EdgeBanding ebl2 = check.EBL2(books.Workbooks["E"], tempEdgebandings);
+
+            string[] comments = partRange[0, 26].Text.Split('|');//Column26
+            string comment = comments[0];
+            string comment2 = (comments.Length > 1) ? comments[1] : string.Empty;
+            string comment3 = (comments.Length > 2) ? comments[2] : string.Empty;
 
             int basepoint = check.BasePoint();
             MachinePoint machinePoint = check.MachinePoint();
@@ -58,12 +63,17 @@ namespace Dimeng.WoodEngine.Business
             {
                 List<double[]> origins = check.Positions(qty, thick, product.Width);
 
+                if (errors.Count > 0)
+                {
+                    return errors;
+                }
+
                 foreach (var d in origins)
                 {
-                    Part part = new Part(partName, 1, width, length, thick, material.Name,
-                        ebw1.Name, ebw2.Name, ebl1.Name, ebl2.Name,
-                        "", "", "",
-                        basepoint, machinePoint.MP,
+                    Part part = new Part(partName, 1, width, length, thick, material,
+                        ebw1, ebw2, ebl1, ebl2,
+                        comment, comment2, comment3,
+                        basepoint, machinePoint,
                         d[0], d[1], d[2], xRotation, yRotation, zRotation,
                         layname3d, layname2d,
                         product);
@@ -75,10 +85,16 @@ namespace Dimeng.WoodEngine.Business
                 double xPos = check.XPosition();
                 double yPos = check.YPosition();
                 double zPos = check.ZPosition();
-                Part part = new Part(partName, qty, width, length, thick, material.Name,
-                    ebw1.Name, ebw2.Name, ebl1.Name, ebl2.Name,
-                    "", "", "",
-                    basepoint, machinePoint.MP,
+
+                if (errors.Count > 0)
+                {
+                    return errors;
+                }
+
+                Part part = new Part(partName, qty, width, length, thick, material,
+                    ebw1, ebw2, ebl1, ebl2,
+                    comment, comment2, comment3,
+                    basepoint, machinePoint,
                     xPos, yPos, zPos, xRotation, yRotation, zRotation,
                     layname3d, layname2d,
                     product);
@@ -87,6 +103,23 @@ namespace Dimeng.WoodEngine.Business
             }
 
             return errors;
+        }
+
+        private string getLocation(IProduct product)
+        {
+            if (product is Product)
+            {
+                var _product = product as Product;
+                return string.Format("{0} {1}", _product.Handle, _product.Description);
+            }
+
+            if (product is Subassembly)
+            {
+                var _sub = product as Subassembly;
+                return string.Format("{0}", _sub.Description);//TODO
+            }
+
+            throw new Exception("Unknown type of product");
         }
 
 

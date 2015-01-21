@@ -48,8 +48,9 @@
     <Compile Include="Checks\CheckMaterial.cs" />
     <Compile Include="Checks\CheckPartRotation.cs" />
     <Compile Include="Checks\CheckPositions.cs" />
+    <Compile Include="Checks\ErrorLevel.cs" />
     <Compile Include="Checks\PartChecker.cs" />
-    <Compile Include="ModelError.cs" />
+    <Compile Include="Checks\ModelError.cs" />
     <Compile Include="PartInitializer.cs" />
     <Compile Include="ProductAnalyst.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

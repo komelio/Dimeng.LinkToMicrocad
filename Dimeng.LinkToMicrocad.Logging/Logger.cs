@@ -81,6 +81,7 @@ namespace Dimeng.LinkToMicrocad.Logging
 
         private void errorInnerException(Exception error)
         {
+            logger.Debug("----------");
             logger.Error(string.Format("{0}\n {1}", error.Message, error.StackTrace));
 
             if (error.InnerException != null)

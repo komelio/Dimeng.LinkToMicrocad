@@ -392,6 +392,12 @@ namespace Dimeng.WoodEngine.Prompts
             }
         }
         #endregion
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            SpreadExplorer se = new SpreadExplorer(this.viewModel.Book);
+            se.ShowDialog();
+        }
     }
 }
 

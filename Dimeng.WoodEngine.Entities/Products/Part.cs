@@ -22,7 +22,6 @@ namespace Dimeng.WoodEngine.Entities
             Profiles = new List<Profile>();
 
             IsBend = false;
-            IsFake = false;
         }
 
         public Part(string partname,
@@ -30,24 +29,24 @@ namespace Dimeng.WoodEngine.Entities
                     double width,
                     double length,
                     double thickness,
-                    string material,
-                    string ebw1,
-                    string ebw2,
-                    string ebl1,
-                    string ebl2,
+                    Material material,
+                    EdgeBanding ebw1,
+                    EdgeBanding ebw2,
+                    EdgeBanding ebl1,
+                    EdgeBanding ebl2,
                     string comment,
                     string comment2,
                     string comment3,
                     int bp,
-                    string mp,
+                    MachinePoint mp,
                     double xo,
                     double yo,
                     double zo,
                     double xr,
                     double yr,
                     double zr,
-                    string draw3dstr,
-                    string draw2dstr,
+                    string layer3DName,
+                    string layer2DName,
                     IProduct product)
             : this()
         {
@@ -65,18 +64,17 @@ namespace Dimeng.WoodEngine.Entities
             this.Comment2 = comment2;
             this.Comment3 = comment3;
             this.BasePoint = bp;
-            this.MachinePoint = new MachinePoint(mp);
+            this.MachinePoint = mp;
             this.XOrigin = xo;
             this.YOrigin = yo;
             this.ZOrigin = zo;
             this.XRotation = xr;
             this.YRotation = yr;
             this.ZRotation = zr;
-            this.Draw3DToken = draw3dstr;
-            this.Draw2DToken = draw2dstr;
-            
-            //TODO:
-            //this.Product = product;
+            this.LayerName3D = layer3DName;
+            this.LayerName2D = layer2DName;
+
+            this.Parent = product;
 
             this.TXOrigin = this.XOrigin;
             this.TYOrigin = this.YOrigin;
@@ -86,15 +84,52 @@ namespace Dimeng.WoodEngine.Entities
             this.TZRotation = this.ZRotation;
         }
 
-        /// <summary>
-        /// 如果材料为负号，则板件只绘图不生产
-        /// </summary>
-        public bool IsFake { get; set; }
+        private Product _product;
+        public Product Product
+        {
+            get { return _product; }
+            set
+            {
+                if (value == null)
+                {
+                    throw new Exception("Product can not be null");
+                }
+                _product = value;
+            }
+        }
+        private IProduct _parent;
+        public IProduct Parent
+        {
+            get { return _parent; }
+            set
+            {
+                _parent = value;
+                if (value is Product)
+                {
+                    this.Product = value as Product;
+                }
+                else if (value is Subassembly)
+                {
+                    Subassembly sub = value as Subassembly;
 
-        /// <summary>
-        /// 对应模型里的行号
-        /// </summary>
-        public int LineNumber { get; set; }
+                    if (sub.Parent is Product)
+                    {
+                        this.Product = sub.Parent as Product;
+                    }
+                    else if (sub.Parent is Subassembly)
+                    {
+                        if (sub.Parent.Parent is Product)
+                        {
+                            this.Product = sub.Parent.Parent as Product;
+                        }
+                        else
+                        {
+                            throw new Exception("Wrong product type!");
+                        }
+                    }
+                }
+            }
+        }
 
         public void CalculateLocationInfo(Point3d basepoint, double zr)
         {
@@ -306,56 +341,16 @@ namespace Dimeng.WoodEngine.Entities
         public int Qty { get; set; }
         public double Width { get; set; }
         public double Length { get; set; }
-        public string Material { get; set; }
+        public Material Material { get; set; }
         public double Thickness { get; set; }
-        public string EBW1 { get; set; }
-        public string EBW2 { get; set; }
-        public string EBL1 { get; set; }
-        public string EBL2 { get; set; }
+        public EdgeBanding EBW1 { get; set; }
+        public EdgeBanding EBW2 { get; set; }
+        public EdgeBanding EBL1 { get; set; }
+        public EdgeBanding EBL2 { get; set; }
         public string Comment { get; set; }
         public string Comment2 { get; set; }
         public string Comment3 { get; set; }
 
-        private string draw3DToken;
-        public string Draw3DToken
-        {
-            get { return draw3DToken; }
-            set
-            {
-                draw3DToken = value;
-                if (value.ToUpper().StartsWith("DRAW3DBOX"))
-                {
-                    string name = value.ToUpper().Replace("DRAW3DBOX", "").Trim();
-                    if (string.IsNullOrEmpty(name))
-                        name = "Cabinet";
-                    LayerName3D = "3D_" + name;
-                    IsDrawOnDWG3D = true;
-                }
-                else
-                    IsDrawOnDWG3D = false;
-            }
-        }
-
-        private string draw2DToken;
-        public string Draw2DToken
-        {
-            get
-            { return draw2DToken; }
-            set
-            {
-                draw2DToken = value;
-                if (value.ToUpper().StartsWith("DRAW2DBOX"))
-                {
-                    string name = value.ToUpper().Replace("DRAW2DBOX", "").Trim();
-                    if (string.IsNullOrEmpty(name))
-                        name = "Cabinet";
-                    LayerName2D = "2D_" + name;
-                    IsDrawOnDWG2D = true;
-                }
-                else
-                    IsDrawOnDWG2D = false;
-            }
-        }
         public int BasePoint { get; set; }
         public MachinePoint MachinePoint { get; set; }
 
@@ -375,8 +370,6 @@ namespace Dimeng.WoodEngine.Entities
         public double TYRotation { get; set; }
         public double TZRotation { get; set; }
 
-        public bool IsDrawOnDWG3D { get; set; }
-        public bool IsDrawOnDWG2D { get; set; }
         public string LayerName2D { get; set; }
         public string LayerName3D { get; set; }
         public bool IsMirrorPart { get; set; }
@@ -388,7 +381,7 @@ namespace Dimeng.WoodEngine.Entities
         public List<Sawing> Sawings { get; private set; }
         public List<Profile> Profiles { get; private set; }
 
-        public Product Product { get; set; }
+
 
         //板件的8个点，在空间的最终坐标 （即经过各种旋转、位移后的），数字的定义遵循MV的板件角点定义
         public Point3d Point1 { get; set; }
@@ -481,5 +474,7 @@ namespace Dimeng.WoodEngine.Entities
         }
 
         public bool IsBend { get; set; }//是否为弧形板件，如果是的话，在生成机加工、绘制板件时都是不同的
+
+        public bool IsValid { get; set; }
     }
 }
