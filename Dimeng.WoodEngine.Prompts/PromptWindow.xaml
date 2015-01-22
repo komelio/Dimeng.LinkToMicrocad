@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Dimeng.WoodEngine.Prompts.PromptWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="产品提示屏" Height="607" Width="700" Icon="Images/Order.ico" WindowStartupLocation="CenterScreen">
+        Title="产品提示屏" Height="607" Width="700" Icon="Images/Order.ico" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -33,7 +33,7 @@
                 <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Image Source="{Binding ProductImagePath}" Width="150"/>
+            <Image x:Name="ImageControl" Source="{Binding ProductImagePath}" Width="150"/>
             <Grid Grid.Column="2" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>

@@ -34,13 +34,16 @@ namespace Dimeng.LinkToMicrocad
                     project.SpecificationGroups.Find(it => it.Name == mvProduct.MatFile);
                 var bookset = showPromptWindow(product, project, productCutx, specificationGroup);
 
+                bookset.GetLock();
                 ProductAnalyst analyst = new ProductAnalyst();
                 var errors = analyst.Analysis(mvProduct, bookset);
+                bookset.Workbooks["L"].SaveAs(productCutx, FileFormat.OpenXMLWorkbook);
+                bookset.ReleaseLock();
 
                 outputErrors(errors);
 
                 ProductDrawer drawer = new ProductDrawer();
-                drawer.DrawAndSaveAsDWG(mvProduct, 
+                drawer.DrawAndSaveAsDWG(mvProduct,
                     bookset, Path.Combine(folderPath, product.Tab.DWG + ".dwg"));
             }
             catch (Exception error)
@@ -118,7 +121,38 @@ namespace Dimeng.LinkToMicrocad
 
         internal void EditAndDrawBlock()
         {
-            ShowPromptAndDrawBlock();
+            try
+            {
+                string folderPath = getTempFolderPath(
+                    Context.GetContext().AKInfo.Path);
+                AKProduct product = AKProduct.Load(
+                    Path.Combine(folderPath, "temp.xml"));
+
+                var project = ProjectManager.CreateOrOpenProject(
+                    product.GetProjectPath());
+
+                Product mvProduct = getProductFromProject(product, project);
+                string productCutx = mvProduct.GetProductCutxFileName();
+                SpecificationGroup specificationGroup =
+                    project.SpecificationGroups.Find(it => it.Name == mvProduct.MatFile);
+                var bookset = showPromptWindow(product, project, productCutx, specificationGroup);
+
+                bookset.GetLock();
+                ProductAnalyst analyst = new ProductAnalyst();
+                var errors = analyst.Analysis(mvProduct, bookset);
+                bookset.Workbooks["L"].SaveAs(productCutx, FileFormat.OpenXMLWorkbook);
+                bookset.ReleaseLock();
+
+                outputErrors(errors);
+
+                ProductDrawer drawer = new ProductDrawer();
+                drawer.DrawAndSaveAsDWG(mvProduct,
+                    bookset, Path.Combine(folderPath, product.Tab.DWG + ".dwg"));
+            }
+            catch (Exception error)
+            {
+                throw new Exception("Error occured during drawing....", error);
+            }
         }
     }
 }

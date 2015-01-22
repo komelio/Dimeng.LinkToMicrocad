@@ -57,11 +57,6 @@ namespace Dimeng.LinkToMicrocad
             if (!File.Exists(mvmdb))
             {
                 throw new Exception("MicrovellumProject.mdb missing!");
-                //using (FileStream fs = new FileStream(mvmdb, FileMode.CreateNew, FileAccess.Write, FileShare.Write))
-                //{
-                //    fs.Write(Properties.Resources.MicrovellumProject, 0, Properties.Resources.MicrovellumProject.Length);
-                //}
-                //Logger.GetLogger().Info("Copy MicrovellumProject.mdb from resources.");
             }
 
 
@@ -71,26 +66,12 @@ namespace Dimeng.LinkToMicrocad
         {
             Logger.GetLogger().Debug("Start validating project`s mdb files...");
 
-            //string opmdb = Path.Combine(projectPath, "OverdrivePro.mdb");
-            //if (!File.Exists(opmdb))
-            //{
-            //    Logger.GetLogger().Warn("OverdrivePro.mdb not found");
-            //    return false;
-            //}
-
             string mvmdb = Path.Combine(projectPath, "MicrovellumProject.mdb");
             if (!File.Exists(mvmdb))
             {
                 Logger.GetLogger().Warn("MicrovellumProject.mdb not found");
                 return false;
             }
-
-            //string productList = Path.Combine(projectPath, "ProductList.mdb");
-            //if (!File.Exists(productList))
-            //{
-            //    Logger.GetLogger().Warn("ProductList.mdb not found");
-            //    return false;
-            //}
 
             return true;
         }

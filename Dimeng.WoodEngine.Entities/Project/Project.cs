@@ -54,6 +54,8 @@ namespace Dimeng.WoodEngine.Entities
                 this.Products = conn.Query<Product>
                     ("Select * from ProductList", null).ToList<Product>();
 
+                this.Products.ForEach(it => it.Project = this);
+
                 if (this.Products == null)
                 {
                     this.Products = new List<Product>();

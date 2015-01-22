@@ -12,6 +12,7 @@ namespace Dimeng.WoodEngine.Business
     {
         List<Material> tempMaterials = new List<Material>();
         List<EdgeBanding> tempEdgebandings = new List<EdgeBanding>();
+        List<Hardware> tempHardwares = new List<Hardware>();
 
         public IEnumerable<ModelError> Analysis(Product product, IWorkbookSet bookSet)
         {
@@ -19,8 +20,6 @@ namespace Dimeng.WoodEngine.Business
 
             try
             {
-                bookSet.GetLock();
-
                 validateBookset(bookSet);
                 this.workBookSet = bookSet;
 
@@ -28,10 +27,7 @@ namespace Dimeng.WoodEngine.Business
 
                 fillProductDimensionToLBook(product.Width, product.Height, product.Depth);
 
-                IWorkbook book = workBookSet.Workbooks["L"];
-                var errors = getIProductElements(product, book);
-
-                bookSet.ReleaseLock();
+                var errors = getIProductElements(product, workBookSet.Workbooks["L"]);
 
                 return errors;
             }
@@ -63,8 +59,72 @@ namespace Dimeng.WoodEngine.Business
             List<ModelError> errors = new List<ModelError>();
 
             errors.AddRange(getParts(product, cutPartCells));//TODO：和下面的函数看起来是重复的
+            errors.AddRange(getHardwares(product, hardwareCells));
+            errors.AddRange(getSubassemblies(product, subassembliesCells));
             //TODO:Subassemblies
             //TODO:Hardwares
+
+            return errors;
+        }
+
+        private IEnumerable<ModelError> getSubassemblies(IProduct product, IRange cells)
+        {
+            Logger.GetLogger().Info(string.Format("Getting subassemblies from product:{0}", product.Description));
+
+            List<ModelError> errors = new List<ModelError>();
+
+            for (int i = 0; i < cells.Cells.RowCount; i++)
+            {
+
+                var subRow = cells.Cells[i, 0].EntireRow;
+
+                string subName = subRow[0, 16].Text;
+                Logger.GetLogger().Debug(string.Format("Current row number:{0}/{1}", i + 1, subName));
+
+                if (string.IsNullOrEmpty(subName.Trim()))
+                {
+                    Logger.GetLogger().Debug("Blank row and break the loop");
+                    break;
+                }
+
+                List<Subassembly> subs = new List<Subassembly>();
+                var subassemblyInitializer = new SubassemblyInitializer();
+                var errorList = subassemblyInitializer.GetSubassembliesFromOneLine(subRow, product, subs,
+                    workBookSet, tempMaterials, tempEdgebandings, tempHardwares);
+            }
+
+            return errors;
+        }
+
+        private IEnumerable<ModelError> getHardwares(IProduct product, IRange cells)
+        {
+            Logger.GetLogger().Info(string.Format("Getting hardwares from product:{0}", product.Description));
+
+            List<ModelError> errors = new List<ModelError>();
+
+            //for (int i = 0; i < cells.Rows.RowCount; i++)
+            //{
+            //    Logger.GetLogger().Debug(string.Format("Current row number:{0}/{1}", i + 1, cells[i, 16].Text));
+
+            //    if (string.IsNullOrEmpty(cells[i, 16].Text))
+            //    {
+            //        Logger.GetLogger().Debug("Blank row and break the loop.");
+            //        break;
+            //    }
+
+            //    IRange row = cells[i, 0].EntireRow;
+
+            //    List<Hardware> tempHardwares = new List<Hardware>();
+
+
+
+            //    errors.AddRange(errorList);
+
+            //    if (tempHardwares.Count > 0)
+            //    {
+            //        product.Hardwares.AddRange(tempHardwares);
+            //    }
+            //}
 
             return errors;
         }

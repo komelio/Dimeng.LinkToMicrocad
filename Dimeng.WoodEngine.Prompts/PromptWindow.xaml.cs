@@ -23,6 +23,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SpreadsheetGear;
+using Dimeng.LinkToMicrocad.Logging;
 
 namespace Dimeng.WoodEngine.Prompts
 {
@@ -397,6 +398,14 @@ namespace Dimeng.WoodEngine.Prompts
         {
             SpreadExplorer se = new SpreadExplorer(this.viewModel.Book);
             se.ShowDialog();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            //release the image
+            Logger.GetLogger().Info("Clear image binding");
+            BindingOperations.ClearBinding(this.ImageControl, Image.SourceProperty);
+            this.ImageControl.Source = null;
         }
     }
 }

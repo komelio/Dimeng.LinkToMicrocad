@@ -41,19 +41,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Checks\Check.cs" />
-    <Compile Include="Checks\CheckBasePoint.cs" />
-    <Compile Include="Checks\CheckDrawToken.cs" />
-    <Compile Include="Checks\CheckEdgebanding.cs" />
-    <Compile Include="Checks\CheckMachinePoint.cs" />
-    <Compile Include="Checks\CheckMaterial.cs" />
-    <Compile Include="Checks\CheckPartRotation.cs" />
-    <Compile Include="Checks\CheckPositions.cs" />
+    <Compile Include="Checks\Part\CheckBasePoint.cs" />
+    <Compile Include="Checks\Part\CheckDrawToken.cs" />
+    <Compile Include="Checks\Part\CheckEdgebanding.cs" />
+    <Compile Include="Checks\Part\CheckMachinePoint.cs" />
+    <Compile Include="Checks\Part\CheckMaterial.cs" />
+    <Compile Include="Checks\Part\CheckPartRotation.cs" />
+    <Compile Include="Checks\Part\CheckPositions.cs" />
     <Compile Include="Checks\ErrorLevel.cs" />
-    <Compile Include="Checks\PartChecker.cs" />
+    <Compile Include="Checks\Part\PartChecker.cs" />
     <Compile Include="Checks\ModelError.cs" />
+    <Compile Include="Checks\SubassemblyChecker.cs" />
     <Compile Include="PartInitializer.cs" />
     <Compile Include="ProductAnalyst.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SubassemblyInitializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dimeng.LinkToMicrocad.Logging\Dimeng.LinkToMicrocad.Logging.csproj">
@@ -69,7 +71,9 @@
       <Name>Dimeng.WoodEngine.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Checks\Sub\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
