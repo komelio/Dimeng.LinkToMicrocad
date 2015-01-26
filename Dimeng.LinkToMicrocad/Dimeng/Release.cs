@@ -1,4 +1,5 @@
 ﻿using Dimeng.LinkToMicrocad.Logging;
+using Dimeng.WoodEngine.Entities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace Dimeng.LinkToMicrocad
 {
-    public class Release
+    public class Release : IMVLibrary
     {
         public static Release GetRelease(string path)
         {

@@ -28,6 +28,7 @@ namespace Dimeng.WoodEngine.Entities
             this.Rotation = rotation;
             this.Handle = handle;
             this.LineNumber = lineNumber;
+            this.Parent = parent;
         }
         public string Description { get; set; }
         public int Qty { get; set; }

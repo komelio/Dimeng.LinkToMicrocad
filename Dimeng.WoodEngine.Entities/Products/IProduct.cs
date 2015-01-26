@@ -11,6 +11,7 @@ namespace Dimeng.WoodEngine.Entities
         double Width { get; }
         double Height { get; }
         double Depth { get; }
+        string Handle { get; }
         List<Part> Parts { get; }
         List<Hardware> Hardwares { get; }
         List<Subassembly> Subassemblies { get; }

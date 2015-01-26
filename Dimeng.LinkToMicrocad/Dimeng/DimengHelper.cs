@@ -35,9 +35,14 @@ namespace Dimeng.LinkToMicrocad
                 var bookset = showPromptWindow(product, project, productCutx, specificationGroup);
 
                 bookset.GetLock();
-                ProductAnalyst analyst = new ProductAnalyst();
+
+                updateProductWHD(product, bookset);
+
+                ProductAnalyst analyst = new ProductAnalyst(
+                    Context.GetContext().MVDataContext.GetLatestRelease());
                 var errors = analyst.Analysis(mvProduct, bookset);
                 bookset.Workbooks["L"].SaveAs(productCutx, FileFormat.OpenXMLWorkbook);
+
                 bookset.ReleaseLock();
 
                 outputErrors(errors);
@@ -49,6 +54,21 @@ namespace Dimeng.LinkToMicrocad
             catch (Exception error)
             {
                 throw new Exception("Error occured during drawing....", error);
+            }
+        }
+
+        private void updateProductWHD(AKProduct product, IWorkbookSet bookset)
+        {
+            //Update the product data
+            try
+            {
+                product.Tab.VarX = double.Parse(bookset.Workbooks["L"].Worksheets["Prompts"].Cells[0, 1].Value.ToString());
+                product.Tab.VarY = double.Parse(bookset.Workbooks["L"].Worksheets["Prompts"].Cells[1, 1].Value.ToString());
+                product.Tab.VarZ = double.Parse(bookset.Workbooks["L"].Worksheets["Prompts"].Cells[2, 1].Value.ToString());
+            }
+            catch (Exception error)
+            {
+                throw new Exception("Error occured when injecting WHD values into product properties.", error);
             }
         }
 
@@ -138,9 +158,16 @@ namespace Dimeng.LinkToMicrocad
                 var bookset = showPromptWindow(product, project, productCutx, specificationGroup);
 
                 bookset.GetLock();
-                ProductAnalyst analyst = new ProductAnalyst();
+
+                updateProductWHD(product, bookset);
+
+                ProductAnalyst analyst = new ProductAnalyst(
+                    Context.GetContext().MVDataContext.GetLatestRelease());
                 var errors = analyst.Analysis(mvProduct, bookset);
                 bookset.Workbooks["L"].SaveAs(productCutx, FileFormat.OpenXMLWorkbook);
+
+    
+
                 bookset.ReleaseLock();
 
                 outputErrors(errors);

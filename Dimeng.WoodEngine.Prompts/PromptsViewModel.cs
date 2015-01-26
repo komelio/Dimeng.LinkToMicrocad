@@ -151,10 +151,6 @@ namespace Dimeng.WoodEngine.Prompts
                     break;
                 }
 
-                //忽略宽度、高度、深度三个变量
-                if (i == 0 || i == 1 || i == 2)
-                { continue; }
-
                 string value = PromptCells[i, 1].Text;
                 string controlType = PromptCells[i, 2].Text;
                 string helpMessage = PromptCells[i, 3].Text;

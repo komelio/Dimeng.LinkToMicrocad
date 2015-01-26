@@ -52,7 +52,9 @@
     <Compile Include="Checks\Part\PartChecker.cs" />
     <Compile Include="Checks\ModelError.cs" />
     <Compile Include="Checks\SubassemblyChecker.cs" />
+    <Compile Include="Checks\CheckSubFileName.cs" />
     <Compile Include="PartInitializer.cs" />
+    <Compile Include="PartsLoader.cs" />
     <Compile Include="ProductAnalyst.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SubassemblyInitializer.cs" />

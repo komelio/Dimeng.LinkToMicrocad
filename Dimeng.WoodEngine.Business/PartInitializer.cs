@@ -1,4 +1,5 @@
-﻿using Dimeng.WoodEngine.Entities;
+﻿using Dimeng.LinkToMicrocad.Logging;
+using Dimeng.WoodEngine.Entities;
 using SpreadsheetGear;
 using System;
 using System.Collections.Generic;
@@ -78,6 +79,7 @@ namespace Dimeng.WoodEngine.Business
                         layname3d, layname2d,
                         product);
                     parts.Add(part);
+                    Logger.GetLogger().Debug(string.Format("{0}/{1}/{2}/{3}", partName, 1, width, length));
                 }
             }
             else
@@ -100,6 +102,7 @@ namespace Dimeng.WoodEngine.Business
                     product);
 
                 parts.Add(part);
+                Logger.GetLogger().Debug(string.Format("{0}/{1}/{2}/{3}", partName, qty, width, length));
             }
 
             return errors;

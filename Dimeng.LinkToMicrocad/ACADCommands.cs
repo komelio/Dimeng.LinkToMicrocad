@@ -44,6 +44,8 @@ namespace Dimeng.LinkToMicrocad
             {
                 Logging.Logger.GetLogger().Error(error);
             }
+
+            MessageBox.Show("Haha");
         }
 
         /// <summary>
@@ -64,14 +66,14 @@ namespace Dimeng.LinkToMicrocad
                 Logging.Logger.GetLogger().Error(error);
             }
         }
- 
+
         /// <summary>
         /// Command for export current project information to a zip file
         /// </summary>
-        [CommandMethod("AK","Export_dm",CommandFlags.Modal)]
+        [CommandMethod("AK", "Del_dm", CommandFlags.Modal)]
         public void ExportData()
         {
-
+            MessageBox.Show("Del_dm");
         }
     }
 

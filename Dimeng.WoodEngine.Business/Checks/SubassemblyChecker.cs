@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Dimeng.WoodEngine.Business
 {
-    internal class SubassemblyChecker : Check
+    internal partial class SubassemblyChecker : Check
     {
         IRange range;
         List<ModelError> errors;

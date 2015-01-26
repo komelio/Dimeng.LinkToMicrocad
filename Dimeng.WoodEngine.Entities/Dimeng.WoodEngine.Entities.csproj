@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Library\IMVLibrary.cs" />
     <Compile Include="Machinings\HDrilling.cs" />
     <Compile Include="Machinings\Profile.cs" />
     <Compile Include="Machinings\Routing.cs" />
