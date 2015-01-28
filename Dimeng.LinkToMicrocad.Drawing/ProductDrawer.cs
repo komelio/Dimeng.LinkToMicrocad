@@ -23,28 +23,17 @@ namespace Dimeng.LinkToMicrocad.Drawing
 
             prepareData(product);//TODO:not here
 
+            Logger.GetLogger().Debug("Drawing product elements....");
+            Logger.GetLogger().Debug("Parts:" + product.Parts.Count.ToString());
+
             using (Database db = new Database())
-            using (Transaction acTrans = db.TransactionManager.StartTransaction())
             {
                 Database oDb = HostApplicationServices.WorkingDatabase;
                 HostApplicationServices.WorkingDatabase = db;//重要，否则会导致很多问题，比如图层加入了却找不到
 
-                BlockTable bt = (BlockTable)acTrans.GetObject(db.BlockTableId, OpenMode.ForRead);
-                BlockTableRecord btr = (BlockTableRecord)acTrans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
-
-                Logger.GetLogger().Debug("Drawing product elements....");
-                Logger.GetLogger().Debug("Parts:" + product.Parts.Count.ToString());
                 foreach (var part in product.Parts)
                 {
-                    LayerHelper.SetLayer(db, part.LayerName3D);
-                    //LayerHelper.SetLayer(db, "DOOR");
-
-                    Solid3d panel = drawPart(part);
-                    panel.Layer = part.LayerName3D;
-                    //panel.Layer = "DOOR";
-
-                    btr.AppendEntity(panel);
-                    acTrans.AddNewlyCreatedDBObject(panel, true);
+                    (new PartDrawer(db)).Draw(part);
                 }
 
                 foreach (var sub in product.Subassemblies)
@@ -53,41 +42,14 @@ namespace Dimeng.LinkToMicrocad.Drawing
                     Logger.GetLogger().Debug("Parts:" + sub.Parts.Count.ToString());
                     foreach (var part in sub.Parts)
                     {
-                        LayerHelper.SetLayer(db, part.LayerName3D);
-
-                        Solid3d panel = drawPart(part);
-                        panel.Layer = part.LayerName3D;
-
-                        btr.AppendEntity(panel);
-                        acTrans.AddNewlyCreatedDBObject(panel, true);
+                        (new PartDrawer(db)).Draw(part);
                     }
                 }
-
-                acTrans.Commit();
 
                 HostApplicationServices.WorkingDatabase = oDb;//重要，否则会导致很多问题，比如图层加入了却找不到
                 //另外先改回，在保存，否则会导致报错
                 db.SaveAs(savePath, DwgVersion.Newest);
-
             }
-        }
-
-        private static Solid3d drawPart(Part part)
-        {
-            Logger.GetLogger().Debug(string.Format("Drawing part {0}/{1}/{2}/{3}/{4}",
-                        part.PartName, part.Width, part.Length, part.Thickness, part.Material));
-            Logger.GetLogger().Debug(string.Format("-- Positions: {0}",
-                part.CenterVector));
-
-            Solid3d panel = new Solid3d();
-            panel.CreateBox(part.Length, part.Width, part.Thickness);
-
-            panel.TransformBy(Matrix3d.Rotation(part.XRotation * Math.PI / 180, Vector3d.XAxis, Point3d.Origin));
-            panel.TransformBy(Matrix3d.Rotation(part.YRotation * Math.PI / 180, Vector3d.YAxis, Point3d.Origin));
-            panel.TransformBy(Matrix3d.Rotation(part.ZRotation * Math.PI / 180, Vector3d.ZAxis, Point3d.Origin));
-
-            panel.TransformBy(Matrix3d.Displacement(part.CenterVector));
-            return panel;
         }
 
         private static void prepareData(Product product)
@@ -96,7 +58,8 @@ namespace Dimeng.LinkToMicrocad.Drawing
 
             foreach (var sub in product.Subassemblies)
             {
-                sub.Parts.ForEach(it => it.CalculateLocationInfo(new Point3d(sub.XOrigin, sub.YOrigin, sub.ZOrigin), sub.Rotation));
+                sub.Parts.ForEach(it => it.CalculateLocationInfo(
+                    new Point3d(sub.XOrigin, sub.YOrigin, sub.ZOrigin), sub.Rotation));
             }
         }
     }

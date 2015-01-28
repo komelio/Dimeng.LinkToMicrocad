@@ -120,6 +120,7 @@
     <Compile Include="Dimeng\MVDataContext.cs" />
     <Compile Include="Dimeng\ProjectManager.cs" />
     <Compile Include="Dimeng\Release.cs" />
+    <Compile Include="Dimeng\TempXMLWriter.cs" />
     <Compile Include="Dimeng\UnitConverter.cs" />
     <Compile Include="IOHelper.cs" />
     <Compile Include="Logging\ConsoleHelper.cs" />

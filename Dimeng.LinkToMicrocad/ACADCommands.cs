@@ -71,8 +71,9 @@ namespace Dimeng.LinkToMicrocad
         /// Command for export current project information to a zip file
         /// </summary>
         [CommandMethod("AK", "Del_dm", CommandFlags.Modal)]
-        public void ExportData()
+        public void DelProduct()
         {
+            Logging.Logger.GetLogger().Info("Call command 'Del_dm'");
             MessageBox.Show("Del_dm");
         }
     }

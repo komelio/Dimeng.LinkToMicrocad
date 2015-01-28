@@ -32,7 +32,7 @@ namespace Dimeng.WoodEngine.Business
 
                 product.ClearData();
 
-                fillProductDimensionToLBook(product.Width, product.Height, product.Depth);
+                //fillProductDimensionToLBook(product.Width, product.Height, product.Depth);
 
                 var errors = getIProductElements(product, workBookSet.Workbooks["L"]);
 

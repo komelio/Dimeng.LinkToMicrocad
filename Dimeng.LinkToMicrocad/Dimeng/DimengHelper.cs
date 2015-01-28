@@ -22,8 +22,9 @@ namespace Dimeng.LinkToMicrocad
             {
                 string folderPath = getTempFolderPath(
                     Context.GetContext().AKInfo.Path);
-                AKProduct product = AKProduct.Load(
-                    Path.Combine(folderPath, "temp.xml"));
+                string tempXMLPath = Path.Combine(folderPath,
+                    "temp.xml");
+                AKProduct product = AKProduct.Load(tempXMLPath);
 
                 var project = ProjectManager.CreateOrOpenProject(
                     product.GetProjectPath());
@@ -34,7 +35,7 @@ namespace Dimeng.LinkToMicrocad
                     project.SpecificationGroups.Find(it => it.Name == mvProduct.MatFile);
                 var bookset = showPromptWindow(product, project, productCutx, specificationGroup);
 
-                bookset.GetLock();
+                bookset.GetLock();//lock the work book set
 
                 updateProductWHD(product, bookset);
 
@@ -43,13 +44,16 @@ namespace Dimeng.LinkToMicrocad
                 var errors = analyst.Analysis(mvProduct, bookset);
                 bookset.Workbooks["L"].SaveAs(productCutx, FileFormat.OpenXMLWorkbook);
 
-                bookset.ReleaseLock();
+                bookset.ReleaseLock();//release the work book set
 
                 outputErrors(errors);
+                (new TempXMLWriter()).WriteFile(tempXMLPath, product);
 
                 ProductDrawer drawer = new ProductDrawer();
                 drawer.DrawAndSaveAsDWG(mvProduct,
                     bookset, Path.Combine(folderPath, product.Tab.DWG + ".dwg"));
+
+                //(new TempXMLWriter()).WriteFile(tempXMLPath, product);
             }
             catch (Exception error)
             {
@@ -63,8 +67,8 @@ namespace Dimeng.LinkToMicrocad
             try
             {
                 product.Tab.VarX = double.Parse(bookset.Workbooks["L"].Worksheets["Prompts"].Cells[0, 1].Value.ToString());
-                product.Tab.VarY = double.Parse(bookset.Workbooks["L"].Worksheets["Prompts"].Cells[1, 1].Value.ToString());
-                product.Tab.VarZ = double.Parse(bookset.Workbooks["L"].Worksheets["Prompts"].Cells[2, 1].Value.ToString());
+                product.Tab.VarZ = double.Parse(bookset.Workbooks["L"].Worksheets["Prompts"].Cells[1, 1].Value.ToString());
+                product.Tab.VarY = double.Parse(bookset.Workbooks["L"].Worksheets["Prompts"].Cells[2, 1].Value.ToString());
             }
             catch (Exception error)
             {
@@ -166,7 +170,7 @@ namespace Dimeng.LinkToMicrocad
                 var errors = analyst.Analysis(mvProduct, bookset);
                 bookset.Workbooks["L"].SaveAs(productCutx, FileFormat.OpenXMLWorkbook);
 
-    
+
 
                 bookset.ReleaseLock();
 
