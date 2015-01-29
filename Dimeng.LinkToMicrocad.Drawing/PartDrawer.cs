@@ -21,6 +21,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
         public void Draw(Part part)
         {
             Logger.GetLogger().Debug("Drawing product elements....");
+
             using (Transaction trans = db.TransactionManager.StartTransaction())
             {
                 BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
@@ -28,11 +29,18 @@ namespace Dimeng.LinkToMicrocad.Drawing
 
                 LayerHelper.SetLayer(db, part.LayerName3D);
 
-                Solid3d panel = drawPart(part);
+                if (part.IsBend)
+                {
+                    Logger.GetLogger().Warn("This part is a blend part and this function is not finished yet.");
+                    //todo:blend part drawing
+                }
+                else
+                {
+                    Solid3d panel = drawPart(part);
+                    btr.AppendEntity(panel);
+                    trans.AddNewlyCreatedDBObject(panel, true);
+                }
                 
-                btr.AppendEntity(panel);
-                trans.AddNewlyCreatedDBObject(panel, true);
-
                 trans.Commit();
             }
         }

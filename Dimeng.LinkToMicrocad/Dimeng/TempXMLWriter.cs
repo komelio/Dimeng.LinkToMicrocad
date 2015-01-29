@@ -15,11 +15,11 @@ namespace Dimeng.LinkToMicrocad
 
             XDocument doc = new XDocument(
                                 new XElement("Root",
-                                    new XElement("UIVar", new XAttribute("Value", 2), new XAttribute("Name", "Status")),
-                                    new XElement("UIVar", new XAttribute("Value", 0), new XAttribute("Name", "DistanceToLast")),
-                                    new XElement("UIVar", new XAttribute("Value", 0), new XAttribute("Name", "DistanceToBack")),
-                                    new XElement("UIVar", new XAttribute("Value", 0), new XAttribute("Name", "CheckElevation")),
-                                    new XElement("UIVar", new XAttribute("Value", product.GetProjectPath()), new XAttribute("Name", "ManufacturingFolder")),
+                                    new XElement("UIVar", new XAttribute("Value", product.GetUIVarValue("Status") ?? "2"), new XAttribute("Name", "Status")),
+                                    new XElement("UIVar", new XAttribute("Value", product.GetUIVarValue("DistanceToLast") ?? "0"), new XAttribute("Name", "DistanceToLast")),
+                                    new XElement("UIVar", new XAttribute("Value", product.GetUIVarValue("DistanceToBack") ?? "0"), new XAttribute("Name", "DistanceToBack")),
+                                    new XElement("UIVar", new XAttribute("Value", product.GetUIVarValue("CheckElevation") ?? "0"), new XAttribute("Name", "CheckElevation")),
+                                    new XElement("UIVar", new XAttribute("Value", product.GetUIVarValue("ManufacturingFolder")), new XAttribute("Name", "ManufacturingFolder")),
                                     new XElement("UIVar", new XAttribute("Value", @"f:\ak12\x64\CATALOG\DMS"), new XAttribute("Name", "CatalogPath")),
                                     getTab(product))
                                 );

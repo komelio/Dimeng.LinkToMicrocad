@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dimeng.LinkToMicrocad.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,11 +36,15 @@ namespace Dimeng.WoodEngine.Business
         }
 
 
-        internal List<double[]> Positions(int qty, double thick, double productwidth)
+        internal List<double[]> EQPositions(int qty, double thick, double productwidth)
         {
+            //TODO:用专门的EQ解析器去完成
+
             string xo = range[0, 29].Text.ToUpper();
             string yo = range[0, 30].Text.ToUpper();
             string zo = range[0, 31].Text.ToUpper();
+
+            Logger.GetLogger().Debug(string.Format("Start analysising EQ functions:{0}/{1}/{2}", xo, yo, zo));
 
             List<double[]> doubles = new List<double[]>();
 
@@ -84,23 +89,25 @@ namespace Dimeng.WoodEngine.Business
                     else
                     {
                         for (int s = 0; s < stackqty; s++)
+                        {
                             doubles.Add(new double[] { xorigin, yorigin, Convert.ToDouble(zo) });
+                        }
                     }
                 }
 
             }
-            else if (xo.ToUpper().StartsWith("EQH"))
+            else if (xo.StartsWith("EQH"))
             {
-                string[] r = xo.ToUpper().Replace("EQH ", "").Split(',');
+                string[] r = xo.Replace("EQH ", "").Split(',');
 
                 if (r.Length < 3)
-                    throw new Exception("EQV函数参数不正确");
+                    throw new Exception("EQH函数参数不正确");
 
                 int arrayqty = Int32.Parse(r[0]);
 
                 //存在arrayqty大于板件qty的可能，如何处理？
                 if (arrayqty > qty)
-                    throw new Exception("EQV的arrayQty多于板件的Qty，无法处理");
+                    throw new Exception("EQH的arrayQty多于板件的Qty，无法处理");
 
                 int stackqty = Int32.Parse(Math.Ceiling(Convert.ToDouble(qty) / Convert.ToDouble(arrayqty)).ToString());
 
@@ -117,7 +124,7 @@ namespace Dimeng.WoodEngine.Business
                 {
                     xorigin = (productwidth - leftthick - rightthick - panelthick) / arrayqty * (a) + leftthick + a * panelthick;
 
-                    if (zo.ToUpper().StartsWith("EQ1"))
+                    if (zo.StartsWith("EQ1"))
                     {
                         EQ1Parser(xorigin.ToString(), yo, zo, stackqty, thick, doubles);
                     }
@@ -132,11 +139,11 @@ namespace Dimeng.WoodEngine.Business
                     }
                 }
             }
-            else if (zo.ToUpper().StartsWith("EQ1"))
+            else if (zo.StartsWith("EQ1"))
             {
                 EQ1Parser(xo, yo, zo, qty, thick, doubles);
             }
-            else if (zo.ToUpper().StartsWith("EQ2"))
+            else if (zo.StartsWith("EQ2"))
             {
                 EQ2Parser(xo, yo, zo, qty, doubles);
             }

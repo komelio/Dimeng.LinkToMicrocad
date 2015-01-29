@@ -1,6 +1,4 @@
 ﻿using Autodesk.AutoCAD.Geometry;
-using Dimeng.WoodEngine.Entities.MachineTokens;
-using Dimeng.WoodEngine.Entities.Machinings;
 using Dimeng.WoodEngine.Math;
 using System;
 using System.Collections.Generic;
@@ -9,128 +7,8 @@ using System.Text;
 
 namespace Dimeng.WoodEngine.Entities
 {
-    public class Part
+    public partial class Part
     {
-        private Part()
-        {
-            MachineTokens = new List<BaseToken>();
-            VDrillings = new List<VDrilling>();
-            HDrillings = new List<HDrilling>();
-            Sawings = new List<Sawing>();
-            Routings = new List<Routing>();
-            Faces = new List<PartFace>();
-            Profiles = new List<Profile>();
-
-            IsBend = false;
-        }
-
-        public Part(string partname,
-                    int qty,
-                    double width,
-                    double length,
-                    double thickness,
-                    Material material,
-                    EdgeBanding ebw1,
-                    EdgeBanding ebw2,
-                    EdgeBanding ebl1,
-                    EdgeBanding ebl2,
-                    string comment,
-                    string comment2,
-                    string comment3,
-                    int bp,
-                    MachinePoint mp,
-                    double xo,
-                    double yo,
-                    double zo,
-                    double xr,
-                    double yr,
-                    double zr,
-                    string layer3DName,
-                    string layer2DName,
-                    IProduct product)
-            : this()
-        {
-            this.PartName = partname;
-            this.Width = width;
-            this.Length = length;
-            this.Qty = qty;
-            this.Thickness = thickness;
-            this.Material = material;
-            this.EBW1 = ebw1;
-            this.EBW2 = ebw2;
-            this.EBL1 = ebl1;
-            this.EBL2 = ebl2;
-            this.Comment = comment;
-            this.Comment2 = comment2;
-            this.Comment3 = comment3;
-            this.BasePoint = bp;
-            this.MachinePoint = mp;
-            this.XOrigin = xo;
-            this.YOrigin = yo;
-            this.ZOrigin = zo;
-            this.XRotation = xr;
-            this.YRotation = yr;
-            this.ZRotation = zr;
-            this.LayerName3D = layer3DName;
-            this.LayerName2D = layer2DName;
-
-            this.Parent = product;
-
-            this.TXOrigin = this.XOrigin;
-            this.TYOrigin = this.YOrigin;
-            this.TZOrigin = this.ZOrigin;
-            this.TXRotation = this.XRotation;
-            this.TYRotation = this.YRotation;
-            this.TZRotation = this.ZRotation;
-        }
-
-        private Product _product;
-        public Product Product
-        {
-            get { return _product; }
-            set
-            {
-                if (value == null)
-                {
-                    throw new Exception("Product can not be null");
-                }
-                _product = value;
-            }
-        }
-        private IProduct _parent;
-        public IProduct Parent
-        {
-            get { return _parent; }
-            set
-            {
-                _parent = value;
-                if (value is Product)
-                {
-                    this.Product = value as Product;
-                }
-                else if (value is Subassembly)
-                {
-                    Subassembly sub = value as Subassembly;
-
-                    if (sub.Parent is Product)
-                    {
-                        this.Product = sub.Parent as Product;
-                    }
-                    else if (sub.Parent is Subassembly)
-                    {
-                        if (sub.Parent.Parent is Product)
-                        {
-                            this.Product = sub.Parent.Parent as Product;
-                        }
-                        else
-                        {
-                            throw new Exception("Wrong product type!");
-                        }
-                    }
-                }
-            }
-        }
-
         public void CalculateLocationInfo(Point3d basepoint, double zr)
         {
             //获取中心向量的位置
@@ -148,8 +26,6 @@ namespace Dimeng.WoodEngine.Entities
             //设置最基本的向量位置
             SetOrginalAxis();
         }
-
-        #region  与板件相关的空间计算的函数
         private void SetFaces()
         {
             Point3d p1 = Point3d.Origin;
@@ -248,14 +124,12 @@ namespace Dimeng.WoodEngine.Entities
             MovedMPYAxis = MathHelper.GetRotateVector(MPYAxis, TXRotation, TYRotation, TZRotation);
             MovedMPZAxis = MathHelper.GetRotateVector(MPZAxis, TXRotation, TYRotation, TZRotation);
         }
-
         private void SetOrginalAxis()
         {
             MovedOrginXAxis = MathHelper.GetRotateVector(Vector3d.XAxis, TXRotation, TYRotation, TZRotation);
             MovedOrginYAxis = MathHelper.GetRotateVector(-Vector3d.YAxis, TXRotation, TYRotation, TZRotation);
             MovedOrginZAxis = MathHelper.GetRotateVector(Vector3d.ZAxis, TXRotation, TYRotation, TZRotation);
         }
-
         public Point3d GetPartPointByNumber(string num)
         {
             if (num == "1" || num == "1M")
@@ -277,7 +151,6 @@ namespace Dimeng.WoodEngine.Entities
 
             throw new System.Exception("Error Machinepoint!" + MachinePoint.MP);
         }
-
         public Vector3d GetMPXAxis(string mp)
         {
             if (mp == "1" || mp == "4" || mp == "2M" || mp == "3M") return Vector3d.XAxis;
@@ -334,33 +207,6 @@ namespace Dimeng.WoodEngine.Entities
 
             CenterVector = -MoveVector + DimVector;
         }
-        #endregion
-
-        public List<PartFace> Faces { get; private set; }
-        public string PartName { get; set; }
-        public int Qty { get; set; }
-        public double Width { get; set; }
-        public double Length { get; set; }
-        public Material Material { get; set; }
-        public double Thickness { get; set; }
-        public EdgeBanding EBW1 { get; set; }
-        public EdgeBanding EBW2 { get; set; }
-        public EdgeBanding EBL1 { get; set; }
-        public EdgeBanding EBL2 { get; set; }
-        public string Comment { get; set; }
-        public string Comment2 { get; set; }
-        public string Comment3 { get; set; }
-
-        public int BasePoint { get; set; }
-        public MachinePoint MachinePoint { get; set; }
-
-        //建模的坐标及旋转
-        public double XOrigin { get; set; }
-        public double YOrigin { get; set; }
-        public double ZOrigin { get; set; }
-        public double XRotation { get; set; }
-        public double YRotation { get; set; }
-        public double ZRotation { get; set; }
 
         //对应实际的坐标及旋转,如组件中的元素，经过各种旋转转换后的结果
         public double TXOrigin { get; set; }
@@ -369,19 +215,6 @@ namespace Dimeng.WoodEngine.Entities
         public double TXRotation { get; set; }
         public double TYRotation { get; set; }
         public double TZRotation { get; set; }
-
-        public string LayerName2D { get; set; }
-        public string LayerName3D { get; set; }
-        public bool IsMirrorPart { get; set; }
-
-        public List<BaseToken> MachineTokens { get; set; }
-        public List<VDrilling> VDrillings { get; private set; }
-        public List<HDrilling> HDrillings { get; private set; }
-        public List<Routing> Routings { get; private set; }
-        public List<Sawing> Sawings { get; private set; }
-        public List<Profile> Profiles { get; private set; }
-
-
 
         //板件的8个点，在空间的最终坐标 （即经过各种旋转、位移后的），数字的定义遵循MV的板件角点定义
         public Point3d Point1 { get; set; }
@@ -400,58 +233,7 @@ namespace Dimeng.WoodEngine.Entities
         public PartFace FaceFive = new PartFace();
         public PartFace FaceFour = new PartFace();
         public PartFace FaceSix = new PartFace();
-
-        #region 与空间定位相关的内容
-        /// <summary>
-        /// 板件中心向量,用于绘图时的旋转
-        /// </summary>
-        public Vector3d CenterVector { get; set; }
-
-        /// <summary>
-        /// 未进行任何旋转位移下MP的坐标
-        /// </summary>
-        public Point3d MPPoint { get; set; }
-        /// <summary>
-        /// 未进行任何旋转位移下MP的X向量
-        /// </summary>
-        public Vector3d MPXAxis { get; set; }
-        /// <summary>
-        /// 未进行任何旋转位移下MP的Y向量
-        /// </summary>
-        public Vector3d MPYAxis { get; set; }
-        /// <summary>
-        /// 未进行任何旋转位移下MP的Z向量
-        /// </summary>
-        public Vector3d MPZAxis { get; set; }
-        /// <summary>
-        /// 空间位移后的MP的坐标
-        /// </summary>
-        public Point3d MovedMPPoint { get; set; }
-        /// <summary>
-        /// 空间变化后的MP的X的向量
-        /// </summary>
-        public Vector3d MovedMPXAxis { get; set; }
-        /// <summary>
-        /// 空间变化后的MP的X的向量
-        /// </summary>
-        public Vector3d MovedMPYAxis { get; set; }
-        /// <summary>
-        /// 空间变化后的MP的X的向量
-        /// </summary>
-        public Vector3d MovedMPZAxis { get; set; }
-        /// <summary>
-        /// 基本向量，和任何点都没有关系，经过空间变化后的向量
-        /// </summary>
-        public Vector3d MovedOrginXAxis { get; private set; }
-        public Vector3d MovedOrginYAxis { get; private set; }
-        public Vector3d MovedOrginZAxis { get; private set; }
-        #endregion
-
-        public override string ToString()
-        {
-            return string.Format("{0}/{1}", PartName, Material);
-        }
-
+       
         public PartFace GetPartFaceByNumber(int num)
         {
             switch (num)
@@ -472,9 +254,7 @@ namespace Dimeng.WoodEngine.Entities
                     throw new System.Exception("你所要的面" + num.ToString() + "是非法的");
             }
         }
-
-        public bool IsBend { get; set; }//是否为弧形板件，如果是的话，在生成机加工、绘制板件时都是不同的
-
-        public bool IsValid { get; set; }
+        
+        public List<PartFace> Faces { get; private set; }
     }
 }

@@ -62,7 +62,7 @@ namespace Dimeng.WoodEngine.Business
             bool isEQPart = check.IsEQPart();
             if (isEQPart)
             {
-                List<double[]> origins = check.Positions(qty, thick, product.Width);
+                List<double[]> origins = check.EQPositions(qty, thick, product.Width);
 
                 if (errors.Count > 0)
                 {

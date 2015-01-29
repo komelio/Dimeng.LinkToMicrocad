@@ -32,8 +32,6 @@ namespace Dimeng.WoodEngine.Business
 
                 product.ClearData();
 
-                //fillProductDimensionToLBook(product.Width, product.Height, product.Depth);
-
                 var errors = getIProductElements(product, workBookSet.Workbooks["L"]);
 
                 return errors;
@@ -42,18 +40,6 @@ namespace Dimeng.WoodEngine.Business
             {
                 throw new Exception("Error occures when analysising product:" + product.Description, error);
             }
-        }
-
-        private void fillProductDimensionToLBook(double width, double height, double depth)
-        {
-            Logger.GetLogger().Debug("Fill the product workbook with product`s width/height/depth.");
-
-            var sheet = this.workBookSet.Workbooks["L"].Worksheets["Prompts"];
-            sheet.Cells[0, 1].Value = width;
-            sheet.Cells[1, 1].Value = height;
-            sheet.Cells[2, 1].Value = depth;
-
-            Logger.GetLogger().Debug(string.Format("W({0})H({1})D({2}).", width, height, depth));
         }
 
         private IEnumerable<ModelError> getIProductElements(IProduct product, IWorkbook book)

@@ -27,7 +27,7 @@ namespace Dimeng.LinkToMicrocad
                 AKProduct product = AKProduct.Load(tempXMLPath);
 
                 var project = ProjectManager.CreateOrOpenProject(
-                    product.GetProjectPath());
+                    product.GetUIVarValue("ManufacturingFolder"));
 
                 Product mvProduct = getProductFromProject(product, project);
                 string productCutx = mvProduct.GetProductCutxFileName();
@@ -52,8 +52,6 @@ namespace Dimeng.LinkToMicrocad
                 ProductDrawer drawer = new ProductDrawer();
                 drawer.DrawAndSaveAsDWG(mvProduct,
                     bookset, Path.Combine(folderPath, product.Tab.DWG + ".dwg"));
-
-                //(new TempXMLWriter()).WriteFile(tempXMLPath, product);
             }
             catch (Exception error)
             {
@@ -153,7 +151,7 @@ namespace Dimeng.LinkToMicrocad
                     Path.Combine(folderPath, "temp.xml"));
 
                 var project = ProjectManager.CreateOrOpenProject(
-                    product.GetProjectPath());
+                    product.GetUIVarValue("ManufacturingFolder"));
 
                 Product mvProduct = getProductFromProject(product, project);
                 string productCutx = mvProduct.GetProductCutxFileName();

@@ -12,7 +12,7 @@ namespace Dimeng.LinkToMicrocad
     internal class AKProduct
     {
         public TabInfo Tab { get; set; }
-        IEnumerable<UIVar> UIVars { get; set; }
+        public List<UIVar> UIVars { get; set; }
 
         internal static AKProduct Load(string tempXMLFilePath)
         {
@@ -22,11 +22,13 @@ namespace Dimeng.LinkToMicrocad
             AKProduct product = new AKProduct();
 
             XElement xml = XElement.Load(tempXMLFilePath);
-            product.UIVars = from n in xml.Elements("UIVar")
-                             select new UIVar(
-                                    (string)n.Attribute("Name"),
-                                    (string)n.Attribute("Value")
-                                 );
+            var uivars = from n in xml.Elements("UIVar")
+                         select new UIVar(
+                                (string)n.Attribute("Name"),
+                                (string)n.Attribute("Value")
+                             );
+
+            product.UIVars = uivars.ToList();
 
 
             product.Tab = new TabInfo();
@@ -65,13 +67,11 @@ namespace Dimeng.LinkToMicrocad
             return product;
         }
 
-        public string GetProjectPath()
+        public string GetUIVarValue(string parameter)
         {
-            string projectPath = this.UIVars.Where(it => it.Name == "ManufacturingFolder")
+            return this.UIVars.Where(it => it.Name == parameter)
                                             .SingleOrDefault()
                                             .Value;
-
-            return projectPath;
         }
     }
 

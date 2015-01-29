@@ -44,8 +44,6 @@ namespace Dimeng.LinkToMicrocad
             {
                 Logging.Logger.GetLogger().Error(error);
             }
-
-            MessageBox.Show("Haha");
         }
 
         /// <summary>

@@ -63,10 +63,11 @@
     <Compile Include="Materials\Stock.cs" />
     <Compile Include="Products\Hardware.cs" />
     <Compile Include="Products\IProduct.cs" />
-    <Compile Include="Products\MachinePoint.cs" />
+    <Compile Include="Products\Part\MachinePoint.cs" />
     <Compile Include="Materials\Material.cs" />
-    <Compile Include="Products\Part.cs" />
-    <Compile Include="Products\PartFace.cs" />
+    <Compile Include="Products\Part\Part.cs" />
+    <Compile Include="Products\Part\PartFace.cs" />
+    <Compile Include="Products\Part\PartLocation.cs" />
     <Compile Include="Products\Product.cs" />
     <Compile Include="Products\Subassembly.cs" />
     <Compile Include="Project\Project.cs" />
@@ -79,9 +80,6 @@
     <Compile Include="ToolFile\Tool.cs" />
     <Compile Include="ToolFile\ToolFile.cs" />
     <Compile Include="ToolFile\ToolType.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
