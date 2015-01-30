@@ -47,6 +47,7 @@ namespace Dimeng.LinkToMicrocad
                 bookset.ReleaseLock();//release the work book set
 
                 outputErrors(errors);
+
                 (new TempXMLWriter()).WriteFile(tempXMLPath, product);
 
                 ProductDrawer drawer = new ProductDrawer();
@@ -139,49 +140,6 @@ namespace Dimeng.LinkToMicrocad
             }
 
             return folderPath;
-        }
-
-        internal void EditAndDrawBlock()
-        {
-            try
-            {
-                string folderPath = getTempFolderPath(
-                    Context.GetContext().AKInfo.Path);
-                AKProduct product = AKProduct.Load(
-                    Path.Combine(folderPath, "temp.xml"));
-
-                var project = ProjectManager.CreateOrOpenProject(
-                    product.GetUIVarValue("ManufacturingFolder"));
-
-                Product mvProduct = getProductFromProject(product, project);
-                string productCutx = mvProduct.GetProductCutxFileName();
-                SpecificationGroup specificationGroup =
-                    project.SpecificationGroups.Find(it => it.Name == mvProduct.MatFile);
-                var bookset = showPromptWindow(product, project, productCutx, specificationGroup);
-
-                bookset.GetLock();
-
-                updateProductWHD(product, bookset);
-
-                ProductAnalyst analyst = new ProductAnalyst(
-                    Context.GetContext().MVDataContext.GetLatestRelease());
-                var errors = analyst.Analysis(mvProduct, bookset);
-                bookset.Workbooks["L"].SaveAs(productCutx, FileFormat.OpenXMLWorkbook);
-
-
-
-                bookset.ReleaseLock();
-
-                outputErrors(errors);
-
-                ProductDrawer drawer = new ProductDrawer();
-                drawer.DrawAndSaveAsDWG(mvProduct,
-                    bookset, Path.Combine(folderPath, product.Tab.DWG + ".dwg"));
-            }
-            catch (Exception error)
-            {
-                throw new Exception("Error occured during drawing....", error);
-            }
         }
     }
 }

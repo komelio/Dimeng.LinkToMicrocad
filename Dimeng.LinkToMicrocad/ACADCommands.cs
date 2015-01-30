@@ -57,7 +57,7 @@ namespace Dimeng.LinkToMicrocad
             try
             {
                 var dmHelper = new DimengHelper();
-                dmHelper.EditAndDrawBlock();
+                dmHelper.ShowPromptAndDrawBlock();
             }
             catch (System.Exception error)
             {
