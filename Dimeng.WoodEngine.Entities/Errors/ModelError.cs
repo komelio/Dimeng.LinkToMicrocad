@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Dimeng.WoodEngine.Business;
 
-namespace Dimeng.WoodEngine.Business
+namespace Dimeng.WoodEngine.Entities
 {
     public struct ModelError
     {

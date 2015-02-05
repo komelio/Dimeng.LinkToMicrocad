@@ -48,13 +48,12 @@
     <Compile Include="Checks\Part\CheckMaterial.cs" />
     <Compile Include="Checks\Part\CheckPartRotation.cs" />
     <Compile Include="Checks\Part\CheckPositions.cs" />
-    <Compile Include="Checks\ErrorLevel.cs" />
     <Compile Include="Checks\Part\PartChecker.cs" />
-    <Compile Include="Checks\ModelError.cs" />
     <Compile Include="Checks\SubassemblyChecker.cs" />
     <Compile Include="Checks\CheckSubFileName.cs" />
     <Compile Include="EQ\EQParaser.cs" />
     <Compile Include="EQ\EQVParaser.cs" />
+    <Compile Include="ModelAssemblyLoader.cs" />
     <Compile Include="PartInitializer.cs" />
     <Compile Include="PartsLoader.cs" />
     <Compile Include="ProductAnalyst.cs" />

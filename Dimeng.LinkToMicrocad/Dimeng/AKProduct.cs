@@ -61,6 +61,9 @@ namespace Dimeng.LinkToMicrocad
                     case "Z":
                         product.Tab.VarZ = UnitConverter.GetValueFromString(v.Attribute("Value").Value);
                         break;
+                    case "Elevation":
+                        product.Tab.VarElevation = UnitConverter.GetValueFromString(v.Attribute("Value").Value);
+                        break;
                 }
             }
 

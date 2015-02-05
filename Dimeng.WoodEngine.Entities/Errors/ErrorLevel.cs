@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Dimeng.WoodEngine.Business
+namespace Dimeng.WoodEngine.Entities
 {
     public enum ErrorLevel
     {

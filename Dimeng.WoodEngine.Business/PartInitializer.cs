@@ -1,19 +1,23 @@
 ﻿using Dimeng.LinkToMicrocad.Logging;
 using Dimeng.WoodEngine.Entities;
+using Dimeng.WoodEngine.Entities.MachineTokens;
 using SpreadsheetGear;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Dimeng.WoodEngine.Business
 {
     public class PartInitializer
     {
-        public List<ModelError> GetPartsFromOneLine(IRange partRange, IProduct product, List<Part> parts, IWorkbookSet books, List<Material> tempMaterials, List<EdgeBanding> tempEdgebandings)
-        {
-            List<ModelError> errors = new List<ModelError>();
+        private List<ModelError> errors = new List<ModelError>();
 
+        public List<ModelError> GetPartsFromOneLine(IRange partRange, IProduct product, List<Part> parts,
+            IWorkbookSet books, List<Material> tempMaterials, List<EdgeBanding> tempEdgebandings)
+        {
             PartChecker check = new PartChecker(partRange, getLocation(product), errors);
 
             string partName = check.PartName();
@@ -58,6 +62,7 @@ namespace Dimeng.WoodEngine.Business
             check.IsMaterialFitPartLengthAndWidth(length, width, material, errors);
 
             //TODO:tokens
+            List<BaseToken> tokens = getTokens(partRange);
 
             bool isEQPart = check.IsEQPart();
             if (isEQPart)
@@ -108,6 +113,81 @@ namespace Dimeng.WoodEngine.Business
             return errors;
         }
 
+        private List<BaseToken> getTokens(IRange partRange)
+        {
+            List<BaseToken> tokens = new List<BaseToken>();
+
+            //for (int i = 0; i <= partRange.Columns.ColumnCount; i += 10)
+            //{
+            //    string fullToken = partRange[0, 40 + i].Text;
+
+            //    if (String.IsNullOrEmpty(fullToken))
+            //    {
+            //        break;
+            //    }
+
+            //    double v;
+            //    if (double.TryParse(fullToken, out v) && v == 0)
+            //    {
+            //        continue;
+            //    }
+
+            //    string tokenName = GetTokenFromMachiningTokenString(fullToken);
+
+            //    string typeFullName = "Dimeng.WoodEngine.Entities.MachineTokens." + tokenName + "MachiningToken";
+
+                
+
+            //    //提前检查是否含有这个指令
+            //    if (ModelAssemblyLoader.GetInstance().Types.Find(it => it.FullName == typeFullName) == null)
+            //    {
+            //        continue;
+            //    }
+
+            //    try
+            //    {
+            //        object[] parms = new object[] { 
+            //                                                                    partRow[0, 40 + x].Text, 
+            //                                                                    partRow[0, 41 + x].Text, 
+            //                                                                    partRow[0, 42 + x].Text, 
+            //                                                                    partRow[0, 43 + x].Text, 
+            //                                                                    partRow[0, 44 + x].Text, 
+            //                                                                    partRow[0, 45 + x].Text, 
+            //                                                                    partRow[0, 46 + x].Text, 
+            //                                                                    partRow[0, 47 + x].Text, 
+            //                                                                    partRow[0, 48 + x].Text, 
+            //                                                                    partRow[0, 49 + x].Text, 
+            //                                                                    partRow.Row,
+            //                                                                    40 + x,
+            //                                                          };
+
+            //        BaseToken token = (BaseToken)Activator.CreateInstance(
+            //            tempAssembly.GetType(
+            //                typeFullName,
+            //                true,
+            //                true
+            //                )
+            //            , parms);
+
+            //        if (token.Valid(check))
+            //        {
+            //            tokens.Add(token);
+            //        }
+            //    }
+            //    catch (Exception error)
+            //    {
+            //        //logger.Error(string.Format("分析指令{0}过程中出现错误：{1}\n{2}",
+            //        //                            fulltoken,
+            //        //                            error.Message,
+            //        //                            error.StackTrace
+            //        //                            ));
+            //        throw error;
+            //    }
+            //}
+
+            return tokens;
+        }
+
         private string getLocation(IProduct product)
         {
             if (product is Product)
@@ -125,6 +205,54 @@ namespace Dimeng.WoodEngine.Business
             throw new Exception("Unknown type of product");
         }
 
+        private string GetTokenFromMachiningTokenString(string token)
+        {
+            token = token.ToUpper();//先变成大写
 
+            string temp = "";
+            if (token.IndexOf("[") > -1)//如果指令含有中括号，就去掉括号内的内容
+            {
+                temp = token.Substring(0, token.IndexOf("["));
+            }
+            else temp = token;
+
+            //过滤掉空格
+            temp = temp.Replace(" ", "");
+
+            if (temp.StartsWith("3"))//如果指令名以数字开头，应加上一个下划线，将来应采用正则表达式
+            {
+                temp = "_" + temp;
+            }
+
+            //////对MITER/PROFILE这些包含两个空格的指令，要进行特殊处理？
+            ////未完成
+            if (temp.StartsWith("MITER")) return "MITER";
+            if (temp.StartsWith("PROFILE")) return "PROFILE";
+            if (temp.StartsWith("BENDING")) return "BENDING";
+
+            //正则匹配，最后两位是数字的，就去掉最后两个返回
+            //只有一位是数字的，就去掉最后一个
+            if (isLastTwoDigital(temp))
+            {
+                return temp.Substring(0, temp.Length - 2);
+            }
+            else if (isLastOneDigital(temp))
+            {
+                return temp.Substring(0, temp.Length - 1);
+            }
+
+            return temp;//试试运气了
+        }
+
+        private bool isLastOneDigital(string trimTokenString)
+        {
+            Regex regex = new Regex("\\d$");
+            return regex.IsMatch(trimTokenString);
+        }
+        private bool isLastTwoDigital(string trimTokenString)
+        {
+            Regex regex = new Regex("\\d\\d$");
+            return regex.IsMatch(trimTokenString);
+        }
     }
 }

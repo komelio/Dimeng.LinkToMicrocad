@@ -44,6 +44,8 @@ namespace Dimeng.LinkToMicrocad
             {
                 Logging.Logger.GetLogger().Error(error);
             }
+
+            MessageBox.Show("New_dm");
         }
 
         /// <summary>
@@ -63,15 +65,44 @@ namespace Dimeng.LinkToMicrocad
             {
                 Logging.Logger.GetLogger().Error(error);
             }
+            MessageBox.Show("Edit_dm");
         }
 
         /// <summary>
         /// Command for export current project information to a zip file
         /// </summary>
-        [CommandMethod("AK", "Del_dm", CommandFlags.Modal)]
+        [CommandMethod("AK", "Del_dm", CommandFlags.Session)]
         public void DelProduct()
         {
             Logging.Logger.GetLogger().Info("Call command 'Del_dm'");
+
+            Logging.Logger.GetLogger().Info("try point pick");
+            Document doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+            Database db = doc.Database;
+            Editor ed = doc.Editor;
+
+            PromptPointResult psr = ed.GetPoint("Get a point");
+
+            if (psr.Status == PromptStatus.OK)
+            {
+                Logging.Logger.GetLogger().Info(psr.Value.ToString());
+            }
+            MessageBox.Show("Del_dm");
+        }
+
+        [CommandMethod("CapturePoint", CommandFlags.Modal)]
+        public void Capture()
+        {
+            Document doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+            Database db = doc.Database;
+            Editor ed = doc.Editor;
+
+            PromptPointResult psr = ed.GetPoint("Get a point");
+
+            if (psr.Status == PromptStatus.OK)
+            {
+                ed.WriteMessage(psr.Value.ToString());
+            }
             MessageBox.Show("Del_dm");
         }
     }

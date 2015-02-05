@@ -92,7 +92,7 @@ namespace Dimeng.WoodEngine.Entities
             {
                 if (value == null)
                 {
-                    throw new Exception("Product can not be null");
+                    throw new Exception("Part`s product can not be null");
                 }
                 _product = value;
             }
