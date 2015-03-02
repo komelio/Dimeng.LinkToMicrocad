@@ -1,5 +1,6 @@
 ﻿using Dimeng.LinkToMicrocad.Logging;
 using Dimeng.WoodEngine.Entities;
+using Dimeng.WoodEngine.Entities.Checks;
 using SpreadsheetGear;
 using System;
 using System.Collections.Generic;

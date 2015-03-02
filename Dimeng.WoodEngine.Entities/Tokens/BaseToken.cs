@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Autodesk.AutoCAD.Geometry;
+using Dimeng.WoodEngine.Entities.Checks;
 
 namespace Dimeng.WoodEngine.Entities.MachineTokens
 {
@@ -35,8 +36,6 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             this.Par7 = par7;
             this.Par8 = par8;
             this.Par9 = par9;
-            
-            this.Errors = new List<ModelError>();
 
             this.IsDrawOnly = false;
         }
@@ -55,8 +54,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
         public string Par8 { get; set; }
         public string Par9 { get; set; }
 
-        protected Part Part { get; set; }
-        public List<ModelError> Errors { get; protected set; }
+        public Part Part { get; set; }
 
         public bool IsDrawOnly { get; protected set; }
 
@@ -91,14 +89,35 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             return Token;
         }
 
-        protected void WriteModelError(string msg)
-        {
-
-        }
-
-        public virtual bool Valid()
+        public virtual bool Valid(MachineTokenChecker chekcer)
         {
             return true;
+        }
+
+        public void FindAssociatedFaces(double associateDist)
+        {
+            PartFace pf = this.Part.GetPartFaceByNumber(this.FaceNumber);
+
+            if (pf.AssociatedPartFaces == null)//如果这个面的相关联板件是null，表明还没有算过，就算一次
+            {
+                pf.AssociatedPartFaces = new List<PartFace>();
+
+                foreach (Part part in Part.Product.Parts.Where(it => it.IsBend == false))
+                {
+                    if (part == Part)//跳过自己
+                    {
+                        continue;
+                    }
+
+                    foreach (PartFace face in part.Faces)
+                    {
+                        if (pf.IsAssocaitedWithAnotherFace(face, associateDist))
+                        {
+                            pf.AssociatedPartFaces.Add(face);//添加关联板件
+                        }
+                    }
+                }
+            }
         }
     }
 }

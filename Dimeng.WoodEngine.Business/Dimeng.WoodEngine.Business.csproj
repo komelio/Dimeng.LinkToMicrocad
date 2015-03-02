@@ -40,19 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Checks\Check.cs" />
-    <Compile Include="Checks\Part\CheckBasePoint.cs" />
-    <Compile Include="Checks\Part\CheckDrawToken.cs" />
-    <Compile Include="Checks\Part\CheckEdgebanding.cs" />
-    <Compile Include="Checks\Part\CheckMachinePoint.cs" />
-    <Compile Include="Checks\Part\CheckMaterial.cs" />
-    <Compile Include="Checks\Part\CheckPartRotation.cs" />
-    <Compile Include="Checks\Part\CheckPositions.cs" />
-    <Compile Include="Checks\Part\PartChecker.cs" />
-    <Compile Include="Checks\SubassemblyChecker.cs" />
-    <Compile Include="Checks\CheckSubFileName.cs" />
-    <Compile Include="EQ\EQParaser.cs" />
-    <Compile Include="EQ\EQVParaser.cs" />
     <Compile Include="ModelAssemblyLoader.cs" />
     <Compile Include="PartInitializer.cs" />
     <Compile Include="PartsLoader.cs" />
@@ -74,9 +61,7 @@
       <Name>Dimeng.WoodEngine.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Checks\Sub\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -5,34 +5,38 @@ using System.Text;
 
 using Autodesk.AutoCAD.Geometry;
 using Dimeng.WoodEngine.Entities.Machinings;
+using Dimeng.WoodEngine.Entities.Checks;
 
 namespace Dimeng.WoodEngine.Entities.MachineTokens
 {
     public class HOLESMachiningToken : BaseToken
     {
-        public HOLESMachiningToken(string token, string par1, string par2, string par3, string par4, string par5, string par6, string par7, string par8, string par9, int row, int column, Part p)
-            : base(token, par1, par2, par3, par4, par5, par6, par7, par8, par9, row, column, p)
+        public HOLESMachiningToken(string token, string par1, string par2, string par3, string par4, string par5, string par6, string par7, string par8, string par9)
+            : base(token, par1, par2, par3, par4, par5, par6, par7, par8, par9)
         {
             IsDrawOnly = false;
         }
 
-        public override bool Valid(Logger logger)
+        public override bool Valid(MachineTokenChecker check)
         {
-            this.logger = logger;
+            FaceNumber = check.FaceNumber(this.Token, 5, new int[] { 1, 2, 3, 4 });
 
-            base.faceNumberChecker(this.Token, 5, new int[] { 1, 2, 3, 4 });
+            PointsPosition = check.PointPositions(this.Par1);
 
-            PointsPosition = base.pointsChecker(this.Par1);
+            EdgeBoreDiameter = check.GetDoubleValue(this.Par2, @"HOLES/边孔直径", true, check.Errors);
+            EdgeBoreDepth = check.GetDoubleValue(this.Par3, @"HOLES/边孔深度", true, check.Errors);
 
-            EdgeBoreDiameter = base.DoubleChecker(this.Par2, @"HOLES/边孔直径", true);
-            EdgeBoreDepth = base.DoubleChecker(this.Par3, @"HOLES/边孔深度", true);
+            ZValue = (string.IsNullOrEmpty(this.Par4)) ? Part.Thickness / 2 
+                : check.GetDoubleValue(this.Par4, @"Camlock/par4", true, check.Errors);
 
-            ZValue = (string.IsNullOrEmpty(this.Par4)) ? Part.Thickness / 2 : base.DoubleChecker(this.Par4, @"Camlock/par4", true);
+            FaceBoreDiameter = check.GetDoubleValue(this.Par5, @"HOLES/面孔直径", true, check.Errors);
+            FaceBoreDepth = check.GetDoubleValue(this.Par6, @"HOLES/面孔深度", true, check.Errors);
 
-            FaceBoreDiameter = base.DoubleChecker(this.Par5, @"HOLES/面孔直径", true);
-            FaceBoreDepth = base.DoubleChecker(this.Par6, @"HOLES/面孔深度", true);
-
-            return this.IsValid;
+            if (check.Errors.Count == 0)
+            {
+                return true;
+            }
+            else return false;
         }
 
         public List<double> PointsPosition { get; private set; }
@@ -74,22 +78,22 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                             foreach (var hdrill in TempHDrills)
                             {
                                 Point3d holeposition = hdrill.GetBorePosition();
-                                holeposition = holeposition.TransformBy(Matrix3d.AlignCoordinateSystem(new Point3d(), 
-                                                                                                       Vector3d.XAxis, 
-                                                                                                       Vector3d.YAxis, 
-                                                                                                       Vector3d.ZAxis, 
-                                                                                                       hdrill.Part.MPPoint, 
+                                holeposition = holeposition.TransformBy(Matrix3d.AlignCoordinateSystem(new Point3d(),
+                                                                                                       Vector3d.XAxis,
+                                                                                                       Vector3d.YAxis,
+                                                                                                       Vector3d.ZAxis,
+                                                                                                       hdrill.Part.MPPoint,
                                                                                                        hdrill.Part.MPXAxis,
                                                                                                        hdrill.Part.MPYAxis,
                                                                                                        hdrill.Part.MPZAxis));
                                 holeposition = Math.MathHelper.GetRotatedAndMovedPoint(holeposition, Part.TXRotation, Part.YRotation, Part.ZRotation, Part.CenterVector);
-                                holeposition = holeposition.TransformBy(Matrix3d.AlignCoordinateSystem(f.Part.MovedMPPoint, 
+                                holeposition = holeposition.TransformBy(Matrix3d.AlignCoordinateSystem(f.Part.MovedMPPoint,
                                                                                                        f.Part.MovedMPXAxis,
-                                                                                                       f.Part.MovedMPYAxis, 
+                                                                                                       f.Part.MovedMPYAxis,
                                                                                                        f.Part.MovedMPZAxis,
                                                                                                        new Point3d(),
                                                                                                        Vector3d.XAxis,
-                                                                                                       Vector3d.YAxis, 
+                                                                                                       Vector3d.YAxis,
                                                                                                        Vector3d.ZAxis));
                                 double dimx = holeposition.X;
                                 double dimy = holeposition.Y;

@@ -1,6 +1,7 @@
 ﻿using Dimeng.LinkToMicrocad.Logging;
 using Dimeng.WoodEngine.Entities;
 using Dimeng.WoodEngine.Entities.MachineTokens;
+using Dimeng.WoodEngine.Entities.Checks;
 using SpreadsheetGear;
 using System;
 using System.Collections.Generic;
@@ -61,7 +62,6 @@ namespace Dimeng.WoodEngine.Business
 
             check.IsMaterialFitPartLengthAndWidth(length, width, material, errors);
 
-            //TODO:tokens
             List<BaseToken> tokens = getTokens(partRange);
 
             bool isEQPart = check.IsEQPart();
@@ -110,80 +110,83 @@ namespace Dimeng.WoodEngine.Business
                 Logger.GetLogger().Debug(string.Format("{0}/{1}/{2}/{3}", partName, qty, width, length));
             }
 
+            MachineTokenChecker mChecker = new MachineTokenChecker(errors);
+            parts.ForEach(it =>
+            {
+                it.MachineTokens = tokens.Where(t =>
+                {
+                    t.Part = it;
+                    return t.Valid(mChecker);
+                }).ToList();
+            });
+
             return errors;
         }
 
-        private List<BaseToken> getTokens(IRange partRange)
+        private List<BaseToken> getTokens(IRange partRow)
         {
             List<BaseToken> tokens = new List<BaseToken>();
 
-            //for (int i = 0; i <= partRange.Columns.ColumnCount; i += 10)
-            //{
-            //    string fullToken = partRange[0, 40 + i].Text;
+            for (int i = 0; i <= partRow.Columns.ColumnCount; i += 10)
+            {
+                string fullToken = partRow[0, 40 + i].Text;
 
-            //    if (String.IsNullOrEmpty(fullToken))
-            //    {
-            //        break;
-            //    }
+                if (String.IsNullOrEmpty(fullToken))
+                {
+                    break;
+                }
 
-            //    double v;
-            //    if (double.TryParse(fullToken, out v) && v == 0)
-            //    {
-            //        continue;
-            //    }
+                double v;
+                if (double.TryParse(fullToken, out v) && v == 0)
+                {
+                    continue;
+                }
 
-            //    string tokenName = GetTokenFromMachiningTokenString(fullToken);
+                string tokenName = GetTokenFromMachiningTokenString(fullToken);
 
-            //    string typeFullName = "Dimeng.WoodEngine.Entities.MachineTokens." + tokenName + "MachiningToken";
+                string typeFullName = "Dimeng.WoodEngine.Entities.MachineTokens." + tokenName + "MachiningToken";
 
-                
+                //提前检查是否含有这个指令
+                if (ModelAssemblyLoader.GetInstance().Types.Find(it => it.FullName == typeFullName) == null)
+                {
+                    continue;
+                }
 
-            //    //提前检查是否含有这个指令
-            //    if (ModelAssemblyLoader.GetInstance().Types.Find(it => it.FullName == typeFullName) == null)
-            //    {
-            //        continue;
-            //    }
+                try
+                {
+                    object[] parms = new object[] { 
+                                                                                partRow[0, 40 + i].Text, 
+                                                                                partRow[0, 41 + i].Text, 
+                                                                                partRow[0, 42 + i].Text, 
+                                                                                partRow[0, 43 + i].Text, 
+                                                                                partRow[0, 44 + i].Text, 
+                                                                                partRow[0, 45 + i].Text, 
+                                                                                partRow[0, 46 + i].Text, 
+                                                                                partRow[0, 47 + i].Text, 
+                                                                                partRow[0, 48 + i].Text, 
+                                                                                partRow[0, 49 + i].Text, 
+                                                                      };
 
-            //    try
-            //    {
-            //        object[] parms = new object[] { 
-            //                                                                    partRow[0, 40 + x].Text, 
-            //                                                                    partRow[0, 41 + x].Text, 
-            //                                                                    partRow[0, 42 + x].Text, 
-            //                                                                    partRow[0, 43 + x].Text, 
-            //                                                                    partRow[0, 44 + x].Text, 
-            //                                                                    partRow[0, 45 + x].Text, 
-            //                                                                    partRow[0, 46 + x].Text, 
-            //                                                                    partRow[0, 47 + x].Text, 
-            //                                                                    partRow[0, 48 + x].Text, 
-            //                                                                    partRow[0, 49 + x].Text, 
-            //                                                                    partRow.Row,
-            //                                                                    40 + x,
-            //                                                          };
+                    BaseToken token = (BaseToken)Activator.CreateInstance(
+                        ModelAssemblyLoader.GetInstance().Assembly.GetType(
+                            typeFullName,
+                            true,
+                            true
+                            )
+                        , parms);
 
-            //        BaseToken token = (BaseToken)Activator.CreateInstance(
-            //            tempAssembly.GetType(
-            //                typeFullName,
-            //                true,
-            //                true
-            //                )
-            //            , parms);
-
-            //        if (token.Valid(check))
-            //        {
-            //            tokens.Add(token);
-            //        }
-            //    }
-            //    catch (Exception error)
-            //    {
-            //        //logger.Error(string.Format("分析指令{0}过程中出现错误：{1}\n{2}",
-            //        //                            fulltoken,
-            //        //                            error.Message,
-            //        //                            error.StackTrace
-            //        //                            ));
-            //        throw error;
-            //    }
-            //}
+                    tokens.Add(token);
+                }
+                catch (Exception error)
+                {
+                    //logger.Error(string.Format("分析指令{0}过程中出现错误：{1}\n{2}",
+                    //                            fulltoken,
+                    //                            error.Message,
+                    //                            error.StackTrace
+                    //                            ));
+                    throw error;
+                }
+            }
 
             return tokens;
         }

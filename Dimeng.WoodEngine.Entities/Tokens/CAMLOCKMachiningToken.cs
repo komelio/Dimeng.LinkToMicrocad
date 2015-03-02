@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Autodesk.AutoCAD.Geometry;
 using Dimeng.WoodEngine.Entities.Machinings;
+using Dimeng.WoodEngine.Entities.Checks;
 
 namespace Dimeng.WoodEngine.Entities.MachineTokens
 {
@@ -16,23 +17,27 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             IsDrawOnly = false;
         }
 
-        public override bool Valid()
+        public override bool Valid(MachineTokenChecker check)
         {
-            //base.faceNumberChecker(this.Token, 7, new int[] { 1, 2, 3, 4 });
-            //PointsPosition = base.pointsChecker(this.Par1);
-            //EdgeBoreDiameter = base.DoubleChecker(this.Par2, @"Camlock/边孔直径", true);
-            //EdgeBoreDepth = base.DoubleChecker(this.Par3, @"Camlock/边孔深度", true);
-            //ZValue = (string.IsNullOrEmpty(this.Par4)) ? Part.Thickness / 2 : base.DoubleChecker(this.Par4, @"Camlock/par4", true);
-            //diameterChecker(this.Par5);
-            //depthChecker(this.Par6);
-            //Backset = base.DoubleChecker(this.Par7, @"Camlock/par7", false);
-            //camlockFaceChecker();
-            //this.DrillFromOppsiteFace = base.BoolChecker(this.Par9, @"Camlock/par9", false, false);
-            //ListCamVBoreXY = GetCamVBoreXYList();
+            //todo:其实深度和直径是用逗号区分的,存在两种尺寸并排的情况要处理
+            this.FaceNumber = check.FaceNumber(this.Token, 7, new int[] { 1, 2, 3, 4 });
+            PointsPosition = check.PointPositions(this.Par1);
+            EdgeBoreDiameter = check.GetDoubleValue(this.Par2, @"Camlock/边孔直径", true, check.Errors);
+            EdgeBoreDepth = check.GetDoubleValue(this.Par3, @"Camlock/边孔深度", true, check.Errors);
+            ZValue = (string.IsNullOrEmpty(this.Par4)) ?
+                Part.Thickness / 2 : check.GetDoubleValue(this.Par4, @"Camlock/par4", true, check.Errors);
+            diameterChecker(this.Par5, check);
+            depthChecker(this.Par6, check);
+            Backset = check.GetDoubleValue(this.Par7, @"Camlock/par7", false, check.Errors);
+            camlockFaceChecker();
+            this.DrillFromOppsiteFace = check.GetBoolValue(this.Par9, @"Camlock/par9", false, false, check.Errors);
+            ListCamVBoreXY = GetCamVBoreXYList();
 
-            //return this.IsValid;
-
-            return true;
+            if (check.Errors.Count == 0)
+            {
+                return true;
+            }
+            else return false;
         }
 
         public List<double> PointsPosition { get; private set; }
@@ -75,7 +80,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         public override void ToMachining(double associateDist, Entities.ToolFile toolFile)
         {
-            //FindAssociatedFaces(associateDist);
+            FindAssociatedFaces(associateDist);
 
             PartFace pf = this.Part.GetPartFaceByNumber(FaceNumber);
             if (pf.AssociatedPartFaces.Count != 0)//数量不为0，说明有关联的板件
@@ -145,34 +150,32 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             //this.writeError("Camlock指令参数par8错误：" + Par8, false);
         }
 
-        private void depthChecker(string par6)
+        private void depthChecker(string par6, MachineTokenChecker checker)
         {
-            //string[] FDepths = par6.Split(',');
-            //if (FDepths.Length >= 2)
-            //{
-            //    FaceBoreDepth = base.DoubleChecker(FDepths[0], @"Camlock/par6", true);
-            //    CamFaceBoreDepth = base.DoubleChecker(FDepths[1], @"Camlock/par6", true);
-            //}
-            //else
-            //{
-            //    this.IsValid = false;
-            //    this.writeError(string.Format("Camlock/par5机加工指令参数错误,分隔符数量不足:{0}", par6), false);
-            //}
+            string[] FDepths = par6.Split(',');
+            if (FDepths.Length >= 2)
+            {
+                FaceBoreDepth = checker.GetDoubleValue(FDepths[0], @"Camlock/par6", true, checker.Errors);
+                CamFaceBoreDepth = checker.GetDoubleValue(FDepths[1], @"Camlock/par6", true, checker.Errors);
+            }
+            else
+            {
+                checker.Errors.Add(new ModelError("xxxx"));
+            }
         }
 
-        private void diameterChecker(string par5)
+        private void diameterChecker(string par5, MachineTokenChecker checker)
         {
-            //string[] FDiams = par5.Split(',');
-            //if (FDiams.Length >= 2)
-            //{
-            //    FaceBoreDiameter = base.DoubleChecker(FDiams[0], @"Camlock/par5", true);
-            //    CamFaceBoreDiameter = base.DoubleChecker(FDiams[1], @"Camlock/par5", true);
-            //}
-            //else
-            //{
-            //    this.IsValid = false;
-            //    this.writeError(string.Format("Camlock/par5机加工指令参数错误,分隔符数量不足:{0}", par5), false);
-            //}
+            string[] FDiams = par5.Split(',');
+            if (FDiams.Length >= 2)
+            {
+                FaceBoreDiameter = checker.GetDoubleValue(FDiams[0], @"Camlock/par5", true, checker.Errors);
+                CamFaceBoreDiameter = checker.GetDoubleValue(FDiams[1], @"Camlock/par5", true, checker.Errors);
+            }
+            else
+            {
+                checker.Errors.Add(new ModelError("xxxx"));
+            }
         }
     }
 }

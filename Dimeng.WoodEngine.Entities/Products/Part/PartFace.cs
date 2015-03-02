@@ -235,7 +235,7 @@ namespace Dimeng.WoodEngine.Entities
         /// <param name="associateDist">容忍值，就是容差</param>
         /// <param name="peakValue">距离值，属于特定的距离判定</param>
         /// <returns></returns>
-        internal bool IsAssocaitedWithAnotherFace(PartFace anotherFace, double associateDist, double peakValue)
+        public bool IsAssocaitedWithAnotherFace(PartFace anotherFace, double associateDist, double peakValue)
         {
             /*
             * 判断原则

@@ -1,4 +1,5 @@
-﻿using Dimeng.LinkToMicrocad.Web.Models;
+﻿using Dimeng.LinkToMicrocad.Web.Domain.Abstract;
+using Dimeng.LinkToMicrocad.Web.Domain.Concrete;
 using Ninject;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,15 @@ namespace Dimeng.LinkToMicrocad.Web.Infrastructure
     public class NinjectDependencyResolver : IDependencyResolver
     {
         private IKernel kernel;
-
-        public NinjectDependencyResolver(IKernel kernelParam)
+        public NinjectDependencyResolver(IKernel kernel)
         {
-            kernel = kernelParam;
+            this.kernel = kernel;
             addBindings();
+        }
+
+        private void addBindings()
+        {
+            kernel.Bind<IProductRepository>().To<EFProductRepository>();
         }
 
         public object GetService(Type serviceType)
@@ -26,11 +31,6 @@ namespace Dimeng.LinkToMicrocad.Web.Infrastructure
         public IEnumerable<object> GetServices(Type serviceType)
         {
             return kernel.GetAll(serviceType);
-        }
-
-        private void addBindings()
-        {
-            kernel.Bind<IProductRepository>().To<EFProductRepository>();
         }
     }
 }

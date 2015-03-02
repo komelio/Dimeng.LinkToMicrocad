@@ -1,0 +1,52 @@
+﻿@model Dimeng.LinkToMicrocad.Web.Models.ProductListViewModel
+
+@{
+    ViewBag.Title = "产品数据库管理";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.ActionLink("导入", "Import", null, new { @class = "btn btn-primary btn-sm" })
+@Html.ActionLink("导出", "Output", null, new { @class = "btn btn-primary btn-sm" })
+@Html.ActionLink("清除", "Clear", null, new { @class = "btn btn-primary btn-sm" })
+
+<table class="table">
+    <caption>产品清单</caption>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>名称</th>
+            <th>描述</th>
+            <th>分类</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model.Products)
+        {
+            <tr>
+                <td>@p.Id
+                </td>
+                <td>@p.Name</td>
+                <td>@p.Description</td>
+                <td>@p.Category</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { productId = p.Id }, new { @class = "btn btn-xs btn-primary" })
+                    @Html.ActionLink("Details", "Details", new { id = p.Id }, new { @class = "btn btn-xs btn-primary" })
+                    @Html.ActionLink("Delete", "Delete", new { id = p.Id }, new { @class = "btn btn-xs btn-danger" })
+                    @*@Ajax.ActionLink("test", "TestAjax", new { name = "test" }, new AjaxOptions()
+                                                           {
+                                                               UpdateTargetId = "tableData",
+                                                               LoadingElementId = "loading"
+                                                           })*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="pull-right">
+    <ul class="pagination pagination-sm">
+        @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x, category = @Model.CurrentCategory }))
+    </ul>
+</div>
+

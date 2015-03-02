@@ -61,6 +61,8 @@ namespace Dimeng.LinkToMicrocad.Drawing
                 sub.Parts.ForEach(it => it.CalculateLocationInfo(
                     new Point3d(sub.XOrigin, sub.YOrigin, sub.ZOrigin), sub.Rotation));
             }
+
+            product.Parts.ForEach(p => p.MachineTokens.ForEach(m => m.ToMachining(0.1, null)));
         }
     }
 }

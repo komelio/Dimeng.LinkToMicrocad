@@ -51,6 +51,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Checks\Check.cs" />
+    <Compile Include="Checks\CheckSubFileName.cs" />
+    <Compile Include="Checks\MachineTokenChecker.cs" />
+    <Compile Include="Checks\Part\CheckBasePoint.cs" />
+    <Compile Include="Checks\Part\CheckDrawToken.cs" />
+    <Compile Include="Checks\Part\CheckEdgebanding.cs" />
+    <Compile Include="Checks\Part\CheckMachinePoint.cs" />
+    <Compile Include="Checks\Part\CheckMaterial.cs" />
+    <Compile Include="Checks\Part\CheckPartRotation.cs" />
+    <Compile Include="Checks\Part\CheckPositions.cs" />
+    <Compile Include="Checks\Part\PartChecker.cs" />
+    <Compile Include="Checks\SubassemblyChecker.cs" />
+    <Compile Include="EQ\EQParaser.cs" />
+    <Compile Include="EQ\EQVParaser.cs" />
     <Compile Include="Errors\ErrorLevel.cs" />
     <Compile Include="Errors\ModelError.cs" />
     <Compile Include="Library\IMVLibrary.cs" />
@@ -78,6 +92,7 @@
     <Compile Include="Project\SpecificationGroup.cs" />
     <Compile Include="Tokens\BaseToken.cs" />
     <Compile Include="Tokens\CAMLOCKMachiningToken.cs" />
+    <Compile Include="Tokens\HOLESMachiningToken.cs" />
     <Compile Include="Tokens\StructXY.cs" />
     <Compile Include="Tokens\ToolComp.cs" />
     <Compile Include="ToolFile\Tool.cs" />
@@ -93,7 +108,9 @@
       <Name>Dimeng.WoodEngine.Math</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Checks\Sub\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

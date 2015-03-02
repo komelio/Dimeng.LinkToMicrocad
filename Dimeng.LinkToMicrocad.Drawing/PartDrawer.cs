@@ -40,7 +40,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
                     btr.AppendEntity(panel);
                     trans.AddNewlyCreatedDBObject(panel, true);
                 }
-                
+
                 trans.Commit();
             }
         }
@@ -54,6 +54,9 @@ namespace Dimeng.LinkToMicrocad.Drawing
 
             Solid3d panel = new Solid3d();
             panel.CreateBox(part.Length, part.Width, part.Thickness);
+
+            (new VDrillDrawer()).Draw(panel, part);
+            (new HDrillDrawer()).Draw(panel, part);
 
             panel.TransformBy(Matrix3d.Rotation(part.XRotation * Math.PI / 180, Vector3d.XAxis, Point3d.Origin));
             panel.TransformBy(Matrix3d.Rotation(part.YRotation * Math.PI / 180, Vector3d.YAxis, Point3d.Origin));
