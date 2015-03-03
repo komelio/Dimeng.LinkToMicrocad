@@ -38,5 +38,22 @@ namespace Dimeng.WoodEngine.Entities.Machinings
                 return onTopFace;
             }
         }
+        public bool HasChangedPartRectangleBorder
+        {
+            get
+            {
+                if (this.ToolComp == ToolComp.None)
+                { return false; }
+
+                double routeMaxthick = this.Points.Max(p => p.Z);
+                if (routeMaxthick < Part.Thickness)
+                {
+                    return false;
+                }
+
+                //TODO:判断交点数量
+                return true;
+            }
+        }
     }
 }
