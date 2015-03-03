@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dimeng.WoodEngine.Entities.Checks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,24 +8,22 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 {
     public class BOREMachiningToken : BaseToken
     {
-        public BOREMachiningToken(string token, string par1, string par2, string par3, string par4, string par5, string par6, string par7, string par8, string par9, int row, int column, Part p)
-            : base(token, par1, par2, par3, par4, par5, par6, par7, par8, par9, row, column, p)
+        public BOREMachiningToken(string token, string par1, string par2, string par3, string par4, string par5, string par6, string par7, string par8, string par9)
+            : base(token, par1, par2, par3, par4, par5, par6, par7, par8, par9)
         {
             IsDrawOnly = false;
         }
 
-        public override bool Valid(Logger logger)
+        public override bool Valid(MachineTokenChecker check)
         {
-            this.logger = logger;
-
-            base.faceNumberChecker(this.Token, 4, new int[] { 1, 2, 3, 4, 5, 6 });
-            PosStartX = base.DoubleChecker(this.Par1, @"BORE/X起始坐标", false);
-            PosStartY = base.DoubleChecker(this.Par2, @"BORE/Y起始坐标", false);
-            PosStartZ = base.DoubleChecker(this.Par3, @"BORE/Z起始坐标", true);
-            Diameter = base.DoubleChecker(this.Par4, @"BORE/孔直径", false);
-            PosEndX = (string.IsNullOrEmpty(Par5)) ? PosStartX : base.DoubleChecker(this.Par5, @"BORE/X结束坐标", false);
-            PosEndY = (string.IsNullOrEmpty(Par6)) ? PosStartY : base.DoubleChecker(this.Par6, @"BORE/Y结束坐标", false);
-            HoleGap = (string.IsNullOrEmpty(Par7)) ? 0 : base.DoubleChecker(this.Par5, @"BORE/孔间距", true);
+            this.FaceNumber = check.FaceNumber(this.Token, 4, new int[] { 1, 2, 3, 4, 5, 6 });
+            PosStartX = check.GetDoubleValue(this.Par1, @"BORE/X起始坐标", false, check.Errors);
+            PosStartY = check.GetDoubleValue(this.Par2, @"BORE/Y起始坐标", false, check.Errors);
+            PosStartZ = check.GetDoubleValue(this.Par3, @"BORE/Z起始坐标", true, check.Errors);
+            Diameter = check.GetDoubleValue(this.Par4, @"BORE/孔直径", false, check.Errors);
+            PosEndX = (string.IsNullOrEmpty(Par5)) ? PosStartX : check.GetDoubleValue(this.Par5, @"BORE/X结束坐标", false, check.Errors);
+            PosEndY = (string.IsNullOrEmpty(Par6)) ? PosStartY : check.GetDoubleValue(this.Par6, @"BORE/Y结束坐标", false, check.Errors);
+            HoleGap = (string.IsNullOrEmpty(Par7)) ? 0 : check.GetDoubleValue(this.Par5, @"BORE/孔间距", true, check.Errors);
 
             if (PosEndX == PosStartX &&
                 PosStartY == PosEndY)
@@ -34,7 +33,11 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
             CheckFaceNumber();
 
-            return this.IsValid;
+            if (check.Errors.Count == 0)
+            {
+                return true;
+            }
+            else return false;
         }
 
         private void CheckFaceNumber()
