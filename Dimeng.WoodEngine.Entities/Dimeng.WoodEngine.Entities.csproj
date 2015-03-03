@@ -98,6 +98,7 @@
     <Compile Include="Tokens\CORNERNOTCHMachiningToken.cs" />
     <Compile Include="Tokens\CUTOUTMachiningToken.cs" />
     <Compile Include="Tokens\HOLESMachiningToken.cs" />
+    <Compile Include="Tokens\PLINEMachiningToken.cs" />
     <Compile Include="Tokens\RCORNERNOTCHMachiningToken.cs" />
     <Compile Include="Tokens\ROUTEMachiningTokne.cs" />
     <Compile Include="Tokens\StructXY.cs" />

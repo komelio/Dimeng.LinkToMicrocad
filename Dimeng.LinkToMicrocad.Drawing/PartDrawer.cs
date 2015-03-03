@@ -52,9 +52,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
             Logger.GetLogger().Debug(string.Format("-- Positions: {0}",
                         part.CenterVector));
 
-            Solid3d panel = new Solid3d();
-            panel.CreateBox(part.Length, part.Width, part.Thickness);
-
+            Solid3d panel = (new BaseSolidStructer()).Draw(part);
             (new VDrillDrawer()).Draw(panel, part);
             (new HDrillDrawer()).Draw(panel, part);
 

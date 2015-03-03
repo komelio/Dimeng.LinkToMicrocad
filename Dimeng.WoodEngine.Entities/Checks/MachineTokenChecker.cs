@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Autodesk.AutoCAD.Geometry;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -97,6 +98,65 @@ namespace Dimeng.WoodEngine.Entities.Checks
             }
 
             return par;
+        }
+
+        public ToolComp GetToolComp(string par, string tokenName)
+        {
+            if(par =="L")
+            {
+                return ToolComp.Left;
+            }
+            else if(par=="R")
+            {
+                return ToolComp.Right;
+            }
+            else
+            {
+                return ToolComp.None;
+            }
+        }
+
+        internal List<double> GetBulges(string par)
+        {
+            List<Double> values = new List<double>();
+
+            string[] valueStringArray = par.Split(';');
+            foreach(var s in valueStringArray)
+            {
+                values.Add(this.GetDoubleValue(s, "PLine/Bulges", false, this.Errors));
+            }
+
+            return values;
+        }
+
+        internal List<Point3d> GetPoints(string par)
+        {
+            List<Point3d> points = new List<Point3d>();
+
+            if(string.IsNullOrEmpty(par))
+            {
+                this.Errors.Add(new ModelError("No points!"));
+                return points;
+            }
+
+            string[] array = par.Split('|');
+            foreach(var s in array)
+            {
+                string[] xyzArray = s.Split(';');
+                if(xyzArray.Length!=3)
+                {
+                    this.Errors.Add(new ModelError("Error point data!"));
+                    return points;
+                }
+
+                double x = this.GetDoubleValue(xyzArray[0], "PLine/PointX", false, this.Errors);
+                double y = this.GetDoubleValue(xyzArray[1], "PLine/PointY", false, this.Errors);
+                double z = this.GetDoubleValue(xyzArray[2], "PLine/PointZ", false, this.Errors);
+
+                points.Add(new Point3d(x, y, z));
+            }
+
+            return points;
         }
     }
 }

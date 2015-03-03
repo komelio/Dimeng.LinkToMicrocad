@@ -402,10 +402,10 @@ namespace Dimeng.WoodEngine.Prompts
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            //release the image
-            Logger.GetLogger().Info("Clear image binding");
-            BindingOperations.ClearBinding(this.ImageControl, Image.SourceProperty);
-            this.ImageControl.Source = null;
+            ////release the image
+            //Logger.GetLogger().Info("Clear image binding");
+            //BindingOperations.ClearBinding(this.ImageControl, Image.SourceProperty);
+            //this.ImageControl.Source = null;
         }
     }
 }

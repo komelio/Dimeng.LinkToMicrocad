@@ -3,27 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Autodesk.AutoCAD.Geometry;
+using Dimeng.WoodEngine.Entities.Checks;
 //using Dimeng.WoodEngine.Data.Job.Product.Machinings;
 
 namespace Dimeng.WoodEngine.Entities.MachineTokens
 {
     public class PLINEMachiningToken : BaseToken
     {
-        public PLINEMachiningToken(string token, string par1, string par2, string par3, string par4, string par5, string par6, string par7, string par8, string par9, int row, int column, Part p)
-            : base(token, par1, par2, par3, par4, par5, par6, par7, par8, par9, row, column, p)
+        public PLINEMachiningToken(string token, string par1, string par2, string par3, string par4, string par5, string par6, string par7, string par8, string par9)
+            : base(token, par1, par2, par3, par4, par5, par6, par7, par8, par9)
         {
             IsDrawOnly = false;
         }
 
-        public override bool Valid(Logger logger)
+        public override bool Valid(MachineTokenChecker check)
         {
-            this.logger = logger;
 
-            base.faceNumberChecker(this.Token, 5, new int[] { 5, 6 });
-
-            this.checkPoints();
-
-            Bulges = base.pointsChecker(this.Par2);
+            this.FaceNumber = check.FaceNumber(this.Token, 5, new int[] { 5, 6 });
+            this.Points = check.GetPoints(this.Par1);
+            this.Bulges = check.GetBulges(this.Par2);
 
             //对Bulges不足的情况，用0补上
             if (Bulges.Count < Points.Count)
@@ -34,20 +32,14 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                 }
             }
 
-            this.ToolName = base.notEmptyStringChecker(this.Par7, "PLINE/刀具名称");
+            this.ToolName = check.ToolName(this.Par7, "PLINE/刀具名称");
+            this.ToolComp = check.GetToolComp(this.Par8, "PLINE/刀具补偿");
 
-            ToolComp = base.toolCompChecker(this.Par8, "PLINE/刀具补偿");
-
-            if (this.FaceNumber == 5)
+            if (check.Errors.Count == 0)
             {
-                OnFace5 = true;
+                return true;
             }
-            else if (this.FaceNumber == 6)
-            {
-                OnFace5 = false;
-            }
-
-            return this.IsValid;
+            else return false;
         }
 
         public List<Point3d> Points { get; private set; }
@@ -55,28 +47,6 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
         public ToolComp ToolComp { get; private set; }
         public bool OnFace5 { get; private set; }
         public string ToolName { get; private set; }
-
-        private void checkPoints()
-        {
-            Points = Par1.Split('|')
-                         .Select(s => FromStringToPoint3d(s.Split(';')))
-                         .ToList();
-        }
-        private Point3d FromStringToPoint3d(string[] p)
-        {
-            if (p.Length != 3)
-            {
-                this.IsValid = false;
-                this.writeError("非法的点数据:" + this.Par1, false);
-                return Point3d.Origin;
-            }
-
-            double x = base.DoubleChecker(p[0], "PLINE/点坐标", false);
-            double y = base.DoubleChecker(p[1], "PLINE/点坐标", false);
-            double z = base.DoubleChecker(p[2], "PLINE/点坐标", false);
-
-            return new Point3d(x, y, z);
-        }
 
         public override void ToMachining(double AssociatedDist, ToolFile toolFile)
         {
