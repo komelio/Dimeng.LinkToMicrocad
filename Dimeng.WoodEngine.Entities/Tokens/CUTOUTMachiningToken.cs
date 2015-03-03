@@ -3,36 +3,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Autodesk.AutoCAD.Geometry;
+using Dimeng.WoodEngine.Entities.Checks;
 
 namespace Dimeng.WoodEngine.Entities.MachineTokens
 {
     public class CUTOUTMachiningToken : BaseToken
     {
-        public CUTOUTMachiningToken(string token, string par1, string par2, string par3, string par4, string par5, string par6, string par7, string par8, string par9, int row, int column, Part p)
-            : base(token, par1, par2, par3, par4, par5, par6, par7, par8, par9, row, column, p)
+        public CUTOUTMachiningToken(string token, string par1, string par2, string par3, string par4, string par5, string par6, string par7, string par8, string par9)
+            : base(token, par1, par2, par3, par4, par5, par6, par7, par8, par9)
         {
         }
 
-        public override bool Valid(Logger logger)
+        public override bool Valid(MachineTokenChecker check)
         {
-            this.logger = logger;
-
-            base.faceNumberChecker(this.Token, 6, new int[] { 5, 6 });
-            StartX = base.DoubleChecker(Par1, "CUTOUT/X起始坐标", false);
-            StartY = base.DoubleChecker(Par2, "CUTOUT/Y起始坐标", false);
-            Depth = base.DoubleChecker(Par3, "CUTOUT/深度", true);
-            EndX = base.DoubleChecker(Par4, "CUTOUT/X结束坐标", false);
-            EndY = base.DoubleChecker(Par5, "CUTOUT/Y起始坐标", false);
-            IsPocket = base.BoolChecker(Par6, "CUTOUT/袋式加工", false, false);
-            ToolName = base.notEmptyStringChecker(Par7, "CUTOUT/刀具名称");
-            IsDrawOnly = base.BoolChecker(Par8, "CUTOUT/仅用于图形绘制", false, false);
+            this.FaceNumber = check.FaceNumber(this.Token, 6, new int[] { 5, 6 });
+            StartX = check.GetDoubleValue(Par1, "CUTOUT/X起始坐标", false, check.Errors);
+            StartY = check.GetDoubleValue(Par2, "CUTOUT/Y起始坐标", false, check.Errors);
+            Depth = check.GetDoubleValue(Par3, "CUTOUT/深度", true, check.Errors);
+            EndX = check.GetDoubleValue(Par4, "CUTOUT/X结束坐标", false, check.Errors);
+            EndY = check.GetDoubleValue(Par5, "CUTOUT/Y起始坐标", false, check.Errors);
+            IsPocket = check.GetBoolValue(Par6, "CUTOUT/袋式加工", false, false, check.Errors);
+            ToolName = check.ToolName(Par7, "CUTOUT/刀具名称");
+            IsDrawOnly = check.GetBoolValue(Par8, "CUTOUT/仅用于图形绘制", false, false, check.Errors);
 
             lowX = (StartX >= EndX) ? EndX : StartX;
             lowY = (StartY >= EndY) ? EndY : StartY;
             highX = (StartX >= EndX) ? StartX : EndX;
             highY = (StartY >= EndY) ? StartY : EndY;
 
-            return this.IsValid;
+            if (check.Errors.Count == 0)
+            {
+                return true;
+            }
+            else return false;
         }
 
         public double StartX { get; set; }

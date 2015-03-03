@@ -3,32 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Autodesk.AutoCAD.Geometry;
+using Dimeng.WoodEngine.Entities.Checks;
 
 namespace Dimeng.WoodEngine.Entities.MachineTokens
 {
     public class CORNERNOTCHMachiningToken : BaseToken
     {
-        public CORNERNOTCHMachiningToken(string token, string par1, string par2, string par3, string par4, string par5, string par6, string par7, string par8, string par9, int row, int column, Part p)
-            : base(token, par1, par2, par3, par4, par5, par6, par7, par8, par9, row, column, p)
+        public CORNERNOTCHMachiningToken(string token, string par1, string par2, string par3, string par4, string par5, string par6, string par7, string par8, string par9)
+            : base(token, par1, par2, par3, par4, par5, par6, par7, par8, par9)
         {
 
         }
 
-        public override bool Valid(Logger logger)
+        public override bool Valid(MachineTokenChecker check)
         {
-            base.logger = logger;
+            this.FaceNumber = check.FaceNumber(this.Token, 11, new int[] { 5, 6 });
+            this.EdgeNumber = check.EdgeNumber(this.Token, 13, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
 
-            base.faceNumberChecker(this.Token, 11, new int[] { 5, 6 });
-            base.edgeNumberChecker(this.Token, 13, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+            XDist = check.GetDoubleValue(Par1, "直角切口/X上距离", false, check.Errors);
+            YDist = check.GetDoubleValue(Par2, "直角切口/Y上距离", false, check.Errors);
+            Depth = check.GetDoubleValue(Par3, "直角切口/深度", true, check.Errors);
+            LeadIn = string.IsNullOrEmpty(Par4) ? 0 : check.GetDoubleValue(Par4, "直角切口/进退刀距离", true, check.Errors);
+            ToolName = check.ToolName(this.Par7, "直角切口/刀具名称");
+            IsDrawOnly = check.GetBoolValue(this.Par8, "直接切口/仅用于绘图", false, false, check.Errors);
 
-            XDist = base.DoubleChecker(Par1, "直角切口/X上距离", false);
-            YDist = base.DoubleChecker(Par2, "直角切口/Y上距离", false);
-            Depth = base.DoubleChecker(Par3, "直角切口/深度", true);
-            LeadIn = string.IsNullOrEmpty(Par4) ? 0 : base.DoubleChecker(Par4, "直角切口/进退刀距离", true);
-            ToolName = base.notEmptyStringChecker(this.Par7, "直角切口/刀具名称");
-            IsDrawOnly = base.BoolChecker(this.Par8, "直接切口/仅用于绘图", false, false);
-
-            return this.IsValid;
+            if (check.Errors.Count == 0)
+            {
+                return true;
+            }
+            else return false;
         }
 
         public double XDist { get; private set; }

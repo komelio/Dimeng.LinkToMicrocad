@@ -3,33 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Autodesk.AutoCAD.Geometry;
+using Dimeng.WoodEngine.Entities.Checks;
 
 namespace Dimeng.WoodEngine.Entities.MachineTokens
 {
     public class RCORNERNOTCHMachiningToken : BaseToken
     {
-        public RCORNERNOTCHMachiningToken(string token, string par1, string par2, string par3, string par4, string par5, string par6, string par7, string par8, string par9, int row, int column, Part p)
-            : base(token, par1, par2, par3, par4, par5, par6, par7, par8, par9, row, column, p)
+        public RCORNERNOTCHMachiningToken(string token, string par1, string par2, string par3, string par4, string par5, string par6, string par7, string par8, string par9)
+            : base(token, par1, par2, par3, par4, par5, par6, par7, par8, par9)
         {
         }
 
-        public override bool Valid(Logger logger)
+        public override bool Valid(MachineTokenChecker check)
         {
-            this.logger = logger;
-
-            base.faceNumberChecker(this.Token, 12, new int[] { 5, 6 });
-            base.edgeNumberChecker(this.Token, 14, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+            this.FaceNumber = check.FaceNumber(this.Token, 12, new int[] { 5, 6 });
+            this.EdgeNumber = check.EdgeNumber(this.Token, 14, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
 
             if (FaceNumber == 6)
                 OnFace5 = false;
             else OnFace5 = true;
 
-            Radius = base.DoubleChecker(Par1, "RCORNERNOTCH/圆半径", true);
-            Depth = base.DoubleChecker(Par3, "RCORNERNOTCH/深度", true);
-            LeadIn = base.DoubleChecker(Par4, "RCORNERNOTCH/进退刀距离", true);
-            ToolName = base.notEmptyStringChecker(Par7, "RCORNERNOTCH/刀具名称");
+            Radius = check.GetDoubleValue(Par1, "RCORNERNOTCH/圆半径", true, check.Errors);
+            Depth = check.GetDoubleValue(Par3, "RCORNERNOTCH/深度", true, check.Errors);
+            LeadIn = check.GetDoubleValue(Par4, "RCORNERNOTCH/进退刀距离", true, check.Errors);
+            ToolName = check.ToolName(Par7, "RCORNERNOTCH/刀具名称");
 
-            return this.IsValid;
+            if (check.Errors.Count == 0)
+            {
+                return true;
+            }
+            else return false;
         }
 
         public double Radius { get; set; }

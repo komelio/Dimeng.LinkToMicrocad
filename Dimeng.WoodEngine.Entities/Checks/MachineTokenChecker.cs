@@ -36,6 +36,30 @@ namespace Dimeng.WoodEngine.Entities.Checks
             return valueRange[0];
         }
 
+        public int EdgeNumber(string par, int startIndex, int[] valueRange)
+        {
+            if (valueRange.Length == 0)
+            {
+                throw new Exception("数据值范围不能为空");
+            }
+
+            if (par.Length >= startIndex + 1)
+            {
+                int value;
+                if (int.TryParse(par.Substring(startIndex, 1), out value))
+                {
+                    if (valueRange.Contains(value))
+                    {
+                        return value;
+                    }
+                }
+            }
+
+            Errors.Add(new ModelError("Wrong edge number!"));
+            //TODO:需要报错信息
+            return valueRange[0];
+        }
+
         public List<double> PointPositions(string par)
         {
             List<double> points = new List<double>();
@@ -63,6 +87,16 @@ namespace Dimeng.WoodEngine.Entities.Checks
             }
 
             return points;
+        }
+
+        public string ToolName(string par, string tokenName)
+        {
+            if (string.IsNullOrEmpty(par.Trim()))
+            {
+                this.Errors.Add(new ModelError(tokenName + " could not be empty!"));
+            }
+
+            return par;
         }
     }
 }

@@ -3,40 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Autodesk.AutoCAD.Geometry;
+using Dimeng.WoodEngine.Entities.Checks;
 
 namespace Dimeng.WoodEngine.Entities.MachineTokens
 {
     public class CHAMFERMachiningToken : BaseToken
     {
-        public CHAMFERMachiningToken(string token, string par1, string par2, string par3, string par4, string par5, string par6, string par7, string par8, string par9, int row, int column, Part p)
-            : base(token, par1, par2, par3, par4, par5, par6, par7, par8, par9, row, column, p)
+        public CHAMFERMachiningToken(string token, string par1, string par2, string par3, string par4, string par5, string par6, string par7, string par8, string par9)
+            : base(token, par1, par2, par3, par4, par5, par6, par7, par8, par9)
         {
 
         }
 
-        public override bool Valid(Logger logger)
+        public override bool Valid(MachineTokenChecker check)
         {
-            this.logger = logger;
+            this.FaceNumber = check.FaceNumber(this.Token, 7, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+            this.EdgeNumber = check.EdgeNumber(this.Token, 9, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
 
-            base.faceNumberChecker(this.Token, 7, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
-            base.edgeNumberChecker(this.Token, 9, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+            DistX = check.GetDoubleValue(Par1, "CHAMFER/X距离", true, check.Errors);
+            DistY = check.GetDoubleValue(Par2, "CHAMFER/Y距离", true, check.Errors);
+            Depth = check.GetDoubleValue(Par2, "CHAMFER/深度", true, check.Errors);
 
-            DistX = base.DoubleChecker(Par1, "CHAMFER/X距离", true);
-            DistY = base.DoubleChecker(Par2, "CHAMFER/Y距离", true);
-            Depth = base.DoubleChecker(Par2, "CHAMFER/深度", true);
+            this.LeadIn = check.GetDoubleValue(Par4, "CHAMFER/下刀引线长度", true, check.Errors);
 
-            this.LeadIn = base.DoubleChecker(Par4, "CHAMFER/下刀引线长度", true);
+            ToolName = check.ToolName(Par7, "CHAMFER/刀具名称");
 
-            ToolName = base.notEmptyStringChecker(Par7, "CHAMFER/刀具名称");
+            this.IsDrawOnly = check.GetBoolValue(Par8, "CHAMFER/只用于绘图", false, false, check.Errors);
 
-            this.IsDrawOnly = base.BoolChecker(Par8, "CHAMFER/只用于绘图", false, false);
-
+            //TODO 纳入modelerror
             if (DistY <= 0 || DistX <= 0 || LeadIn < 0)
             {
                 throw new Exception("距离值不能小于等于0");
             }
 
-            return this.IsValid;
+            if (check.Errors.Count == 0)
+            {
+                return true;
+            }
+            else return false;
         }
 
         public double DistX { get; private set; }

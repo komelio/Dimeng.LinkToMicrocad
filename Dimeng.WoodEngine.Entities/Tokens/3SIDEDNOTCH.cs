@@ -3,26 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Autodesk.AutoCAD.Geometry;
+using Dimeng.WoodEngine.Entities.Checks;
 
 namespace Dimeng.WoodEngine.Entities.MachineTokens
 {
     public class _3SIDEDNOTCHMachiningToken : BaseToken
     {
-        public _3SIDEDNOTCHMachiningToken(string token, string par1, string par2, string par3, string par4, string par5, string par6, string par7, string par8, string par9, int row, int column, Part p)
-            : base(token, par1, par2, par3, par4, par5, par6, par7, par8, par9, row, column, p)
+        public _3SIDEDNOTCHMachiningToken(string token, string par1, string par2, string par3, string par4, string par5, string par6, string par7, string par8, string par9)
+            : base(token, par1, par2, par3, par4, par5, par6, par7, par8, par9)
         {
         }
 
-        public override bool Valid(Logger logger)
+        public override bool Valid(MachineTokenChecker check)
         {
-            this.logger = logger;
+            this.FaceNumber = check.FaceNumber(Token, 13, new int[] { 1, 2, 3, 4 });
+            this.EdgeNumber = check.EdgeNumber(Token, 11, new int[] { 5, 6 });
 
-            base.edgeNumberChecker(Token, 13, new int[] { 1, 2, 3, 4 });
-            base.faceNumberChecker(Token, 11, new int[] { 5, 6 });
-
-            StartX = base.DoubleChecker(Par1, "三面切口指令/X起始坐标", false);
-            StartY = base.DoubleChecker(Par2, "三面切口指令/Y起始坐标", false);
-            Depth = base.DoubleChecker(Par3, "三面切口指令/深度", true);
+            StartX = check.GetDoubleValue(Par1, "三面切口指令/X起始坐标", false, check.Errors);
+            StartY = check.GetDoubleValue(Par2, "三面切口指令/Y起始坐标", false, check.Errors);
+            Depth = check.GetDoubleValue(Par3, "三面切口指令/深度", true, check.Errors);
 
             if (EdgeNumber == 1 || EdgeNumber == 2)
             {
@@ -30,7 +29,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             }
             else
             {
-                EndY = base.DoubleChecker(Par5, "三面切口指令/Y起始坐标", false);
+                EndY = check.GetDoubleValue(Par5, "三面切口指令/Y起始坐标", false, check.Errors);
             }
 
             if (EdgeNumber == 3 || EdgeNumber == 4)
@@ -39,16 +38,20 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             }
             else
             {
-                EndX = base.DoubleChecker(Par4, "三面切口指令/Y起始坐标", false);
+                EndX = check.GetDoubleValue(Par4, "三面切口指令/Y起始坐标", false, check.Errors);
             }
 
-            this.LeadIn = base.DoubleChecker(Par6, "三面切口指令/下刀引线长度", false);
+            this.LeadIn = check.GetDoubleValue(Par6, "三面切口指令/下刀引线长度", false, check.Errors);
 
-            ToolName = base.notEmptyStringChecker(Par7, "三面切口指令/刀具名称");
+            ToolName = check.ToolName(Par7, "三面切口指令/刀具名称");
 
-            IsDrawOnly = base.BoolChecker(Par8, "三面切口指令/只用于绘图", false, false);
+            IsDrawOnly = check.GetBoolValue(Par8, "三面切口指令/只用于绘图", false, false, check.Errors);
 
-            return this.IsValid;
+            if (check.Errors.Count == 0)
+            {
+                return true;
+            }
+            else return false;
         }
 
         public double StartX { get; set; }
