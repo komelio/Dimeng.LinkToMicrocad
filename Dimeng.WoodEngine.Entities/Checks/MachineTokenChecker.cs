@@ -102,11 +102,11 @@ namespace Dimeng.WoodEngine.Entities.Checks
 
         public ToolComp GetToolComp(string par, string tokenName)
         {
-            if(par =="L")
+            if (par == "L")
             {
                 return ToolComp.Left;
             }
-            else if(par=="R")
+            else if (par == "R")
             {
                 return ToolComp.Right;
             }
@@ -121,7 +121,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
             List<Double> values = new List<double>();
 
             string[] valueStringArray = par.Split(';');
-            foreach(var s in valueStringArray)
+            foreach (var s in valueStringArray)
             {
                 values.Add(this.GetDoubleValue(s, "PLine/Bulges", false, this.Errors));
             }
@@ -133,17 +133,17 @@ namespace Dimeng.WoodEngine.Entities.Checks
         {
             List<Point3d> points = new List<Point3d>();
 
-            if(string.IsNullOrEmpty(par))
+            if (string.IsNullOrEmpty(par))
             {
                 this.Errors.Add(new ModelError("No points!"));
                 return points;
             }
 
             string[] array = par.Split('|');
-            foreach(var s in array)
+            foreach (var s in array)
             {
                 string[] xyzArray = s.Split(';');
-                if(xyzArray.Length!=3)
+                if (xyzArray.Length != 3)
                 {
                     this.Errors.Add(new ModelError("Error point data!"));
                     return points;
@@ -157,6 +157,17 @@ namespace Dimeng.WoodEngine.Entities.Checks
             }
 
             return points;
+        }
+
+        internal string TokenFileName(string par, string tokenName)
+        {
+            if (string.IsNullOrEmpty(par))
+            {
+                Errors.Add(new ModelError(tokenName + "文件名称不能为空"));
+                return par;
+            }
+
+            return par;
         }
     }
 }

@@ -45,7 +45,7 @@ namespace Dimeng.LinkToMicrocad
                 Logging.Logger.GetLogger().Error(error);
             }
 
-            MessageBox.Show("New_dm");
+            //MessageBox.Show("New_dm");
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Dimeng.LinkToMicrocad
             {
                 Logging.Logger.GetLogger().Error(error);
             }
-            MessageBox.Show("Edit_dm");
+            //MessageBox.Show("Edit_dm");
         }
 
         /// <summary>
@@ -86,22 +86,6 @@ namespace Dimeng.LinkToMicrocad
             if (psr.Status == PromptStatus.OK)
             {
                 Logging.Logger.GetLogger().Info(psr.Value.ToString());
-            }
-            MessageBox.Show("Del_dm");
-        }
-
-        [CommandMethod("CapturePoint", CommandFlags.Modal)]
-        public void Capture()
-        {
-            Document doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-            Database db = doc.Database;
-            Editor ed = doc.Editor;
-
-            PromptPointResult psr = ed.GetPoint("Get a point");
-
-            if (psr.Status == PromptStatus.OK)
-            {
-                ed.WriteMessage(psr.Value.ToString());
             }
             MessageBox.Show("Del_dm");
         }

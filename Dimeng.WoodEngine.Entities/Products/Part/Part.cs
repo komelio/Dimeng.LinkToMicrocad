@@ -47,6 +47,7 @@ namespace Dimeng.WoodEngine.Entities
                     double zr,
                     string layer3DName,
                     string layer2DName,
+                    bool isDraw3d,
                     IProduct product)
             : this()
         {
@@ -73,6 +74,7 @@ namespace Dimeng.WoodEngine.Entities
             this.ZRotation = zr;
             this.LayerName3D = layer3DName;
             this.LayerName2D = layer2DName;
+            this.IsDrawOn3D = isDraw3d;
 
             this.Parent = product;
 
@@ -156,7 +158,7 @@ namespace Dimeng.WoodEngine.Entities
         public double YRotation { get; set; }
         public double ZRotation { get; set; }
 
-
+        public bool IsDrawOn3D { get; set; }
 
         public string LayerName2D { get; set; }
         public string LayerName3D { get; set; }

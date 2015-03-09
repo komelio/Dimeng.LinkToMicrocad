@@ -8,7 +8,7 @@ using Dimeng.WoodEngine.Entities.Checks;
 
 namespace Dimeng.WoodEngine.Entities.MachineTokens
 {
-    public class CAMLOCKMachiningToken : BaseToken
+    public class CAMLOCKMachiningToken : AssociativeToken
     {
         public CAMLOCKMachiningToken(string token, string par1, string par2, string par3,
             string par4, string par5, string par6, string par7, string par8, string par9)
@@ -83,7 +83,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             FindAssociatedFaces(associateDist);
 
             PartFace pf = this.Part.GetPartFaceByNumber(FaceNumber);
-            if (pf.AssociatedPartFaces.Count != 0)//数量不为0，说明有关联的板件
+            if (this.AssociatedPartFaces.Count != 0)//数量不为0，说明有关联的板件
             {
                 List<HDrilling> TempHDrills = new List<HDrilling>();
 
@@ -99,7 +99,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                     Part.VDrillings.Add(vdrill);
                 }
 
-                foreach (PartFace f in pf.AssociatedPartFaces)
+                foreach (PartFace f in this.AssociatedPartFaces)
                 {
                     if (!f.IsHorizontalFace)//如果关联的面是面5或面6
                     {

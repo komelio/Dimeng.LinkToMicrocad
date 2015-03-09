@@ -81,7 +81,7 @@ namespace Dimeng.WoodEngine.Business
                         comment, comment2, comment3,
                         basepoint, machinePoint,
                         d[0], d[1], d[2], xRotation, yRotation, zRotation,
-                        layname3d, layname2d,
+                        layname3d, layname2d, isDraw3d,
                         product);
                     parts.Add(part);
                     Logger.GetLogger().Debug(string.Format("{0}/{1}/{2}/{3}", partName, 1, width, length));
@@ -103,7 +103,7 @@ namespace Dimeng.WoodEngine.Business
                     comment, comment2, comment3,
                     basepoint, machinePoint,
                     xPos, yPos, zPos, xRotation, yRotation, zRotation,
-                    layname3d, layname2d,
+                    layname3d, layname2d, isDraw3d,
                     product);
 
                 parts.Add(part);

@@ -20,12 +20,6 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                          string par8,
                          string par9)
         {
-            if (token.IndexOf("[") > -1)
-            {
-                //提取指令名中的说明部分
-                Reference = token.Substring(token.LastIndexOf("[") + 1).Replace("]", "");
-            }
-
             this.Token = token;
             this.Par1 = par1;
             this.Par2 = par2;
@@ -37,7 +31,27 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             this.Par8 = par8;
             this.Par9 = par9;
 
+            getReferenceString();
+
             this.IsDrawOnly = false;
+        }
+
+        protected virtual void getReferenceString()
+        {
+            int index1 = this.Token.LastIndexOf("[");
+            int index2 = this.Token.LastIndexOf("]");
+
+            if (index1 > -1)
+            {
+                int length = index2 - index1 - 1;
+                if (index2 < index1)
+                {
+                    length = Token.Length - index1 - 1;
+                }
+
+                //提取指令名中的说明部分
+                Reference = this.Token.Substring(index1 + 1, length);
+            }
         }
 
         public string Reference { get; set; }//指令的备注名称,及中括号内的部分
@@ -94,30 +108,6 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             return true;
         }
 
-        public void FindAssociatedFaces(double associateDist)
-        {
-            PartFace pf = this.Part.GetPartFaceByNumber(this.FaceNumber);
-
-            if (pf.AssociatedPartFaces == null)//如果这个面的相关联板件是null，表明还没有算过，就算一次
-            {
-                pf.AssociatedPartFaces = new List<PartFace>();
-
-                foreach (Part part in Part.Product.Parts.Where(it => it.IsBend == false))
-                {
-                    if (part == Part)//跳过自己
-                    {
-                        continue;
-                    }
-
-                    foreach (PartFace face in part.Faces)
-                    {
-                        if (pf.IsAssocaitedWithAnotherFace(face, associateDist))
-                        {
-                            pf.AssociatedPartFaces.Add(face);//添加关联板件
-                        }
-                    }
-                }
-            }
-        }
+      
     }
 }

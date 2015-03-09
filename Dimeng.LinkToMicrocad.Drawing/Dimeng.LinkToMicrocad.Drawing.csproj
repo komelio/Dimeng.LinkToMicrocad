@@ -49,10 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CAD\CADHelper.cs" />
     <Compile Include="CAD\LayerHelper.cs" />
     <Compile Include="PartDrawer.cs" />
     <Compile Include="Part\BaseSolidStructer.cs" />
     <Compile Include="Part\HDrillDrawer.cs" />
+    <Compile Include="Part\ProfileDrawer.cs" />
     <Compile Include="Part\VDrillDrawer.cs" />
     <Compile Include="ProductDrawer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

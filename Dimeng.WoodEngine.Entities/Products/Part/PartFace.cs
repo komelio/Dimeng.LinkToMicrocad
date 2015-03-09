@@ -32,6 +32,11 @@ namespace Dimeng.WoodEngine.Entities
             else IsHorizontalFace = false;
         }
 
+        ~PartFace()
+        {
+            this.Plane.Dispose();
+        }
+
         //四个端点，最后表现为世界坐标系之下
         public Point3d Point1 { get; set; }
         public Point3d Point2 { get; set; }
@@ -105,8 +110,6 @@ namespace Dimeng.WoodEngine.Entities
 
             return false;
         }
-
-        public List<PartFace> AssociatedPartFaces { get; set; }
 
         public bool IsHorizontalFace { get; set; }
 

@@ -26,10 +26,10 @@ namespace Dimeng.WoodEngine.Entities.Checks
                 return 0;
             }
 
-            if (name.StartsWith("-"))
+            if (name.StartsWith("-"))//todo：用正则来判断
             {
                 isFakeMaterial = true;
-                name = name.Substring(0);
+                name = name.Substring(1);//去掉-再进行判断
             }
 
             //从缓存中查找是否有数据

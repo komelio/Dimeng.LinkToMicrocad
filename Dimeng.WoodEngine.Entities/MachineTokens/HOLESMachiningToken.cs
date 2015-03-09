@@ -9,7 +9,7 @@ using Dimeng.WoodEngine.Entities.Checks;
 
 namespace Dimeng.WoodEngine.Entities.MachineTokens
 {
-    public class HOLESMachiningToken : BaseToken
+    public class HOLESMachiningToken : AssociativeToken
     {
         public HOLESMachiningToken(string token, string par1, string par2, string par3, string par4, string par5, string par6, string par7, string par8, string par9)
             : base(token, par1, par2, par3, par4, par5, par6, par7, par8, par9)
@@ -56,7 +56,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
             PartFace pf = this.Part.GetPartFaceByNumber(FaceNumber);
 
-            if (pf.AssociatedPartFaces.Count != 0)//数量不为0，说明有关联的板件
+            if (this.AssociatedPartFaces.Count != 0)//数量不为0，说明有关联的板件
             {
                 List<HDrilling> TempHDrills = new List<HDrilling>();
 
@@ -71,7 +71,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
                 if (this.FaceBoreDepth > 0 && this.FaceBoreDiameter > 0)
                 {
-                    foreach (PartFace f in pf.AssociatedPartFaces)
+                    foreach (PartFace f in this.AssociatedPartFaces)
                     {
                         if (!f.IsHorizontalFace)//如果关联的面是面5或面6
                         {
