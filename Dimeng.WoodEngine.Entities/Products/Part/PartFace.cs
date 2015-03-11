@@ -34,7 +34,10 @@ namespace Dimeng.WoodEngine.Entities
 
         ~PartFace()
         {
-            this.Plane.Dispose();
+            if (this.Plane != null)
+            {
+                this.Plane.Dispose();
+            }
         }
 
         //四个端点，最后表现为世界坐标系之下

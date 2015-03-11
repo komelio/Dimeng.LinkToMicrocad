@@ -39,7 +39,7 @@ namespace Dimeng.LinkToMicrocad
             tabNode.Add(new XAttribute("DWG", product.Tab.DWG));
             tabNode.Add(new XAttribute("Photo", product.Tab.Photo));
             tabNode.Add(new XAttribute("File", "DMS.xml"));
-            tabNode.Add(new XAttribute("Path", "f:\\ak12\\x64\\catalog\\dms"));
+            tabNode.Add(new XAttribute("Path", product.GetUIVarValue("CatalogPath")));
             tabNode.Add(new XAttribute("Description", product.Tab.Description));
             tabNode.Add(new XAttribute("DMID", product.Tab.DMID));
             tabNode.Add(new XAttribute("ID", product.Tab.ID));
