@@ -43,8 +43,8 @@ namespace Dimeng.LinkToMicrocad.Web.Controllers
 
         public RedirectToRouteResult Import()
         {
-            MVLibraryImporter importer = new MVLibraryImporter(repository);
-            importer.Import();
+            //MVLibraryImporter importer = new MVLibraryImporter(repository);
+            //importer.Import();
 
             return RedirectToAction("List");
         }

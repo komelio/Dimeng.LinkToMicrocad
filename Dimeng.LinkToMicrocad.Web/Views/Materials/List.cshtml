@@ -1,0 +1,38 @@
+﻿@using Dimeng.LinkToMicrocad.Web.Models
+@model MaterialListViewModel
+
+@{
+    ViewBag.Title = "材料管理";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.ActionLink("导入", "Import", null, new { @class = "btn btn-primary btn-sm" })
+
+<table class="table">
+    <caption>材料清单</caption>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>名称</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model.Materials)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+    }
+
+</table>

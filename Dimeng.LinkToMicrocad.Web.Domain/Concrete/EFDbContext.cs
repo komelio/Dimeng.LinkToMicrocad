@@ -12,6 +12,11 @@ namespace Dimeng.LinkToMicrocad.Web.Domain.Concrete
     {
         public DbSet<Product> Products { get; set; }
         //public DbSet<Texture> Textures { get; set; }
-        //public DbSet<Material> Materials { get; set; }
+        public DbSet<Material> Materials { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

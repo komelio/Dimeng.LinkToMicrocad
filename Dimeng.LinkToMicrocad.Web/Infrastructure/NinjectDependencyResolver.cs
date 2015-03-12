@@ -21,6 +21,7 @@ namespace Dimeng.LinkToMicrocad.Web.Infrastructure
         private void addBindings()
         {
             kernel.Bind<IProductRepository>().To<EFProductRepository>();
+            kernel.Bind<IMaterialRepository>().To<EFMaterialRepository>();
         }
 
         public object GetService(Type serviceType)

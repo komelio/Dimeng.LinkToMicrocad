@@ -11,17 +11,20 @@ namespace Dimeng.LinkToMicrocad.Web.Business
 {
     public class MVLibraryImporter
     {
-        private string path = @"c:\mv\";
-        private string libraryPath = @"c:\library\";
+        private string sourcePath;
+        private string savePath;
         private IProductRepository repository;
-        public MVLibraryImporter(IProductRepository repo)
+
+        public MVLibraryImporter(IProductRepository repo, string savePath, string sourcePath)
         {
             this.repository = repo;
+            this.sourcePath = sourcePath;
+            this.savePath = savePath;
         }
 
         public void Import()
         {
-            string[] directories = Directory.GetDirectories(path);
+            string[] directories = Directory.GetDirectories(sourcePath);
             foreach (string dir in directories)
             {
                 DirectoryInfo di = new DirectoryInfo(dir);
@@ -38,12 +41,12 @@ namespace Dimeng.LinkToMicrocad.Web.Business
 
                     int id = repository.Add(product);
 
-                    File.Copy(fi.FullName, Path.Combine(libraryPath, string.Format("{0}.cutx", id)), false);
+                    File.Copy(fi.FullName, Path.Combine(savePath, string.Format("{0}.cutx", id)), false);
 
                     var pictures = di.GetFiles(product.Name + ".jpg");
                     if (pictures.Length > 0)
                     {
-                        File.Copy(pictures[0].FullName, Path.Combine(libraryPath, string.Format("{0}.jpg", id)), false);
+                        File.Copy(pictures[0].FullName, Path.Combine(savePath, string.Format("{0}.jpg", id)), false);
                     }
                 }
             }
