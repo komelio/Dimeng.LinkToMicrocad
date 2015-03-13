@@ -52,6 +52,7 @@
     <Compile Include="Concrete\EFDbContext.cs" />
     <Compile Include="Concrete\EFMaterialRepository.cs" />
     <Compile Include="Concrete\EFProductRepository.cs" />
+    <Compile Include="Concrete\EFTextureRepository.cs" />
     <Compile Include="Entities\Material.cs" />
     <Compile Include="Entities\Product.cs" />
     <Compile Include="Entities\Texture.cs" />

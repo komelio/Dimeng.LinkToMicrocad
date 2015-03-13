@@ -12,9 +12,8 @@ namespace Dimeng.LinkToMicrocad.Web.Domain.Entities
     /// </summary>
     public class Texture
     {
-        [Key] 
-        public int Id { get; set; }
-        [Required]
+        [Key]
+        public int TextureId { get; set; }
         public int Name { get; set; }
     }
 }

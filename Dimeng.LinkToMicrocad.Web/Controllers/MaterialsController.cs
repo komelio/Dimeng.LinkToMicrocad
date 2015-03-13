@@ -1,4 +1,5 @@
-﻿using Dimeng.LinkToMicrocad.Web.Domain.Abstract;
+﻿using Dimeng.LinkToMicrocad.Web.Business;
+using Dimeng.LinkToMicrocad.Web.Domain.Abstract;
 using Dimeng.LinkToMicrocad.Web.Models;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace Dimeng.LinkToMicrocad.Web.Controllers
         {
             MaterialListViewModel model = new MaterialListViewModel();
             model.Materials = repository.Materials
-                                                .OrderBy(it => it.Id)
+                                                .OrderBy(it => it.MaterialId)
                                                 .Skip((page - 1) * pageSize)
                                                 .Take(pageSize);
             model.PagingInfo = new PagingInfo()
@@ -41,6 +42,15 @@ namespace Dimeng.LinkToMicrocad.Web.Controllers
             //model.CurrentCategory = category;
 
             return View(model);
+        }
+
+        public ActionResult Import()
+        {
+            string file = @"D:\MV\Template\切割板件文件.ctpx";
+            MVMaterialImporter importer = new MVMaterialImporter(repository);
+            importer.Import(file);
+
+            return RedirectToAction("List");
         }
     }
 }

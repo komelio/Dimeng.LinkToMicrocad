@@ -13,12 +13,14 @@ namespace Dimeng.LinkToMicrocad.Web.Controllers
 {
     public class ProductsController : Controller
     {
+        private Configuration configuration;
         private IProductRepository repository;
         private int pageSize = 20;
 
-        public ProductsController(IProductRepository repo)
+        public ProductsController(IProductRepository repo, Configuration config)
         {
             this.repository = repo;
+            this.configuration = config;
         }
 
         public ViewResult List(string category, int page = 1)
@@ -43,8 +45,13 @@ namespace Dimeng.LinkToMicrocad.Web.Controllers
 
         public RedirectToRouteResult Import()
         {
-            //MVLibraryImporter importer = new MVLibraryImporter(repository);
-            //importer.Import();
+            var pathOutput = Server.MapPath(configuration.PathToOutput);
+            pathOutput = Path.Combine(pathOutput, "Library");
+
+           
+            var pathLibrary = Server.MapPath(configuration.PathToLibrary);
+            MVLibraryImporter importer = new MVLibraryImporter(repository,pathOutput,pathLibrary);
+            importer.Import();
 
             return RedirectToAction("List");
         }

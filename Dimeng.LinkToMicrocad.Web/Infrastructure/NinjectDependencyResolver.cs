@@ -1,4 +1,5 @@
-﻿using Dimeng.LinkToMicrocad.Web.Domain.Abstract;
+﻿using Dimeng.LinkToMicrocad.Web.Business;
+using Dimeng.LinkToMicrocad.Web.Domain.Abstract;
 using Dimeng.LinkToMicrocad.Web.Domain.Concrete;
 using Ninject;
 using System;
@@ -22,6 +23,8 @@ namespace Dimeng.LinkToMicrocad.Web.Infrastructure
         {
             kernel.Bind<IProductRepository>().To<EFProductRepository>();
             kernel.Bind<IMaterialRepository>().To<EFMaterialRepository>();
+            kernel.Bind<ITextureRepository>().To<EFTextureRepository>();
+            kernel.Bind<Configuration>().To<Configuration>();
         }
 
         public object GetService(Type serviceType)

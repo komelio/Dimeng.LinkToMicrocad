@@ -24,7 +24,7 @@ namespace Dimeng.LinkToMicrocad.Web.Domain.Concrete
         {
             context.Materials.Add(material);
             context.SaveChanges();
-            return material.Id;
+            return material.MaterialId;
         }
 
         public void AddRange(IEnumerable<Material> materials)

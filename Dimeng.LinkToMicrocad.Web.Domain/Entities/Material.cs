@@ -14,11 +14,13 @@ namespace Dimeng.LinkToMicrocad.Web.Domain.Entities
     public class Material
     {
         [Key]
-        public int Id { get; set; }
+        public int MaterialId { get; set; }
+
         public string Name { get; set; }
 
-        [ForeignKey("Texture")]
-        public int TextureId { get; set; }
+        [ForeignKey("TextureId")]
         public Texture Texture { get; set; }
+
+        public int? TextureId { get; set; }//可以为空
     }
 }

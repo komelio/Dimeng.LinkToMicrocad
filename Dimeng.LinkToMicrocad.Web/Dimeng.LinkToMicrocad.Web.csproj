@@ -138,6 +138,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MaterialsController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
+    <Compile Include="Controllers\TexturesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -146,6 +147,7 @@
     <Compile Include="Models\PagingInfo.cs" />
     <Compile Include="Models\ProductListViewModel.cs" />
     <Compile Include="HtmlHelpers\PagingHelpers.cs" />
+    <Compile Include="Models\TextureListViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -153,6 +155,8 @@
     <Content Include="packages.config" />
     <Content Include="Views\Products\Edit.cshtml" />
     <Content Include="Views\Materials\List.cshtml" />
+    <Content Include="Views\Textures\Edit.cshtml" />
+    <Content Include="Views\Textures\List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -162,6 +166,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ImportSources\Library\" />
+    <Folder Include="ImportSources\Microvellum Data\Graphics\" />
+    <Folder Include="ImportSources\Subassemblies\" />
+    <Folder Include="Output\Library\" />
     <Folder Include="Views\Home\" />
   </ItemGroup>
   <ItemGroup>

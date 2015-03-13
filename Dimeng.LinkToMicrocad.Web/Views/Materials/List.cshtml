@@ -22,7 +22,7 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Id)
+                @Html.DisplayFor(modelItem => item.MaterialId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -36,3 +36,9 @@
     }
 
 </table>
+
+<div class="pull-right">
+    <ul class="pagination pagination-sm">
+        @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x }))
+    </ul>
+</div>

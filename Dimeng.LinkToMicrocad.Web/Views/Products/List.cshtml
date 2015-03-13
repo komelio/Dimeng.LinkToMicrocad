@@ -1,16 +1,19 @@
 ﻿@model Dimeng.LinkToMicrocad.Web.Models.ProductListViewModel
 
 @{
-    ViewBag.Title = "产品数据库管理";
+    ViewBag.Title = "AD数据管理平台 - 缔盟科技";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@Html.ActionLink("导入", "Import", null, new { @class = "btn btn-primary btn-sm" })
-@Html.ActionLink("导出", "Output", null, new { @class = "btn btn-primary btn-sm" })
-@Html.ActionLink("清除", "Clear", null, new { @class = "btn btn-primary btn-sm" })
+<h2>产品管理</h2>
+
+<div class="pull-right">
+    @Html.ActionLink("导入", "Import", null, new { @class = "btn btn-primary btn-sm" })
+    @Html.ActionLink("导出", "Output", null, new { @class = "btn btn-primary btn-sm" })
+    @Html.ActionLink("清除", "Clear", null, new { @class = "btn btn-primary btn-sm" })
+</div>
 
 <table class="table">
-    <caption>产品清单</caption>
     <thead>
         <tr>
             <th>ID</th>
@@ -31,8 +34,8 @@
                 <td>@p.Category</td>
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { productId = p.Id }, new { @class = "btn btn-xs btn-primary" })
-                    @Html.ActionLink("Details", "Details", new { id = p.Id }, new { @class = "btn btn-xs btn-primary" })
-                    @Html.ActionLink("Delete", "Delete", new { id = p.Id }, new { @class = "btn btn-xs btn-danger" })
+                    @*@Html.ActionLink("Details", "Details", new { id = p.Id }, new { @class = "btn btn-xs btn-primary" })
+                    @Html.ActionLink("Delete", "Delete", new { id = p.Id }, new { @class = "btn btn-xs btn-danger" })*@
                     @*@Ajax.ActionLink("test", "TestAjax", new { name = "test" }, new AjaxOptions()
                                                            {
                                                                UpdateTargetId = "tableData",
