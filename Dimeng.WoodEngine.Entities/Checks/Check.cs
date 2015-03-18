@@ -115,10 +115,12 @@ namespace Dimeng.WoodEngine.Entities.Checks
             }
             else
             {
-                bool value;
-                if (bool.TryParse(text, out value))
+                double value;
+                if (double.TryParse(text, out value))
                 {
-                    return value;
+                    if (value == 1)
+                    {return true;}
+                    else { return false; }
                 }
                 else
                 {

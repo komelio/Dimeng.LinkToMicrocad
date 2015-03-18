@@ -1,6 +1,7 @@
 ﻿using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
+using Dimeng.LinkToMicrocad.Logging;
 using Dimeng.WoodEngine.Entities;
 using Dimeng.WoodEngine.Entities.Machinings;
 using System;
@@ -18,6 +19,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
             Polyline pline = getRectanglePolyline(part);
             //addToDrawing(pline);
 
+            Logger.GetLogger().Info("Border Routings : " + part.Routings.Where(it => it.HasChangedPartRectangleBorder).Count().ToString());
             foreach (var route in part.Routings.Where(it => it.HasChangedPartRectangleBorder))
             {
                 routePLine = getRoutePLine(route);
