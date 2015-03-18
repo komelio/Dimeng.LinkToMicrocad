@@ -14,6 +14,11 @@ namespace Dimeng.LinkToMicrocad.Web.Domain.Entities
     {
         [Key]
         public int TextureId { get; set; }
-        public int Name { get; set; }
+
+        [Required(ErrorMessage = "Please enter a description")]
+        public string Name { get; set; }
+        
+
+        public string ImageName { get; set; }
     }
 }

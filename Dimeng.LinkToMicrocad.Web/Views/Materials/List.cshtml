@@ -7,6 +7,8 @@
 }
 
 @Html.ActionLink("导入", "Import", null, new { @class = "btn btn-primary btn-sm" })
+@Html.ActionLink("导出", "Output", null, new { @class = "btn btn-primary btn-sm" })
+@Html.Raw(TempData["msg"])
 
 <table class="table">
     <caption>材料清单</caption>
@@ -14,6 +16,7 @@
         <tr>
             <th>ID</th>
             <th>名称</th>
+            <th>材质</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -28,9 +31,18 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @if (item.Texture != null)
+                {
+                    @Html.DisplayFor(modelItem => item.Texture.Name);
+                }
+                else
+                {
+                    @:无材质
+                }
+
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.MaterialId }) 
             </td>
         </tr>
     }

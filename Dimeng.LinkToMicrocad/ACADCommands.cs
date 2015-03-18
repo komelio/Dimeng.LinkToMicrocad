@@ -45,7 +45,7 @@ namespace Dimeng.LinkToMicrocad
                 Logging.Logger.GetLogger().Error(error);
             }
 
-            //MessageBox.Show("New_dm");
+            MessageBox.Show("New_dm");
         }
 
         /// <summary>
@@ -65,7 +65,8 @@ namespace Dimeng.LinkToMicrocad
             {
                 Logging.Logger.GetLogger().Error(error);
             }
-            //MessageBox.Show("Edit_dm");
+            
+            MessageBox.Show("Edit_dm");
         }
 
         /// <summary>

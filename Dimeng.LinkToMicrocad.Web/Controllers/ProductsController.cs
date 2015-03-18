@@ -46,22 +46,22 @@ namespace Dimeng.LinkToMicrocad.Web.Controllers
         public RedirectToRouteResult Import()
         {
             var pathOutput = Server.MapPath(configuration.PathToOutput);
-            pathOutput = Path.Combine(pathOutput, "Library");
-
-           
             var pathLibrary = Server.MapPath(configuration.PathToLibrary);
-            MVLibraryImporter importer = new MVLibraryImporter(repository,pathOutput,pathLibrary);
+            MVLibraryImporter importer = new MVLibraryImporter(repository, pathOutput, pathLibrary);
             importer.Import();
 
             return RedirectToAction("List");
         }
 
-        public FileResult Output()
+        public string Output()
         {
-            MVLibraryConverter converter = new MVLibraryConverter(repository);
-            MemoryStream stream = new MemoryStream();
-            string path = converter.ConvertToXML();
-            return File(path, System.Net.Mime.MediaTypeNames.Application.Octet, "dms.xml");
+            string pathOutpu = Server.MapPath(configuration.PathToOutput);
+            MVLibraryConverter converter = new MVLibraryConverter(repository, pathOutpu);
+            converter.ConvertToXML();
+
+            return "Done!";
+
+            //return File(path, System.Net.Mime.MediaTypeNames.Application.Octet, "dms.xml");
         }
 
         public string TestAjax()
@@ -77,10 +77,32 @@ namespace Dimeng.LinkToMicrocad.Web.Controllers
             return RedirectToAction("List");
         }
 
+        [HttpGet]
         public ViewResult Edit(int productId)
         {
             Product product = repository.Products.FirstOrDefault(x => x.Id == productId);
             return View(product);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(Product product)
+        {
+            if (ModelState.IsValid)
+            {
+                if (product.Id > 0)
+                {
+                    repository.ApplyModel(product);
+                }
+                else
+                {
+                    repository.Add(product);
+                }
+                return RedirectToAction("List");
+            }
+            else
+            {
+                return View(product);
+            }
         }
     }
 }

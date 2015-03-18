@@ -12,5 +12,6 @@ namespace Dimeng.LinkToMicrocad.Web.Domain.Abstract
         IEnumerable<Material> Materials { get; }
         int Add(Material material);
         void AddRange(IEnumerable<Material> materials);
+        void ApplyModel(Material material);
     }
 }

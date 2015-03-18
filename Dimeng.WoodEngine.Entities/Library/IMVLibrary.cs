@@ -7,12 +7,10 @@ namespace Dimeng.WoodEngine.Entities
 {
     public interface IMVLibrary
     {
-        string DrawingTemplate { get; }
         string Library { get; }
         string MicrovellumData { get; }
         string Subassemblies { get; }
         string Template { get; }
         string Toolfiles { get; }
-        string UserFiles { get; }
     }
 }

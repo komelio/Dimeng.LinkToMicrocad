@@ -5,22 +5,33 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>List</h2>
+<h2>材质</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("创建新材质", "Create")
 </p>
 <table class="table">
     <tr>
-        <th></th>
+        <th>Id</th>
+        <th>名称</th>
+        <th>图片</th>
+        <th>操作</th>
     </tr>
 
 @foreach (var item in Model.Textures) {
     <tr>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            @item.TextureId
+        </td>
+        <td>
+            @item.Name
+        </td>
+        <td>
+            @item.ImageName
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { textureId = item.TextureId }) 
+            @Html.ActionLink("Delete", "Delete", new { textureId=item.TextureId})
         </td>
     </tr>
 }

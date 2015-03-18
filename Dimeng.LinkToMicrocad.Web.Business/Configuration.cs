@@ -16,7 +16,7 @@ namespace Dimeng.LinkToMicrocad.Web.Business
         private string pathToLibrary = @"~/ImportSources/Library/";
         private string pathToSubassemblies = @"~/ImportSources/Subassemblies/";
         private string pathToGraphics = "~/ImportSources/Microvellum Data/Graphics/";
-        private string pathToOutput = "~/Output/";
+        private string pathToOutput = "~/Output/Dms/";
 
         public string PathToLibrary
         {

@@ -1,4 +1,5 @@
-﻿using Dimeng.LinkToMicrocad.Logging;
+﻿using Autodesk.AutoCAD.Geometry;
+using Dimeng.LinkToMicrocad.Logging;
 using Dimeng.WoodEngine.Entities;
 using SpreadsheetGear;
 using System;
@@ -13,7 +14,7 @@ namespace Dimeng.WoodEngine.Business
         List<Material> tempMaterials = new List<Material>();
         List<EdgeBanding> tempEdgebandings = new List<EdgeBanding>();
         List<Hardware> tempHardwares = new List<Hardware>();
-        private string SubassemblyLibraryPath;
+
         private IMVLibrary library;
 
         public ProductAnalyst(IMVLibrary library)
@@ -34,12 +35,41 @@ namespace Dimeng.WoodEngine.Business
 
                 var errors = getIProductElements(product, workBookSet.Workbooks["L"]);
 
+                combinedPartsAndHardwaresAndGetMachining(product);
+
                 return errors;
             }
             catch (Exception error)
             {
                 throw new Exception("Error occures when analysising product:" + product.Description, error);
             }
+        }
+
+        private void combinedPartsAndHardwaresAndGetMachining(Product product)
+        {
+            product.Parts.ForEach(it => it.CalculateLocationInfo(Point3d.Origin, 0));
+
+            product.CombinedParts.AddRange(product.Parts);
+            product.CombinedHardwares.AddRange(product.Hardwares);
+
+            foreach (var sub in product.Subassemblies)
+            {
+                sub.Parts.ForEach(it => it.CalculateLocationInfo(
+                    new Point3d(sub.XOrigin, sub.YOrigin, sub.ZOrigin), sub.Rotation));
+                product.CombinedHardwares.AddRange(sub.Hardwares);
+                product.CombinedParts.AddRange(sub.Parts);
+
+                foreach (var sub2 in sub.Subassemblies)
+                {
+                    sub2.Parts.ForEach(it => it.CalculateLocationInfo(
+                        new Point3d(sub.XOrigin + sub2.XOrigin, sub.YOrigin + sub2.YOrigin, sub.ZOrigin + sub2.ZOrigin), sub.Rotation + sub2.Rotation));
+
+                    product.CombinedHardwares.AddRange(sub2.Hardwares);
+                    product.CombinedParts.AddRange(sub2.Parts);
+                }
+            }
+
+            product.CombinedParts.ForEach(p => p.MachineTokens.ForEach(m => m.ToMachining(0.1, null)));
         }
 
         private IEnumerable<ModelError> getIProductElements(IProduct product, IWorkbook book)
@@ -86,7 +116,6 @@ namespace Dimeng.WoodEngine.Business
                     workBookSet, tempMaterials, tempEdgebandings, tempHardwares, library);
 
                 product.Subassemblies.AddRange(subs);
-
             }
 
             return errors;

@@ -143,6 +143,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
+    <Compile Include="Models\MaterialEditViewModel.cs" />
     <Compile Include="Models\MaterialListViewModel.cs" />
     <Compile Include="Models\PagingInfo.cs" />
     <Compile Include="Models\ProductListViewModel.cs" />
@@ -155,8 +156,9 @@
     <Content Include="packages.config" />
     <Content Include="Views\Products\Edit.cshtml" />
     <Content Include="Views\Materials\List.cshtml" />
-    <Content Include="Views\Textures\Edit.cshtml" />
     <Content Include="Views\Textures\List.cshtml" />
+    <Content Include="Views\Textures\Edit.cshtml" />
+    <Content Include="Views\Materials\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -169,7 +171,13 @@
     <Folder Include="ImportSources\Library\" />
     <Folder Include="ImportSources\Microvellum Data\Graphics\" />
     <Folder Include="ImportSources\Subassemblies\" />
-    <Folder Include="Output\Library\" />
+    <Folder Include="Output\Dms\Library\Graphics\" />
+    <Folder Include="Output\Dms\Library\Products\" />
+    <Folder Include="Output\Dms\Library\Subassemblies\" />
+    <Folder Include="Output\Dms\Library\Template\" />
+    <Folder Include="Output\Dms\Library\Toolfiles\" />
+    <Folder Include="Output\Dms\Material\high\" />
+    <Folder Include="Output\Dms\Photos\dmsobj\" />
     <Folder Include="Views\Home\" />
   </ItemGroup>
   <ItemGroup>

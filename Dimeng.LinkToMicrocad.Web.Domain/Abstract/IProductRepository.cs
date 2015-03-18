@@ -16,5 +16,7 @@ namespace Dimeng.LinkToMicrocad.Web.Domain.Abstract
         void AddRange(IEnumerable<Product> products);
 
         void Clear();
+
+        void ApplyModel(Product product);
     }
 }

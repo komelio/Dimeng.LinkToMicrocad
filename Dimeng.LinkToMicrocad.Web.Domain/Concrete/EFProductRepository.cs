@@ -35,5 +35,11 @@ namespace Dimeng.LinkToMicrocad.Web.Domain.Concrete
             context.Products.RemoveRange(context.Products);
             context.SaveChanges();
         }
+
+        public void ApplyModel(Product product)
+        {
+            context.Entry(product).State = System.Data.Entity.EntityState.Modified;
+            context.SaveChanges();
+        }
     }
 }

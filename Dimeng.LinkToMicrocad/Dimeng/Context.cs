@@ -17,12 +17,9 @@ namespace Dimeng.LinkToMicrocad
         {
             //Microcad产品信息
             AKInfo = AKInfo.GetInfo();
-
-            //MV数据信息
-            MVDataContext = MVDataContext.GetContext(AKInfo.Path);
         }
 
         public AKInfo AKInfo { get; private set; }
-        public MVDataContext MVDataContext { get; private set; }
+        public MVDataContext MVDataContext { get; set; }
     }
 }

@@ -26,5 +26,21 @@ namespace Dimeng.LinkToMicrocad.Web.Domain.Concrete
             context.SaveChanges();
             return texture.TextureId;
         }
+
+        public void ApplyModel(Texture texture)
+        {
+            context.Entry(texture).State = System.Data.Entity.EntityState.Modified;
+            context.SaveChanges();
+        }
+
+        public void Delete(int id)
+        {
+            var texture = context.Textures.FirstOrDefault(it => it.TextureId == id);
+            if (texture != null)
+            {
+                context.Textures.Remove(texture);
+                context.SaveChanges();
+            }
+        }
     }
 }

@@ -12,13 +12,19 @@ namespace Dimeng.LinkToMicrocad.Web.Business
     public class MVLibraryConverter
     {
         private IProductRepository repository;
-        public MVLibraryConverter(IProductRepository repo)
+        private string saveXMLPath;
+
+        public MVLibraryConverter(IProductRepository repo, string savePath)
         {
             this.repository = repo;
+            this.saveXMLPath = Path.Combine(savePath, "Dms.xml");
         }
 
-        public string ConvertToXML()
+        public void ConvertToXML()
         {
+            if (File.Exists(saveXMLPath))
+            { File.Delete(saveXMLPath); }
+
             List<string> categoreis = repository.Products.Select(x => x.Category)
                                                          .Distinct()
                                                          .ToList();
@@ -36,18 +42,24 @@ namespace Dimeng.LinkToMicrocad.Web.Business
                                    new XAttribute("Photo", cate)
                                    );
 
-                foreach (var p in repository.Products.Where(it => it.Category == cate))
+                var products = repository.Products.Where(it => it.Category == cate).ToList();
+                foreach (var p in products)
                 {
+                    if (products.IndexOf(p) == 0)
+                    {
+                        category.Attribute("Photo").Value = p.Id.ToString();
+                    }
+
                     var productXml = new XElement("I",
                                         new XAttribute("Name", p.Name),
-                                        new XAttribute("Photo", p.Name),
+                                        new XAttribute("Photo", p.Id),
                                         new XAttribute("DWG", p.Id),
                                         new XAttribute("DMID", ""),
                                         new XAttribute("Units", "mm"),
-                                        new XAttribute("Elevation", ""),
-                                        new XAttribute("Z", "400"),
-                                        new XAttribute("Y", "500"),
-                                        new XAttribute("X", "400"),
+                                        new XAttribute("Elevation", p.Elevation),
+                                        new XAttribute("Z", p.Height),
+                                        new XAttribute("Y", p.Depth),
+                                        new XAttribute("X", p.Width),
                                         new XAttribute("LongText", p.Description),
                                         new XAttribute("ID", p.Id)
                                         );
@@ -61,11 +73,7 @@ namespace Dimeng.LinkToMicrocad.Web.Business
             root.Add(dimengCategory);
 
             doc.Add(root);
-
-            string path = @"c:\temp.xml";
-
-            doc.Save(path);
-            return path;
+            doc.Save(this.saveXMLPath);
         }
     }
 }

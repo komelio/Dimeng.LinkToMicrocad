@@ -27,7 +27,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
                 BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
                 BlockTableRecord btr = (BlockTableRecord)trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
 
-                LayerHelper.SetLayer(db, part.LayerName3D);
+                LayerHelper.SetLayer(db, part.Material.Name);
 
                 if (part.IsBend)
                 {
@@ -62,7 +62,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
 
             panel.TransformBy(Matrix3d.Displacement(part.CenterVector));
 
-            panel.Layer = part.LayerName3D;
+            panel.Layer = part.Material.Name;
 
             return panel;
         }

@@ -17,13 +17,13 @@ namespace Dimeng.LinkToMicrocad.Web
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
 
-            Database.SetInitializer<EFDbContext>(new DropCreateDatabaseAlways<EFDbContext>());
+            //Database.SetInitializer<EFDbContext>(new DropCreateDatabaseAlways<EFDbContext>());
 
-            // Forces initialization of database on model changes.
-            using (var context = new EFDbContext())
-            {
-                context.Database.Initialize(force: true);
-            }    
+            //// Forces initialization of database on model changes.
+            //using (var context = new EFDbContext())
+            //{
+            //    context.Database.Initialize(force: true);
+            //}    
         }
     }
 }

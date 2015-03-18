@@ -26,6 +26,11 @@ namespace Dimeng.LinkToMicrocad
                     "temp.xml");
                 AKProduct product = AKProduct.Load(tempXMLPath);
 
+                string mvDataContextPath = product.Tab.CatalogPath;
+                mvDataContextPath = Path.Combine(mvDataContextPath, "Library");
+                MVDataContext mvContext = MVDataContext.GetContext(mvDataContextPath);
+                Context.GetContext().MVDataContext = mvContext;
+
                 var project = ProjectManager.CreateOrOpenProject(
                     product.GetUIVarValue("ManufacturingFolder"));
 
@@ -48,7 +53,9 @@ namespace Dimeng.LinkToMicrocad
 
                 outputErrors(errors);
 
-                (new TempXMLWriter()).WriteFile(tempXMLPath, product);
+                IEnumerable<string> materialList = getMaterialList(mvProduct);
+
+                (new TempXMLWriter()).WriteFile(tempXMLPath, product, materialList);
 
                 ProductDrawer drawer = new ProductDrawer();
                 drawer.DrawAndSaveAsDWG(mvProduct,
@@ -58,6 +65,12 @@ namespace Dimeng.LinkToMicrocad
             {
                 throw new Exception("Error occured during drawing....", error);
             }
+        }
+
+        private IEnumerable<string> getMaterialList(Product mvProduct)
+        {
+            //todo:combinedparts
+            return mvProduct.Parts.Select(it => it.Material.Name).Distinct();
         }
 
         private void updateProductWHD(AKProduct product, IWorkbookSet bookset)
@@ -125,7 +138,7 @@ namespace Dimeng.LinkToMicrocad
                                           akProduct.Tab.VarX,
                                           akProduct.Tab.VarZ,
                                           akProduct.Tab.VarY,
-                                          Context.GetContext().MVDataContext.GetProduct(akProduct.Tab.Name));
+                                          Context.GetContext().MVDataContext.GetProduct(akProduct.Tab.ID));
             }
         }
 

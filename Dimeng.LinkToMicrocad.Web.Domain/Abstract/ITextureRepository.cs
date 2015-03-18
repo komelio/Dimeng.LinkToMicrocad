@@ -11,5 +11,7 @@ namespace Dimeng.LinkToMicrocad.Web.Domain.Abstract
     {
         IEnumerable<Texture> Textures { get; }
         int Add(Texture texture);
+        void ApplyModel(Texture texture);
+        void Delete(int id);
     }
 }

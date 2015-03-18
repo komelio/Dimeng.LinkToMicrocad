@@ -45,7 +45,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             {
                 this.AssociatedPartFaces = new List<PartFace>();
 
-                foreach (Part part in Part.Product.Parts.Where(it => it.IsBend == false))
+                foreach (Part part in Part.Product.CombinedParts.Where(it => it.IsBend == false))
                 {
                     if (part == Part)//跳过自己
                     {
@@ -57,25 +57,6 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                         if (pf.IsAssocaitedWithAnotherFace(face, associateDist))
                         {
                             this.AssociatedPartFaces.Add(face);//添加关联板件
-                        }
-                    }
-                }
-
-                foreach (Subassembly sub in Part.Product.Subassemblies)
-                {
-                    foreach (Part part in sub.Parts.Where(it => it.IsBend == false))
-                    {
-                        if (part == Part)//跳过自己
-                        {
-                            continue;
-                        }
-
-                        foreach (PartFace face in part.Faces)
-                        {
-                            if (pf.IsAssocaitedWithAnotherFace(face, associateDist))
-                            {
-                                this.AssociatedPartFaces.Add(face);//添加关联板件
-                            }
                         }
                     }
                 }

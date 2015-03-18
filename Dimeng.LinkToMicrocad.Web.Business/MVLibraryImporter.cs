@@ -13,6 +13,8 @@ namespace Dimeng.LinkToMicrocad.Web.Business
     {
         private string sourcePath;
         private string savePath;
+        private string saveProductPhotoPath;
+        private string saveProductCutxPath;
         private IProductRepository repository;
 
         public MVLibraryImporter(IProductRepository repo, string savePath, string sourcePath)
@@ -20,6 +22,18 @@ namespace Dimeng.LinkToMicrocad.Web.Business
             this.repository = repo;
             this.sourcePath = sourcePath;
             this.savePath = savePath;
+            this.saveProductPhotoPath = Path.Combine(savePath, "Photos", "dmsobj");
+            this.saveProductCutxPath = Path.Combine(savePath, "Library", "Products");
+
+            if (!Directory.Exists(this.saveProductPhotoPath))
+            {
+                Directory.CreateDirectory(this.saveProductPhotoPath);
+            }
+
+            if (!Directory.Exists(this.saveProductCutxPath))
+            {
+                Directory.CreateDirectory(this.saveProductCutxPath);
+            }
         }
 
         public void Import()
@@ -41,12 +55,12 @@ namespace Dimeng.LinkToMicrocad.Web.Business
 
                     int id = repository.Add(product);
 
-                    File.Copy(fi.FullName, Path.Combine(savePath, string.Format("{0}.cutx", id)), false);
+                    File.Copy(fi.FullName, Path.Combine(saveProductCutxPath, string.Format("{0}.cutx", id)), true);
 
                     var pictures = di.GetFiles(product.Name + ".jpg");
                     if (pictures.Length > 0)
                     {
-                        File.Copy(pictures[0].FullName, Path.Combine(savePath, string.Format("{0}.jpg", id)), false);
+                        File.Copy(pictures[0].FullName, Path.Combine(saveProductPhotoPath, string.Format("{0}.jpg", id)), true);
                     }
                 }
             }

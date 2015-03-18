@@ -22,12 +22,10 @@ namespace Dimeng.LinkToMicrocad
 
             this.folderPath = path;
 
-            getReleaseNumber(path);
+            //getReleaseNumber(path);
 
-            this.DrawingTemplate = Path.Combine(folderPath, "Drawing Template");
-            Logger.GetLogger().Debug(string.Format("DrawingTemplate:{0}", this.DrawingTemplate));
-            this.Library = Path.Combine(folderPath, "Library");
-            Logger.GetLogger().Debug(string.Format("Library:{0}", this.Library));
+            this.Library = Path.Combine(folderPath, "Products");
+            Logger.GetLogger().Debug(string.Format("Product Library:{0}", this.Library));
             this.MicrovellumData = Path.Combine(folderPath, "Microvellum Data");
             Logger.GetLogger().Debug(string.Format("MicrovellumData:{0}", this.MicrovellumData));
             this.Subassemblies = Path.Combine(folderPath, "Subassemblies");
@@ -36,8 +34,6 @@ namespace Dimeng.LinkToMicrocad
             Logger.GetLogger().Debug(string.Format("Template:{0}", this.Template));
             this.Toolfiles = Path.Combine(folderPath, "Toolfiles");
             Logger.GetLogger().Debug(string.Format("Toolfiles:{0}", this.Toolfiles));
-            this.UserFiles = Path.Combine(folderPath, "UserFiles");
-            Logger.GetLogger().Debug(string.Format("UserFiles:{0}", this.UserFiles));
         }
 
         private void getReleaseNumber(string path)
@@ -53,13 +49,11 @@ namespace Dimeng.LinkToMicrocad
             Logger.GetLogger().Debug(string.Format("ReleaseNumber:{0}", this.ReleaseNumber));
         }
 
-        public string DrawingTemplate { get; private set; }
         public string Library { get; private set; }
         public string MicrovellumData { get; private set; }
         public string Subassemblies { get; private set; }
         public string Template { get; private set; }
         public string Toolfiles { get; private set; }
-        public string UserFiles { get; private set; }
 
         public string ReleaseNumber { get; private set; }
     }

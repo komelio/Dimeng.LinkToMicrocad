@@ -9,7 +9,7 @@
 
 <div class="pull-right">
     @Html.ActionLink("导入", "Import", null, new { @class = "btn btn-primary btn-sm" })
-    @Html.ActionLink("导出", "Output", null, new { @class = "btn btn-primary btn-sm" })
+    @Html.ActionLink("生成", "Output", null, new { @class = "btn btn-primary btn-sm" })
     @Html.ActionLink("清除", "Clear", null, new { @class = "btn btn-primary btn-sm" })
 </div>
 
@@ -19,6 +19,10 @@
             <th>ID</th>
             <th>名称</th>
             <th>描述</th>
+            <th>宽</th>
+            <th>高</th>
+            <th>深</th>
+            <th>离地高度</th>
             <th>分类</th>
             <th>操作</th>
         </tr>
@@ -27,10 +31,13 @@
         @foreach (var p in Model.Products)
         {
             <tr>
-                <td>@p.Id
-                </td>
+                <td>@p.Id</td>
                 <td>@p.Name</td>
                 <td>@p.Description</td>
+                <td>@p.Width</td>
+                <td>@p.Height</td>
+                <td>@p.Depth</td>
+                <td>@p.Elevation</td>
                 <td>@p.Category</td>
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { productId = p.Id }, new { @class = "btn btn-xs btn-primary" })
