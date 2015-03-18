@@ -227,5 +227,7 @@ namespace Dimeng.WoodEngine.Entities
         public bool IsBend { get; set; }//是否为弧形板件，如果是的话，在生成机加工、绘制板件时都是不同的
 
         public bool IsValid { get; set; }
+
+        public BendingInfo BendingInfo { get; set; }
     }
 }

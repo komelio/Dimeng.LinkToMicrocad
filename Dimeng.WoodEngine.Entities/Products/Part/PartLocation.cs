@@ -256,5 +256,30 @@ namespace Dimeng.WoodEngine.Entities
         }
         
         public List<PartFace> Faces { get; private set; }
+
+        public Point3d GetPartPointPositionByNumber(int num)
+        {
+            switch (num)
+            {
+                case 1:
+                    return Point1;
+                case 2:
+                    return Point2;
+                case 3:
+                    return Point3;
+                case 4:
+                    return Point4;
+                case 5:
+                    return Point5;
+                case 6:
+                    return Point6;
+                case 7:
+                    return Point7;
+                case 8:
+                    return Point8;
+                default:
+                    return Point1;
+            }
+        }
     }
 }

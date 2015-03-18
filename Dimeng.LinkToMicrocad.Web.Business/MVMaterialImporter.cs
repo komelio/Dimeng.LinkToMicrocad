@@ -27,7 +27,7 @@ namespace Dimeng.LinkToMicrocad.Web.Business
             }
 
             IWorkbook book = Factory.GetWorkbook(ctpxfilePath);
-            for (int i = 0; i < 3; i++)//读取三个表
+            for (int i = 1; i < 4; i++)//读取三个表
             {
                 var sheet = book.Worksheets[i];
                 var allCells = sheet.Cells;

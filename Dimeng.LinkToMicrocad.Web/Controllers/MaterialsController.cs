@@ -94,6 +94,7 @@ namespace Dimeng.LinkToMicrocad.Web.Controllers
         public ActionResult Import()
         {
             string file = @"D:\MV\Template\切割板件文件.ctpx";
+
             MVMaterialImporter importer = new MVMaterialImporter(repository);
             importer.Import(file);
 

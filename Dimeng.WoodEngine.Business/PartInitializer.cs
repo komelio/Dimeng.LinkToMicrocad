@@ -57,6 +57,7 @@ namespace Dimeng.WoodEngine.Business
 
             if (width <= 0 || length <= 0 || thick <= 0)
             {
+                Logger.GetLogger().Info("Part got errors !");
                 return errors;
             }
 
@@ -71,6 +72,7 @@ namespace Dimeng.WoodEngine.Business
 
                 if (errors.Count > 0)
                 {
+                    Logger.GetLogger().Info("Part got errors !");
                     return errors;
                 }
 
@@ -84,7 +86,7 @@ namespace Dimeng.WoodEngine.Business
                         layname3d, layname2d, isDraw3d,
                         product);
                     parts.Add(part);
-                    Logger.GetLogger().Debug(string.Format("{0}/{1}/{2}/{3}", partName, 1, width, length));
+                    Logger.GetLogger().Debug(string.Format("{0}/{1}/{2}/{3}/{4}", partName, 1, width, length, isDraw3d));
                 }
             }
             else
@@ -95,6 +97,7 @@ namespace Dimeng.WoodEngine.Business
 
                 if (errors.Count > 0)
                 {
+                    Logger.GetLogger().Info("Part got errors !");
                     return errors;
                 }
 
@@ -107,7 +110,7 @@ namespace Dimeng.WoodEngine.Business
                     product);
 
                 parts.Add(part);
-                Logger.GetLogger().Debug(string.Format("{0}/{1}/{2}/{3}", partName, qty, width, length));
+                Logger.GetLogger().Debug(string.Format("{0}/{1}/{2}/{3}/{4}", partName, 1, width, length, isDraw3d));
             }
 
             MachineTokenChecker mChecker = new MachineTokenChecker(errors);

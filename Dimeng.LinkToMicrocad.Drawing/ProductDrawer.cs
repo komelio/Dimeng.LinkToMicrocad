@@ -29,9 +29,19 @@ namespace Dimeng.LinkToMicrocad.Drawing
                 Database oDb = HostApplicationServices.WorkingDatabase;
                 HostApplicationServices.WorkingDatabase = db;//重要，否则会导致很多问题，比如图层加入了却找不到
 
-                foreach (var part in product.CombinedParts)
+                foreach (var part in product.CombinedParts.Where(it => it.IsDrawOn3D))
                 {
-                    (new PartDrawer(db)).Draw(part);
+                    Logger.GetLogger().Info("Start Drawing Part:" + part.PartName);
+                    Logger.GetLogger().Info("Part Bending:" + part.IsBend.ToString());
+
+                    if (part.IsBend)
+                    {
+                        (new PartBendDrawer(part, Point3d.Origin, db)).Draw();
+                    }
+                    else
+                    {
+                        (new PartDrawer(db)).Draw(part);
+                    }
                 }
 
                 HostApplicationServices.WorkingDatabase = oDb;//重要，否则会导致很多问题，比如图层加入了却找不到

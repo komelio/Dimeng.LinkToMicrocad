@@ -82,6 +82,10 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             firstPt = firstPt.TransformBy(matrix1).TransformBy(matrix2);
             secondPt = secondPt.TransformBy(matrix1).TransformBy(matrix2);
 
+            //todo:转换后z值变成负数了，转会正数，有空再研究原因
+            firstPt = new Point3d(firstPt.X, firstPt.Y, Depth);
+            secondPt = new Point3d(secondPt.X, secondPt.Y, Depth);
+
             ToolComp comp = ToolComp.None;
 
             if (firstPt.X >= secondPt.X && firstPt.Y >= secondPt.Y)

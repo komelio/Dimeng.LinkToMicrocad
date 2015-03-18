@@ -35,6 +35,8 @@ namespace Dimeng.WoodEngine.Entities
             MicrovellumProjectPath = Path.Combine(path, "MicrovellumProject.mdb");
             SubassembliesPath = Path.Combine(path, "Subassemblies");
 
+            checkPaths();
+
             loadProjectInfo();
 
             loadSpecificationGroups();
@@ -42,6 +44,14 @@ namespace Dimeng.WoodEngine.Entities
             loadProducts();
 
             //this.ProjectInfo.JobName = (new DirectoryInfo(path)).Name;
+        }
+
+        private void checkPaths()
+        {
+            if(!Directory.Exists(this.SubassembliesPath))
+            {
+                Directory.CreateDirectory(this.SubassembliesPath);
+            }
         }
 
         private void loadProducts()
