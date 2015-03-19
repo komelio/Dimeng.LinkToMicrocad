@@ -48,7 +48,7 @@ namespace Dimeng.WoodEngine.Entities
 
         private void checkPaths()
         {
-            if(!Directory.Exists(this.SubassembliesPath))
+            if (!Directory.Exists(this.SubassembliesPath))
             {
                 Directory.CreateDirectory(this.SubassembliesPath);
             }
@@ -194,6 +194,39 @@ namespace Dimeng.WoodEngine.Entities
                 book.SaveAs(Path.Combine(JobPath, filename), FileFormat.OpenXMLWorkbook);
 
                 return product;
+            }
+        }
+
+        public void DeleteProduct(string productId)
+        {
+            string connstr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + this.ProductListMDBPath;
+            using (OleDbConnection conn = new OleDbConnection(connstr))
+            {
+                conn.Open();
+                string cmdtext = string.Format("Delete From ProductList Where Handle='{0}'", productId);
+                var cmd = new OleDbCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = cmdtext;
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void UpdateProduct(Product product)
+        {
+            string connstr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + this.ProductListMDBPath;
+            using (OleDbConnection conn = new OleDbConnection(connstr))
+            {
+                conn.Open();
+                string query = "Width='{1}',Height='{2}',Depth='{3}'";
+                if(product.Comments!=null && product.Comments.Length>0)
+                {
+                    query = query + ",Comments='" + product.Comments + "'";
+                }
+                string cmdtext = string.Format("Update ProductList Set " + query + " Where Handle='{0}'", product.Handle, product.Width, product.Height, product.Depth);
+                var cmd = new OleDbCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = cmdtext;
+                cmd.ExecuteNonQuery();
             }
         }
     }

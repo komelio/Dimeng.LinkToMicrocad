@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows;
+using System.Xml.Linq;
 
 namespace Dimeng.LinkToMicrocad
 {
@@ -33,16 +35,21 @@ namespace Dimeng.LinkToMicrocad
 
                 var project = ProjectManager.CreateOrOpenProject(
                     product.GetUIVarValue("ManufacturingFolder"));
+                Context.GetContext().CurrentProject = project;
 
                 Product mvProduct = getProductFromProject(product, project);
                 string productCutx = mvProduct.GetProductCutxFileName();
                 SpecificationGroup specificationGroup =
                     project.SpecificationGroups.Find(it => it.Name == mvProduct.MatFile);
-                var bookset = showPromptWindow(product, project, productCutx, specificationGroup);
+                var bookset = showPromptWindow(product, project, productCutx, specificationGroup, mvProduct);
 
                 bookset.GetLock();//lock the work book set
 
-                updateProductWHD(product, bookset);
+                updateAKProductWHD(product, bookset);
+                mvProduct.Width = product.Tab.VarX;
+                mvProduct.Height = product.Tab.VarZ;
+                mvProduct.Depth = product.Tab.VarY;
+                project.UpdateProduct(mvProduct);
 
                 ProductAnalyst analyst = new ProductAnalyst(
                     Context.GetContext().MVDataContext.GetLatestRelease());
@@ -73,7 +80,7 @@ namespace Dimeng.LinkToMicrocad
             return mvProduct.Parts.Select(it => it.Material.Name).Distinct();
         }
 
-        private void updateProductWHD(AKProduct product, IWorkbookSet bookset)
+        private void updateAKProductWHD(AKProduct product, IWorkbookSet bookset)
         {
             //Update the product data
             try
@@ -96,7 +103,7 @@ namespace Dimeng.LinkToMicrocad
             }
         }
 
-        private static IWorkbookSet showPromptWindow(AKProduct product, Project project, string productCutx, SpecificationGroup specificationGroup)
+        private static IWorkbookSet showPromptWindow(AKProduct product, Project project, string productCutx, SpecificationGroup specificationGroup, Product mvProduct)
         {
             string globalGvfx = Path.Combine(project.JobPath, specificationGroup.GlobalFileName);
             string cutPartsCtpx = Path.Combine(project.JobPath, specificationGroup.CutPartsFileName);
@@ -111,6 +118,8 @@ namespace Dimeng.LinkToMicrocad
             prompt.ViewModel = viewmodel;
             prompt.ShowDialog();
 
+            mvProduct.Comments = viewmodel.Comments;
+
             return viewmodel.BookSet;
         }
 
@@ -124,8 +133,6 @@ namespace Dimeng.LinkToMicrocad
                 _product.Width = akProduct.Tab.VarX;
                 _product.Height = akProduct.Tab.VarZ;
                 _product.Depth = akProduct.Tab.VarY;
-
-                //TODO:update the info in the project database
 
                 return _product;
             }
@@ -157,12 +164,39 @@ namespace Dimeng.LinkToMicrocad
 
         public void DeleteProduct()
         {
+            if (Context.GetContext().CurrentProject == null)
+            {
+                MessageBox.Show("当前未有打开的任务！");
+            }
+
             string folderPath = getTempFolderPath(
                     Context.GetContext().AKInfo.Path);
             string tempXMLPath = Path.Combine(folderPath,
                 "Delete.xml");
 
+            foreach (string s in readIdFromDeleteXML(tempXMLPath))
+            {
+                if (Context.GetContext().CurrentProject.HasProduct(s))
+                {
+                    Logger.GetLogger().Debug("Deleting product id :" + s);
+                    Context.GetContext().CurrentProject.DeleteProduct(s);
+                }
+            }
+        }
 
+        private IEnumerable<string> readIdFromDeleteXML(string tempXMLPath)
+        {
+            List<string> values = new List<string>();
+
+            XElement xml = XElement.Load(tempXMLPath);
+            var ids = from e in xml.Elements("D")
+                      select e;
+            foreach (var x in ids)
+            {
+                values.Add(x.Attribute("Name").Value);
+            }
+
+            return values;
         }
     }
 }

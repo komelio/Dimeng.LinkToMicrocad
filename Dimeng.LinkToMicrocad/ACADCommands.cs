@@ -20,12 +20,6 @@ namespace Dimeng.LinkToMicrocad
 {
     public class Commands
     {
-        [CommandMethod("AK", "HelloWorld", CommandFlags.Modal)]
-        public void HelloWorld()
-        {
-            MessageBox.Show("Hello World!");
-        }
-
         /// <summary>
         /// Read temp.xml and popup a prompt window for product options.
         /// Then draw a autocad block dwg file.
