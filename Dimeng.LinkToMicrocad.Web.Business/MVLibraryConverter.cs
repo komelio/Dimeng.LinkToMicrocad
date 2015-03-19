@@ -60,7 +60,7 @@ namespace Dimeng.LinkToMicrocad.Web.Business
                                         new XAttribute("Z", p.Height),
                                         new XAttribute("Y", p.Depth),
                                         new XAttribute("X", p.Width),
-                                        new XAttribute("LongText", p.Description),
+                                        new XAttribute("LongText", p.Description ?? string.Empty),
                                         new XAttribute("ID", p.Id)
                                         );
 

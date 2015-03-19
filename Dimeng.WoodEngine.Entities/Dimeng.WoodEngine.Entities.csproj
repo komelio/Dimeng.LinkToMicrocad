@@ -116,6 +116,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Dimeng.LinkToMicrocad.Logging\Dimeng.LinkToMicrocad.Logging.csproj">
+      <Project>{ae2c711a-a774-4d97-a609-5ea0e05598e4}</Project>
+      <Name>Dimeng.LinkToMicrocad.Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Dimeng.WoodEngine.Math\Dimeng.WoodEngine.Math.csproj">
       <Project>{dd3bdbb1-56a6-4262-b71d-48bd0e90cab1}</Project>
       <Name>Dimeng.WoodEngine.Math</Name>

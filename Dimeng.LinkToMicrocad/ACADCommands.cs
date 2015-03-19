@@ -45,7 +45,7 @@ namespace Dimeng.LinkToMicrocad
                 Logging.Logger.GetLogger().Error(error);
             }
 
-            MessageBox.Show("New_dm");
+            //MessageBox.Show("New_dm");
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Dimeng.LinkToMicrocad
                 Logging.Logger.GetLogger().Error(error);
             }
             
-            MessageBox.Show("Edit_dm");
+            //MessageBox.Show("Edit_dm");
         }
 
         /// <summary>
@@ -77,18 +77,15 @@ namespace Dimeng.LinkToMicrocad
         {
             Logging.Logger.GetLogger().Info("Call command 'Del_dm'");
 
-            Logging.Logger.GetLogger().Info("try point pick");
-            Document doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-            Database db = doc.Database;
-            Editor ed = doc.Editor;
-
-            PromptPointResult psr = ed.GetPoint("Get a point");
-
-            if (psr.Status == PromptStatus.OK)
+            try
             {
-                Logging.Logger.GetLogger().Info(psr.Value.ToString());
+                var dmHelper = new DimengHelper();
+                dmHelper.DeleteProduct();
             }
-            MessageBox.Show("Del_dm");
+            catch (System.Exception error)
+            {
+                Logging.Logger.GetLogger().Error(error);
+            }
         }
     }
 

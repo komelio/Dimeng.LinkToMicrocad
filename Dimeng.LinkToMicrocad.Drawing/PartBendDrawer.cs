@@ -31,6 +31,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
         public void Draw()
         {
             Logger.GetLogger().Debug("Start drawing bending part:" + part.PartName);
+            LayerHelper.SetLayer(db, part.Material.Name);
             try
             {
                 using (Transaction trans = db.TransactionManager.StartTransaction())
@@ -39,6 +40,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
                     BlockTableRecord btr = (BlockTableRecord)trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
 
                     Solid3d partSolid = getBendPartSolid(part);
+                    partSolid.Layer = part.Material.Name;
 
                     //旋转              
                     partSolid.TransformBy(Matrix3d.Rotation(part.XRotation * System.Math.PI / 180, Vector3d.XAxis, Point3d.Origin));//因为是先旋转再位移，所以solid3d默认是画在0点的，旋转也以0点为中心        

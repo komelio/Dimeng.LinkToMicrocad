@@ -154,5 +154,15 @@ namespace Dimeng.LinkToMicrocad
 
             return folderPath;
         }
+
+        public void DeleteProduct()
+        {
+            string folderPath = getTempFolderPath(
+                    Context.GetContext().AKInfo.Path);
+            string tempXMLPath = Path.Combine(folderPath,
+                "Delete.xml");
+
+
+        }
     }
 }

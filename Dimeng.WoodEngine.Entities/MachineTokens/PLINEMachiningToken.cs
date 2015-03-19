@@ -25,7 +25,8 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             //对Bulges不足的情况，用0补上
             if (Bulges.Count < Points.Count)
             {
-                for (int i = 0; i < Points.Count - Bulges.Count; i++)
+                int count = Points.Count - Bulges.Count;
+                for (int i = 0; i < count; i++)
                 {
                     Bulges.Add(0);
                 }

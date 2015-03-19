@@ -29,7 +29,10 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             diameterChecker(this.Par5, check);
             depthChecker(this.Par6, check);
             Backset = check.GetDoubleValue(this.Par7, @"Camlock/par7", false, check.Errors);
+            
             camlockFaceChecker();
+            Dimeng.LinkToMicrocad.Logging.Logger.GetLogger().Debug(this.Par8 + "//" + this.CamFaceNumber.ToString());
+
             this.DrillFromOppsiteFace = check.GetBoolValue(this.Par9, @"Camlock/par9", false, false, check.Errors);
             ListCamVBoreXY = GetCamVBoreXYList();
 
@@ -131,6 +134,12 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         private void camlockFaceChecker()
         {
+            if(string.IsNullOrEmpty(this.Par8))
+            {
+                this.CamFaceNumber = 5;
+                return;
+            }
+
             double value;
             if (double.TryParse(this.Par8, out value))
             {
@@ -144,6 +153,11 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                     this.CamFaceNumber = 6;
                     return;
                 }
+            }
+            else
+            {
+                this.CamFaceNumber = 5;
+                return;
             }
 
             //this.IsValid = false;

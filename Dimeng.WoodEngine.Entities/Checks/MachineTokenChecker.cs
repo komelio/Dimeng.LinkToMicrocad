@@ -123,6 +123,12 @@ namespace Dimeng.WoodEngine.Entities.Checks
             string[] valueStringArray = par.Split(';');
             foreach (var s in valueStringArray)
             {
+                if(string.IsNullOrEmpty(s))
+                {
+                    values.Add(0);
+                    continue;
+                }
+
                 values.Add(this.GetDoubleValue(s, "PLine/Bulges", false, this.Errors));
             }
 

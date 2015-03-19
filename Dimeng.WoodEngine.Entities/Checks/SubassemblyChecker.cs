@@ -67,7 +67,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
 
         public double Rotation()
         {
-            return GetDoubleValue(range[0, 31].Text, "Subassembly rotation", false, errors);
+            return GetDoubleValue(range[0, 34].Text, "Subassembly rotation", false, errors);
         }
 
         public int LineNumber()

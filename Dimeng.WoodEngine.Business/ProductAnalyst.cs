@@ -47,6 +47,8 @@ namespace Dimeng.WoodEngine.Business
 
         private void combinedPartsAndHardwaresAndGetMachining(Product product)
         {
+            Logger.GetLogger().Info("Get product combined collections...");
+
             product.Parts.ForEach(it => it.CalculateLocationInfo(Point3d.Origin, 0));
 
             product.CombinedParts.AddRange(product.Parts);
@@ -54,6 +56,9 @@ namespace Dimeng.WoodEngine.Business
 
             foreach (var sub in product.Subassemblies)
             {
+                Logger.GetLogger().Debug(
+                    string.Format("Sub:{0}/{1}/{2}/{3}/{4}", sub.Description, sub.Width, sub.Height, sub.Depth, sub.Rotation));
+
                 sub.Parts.ForEach(it => it.CalculateLocationInfo(
                     new Point3d(sub.XOrigin, sub.YOrigin, sub.ZOrigin), sub.Rotation));
                 product.CombinedHardwares.AddRange(sub.Hardwares);

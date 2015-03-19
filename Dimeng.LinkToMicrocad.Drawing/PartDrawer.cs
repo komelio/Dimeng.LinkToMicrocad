@@ -46,9 +46,9 @@ namespace Dimeng.LinkToMicrocad.Drawing
             (new VDrillDrawer()).Draw(panel, part);
             (new HDrillDrawer()).Draw(panel, part);
 
-            panel.TransformBy(Matrix3d.Rotation(part.XRotation * Math.PI / 180, Vector3d.XAxis, Point3d.Origin));
-            panel.TransformBy(Matrix3d.Rotation(part.YRotation * Math.PI / 180, Vector3d.YAxis, Point3d.Origin));
-            panel.TransformBy(Matrix3d.Rotation(part.ZRotation * Math.PI / 180, Vector3d.ZAxis, Point3d.Origin));
+            panel.TransformBy(Matrix3d.Rotation(part.TXRotation * Math.PI / 180, Vector3d.XAxis, Point3d.Origin));
+            panel.TransformBy(Matrix3d.Rotation(part.TYRotation * Math.PI / 180, Vector3d.YAxis, Point3d.Origin));
+            panel.TransformBy(Matrix3d.Rotation(part.TZRotation * Math.PI / 180, Vector3d.ZAxis, Point3d.Origin));
 
             panel.TransformBy(Matrix3d.Displacement(part.CenterVector));
 
