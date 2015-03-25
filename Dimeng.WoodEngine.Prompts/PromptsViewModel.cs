@@ -15,7 +15,7 @@ namespace Dimeng.WoodEngine.Prompts
 {
     public class PromptsViewModel : ViewModelBase
     {
-        private IRange PromptCells;
+        public IRange PromptCells;
 
         private PromptsViewModel()
         {

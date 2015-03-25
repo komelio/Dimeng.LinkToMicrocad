@@ -81,11 +81,17 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CalculatorItem.cs" />
+    <Compile Include="Calculators\Calculator.xaml.cs">
+      <DependentUpon>Calculator.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Calculators\CalculatorItem.cs" />
+    <Compile Include="Calculators\CalculatorViewModel.cs" />
     <Compile Include="ControlType.cs" />
     <Compile Include="Converter\PromptValueToCheckedConverter.cs" />
     <Compile Include="Converter\PromptValueToIntConverter.cs" />
     <Compile Include="Converter\PromptValueToVisibilityConverter.cs" />
+    <Compile Include="Calculators\OneCalculatorViewModel.cs" />
+    <Compile Include="InverseBooleanConverter.cs" />
     <Compile Include="PromptItem.cs" />
     <Compile Include="PromptsViewModel.cs" />
     <Compile Include="PromptWindow.xaml.cs">
@@ -120,6 +126,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Calculators\Calculator.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="PromptWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -152,6 +162,7 @@
       <Name>Dimeng.WoodEngine.Spread</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

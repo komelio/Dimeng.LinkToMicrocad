@@ -231,3 +231,17 @@ $RECYCLE.BIN/
 /Dimeng.LinkToMicrocad.Web/ImportSources/Library
 /Dimeng.LinkToMicrocad.Web/Output/Library
 /packages
+*.cutx
+Dimeng.LinkToMicrocad.Web/Output/Dms/Dms.xml
+Dimeng.LinkToMicrocad.Web/Output/Dms/Library/materials.xml
+*.jpg
+*.wmf
+*.gvfx
+Dimeng.LinkToMicrocad.Web/Output/Dms/Library/Template/MicrovellumProject.mdb
+*.mdb
+Dimeng.LinkToMicrocad.Web/Output/Dms/Library/Template/五金件文件.hwrx
+*.ctpx
+Dimeng.LinkToMicrocad.Web/Output/Dms/Library/Template/封边文件.edgx
+Dimeng.LinkToMicrocad.Web/Output/Dms/Library/Template/缔盟产品规格组.bin
+*.dsvx
+*.tlfx

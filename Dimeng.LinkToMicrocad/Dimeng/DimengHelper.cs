@@ -61,7 +61,6 @@ namespace Dimeng.LinkToMicrocad
                 outputErrors(errors);
 
                 IEnumerable<string> materialList = getMaterialList(mvProduct);
-
                 (new TempXMLWriter()).WriteFile(tempXMLPath, product, materialList);
 
                 ProductDrawer drawer = new ProductDrawer();
@@ -167,6 +166,7 @@ namespace Dimeng.LinkToMicrocad
             if (Context.GetContext().CurrentProject == null)
             {
                 MessageBox.Show("当前未有打开的任务！");
+                return;
             }
 
             string folderPath = getTempFolderPath(

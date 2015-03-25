@@ -18,7 +18,7 @@
                             <Image Width="23" Height="23" Source="Images/refresh.ico" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="计算器" Name="CalculatorMenuItem" IsEnabled="false">
+                    <MenuItem Header="计算器" Name="CalculatorMenuItem" IsEnabled="false" >
                         <MenuItem.Icon>
                             <Image Width="23" Height="23" Source="Images/Calculator.ico" />
                         </MenuItem.Icon>

@@ -55,10 +55,60 @@ namespace Dimeng.WoodEngine.Prompts
 
                 tabAll.Items.Add(tab);
             }
+
+            for (int i = 0; i < viewModel.Calcuators.Count; i++)
+            {
+                MenuItem item = new MenuItem();
+                item.Click += item_Click;
+                item.Tag = viewModel.Calcuators[i];
+                item.Header = viewModel.Calcuators[i].Name;
+                this.CalculatorMenuItem.Items.Add(item);
+                this.CalculatorMenuItem.IsEnabled = true;//改为可用
+            }
         }
         #endregion
 
         #region Private Method
+        /// <summary>
+        /// 调用计算器的方法
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void item_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is MenuItem))
+                return;
+
+            var menuItem = sender as MenuItem;
+            var calItem = menuItem.Tag as CalculatorItem;
+
+            if (calItem == null)
+                return;
+
+            //logger.Debug(string.Format("选中计算器:{0}/{2}/{1}",
+            //                           calItem.Name,
+            //                           calItem.UpperBound,
+            //                           calItem.Gap));
+
+            var prompts = viewModel.Prompts.Where(it => it.CalculatorIndex == calItem.Index);
+
+            if (prompts.Count() == 0)
+            {
+                MessageBox.Show("没有变量适用于当前计算器:" + calItem.Name);
+                return;
+            }
+
+            Calculator cal = new Calculator(calItem, prompts);
+            if (cal.ShowDialog() == true)
+            {
+                foreach (var item in prompts)
+                {
+                    viewModel.PromptCells[item.RowNumber, 1].Value = item.PromptValue;
+                }
+                TabItem tab = (TabItem)tabAll.SelectedItem;
+                RefreshTabContent(tab);
+            }
+        }
         /// <summary>
         /// 当出现控件类型变化时，刷新整个Tab
         /// </summary>
