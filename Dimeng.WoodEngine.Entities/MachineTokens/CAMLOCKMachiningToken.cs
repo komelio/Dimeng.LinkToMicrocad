@@ -29,7 +29,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             diameterChecker(this.Par5, check);
             depthChecker(this.Par6, check);
             Backset = check.GetDoubleValue(this.Par7, @"Camlock/par7", false, check.Errors);
-            
+
             camlockFaceChecker();
             Dimeng.LinkToMicrocad.Logging.Logger.GetLogger().Debug(this.Par8 + "//" + this.CamFaceNumber.ToString());
 
@@ -81,9 +81,9 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             return Pairs;
         }
 
-        public override void ToMachining(double associateDist, Entities.ToolFile toolFile)
+        public override void ToMachining(double tolerenceDist, Entities.ToolFile toolFile)
         {
-            FindAssociatedFaces(associateDist);
+            FindAssociatedFaces(0, tolerenceDist);
 
             PartFace pf = this.Part.GetPartFaceByNumber(FaceNumber);
             if (this.AssociatedPartFaces.Count != 0)//数量不为0，说明有关联的板件
@@ -134,7 +134,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         private void camlockFaceChecker()
         {
-            if(string.IsNullOrEmpty(this.Par8))
+            if (string.IsNullOrEmpty(this.Par8))
             {
                 this.CamFaceNumber = 5;
                 return;

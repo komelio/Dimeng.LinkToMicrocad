@@ -26,7 +26,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             EdgeBoreDiameter = check.GetDoubleValue(this.Par2, @"HOLES/边孔直径", true, check.Errors);
             EdgeBoreDepth = check.GetDoubleValue(this.Par3, @"HOLES/边孔深度", true, check.Errors);
 
-            ZValue = (string.IsNullOrEmpty(this.Par4)) ? Part.Thickness / 2 
+            ZValue = (string.IsNullOrEmpty(this.Par4)) ? Part.Thickness / 2
                 : check.GetDoubleValue(this.Par4, @"Camlock/par4", true, check.Errors);
 
             FaceBoreDiameter = check.GetDoubleValue(this.Par5, @"HOLES/面孔直径", true, check.Errors);
@@ -47,12 +47,12 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
         public double ZValue { get; private set; }
 
         //重写ToMachining方法，将Token转换为Machining
-        public override void ToMachining(double AssociatedDist, Entities.ToolFile toolFile)
+        public override void ToMachining(double tolerenceDist, Entities.ToolFile toolFile)
         {
             //step1 查找关联的板件
             //step2 建立一个临时的水平孔列表，把孔位坐标转换为水平机加工
             //setp3 把关联的垂直钻添加到关联的板件
-            FindAssociatedFaces(AssociatedDist);
+            FindAssociatedFaces(0, tolerenceDist);
 
             PartFace pf = this.Part.GetPartFaceByNumber(FaceNumber);
 

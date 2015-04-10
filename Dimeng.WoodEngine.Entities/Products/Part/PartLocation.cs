@@ -78,12 +78,12 @@ namespace Dimeng.WoodEngine.Entities
             p8 = MathHelper.GetRotatedAndMovedPoint(p8, TXRotation, TYRotation, TZRotation, CenterVector);
 
             //注意这些点的顺序，按顺时针或逆时针，不要乱序
-            FaceOne = new PartFace(p1, p2, p8, p7, 1, this);
-            FaceTwo = new PartFace(p3, p4, p6, p5, 2, this);
-            FaceThree = new PartFace(p1, p2, p4, p3, 3, this);
-            FaceFour = new PartFace(p5, p6, p8, p7, 4, this);
-            FaceFive = new PartFace(p1, p3, p5, p7, 5, this);
-            FaceSix = new PartFace(p2, p4, p6, p8, 6, this);
+            FaceOne = new PartFace(p1, p2, p8, p7, (p3 - p1).GetNormal(), 1, this);
+            FaceTwo = new PartFace(p3, p4, p6, p5, (p1 - p3).GetNormal(), 2, this);
+            FaceThree = new PartFace(p1, p2, p4, p3, (p7 - p1).GetNormal(), 3, this);
+            FaceFour = new PartFace(p5, p6, p8, p7, (p1 - p7).GetNormal(), 4, this);
+            FaceFive = new PartFace(p1, p3, p5, p7, (p2 - p1).GetNormal(), 5, this);
+            FaceSix = new PartFace(p2, p4, p6, p8, (p1 - p2).GetNormal(), 6, this);
 
             Faces.Clear();
             Faces.Add(FaceOne);
