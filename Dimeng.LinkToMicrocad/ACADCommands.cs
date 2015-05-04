@@ -29,6 +29,14 @@ namespace Dimeng.LinkToMicrocad
         {
             Logging.Logger.GetLogger().Info("Call command 'New_dm'");
 
+            //Document doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+            //Editor ed = doc.Editor;
+
+            //PromptPointOptions option = new PromptPointOptions("mm");
+            //PromptPointResult ppr = ed.GetPoint(option);
+            //if (ppr.Status == PromptStatus.OK)
+            //    MessageBox.Show(ppr.Value.ToString());
+
             try
             {
                 var dmHelper = new DimengHelper();
@@ -45,10 +53,19 @@ namespace Dimeng.LinkToMicrocad
         /// <summary>
         /// Read temp.xml and then directly draw a autocad block dwg file.
         /// </summary>
-        [CommandMethod("AK", "Edit_dm", CommandFlags.Modal)]
+        [CommandMethod("AK", "Edit_dm", CommandFlags.Modal )]
         public void EditBlock()
         {
             Logging.Logger.GetLogger().Info("Call command 'Edit_dm'");
+
+            //Document doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+            //Editor ed = doc.Editor;
+
+            //PromptPointOptions option = new PromptPointOptions("mm");
+            //PromptPointResult ppr = ed.GetPoint(option);
+            //if (ppr.Status == PromptStatus.OK)
+            //    MessageBox.Show(ppr.Value.ToString());
+
 
             try
             {
@@ -59,14 +76,12 @@ namespace Dimeng.LinkToMicrocad
             {
                 Logging.Logger.GetLogger().Error(error);
             }
-            
+
+          
             //MessageBox.Show("Edit_dm");
         }
 
-        /// <summary>
-        /// Command for export current project information to a zip file
-        /// </summary>
-        [CommandMethod("AK", "Del_dm", CommandFlags.Session)]
+        [CommandMethod("AK", "Del_dm", CommandFlags.Modal)]
         public void DelProduct()
         {
             Logging.Logger.GetLogger().Info("Call command 'Del_dm'");

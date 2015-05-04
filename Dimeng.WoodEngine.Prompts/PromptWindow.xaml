@@ -23,7 +23,7 @@
                             <Image Width="23" Height="23" Source="Images/Calculator.ico" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="组件" Name="SubassemblyMenuItem"  />
+                    <MenuItem Header="组件" Name="SubassemblyMenuItem"  Click="SubassemblyMenuItem_Click"/>
                 </ContextMenu>
             </TabControl.ContextMenu>
         </TabControl>

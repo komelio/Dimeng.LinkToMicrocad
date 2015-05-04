@@ -14,8 +14,9 @@ namespace Dimeng.LinkToMicrocad
     {
         void IExtensionApplication.Initialize()
         {
-            Dimeng.LinkToMicrocad.Logging.ConsoleHelper.Show();
-
+#if DEBUG
+            //Dimeng.LinkToMicrocad.Logging.ConsoleHelper.Show();
+#endif
             Logger.GetLogger().Debug("-----------");
             Logger.GetLogger().Debug("Program started");
             Logger.GetLogger().Debug("-----------");
@@ -26,7 +27,7 @@ namespace Dimeng.LinkToMicrocad
         void IExtensionApplication.Terminate()
         {
             // Do plug-in application clean up here
-            Dimeng.LinkToMicrocad.Logging.ConsoleHelper.Hide();
+           // Dimeng.LinkToMicrocad.Logging.ConsoleHelper.Hide();
         }
 
     }

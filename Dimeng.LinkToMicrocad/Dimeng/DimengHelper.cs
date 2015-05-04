@@ -38,10 +38,13 @@ namespace Dimeng.LinkToMicrocad
                 Context.GetContext().CurrentProject = project;
 
                 Product mvProduct = getProductFromProject(product, project);
-                string productCutx = mvProduct.GetProductCutxFileName();
                 SpecificationGroup specificationGroup =
                     project.SpecificationGroups.Find(it => it.Name == mvProduct.MatFile);
-                var bookset = showPromptWindow(product, project, productCutx, specificationGroup, mvProduct);
+                var bookset = showPromptWindow(product,
+                                               project,
+                                               specificationGroup,
+                                               mvProduct,
+                                               Context.GetContext().MVDataContext.GetLatestRelease());
 
                 bookset.GetLock();//lock the work book set
 
@@ -54,12 +57,14 @@ namespace Dimeng.LinkToMicrocad
                 ProductAnalyst analyst = new ProductAnalyst(
                     Context.GetContext().MVDataContext.GetLatestRelease());
                 var errors = analyst.Analysis(mvProduct, bookset);
-                bookset.Workbooks["L"].SaveAs(productCutx, FileFormat.OpenXMLWorkbook);
+                bookset.Workbooks["L"].SaveAs(mvProduct.GetProductCutxFileName(),
+                                              FileFormat.OpenXMLWorkbook);
 
                 bookset.ReleaseLock();//release the work book set
 
                 outputErrors(errors);
 
+                //write the temp.xml back to autodecco
                 IEnumerable<string> materialList = getMaterialList(mvProduct);
                 (new TempXMLWriter()).WriteFile(tempXMLPath, product, materialList);
 
@@ -102,7 +107,8 @@ namespace Dimeng.LinkToMicrocad
             }
         }
 
-        private static IWorkbookSet showPromptWindow(AKProduct product, Project project, string productCutx, SpecificationGroup specificationGroup, Product mvProduct)
+        private static IWorkbookSet showPromptWindow(AKProduct product, Project project,
+            SpecificationGroup specificationGroup, Product mvProduct, IMVLibrary library)
         {
             string globalGvfx = Path.Combine(project.JobPath, specificationGroup.GlobalFileName);
             string cutPartsCtpx = Path.Combine(project.JobPath, specificationGroup.CutPartsFileName);
@@ -110,8 +116,9 @@ namespace Dimeng.LinkToMicrocad
             string hardwareHwrx = Path.Combine(project.JobPath, specificationGroup.HardwareFileName);
             string doorstyleDsvx = Path.Combine(project.JobPath, specificationGroup.DoorWizardFileName);
 
-            PromptsViewModel viewmodel = new PromptsViewModel(productCutx, globalGvfx, cutPartsCtpx, edgeEdgx, hardwareHwrx, doorstyleDsvx,
-                    product.Tab.Name, product.Tab.Photo, product.Tab.VarX, product.Tab.VarZ, product.Tab.VarY);
+            PromptsViewModel viewmodel = new PromptsViewModel(mvProduct.GetProductCutxFileName(),
+                globalGvfx, cutPartsCtpx, edgeEdgx, hardwareHwrx, doorstyleDsvx,
+                product.Tab.Name, product.Tab.Photo, product.Tab.VarX, product.Tab.VarZ, product.Tab.VarY, library);
 
             PromptWindow prompt = new PromptWindow();
             prompt.ViewModel = viewmodel;

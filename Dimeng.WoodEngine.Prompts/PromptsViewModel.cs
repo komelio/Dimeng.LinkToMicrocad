@@ -29,7 +29,8 @@ namespace Dimeng.WoodEngine.Prompts
                                 double width,
                                 double height,
                                 double depth,
-                                Project project)
+                                Project project,
+                                IMVLibrary library)
             : this()
         {
             this.Width = width;
@@ -46,6 +47,9 @@ namespace Dimeng.WoodEngine.Prompts
 
             this.ProductImagePath = imagePath + ".jpg";
             Logger.GetLogger().Debug(string.Format("ProductImagePath:{0}.jpg", imagePath));
+
+            this.Library = library;
+            Logger.GetLogger().Debug(string.Format("Library:{0}", library.Library));
         }
 
         public PromptsViewModel(string cutxFilePath,
@@ -58,7 +62,8 @@ namespace Dimeng.WoodEngine.Prompts
                                 string imagePath,
                                 double width,
                                 double height,
-                                double depth)
+                                double depth,
+                                IMVLibrary library)
             : this()
         {
             this.Width = width;
@@ -66,6 +71,7 @@ namespace Dimeng.WoodEngine.Prompts
             this.Depth = depth;
             this.Name = name;
             this.ProductImagePath = imagePath + ".jpg";
+            this.Library = library;
 
             BookSet = SpreadHelper.GetProductBaseicBookSet(cutxFilePath, globalFilePath,
                 cutpartsFilePath, hardwareFilePath, doorstyleFilePath, edgebandFilePath);
@@ -99,7 +105,7 @@ namespace Dimeng.WoodEngine.Prompts
             {
                 string TabName = PromptCells[i, 13].Text;
                 if (!string.IsNullOrEmpty(TabName))
-                {                   
+                {
                     //logger.Debug("增加Tab:" + TabName);
                     this.PromptTabs.Add(TabName);
                 }
@@ -318,6 +324,7 @@ namespace Dimeng.WoodEngine.Prompts
         public Action<List<PromptItem>> ControlTypeChangedAction { get; set; }
         public IWorkbook Book { get; private set; }
         public IWorkbookSet BookSet { get; private set; }
+        public IMVLibrary Library { get; private set; }
         //public Project Project { get; private set; }
     }
 }
