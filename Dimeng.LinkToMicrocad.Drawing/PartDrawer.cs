@@ -12,9 +12,11 @@ namespace Dimeng.LinkToMicrocad.Drawing
     public class PartDrawer
     {
         Database db;
+        Vector3d offsetVector;//整体偏移
 
-        public PartDrawer(Database db)
+        public PartDrawer(Database db, Vector3d moveVector)
         {
+            this.offsetVector = moveVector;
             this.db = db;
         }
 
@@ -35,7 +37,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
             }
         }
 
-        private static Solid3d drawPart(Part part)
+        private Solid3d drawPart(Part part)
         {
             Logger.GetLogger().Debug(string.Format("Drawing part {0}/{1}/{2}/{3}/{4}",
                         part.PartName, part.Width, part.Length, part.Thickness, part.Material));
@@ -51,6 +53,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
             panel.TransformBy(Matrix3d.Rotation(part.TZRotation * Math.PI / 180, Vector3d.ZAxis, Point3d.Origin));
 
             panel.TransformBy(Matrix3d.Displacement(part.CenterVector));
+            panel.TransformBy(Matrix3d.Displacement(this.offsetVector));
 
             panel.Layer = part.Material.Name;
 

@@ -96,6 +96,12 @@ namespace Dimeng.LinkToMicrocad
                 Logging.Logger.GetLogger().Error(error);
             }
         }
+
+        [CommandMethod("AK","showdebug",CommandFlags.Modal)]
+        public void Showdebug()
+        {
+            Dimeng.LinkToMicrocad.Logging.ConsoleHelper.Show();
+        }
     }
 
 }

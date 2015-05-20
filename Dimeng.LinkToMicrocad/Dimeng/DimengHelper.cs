@@ -1,4 +1,5 @@
-﻿using Dimeng.LinkToMicrocad.Drawing;
+﻿using Autodesk.AutoCAD.Geometry;
+using Dimeng.LinkToMicrocad.Drawing;
 using Dimeng.LinkToMicrocad.Logging;
 using Dimeng.WoodEngine.Business;
 using Dimeng.WoodEngine.Entities;
@@ -59,16 +60,18 @@ namespace Dimeng.LinkToMicrocad
                 var errors = analyst.Analysis(mvProduct, bookset);
                 bookset.Workbooks["L"].SaveAs(mvProduct.GetProductCutxFileName(),
                                               FileFormat.OpenXMLWorkbook);
-
                 bookset.ReleaseLock();//release the work book set
 
                 outputErrors(errors);
+
+                var offsetVector = getAcutualWHD(product, mvProduct);
+                Logger.GetLogger().Debug("XXXXXX    " + offsetVector.ToString());
 
                 //write the temp.xml back to autodecco
                 IEnumerable<string> materialList = getMaterialList(mvProduct);
                 (new TempXMLWriter()).WriteFile(tempXMLPath, product, materialList);
 
-                ProductDrawer drawer = new ProductDrawer();
+                ProductDrawer drawer = new ProductDrawer(offsetVector);
                 drawer.DrawAndSaveAsDWG(mvProduct,
                     bookset, Path.Combine(folderPath, product.Tab.DWG + ".dwg"));
             }
@@ -76,6 +79,47 @@ namespace Dimeng.LinkToMicrocad
             {
                 throw new Exception("Error occured during drawing....", error);
             }
+        }
+
+        private Vector3d getAcutualWHD(AKProduct product, Product mvProduct)
+        {
+            if (mvProduct.CombinedParts.Count == 0)
+            {
+                return new Vector3d();
+            }
+
+            double minx = mvProduct.CombinedParts[0].Point1.X;
+            double miny = mvProduct.CombinedParts[0].Point1.Y;
+            double minz = mvProduct.CombinedParts[0].Point1.Z;
+            double maxx = mvProduct.CombinedParts[0].Point1.X;
+            double maxy = mvProduct.CombinedParts[0].Point1.Y;
+            double maxz = mvProduct.CombinedParts[0].Point1.Z;
+
+            foreach (var part in mvProduct.CombinedParts)
+            {
+                List<Point3d> points = new List<Point3d>() { part.Point1, part.Point2, part.Point3, part.Point4, part.Point5, part.Point6, part.Point7, part.Point8 };
+                foreach (var pt in points)
+                {
+                    if (minx > pt.X)
+                    { minx = pt.X; }
+                    if (miny > pt.Y)
+                    { miny = pt.Y; }
+                    if (minz > pt.Z)
+                    { minz = pt.Z; }
+                    if (maxx < pt.X)
+                    { maxx = pt.X; }
+                    if (maxy < pt.Y)
+                    { maxy = pt.Y; }
+                    if (maxz < pt.Z)
+                    { maxz = pt.Z; }
+                }
+            }
+
+            product.Tab.VarX = Math.Abs(maxx - minx);
+            product.Tab.VarY = Math.Abs(maxy - miny);
+            product.Tab.VarZ = Math.Abs(maxz - minz);
+
+            return (new Point3d(-minx, -maxy, -minz)) - Point3d.Origin;
         }
 
         private IEnumerable<string> getMaterialList(Product mvProduct)
@@ -118,7 +162,7 @@ namespace Dimeng.LinkToMicrocad
 
             PromptsViewModel viewmodel = new PromptsViewModel(mvProduct.GetProductCutxFileName(),
                 globalGvfx, cutPartsCtpx, edgeEdgx, hardwareHwrx, doorstyleDsvx,
-                product.Tab.Name, product.Tab.Photo, product.Tab.VarX, product.Tab.VarZ, product.Tab.VarY, library);
+                product.Tab.Name, product.Tab.Photo, product.Tab.VarX, product.Tab.VarZ, product.Tab.VarY, product.Tab.VarElevation, library);
 
             PromptWindow prompt = new PromptWindow();
             prompt.ViewModel = viewmodel;

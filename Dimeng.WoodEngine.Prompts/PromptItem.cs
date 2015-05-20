@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
+using Dimeng.LinkToMicrocad.Logging;
 
 namespace Dimeng.WoodEngine.Prompts
 {
@@ -27,8 +28,12 @@ namespace Dimeng.WoodEngine.Prompts
             get { return promptValue; }
             set
             {
-                promptValue = value;
-                OnPropertyChanged("PromptValue");
+                if (value != promptValue)
+                {
+                    Logger.GetLogger().Debug(string.Format("Set {0} value {1}", name, value));
+                    promptValue = value;
+                    OnPropertyChanged("PromptValue");
+                }
             }
         }
 
@@ -122,10 +127,10 @@ namespace Dimeng.WoodEngine.Prompts
         }
 
         private string picture = string.Empty;
-        public string Picture 
-        { 
-            get; 
-            set; 
+        public string Picture
+        {
+            get;
+            set;
         }
 
         private bool visible = true;
@@ -160,6 +165,7 @@ namespace Dimeng.WoodEngine.Prompts
             IsLoadFirstTime = false;
         }
         private ControlType oldControlType;//记录一下原有的controltype，以决定在改变可变类型时，是否触发wpf的变动机制
+
         public void LoadProperty(string name, string value, string controlType, string helpMessage, string verifyCode, string comboString, string color, string picture, string visible, string hideInReport, string tabIndex, string calculatorIndex)
         {
             this.Name = name;
@@ -339,8 +345,10 @@ namespace Dimeng.WoodEngine.Prompts
             if (this.PropertyChanged != null)
             {
                 if (!IsPassive)
+                {
+                    Logger.GetLogger().Debug("OnPropertyChanged:" + word);
                     this.Manager.ReloadValues(this);
-
+                }
                 this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs(word));
             }
         }

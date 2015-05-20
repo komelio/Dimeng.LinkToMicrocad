@@ -27,13 +27,32 @@ namespace Dimeng.LinkToMicrocad
                 }
             }
 
-            xml.Add(getTab(akproduct, materialList));
+            getMaterialDictionary(materialList);
+
+            xml.Add(getTab(akproduct));
             xml.Add(getCategoryMaterial(materialList));
             doc.Add(xml);
             doc.Save(xmlPath);
+
+            Context.GetContext().MVDataContext.MaterialCounter += MaterialDictionary.Count;
         }
 
-        public XElement getTab(AKProduct akproduct, IEnumerable<string> materialList)
+        private void getMaterialDictionary(IEnumerable<string> materialList)
+        {
+            foreach (var m in materialList)
+            {
+                var texture = Context.GetContext().MVDataContext.GetTexture(m);
+
+                if (texture != null)
+                {
+                    MaterialDictionary.Add(m, texture);
+                }
+            }
+        }
+
+        private Dictionary<string, Texture> MaterialDictionary = new Dictionary<string, Texture>();
+
+        public XElement getTab(AKProduct akproduct)
         {
             XElement tabNode = new XElement("Tab");
             tabNode.Add(new XAttribute("Name", akproduct.Tab.Name));
@@ -61,24 +80,26 @@ namespace Dimeng.LinkToMicrocad
                             new XAttribute("Name", "Z"),
                             new XAttribute("Type", "InputZ")),
                         new XElement("Var",
-                            new XAttribute("Value", akproduct.Tab.VarElevation + "mm"),
+                            new XAttribute("Value", akproduct.Tab.VarElevation.ToString() + "mm"),
                             new XAttribute("Name", "Elevation"),
                             new XAttribute("Type", "InputE"))
                         );
 
-            int i = 0;
-            foreach (var m in materialList)
+            int i = 1;
+            long mid = Context.GetContext().MVDataContext.MaterialCounter;
+            foreach (var m in MaterialDictionary)
             {
-                var texture = Context.GetContext().MVDataContext.GetTexture(m);
+                var texture = m.Value;
 
                 if (texture != null)
                 {
+
                     tabNode.Add(new XElement("G",
-                                    new XAttribute("Name", "material" + i.ToString()),
+                                    new XAttribute("Name", "material" + (mid + i).ToString()),
                                     new XAttribute("HM", 1),
-                                    new XAttribute("Layer", m),
-                                    new XAttribute("Text", m),
-                                    new XAttribute("Material", "material" + i.ToString()),
+                                    new XAttribute("Layer", m.Key),
+                                    new XAttribute("Text", m.Key),
+                                    new XAttribute("Material", "material" + (mid + i).ToString()),
                                     new XAttribute("A_41", texture.ImageName),
                                     new XAttribute("A_47", texture.A47)
                                ));
@@ -98,19 +119,20 @@ namespace Dimeng.LinkToMicrocad
             XElement xmlGroups = new XElement("Groups");
 
 
-            int i = 0;
-            foreach (var m in materialList)
+            int i = 1;
+            long mid = Context.GetContext().MVDataContext.MaterialCounter;
+            foreach (var m in MaterialDictionary)
             {
-                var texture = Context.GetContext().MVDataContext.GetTexture(m);
+                var texture = m.Value;
 
                 if (texture != null)
                 {
                     xmlGroups.Add(new XElement("G",
-                                    new XAttribute("Name", "material" + i.ToString()),
+                                    new XAttribute("Name", "material" + (mid + i).ToString()),
                                     new XAttribute("HM", 1),
-                                    new XAttribute("Layer", m),
-                                    new XAttribute("Text", m),
-                                    new XAttribute("Material", "material" + i.ToString()),
+                                    new XAttribute("Layer", m.Key),
+                                    new XAttribute("Text", m.Key),
+                                    new XAttribute("Material", "material" + (mid + i).ToString()),
                                     new XAttribute("A_41", texture.ImageName),
                                     new XAttribute("A_47", texture.A47)
                                ));

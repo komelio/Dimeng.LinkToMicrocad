@@ -63,6 +63,7 @@ namespace Dimeng.WoodEngine.Prompts
                                 double width,
                                 double height,
                                 double depth,
+                                double elevation,
                                 IMVLibrary library)
             : this()
         {
@@ -72,6 +73,7 @@ namespace Dimeng.WoodEngine.Prompts
             this.Name = name;
             this.ProductImagePath = imagePath + ".jpg";
             this.Library = library;
+            this.Elevation = elevation;
 
             BookSet = SpreadHelper.GetProductBaseicBookSet(cutxFilePath, globalFilePath,
                 cutpartsFilePath, hardwareFilePath, doorstyleFilePath, edgebandFilePath);
@@ -169,21 +171,22 @@ namespace Dimeng.WoodEngine.Prompts
                 string tabIndex = PromptCells[i, 12].Text;
                 string calculatorIndex = PromptCells[i, 16].Text;
 
-
-                //logger.Debug(string.Format("Prompt变量数据:{0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}/{8}/{9}/{10}/{11}",
-                //                           name,
-                //                           value,
-                //                           controlType,
-                //                           helpMessage,
-                //                           verifyCode,
-                //                           comboString,
-                //                           color,
-                //                           picture,
-                //                           visible,
-                //                           hideInReport,
-                //                           tabIndex,
-                //                           calculatorIndex));
-
+                if (i <= 4)
+                {
+                    Logger.GetLogger().Debug(string.Format("Prompt变量数据:{0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}/{8}/{9}/{10}/{11}",
+                                               name,
+                                               value,
+                                               controlType,
+                                               helpMessage,
+                                               verifyCode,
+                                               comboString,
+                                               color,
+                                               picture,
+                                               visible,
+                                               hideInReport,
+                                               tabIndex,
+                                               calculatorIndex));
+                }
                 PromptItem prompt = new PromptItem(name, value, controlType, helpMessage, verifyCode, comboString, color, picture, visible, hideInReport, tabIndex, calculatorIndex, i, this);
                 Prompts.Add(prompt);
             }
@@ -199,6 +202,7 @@ namespace Dimeng.WoodEngine.Prompts
         public void ReloadValues(PromptItem prompt)
         {
             PromptCells[prompt.RowNumber, 1].Value = prompt.PromptValue;
+            Logger.GetLogger().Debug("-------Change Value:" + prompt.Name + "/" + prompt.PromptValue);
 
             PromptsChangedControlType.Clear();
 
@@ -305,6 +309,17 @@ namespace Dimeng.WoodEngine.Prompts
                 depth = value;
                 Logger.GetLogger().Debug(string.Format("Depth:{0}", depth));
                 base.RaisePropertyChanged("Depth");
+            }
+        }
+
+        private double elevation;
+        public double Elevation
+        {
+            get { return elevation; }
+            set
+            {
+                elevation = value;
+                base.RaisePropertyChanged("Elevation");
             }
         }
 

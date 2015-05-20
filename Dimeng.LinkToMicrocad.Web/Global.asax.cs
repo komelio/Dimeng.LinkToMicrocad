@@ -19,7 +19,7 @@ namespace Dimeng.LinkToMicrocad.Web
 
             //Database.SetInitializer<EFDbContext>(new DropCreateDatabaseAlways<EFDbContext>());
 
-            //// Forces initialization of database on model changes.
+            ////Forces initialization of database on model changes.
             //using (var context = new EFDbContext())
             //{
             //    context.Database.Initialize(force: true);

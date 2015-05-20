@@ -1,4 +1,5 @@
 ﻿using Dimeng.LinkToMicrocad.Logging;
+using Dimeng.LinkToMicrocad.Properties;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -111,9 +112,22 @@ namespace Dimeng.LinkToMicrocad
                 textures.Add(texture);
             }
 
-           
+
         }
 
         private List<Texture> textures = new List<Texture>();
+
+        public long MaterialCounter
+        {
+            get
+            {
+                return Settings.Default.MaterialCounter;
+            }
+            set
+            {
+                Settings.Default.MaterialCounter = value;
+                Settings.Default.Save();
+            }
+        }
     }
 }

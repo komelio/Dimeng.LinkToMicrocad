@@ -109,6 +109,7 @@ namespace Dimeng.WoodEngine.Prompts
                 RefreshTabContent(tab);
             }
         }
+       
         /// <summary>
         /// 当出现控件类型变化时，刷新整个Tab
         /// </summary>
@@ -169,7 +170,7 @@ namespace Dimeng.WoodEngine.Prompts
             int index = (int)tab.Tag;
 
             var prompts = viewModel.Prompts.Where(it => it.TabIndex == index)
-                                          .ToList();
+                                           .ToList();
 
             Grid grid = new Grid();
 
@@ -222,7 +223,7 @@ namespace Dimeng.WoodEngine.Prompts
                     //tb.MouseDoubleClick += tb_MouseDoubleClick;
                     tb.AddHandler(UIElement.MouseEnterEvent, new RoutedEventHandler(tb_MouseLeftButtonDown), true);
                     tb.DataContext = prompt;
-                    tb.SetBinding(TextBox.TextProperty, new Binding("PromptValue") { ValidatesOnExceptions = true, ValidatesOnDataErrors = true, NotifyOnValidationError = true });
+                    tb.SetBinding(TextBox.TextProperty, new Binding("PromptValue"));
                     tb.SetBinding(TextBox.VisibilityProperty, new Binding("Visible") { Converter = new PromptValueToVisibilityConverter() });
                     tb.SetBinding(TextBox.IsEnabledProperty, new Binding("IsEnabled"));
                     tb.SetBinding(TextBox.ToolTipProperty, new Binding("HelpMessage"));
@@ -262,7 +263,7 @@ namespace Dimeng.WoodEngine.Prompts
                     combo.Foreground = getBrushById(prompt.ColorIndex);
                     combo.DataContext = prompt;
                     combo.AddHandler(UIElement.MouseEnterEvent, new RoutedEventHandler(tb_MouseLeftButtonDown), true);
-                    combo.SetBinding(ComboBox.SelectedValueProperty, new Binding("PromptValue") { Converter = new PromptValueToIntConverter() });
+                    combo.SetBinding(ComboBox.SelectedValueProperty, new Binding("PromptValue") { Converter = new PromptValueToIntConverter() });//
                     combo.SetBinding(ComboBox.VisibilityProperty, new Binding("Visible") { Converter = new PromptValueToVisibilityConverter() });
                     combo.SetBinding(ComboBox.ToolTipProperty, new Binding("HelpMessage"));
                     combo.ItemsSource = prompt.ComboBoxItemsString.Split('|');
@@ -456,7 +457,7 @@ namespace Dimeng.WoodEngine.Prompts
 
         private void SubassemblyMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            
+
         }
     }
 }

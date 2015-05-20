@@ -185,12 +185,12 @@ namespace Dimeng.WoodEngine.Entities
                 product.Project = this;
                 this.Products.Add(product);
 
-                //add product cutx file to project
+                ////add product cutx file to project
                 IWorkbook book = Factory.GetWorkbook(libraryProductPath);
-                var cells = book.Worksheets["Prompts"].Cells;
-                cells[0, 1].Value = width;
-                cells[1, 1].Value = height;
-                cells[2, 1].Value = depth;
+                //var cells = book.Worksheets["Prompts"].Cells;
+                //cells[0, 1].Value = width;
+                //cells[1, 1].Value = height;
+                //cells[2, 1].Value = depth;
                 book.SaveAs(Path.Combine(JobPath, filename), FileFormat.OpenXMLWorkbook);
 
                 return product;

@@ -17,7 +17,6 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         public override bool Valid(MachineTokenChecker check)
         {
-
             this.FaceNumber = check.FaceNumber(this.Token, 5, new int[] { 5, 6 });
             this.Points = check.GetPoints(this.Par1);
             this.Bulges = check.GetBulges(this.Par2);

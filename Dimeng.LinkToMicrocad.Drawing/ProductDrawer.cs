@@ -14,6 +14,12 @@ namespace Dimeng.LinkToMicrocad.Drawing
 {
     public class ProductDrawer
     {
+        Vector3d offsetVector;
+        public ProductDrawer(Vector3d offsetVector)
+        {
+            this.offsetVector = offsetVector;
+        }
+
         public void DrawAndSaveAsDWG(Product product, IWorkbookSet bookSet, string savePath)
         {
             Logger.GetLogger().Info("Start drawing the cad block.");
@@ -36,11 +42,11 @@ namespace Dimeng.LinkToMicrocad.Drawing
 
                     if (part.IsBend)
                     {
-                        (new PartBendDrawer(part, Point3d.Origin, db)).Draw();
+                        (new PartBendDrawer(part, Point3d.Origin, db, offsetVector)).Draw();
                     }
                     else
                     {
-                        (new PartDrawer(db)).Draw(part);
+                        (new PartDrawer(db, offsetVector)).Draw(part);
                     }
                 }
 

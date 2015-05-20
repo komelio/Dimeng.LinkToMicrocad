@@ -73,7 +73,7 @@ namespace Dimeng.WoodEngine.Business
                 if (errors.Count > 0)
                 {
                     Logger.GetLogger().Info("Part got errors !");
-                    return errors;
+                    //return errors; //有问题的板件还是画
                 }
 
                 foreach (var d in origins)
@@ -98,7 +98,7 @@ namespace Dimeng.WoodEngine.Business
                 if (errors.Count > 0)
                 {
                     Logger.GetLogger().Info("Part got errors !");
-                    return errors;
+                    //return errors; //有问题的板件还是画
                 }
 
                 Part part = new Part(partName, qty, width, length, thick, material,

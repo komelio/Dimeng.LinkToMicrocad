@@ -93,10 +93,25 @@ namespace Dimeng.LinkToMicrocad.Web.Controllers
 
         public ActionResult Import()
         {
-            string file = @"D:\MV\Template\切割板件文件.ctpx";
+            string file = @"C:\Users\xspxs_000\Desktop\Git\Dimeng.LinkToMicrocad\Dimeng.LinkToMicrocad.Web\Output\Dms\Library\Template\切割板件文件.ctpx";
 
             MVMaterialImporter importer = new MVMaterialImporter(repository);
             importer.Import(file);
+
+            return RedirectToAction("List");
+        }
+
+        public ActionResult AutoCompare()
+        {
+            foreach (var material in repository.Materials.ToList())
+            {
+                var texture = textureRepository.Textures.Where(it => material.Name.ToUpper().IndexOf(it.Name.ToUpper()) > -1).FirstOrDefault();
+                if (texture != null)
+                {
+                    material.Texture = texture;
+                    repository.ApplyModel(material);
+                }
+            }
 
             return RedirectToAction("List");
         }

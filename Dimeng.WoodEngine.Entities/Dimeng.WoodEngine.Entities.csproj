@@ -70,6 +70,8 @@
     <Compile Include="Library\IMVLibrary.cs" />
     <Compile Include="MachineTokens\BENDINGMachiningToken.cs" />
     <Compile Include="MachineTokens\PROFILEMachiningToken.cs" />
+    <Compile Include="MachineTokens\SHELFMachiningToken.cs" />
+    <Compile Include="MachineTokens\SHLFMachiningToken.cs" />
     <Compile Include="MachineTokens\UnAssociativeToken.cs" />
     <Compile Include="Machinings\HDrilling.cs" />
     <Compile Include="Machinings\Profile.cs" />

@@ -15,8 +15,9 @@ namespace Dimeng.LinkToMicrocad.Drawing
         Point3d startPoint;
         Part part;
         Database db;
+        Vector3d offsetVector;
 
-        public PartBendDrawer(Part part, Point3d startPoint, Database db)
+        public PartBendDrawer(Part part, Point3d startPoint, Database db, Vector3d offsetVector)
         {
             this.part = part;
             this.startPoint = startPoint;
@@ -52,6 +53,8 @@ namespace Dimeng.LinkToMicrocad.Drawing
 
                     Point3d basePoint = part.GetPartPointPositionByNumber(1);//MV将点1作为弧形的圆心,无论基准点是什么
                     partSolid.TransformBy(Matrix3d.Displacement(new Vector3d(basePoint.X, basePoint.Y, basePoint.Z) + moveVector));
+
+                    partSolid.TransformBy(Matrix3d.Displacement(offsetVector));
 
                     btr.AppendEntity(partSolid);
                     trans.AddNewlyCreatedDBObject(partSolid, true);

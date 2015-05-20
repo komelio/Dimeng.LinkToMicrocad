@@ -12,6 +12,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             : base(token, par1, par2, par3, par4, par5, par6, par7, par8, par9)
         {
             IsDrawOnly = false;
+            IsLineHoles = true;
         }
 
         public override bool Valid(MachineTokenChecker check)
@@ -23,32 +24,28 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             Diameter = check.GetDoubleValue(this.Par4, @"BORE/孔直径", false, check.Errors);
             PosEndX = (string.IsNullOrEmpty(Par5)) ? PosStartX : check.GetDoubleValue(this.Par5, @"BORE/X结束坐标", false, check.Errors);
             PosEndY = (string.IsNullOrEmpty(Par6)) ? PosStartY : check.GetDoubleValue(this.Par6, @"BORE/Y结束坐标", false, check.Errors);
-            HoleGap = (string.IsNullOrEmpty(Par7)) ? 0 : check.GetDoubleValue(this.Par5, @"BORE/孔间距", true, check.Errors);
+            HoleGap = (string.IsNullOrEmpty(Par7)) ? 0 : check.GetDoubleValue(this.Par7, @"BORE/孔间距", true, check.Errors);
 
             if (PosEndX == PosStartX &&
                 PosStartY == PosEndY)
             {
-                IsLineHoles = true;
+                IsLineHoles = false;
             }
 
             CheckFaceNumber();
 
             if (check.Errors.Count == 0)
-            {
-                return true;
-            }
-            else return false;
+            { return true; }
+            else { return false; }
         }
 
         private void CheckFaceNumber()
         {
             if (FaceNumber == 1 || FaceNumber == 2 ||
                 FaceNumber == 3 || FaceNumber == 4)
-            {
-                IsHorizontalDrill = true;
-            }
+            { IsHorizontalDrill = true; }
             else if (FaceNumber == 5 || FaceNumber == 6)
-                IsHorizontalDrill = false;
+            { IsHorizontalDrill = false; }
         }
 
         public double PosStartX { get; private set; }
@@ -89,7 +86,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                             FaceNumber,
                             Diameter,
                             PosStartX,
-                            PosStartY + dist / number * i * yfactor * sin,
+                            PosStartY + HoleGap * i * yfactor * sin,
                             PosStartZ,
                             Part);
                         Part.HDrillings.Add(hdrill);
@@ -107,7 +104,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                             FaceNumber,
                             Diameter,
                             depth,
-                            PosStartY + dist / number * i * yfactor * sin,
+                            PosStartY + HoleGap * i * yfactor * sin,
                             PosStartZ,
                             Part);
                         Part.HDrillings.Add(hdrill);
@@ -121,7 +118,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                             FaceNumber,
                             Diameter,
                             PosStartY,
-                            PosStartX + dist / number * i * xfactor * cos,
+                            PosStartX + HoleGap * i * xfactor * cos,
                             PosStartZ,
                             Part);
                         Part.HDrillings.Add(hdrill);
@@ -136,7 +133,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                             FaceNumber,
                             Diameter,
                             depth,
-                            PosStartX + dist / number * i * xfactor * cos,
+                            PosStartX + HoleGap * i * xfactor * cos,
                             PosStartZ,
                             Part);
                         Part.HDrillings.Add(hdrill);
@@ -155,8 +152,8 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                     {
                         Machinings.VDrilling vdrill = new Machinings.VDrilling(
                             FaceNumber,
-                            PosStartX + dist / number * i * xfactor * cos,
-                            PosStartY + dist / number * i * yfactor * sin,
+                            PosStartX + HoleGap * i * xfactor * cos,
+                            PosStartY + HoleGap * i * yfactor * sin,
                             Diameter,
                             PosStartZ,
                             Part);
