@@ -144,6 +144,8 @@ namespace Dimeng.WoodEngine.Prompts
             }
         }
 
+        public bool IsBelowBlankRow { get; set; }
+
         public PromptItem(string name,
                       string value,
                       string controlType,

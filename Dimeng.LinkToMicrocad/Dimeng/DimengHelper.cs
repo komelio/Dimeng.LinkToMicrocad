@@ -64,7 +64,7 @@ namespace Dimeng.LinkToMicrocad
 
                 outputErrors(errors);
 
-                var offsetVector = getAcutualWHD(product, mvProduct);
+                var offsetVector = new Vector3d(0, 0, 0); //getAcutualWHD(product, mvProduct);
                 Logger.GetLogger().Debug("XXXXXX    " + offsetVector.ToString());
 
                 //write the temp.xml back to autodecco

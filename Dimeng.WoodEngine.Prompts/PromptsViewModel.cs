@@ -115,48 +115,19 @@ namespace Dimeng.WoodEngine.Prompts
                     break;
             }
 
-            //读取计算器
-            for (int i = 0; i < PromptCells.Rows.RowCount; i++)
-            {
-                string CalName = PromptCells[i, 17].Text;
-                if (!string.IsNullOrEmpty(CalName))
-                {
-                    //logger.Debug("增加计算器:" + CalName);
+            ReloadCalculators();
 
-                    var strs = CalName.Split('|');
-                    if (strs.Length < 3)
-                        continue;
-
-                    string name = strs[0];
-
-                    double upperBound;
-                    if (!double.TryParse(strs[1], out upperBound))
-                    { continue; }
-
-                    double gap;
-                    if (!double.TryParse(strs[2], out gap))
-                    { continue; }
-
-                    Calcuators.Add(new CalculatorItem()
-                    {
-                        Name = name,
-                        UpperBound = upperBound,
-                        Gap = gap,
-                        Index = i
-                    });
-                }
-                else
-                    break;
-            }
-
+            bool belowBlankRow = false;
             for (int i = 0; i < PromptCells.Rows.RowCount; i++)
             {
                 var name = PromptCells[i, 0].Text;
 
                 if (string.IsNullOrEmpty(name))
                 {
+                    belowBlankRow = true;
                     //logger.Info("空行中断读取,行号:" + i.ToString());
-                    break;
+                    if (string.IsNullOrEmpty(PromptCells[i + 1, 0].Text.Trim()))
+                    { break; }
                 }
 
                 string value = PromptCells[i, 1].Text;
@@ -188,7 +159,47 @@ namespace Dimeng.WoodEngine.Prompts
                                                calculatorIndex));
                 }
                 PromptItem prompt = new PromptItem(name, value, controlType, helpMessage, verifyCode, comboString, color, picture, visible, hideInReport, tabIndex, calculatorIndex, i, this);
+                prompt.IsBelowBlankRow = belowBlankRow;
                 Prompts.Add(prompt);
+            }
+        }
+
+        public void ReloadCalculators()
+        {
+            Logger.GetLogger().Debug("清空计算器");
+            this.Calcuators.Clear();
+            //读取计算器
+            for (int i = 0; i < PromptCells.Rows.RowCount; i++)
+            {
+                string CalName = PromptCells[i, 17].Text;
+                if (!string.IsNullOrEmpty(CalName))
+                {
+                    Logger.GetLogger().Debug("增加计算器:" + CalName);
+
+                    var strs = CalName.Split('|');
+                    if (strs.Length < 3)
+                        continue;
+
+                    string name = strs[0];
+
+                    double upperBound;
+                    if (!double.TryParse(strs[1], out upperBound))
+                    { continue; }
+
+                    double gap;
+                    if (!double.TryParse(strs[2], out gap))
+                    { continue; }
+
+                    Calcuators.Add(new CalculatorItem()
+                    {
+                        Name = name,
+                        UpperBound = upperBound,
+                        Gap = gap,
+                        Index = i
+                    });
+                }
+                else
+                    break;
             }
         }
 

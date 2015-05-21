@@ -55,16 +55,6 @@ namespace Dimeng.WoodEngine.Prompts
 
                 tabAll.Items.Add(tab);
             }
-
-            for (int i = 0; i < viewModel.Calcuators.Count; i++)
-            {
-                MenuItem item = new MenuItem();
-                item.Click += item_Click;
-                item.Tag = viewModel.Calcuators[i];
-                item.Header = viewModel.Calcuators[i].Name;
-                this.CalculatorMenuItem.Items.Add(item);
-                this.CalculatorMenuItem.IsEnabled = true;//改为可用
-            }
         }
         #endregion
 
@@ -109,7 +99,7 @@ namespace Dimeng.WoodEngine.Prompts
                 RefreshTabContent(tab);
             }
         }
-       
+
         /// <summary>
         /// 当出现控件类型变化时，刷新整个Tab
         /// </summary>
@@ -206,6 +196,11 @@ namespace Dimeng.WoodEngine.Prompts
             for (int i = 0; i < prompts.Count(); i++)
             {
                 var prompt = prompts[i];
+
+                if (prompt.IsBelowBlankRow)
+                {
+                    continue;
+                }
 
                 if (prompt.ControlType == ControlType.TextBox
                     || prompt.ControlType == ControlType.UnEditabledTextBox
@@ -458,6 +453,24 @@ namespace Dimeng.WoodEngine.Prompts
         private void SubassemblyMenuItem_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void ContextMenu_Loaded(object sender, RoutedEventArgs e)
+        {
+            //刷新页面，更新计算器
+            ViewModel.ReloadCalculators();
+
+            this.CalculatorMenuItem.Items.Clear();
+
+            for (int i = 0; i < viewModel.Calcuators.Count; i++)
+            {
+                MenuItem item = new MenuItem();
+                item.Click += item_Click;
+                item.Tag = viewModel.Calcuators[i];
+                item.Header = viewModel.Calcuators[i].Name;
+                this.CalculatorMenuItem.Items.Add(item);
+                this.CalculatorMenuItem.IsEnabled = true;//改为可用
+            }
         }
     }
 }

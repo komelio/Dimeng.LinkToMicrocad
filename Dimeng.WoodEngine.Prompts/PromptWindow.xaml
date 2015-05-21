@@ -12,7 +12,7 @@
                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                     SelectionChanged="tabAll_SelectionChanged" Grid.ColumnSpan="3" >
             <TabControl.ContextMenu>
-                <ContextMenu>
+                <ContextMenu Loaded="ContextMenu_Loaded">
                     <MenuItem Header="刷新" Click="RefreshMenuItem_Click" >
                         <MenuItem.Icon>
                             <Image Width="23" Height="23" Source="Images/refresh.ico" />
