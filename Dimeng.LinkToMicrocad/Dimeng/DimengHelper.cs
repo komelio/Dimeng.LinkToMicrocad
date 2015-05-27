@@ -170,6 +170,8 @@ namespace Dimeng.LinkToMicrocad
 
             mvProduct.Comments = viewmodel.Comments;
 
+            product.Tab.VarElevation = prompt.ViewModel.Elevation;//更新离地高度
+
             return viewmodel.BookSet;
         }
 

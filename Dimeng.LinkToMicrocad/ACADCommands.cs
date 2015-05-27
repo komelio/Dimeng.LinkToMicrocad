@@ -29,14 +29,6 @@ namespace Dimeng.LinkToMicrocad
         {
             Logging.Logger.GetLogger().Info("Call command 'New_dm'");
 
-            //Document doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-            //Editor ed = doc.Editor;
-
-            //PromptPointOptions option = new PromptPointOptions("mm");
-            //PromptPointResult ppr = ed.GetPoint(option);
-            //if (ppr.Status == PromptStatus.OK)
-            //    MessageBox.Show(ppr.Value.ToString());
-
             try
             {
                 var dmHelper = new DimengHelper();
@@ -47,7 +39,7 @@ namespace Dimeng.LinkToMicrocad
                 Logging.Logger.GetLogger().Error(error);
             }
 
-            MessageBox.Show("New_dm");
+            //MessageBox.Show("New_dm");
         }
 
         /// <summary>
@@ -78,7 +70,7 @@ namespace Dimeng.LinkToMicrocad
             }
 
           
-            MessageBox.Show("Edit_dm");
+            //MessageBox.Show("Edit_dm");
         }
 
         [CommandMethod("AK", "Del_dm", CommandFlags.Modal)]

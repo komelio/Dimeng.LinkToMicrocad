@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Dimeng.LinkToMicrocad.Properties {
+namespace PolylineGetter.Tools {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Dimeng.LinkToMicrocad.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    internal class myCommands {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        internal myCommands() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Dimeng.LinkToMicrocad.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Dimeng.LinkToMicrocad.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PolylineGetter.Tools.myCommands", typeof(myCommands).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,42 +61,38 @@ namespace Dimeng.LinkToMicrocad.Properties {
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找类似 MyCommand 的本地化字符串。
         /// </summary>
-        internal static byte[] Log4net {
+        internal static string MyCommandLocal {
             get {
-                object obj = ResourceManager.GetObject("Log4net", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("MyCommandLocal", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找类似 MyLispFunction 的本地化字符串。
         /// </summary>
-        internal static byte[] MicrovellumProject {
+        internal static string MyLispFunctionLocal {
             get {
-                object obj = ResourceManager.GetObject("MicrovellumProject", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("MyLispFunctionLocal", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找类似 MyPickFirst 的本地化字符串。
         /// </summary>
-        internal static byte[] OverdrivePro {
+        internal static string MyPickFirstLocal {
             get {
-                object obj = ResourceManager.GetObject("OverdrivePro", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("MyPickFirstLocal", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找类似 MySessionCmd 的本地化字符串。
         /// </summary>
-        internal static byte[] ProductList {
+        internal static string MySessionCmdLocal {
             get {
-                object obj = ResourceManager.GetObject("ProductList", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("MySessionCmdLocal", resourceCulture);
             }
         }
     }

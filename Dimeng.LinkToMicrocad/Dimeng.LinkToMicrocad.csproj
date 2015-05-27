@@ -82,11 +82,16 @@
     <Reference Include="GalaSoft.MvvmLight.Extras">
       <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\net40\GalaSoft.MvvmLight.Extras.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="SpreadsheetGear2012.Core, Version=7.1.1.120, Culture=neutral, PublicKeyToken=39c186f5904944ec, processorArchitecture=MSIL" />
+    <Reference Include="SpreadsheetGear2012.Windows.WPF, Version=7.1.1.120, Culture=neutral, PublicKeyToken=39c186f5904944ec, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -114,6 +119,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ACADCommands.resx</DependentUpon>
     </Compile>
+    <Compile Include="Business\ModelAssemblyLoader.cs" />
+    <Compile Include="Business\PartInitializer.cs" />
+    <Compile Include="Business\PartsLoader.cs" />
+    <Compile Include="Business\ProductAnalyst.cs" />
+    <Compile Include="Business\SubassemblyInitializer.cs" />
     <Compile Include="Dimeng\AKInfo.cs" />
     <Compile Include="Dimeng\AKProduct.cs" />
     <Compile Include="Dimeng\Context.cs" />
@@ -124,10 +134,116 @@
     <Compile Include="Dimeng\TempXMLWriter.cs" />
     <Compile Include="Dimeng\Texture.cs" />
     <Compile Include="Dimeng\UnitConverter.cs" />
+    <Compile Include="Drawing\CAD\CADHelper.cs" />
+    <Compile Include="Drawing\CAD\LayerHelper.cs" />
+    <Compile Include="Drawing\PartBendDrawer.cs" />
+    <Compile Include="Drawing\PartDrawer.cs" />
+    <Compile Include="Drawing\Part\BaseSolidStructer.cs" />
+    <Compile Include="Drawing\Part\HDrillDrawer.cs" />
+    <Compile Include="Drawing\Part\ProfileDrawer.cs" />
+    <Compile Include="Drawing\Part\VDrillDrawer.cs" />
+    <Compile Include="Drawing\ProductDrawer.cs" />
+    <Compile Include="Entities\Checks\Check.cs" />
+    <Compile Include="Entities\Checks\CheckSubFileName.cs" />
+    <Compile Include="Entities\Checks\MachineTokenChecker.cs" />
+    <Compile Include="Entities\Checks\Part\CheckBasePoint.cs" />
+    <Compile Include="Entities\Checks\Part\CheckDrawToken.cs" />
+    <Compile Include="Entities\Checks\Part\CheckEdgebanding.cs" />
+    <Compile Include="Entities\Checks\Part\CheckMachinePoint.cs" />
+    <Compile Include="Entities\Checks\Part\CheckMaterial.cs" />
+    <Compile Include="Entities\Checks\Part\CheckPartRotation.cs" />
+    <Compile Include="Entities\Checks\Part\CheckPositions.cs" />
+    <Compile Include="Entities\Checks\Part\PartChecker.cs" />
+    <Compile Include="Entities\Checks\SubassemblyChecker.cs" />
+    <Compile Include="Entities\EQ\EQParaser.cs" />
+    <Compile Include="Entities\EQ\EQVParaser.cs" />
+    <Compile Include="Entities\Errors\ErrorLevel.cs" />
+    <Compile Include="Entities\Errors\ModelError.cs" />
+    <Compile Include="Entities\Library\IMVLibrary.cs" />
+    <Compile Include="Entities\MachineTokens\3SIDEDNOTCH.cs" />
+    <Compile Include="Entities\MachineTokens\AssociativeToken.cs" />
+    <Compile Include="Entities\MachineTokens\BaseToken.cs" />
+    <Compile Include="Entities\MachineTokens\BENDINGMachiningToken.cs" />
+    <Compile Include="Entities\MachineTokens\BOREMachiningToken.cs" />
+    <Compile Include="Entities\MachineTokens\CAMLOCKMachiningToken.cs" />
+    <Compile Include="Entities\MachineTokens\CHAMFERMachiningToken.cs" />
+    <Compile Include="Entities\MachineTokens\CORNERNOTCHMachiningToken.cs" />
+    <Compile Include="Entities\MachineTokens\CUTOUTMachiningToken.cs" />
+    <Compile Include="Entities\MachineTokens\HOLESMachiningToken.cs" />
+    <Compile Include="Entities\MachineTokens\PLINEMachiningToken.cs" />
+    <Compile Include="Entities\MachineTokens\PROFILEMachiningToken.cs" />
+    <Compile Include="Entities\MachineTokens\RCORNERNOTCHMachiningToken.cs" />
+    <Compile Include="Entities\MachineTokens\ROUTEMachiningTokne.cs" />
+    <Compile Include="Entities\MachineTokens\SHELFMachiningToken.cs" />
+    <Compile Include="Entities\MachineTokens\SHLFMachiningToken.cs" />
+    <Compile Include="Entities\MachineTokens\StructXY.cs" />
+    <Compile Include="Entities\MachineTokens\ToolComp.cs" />
+    <Compile Include="Entities\MachineTokens\UnAssociativeToken.cs" />
+    <Compile Include="Entities\Machinings\HDrilling.cs" />
+    <Compile Include="Entities\Machinings\Profile.cs" />
+    <Compile Include="Entities\Machinings\Routing.cs" />
+    <Compile Include="Entities\Machinings\Sawing.cs" />
+    <Compile Include="Entities\Machinings\VDrilling.cs" />
+    <Compile Include="Entities\Materials\EdgeBanding.cs" />
+    <Compile Include="Entities\Materials\EdgebandingType.cs" />
+    <Compile Include="Entities\Materials\Grain.cs" />
+    <Compile Include="Entities\Materials\Material.cs" />
+    <Compile Include="Entities\Materials\Stock.cs" />
+    <Compile Include="Entities\Products\Hardware.cs" />
+    <Compile Include="Entities\Products\IProduct.cs" />
+    <Compile Include="Entities\Products\Part\BendingInfo.cs" />
+    <Compile Include="Entities\Products\Part\MachinePoint.cs" />
+    <Compile Include="Entities\Products\Part\Part.cs" />
+    <Compile Include="Entities\Products\Part\PartFace.cs" />
+    <Compile Include="Entities\Products\Part\PartLocation.cs" />
+    <Compile Include="Entities\Products\Product.cs" />
+    <Compile Include="Entities\Products\Subassembly.cs" />
+    <Compile Include="Entities\Project\Project.cs" />
+    <Compile Include="Entities\Project\ProjectInfo.cs" />
+    <Compile Include="Entities\Project\SpecificationGroup.cs" />
+    <Compile Include="Entities\ToolFile\Tool.cs" />
+    <Compile Include="Entities\ToolFile\ToolFile.cs" />
+    <Compile Include="Entities\ToolFile\ToolType.cs" />
     <Compile Include="IOHelper.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Logging\ConsoleHelper.cs" />
+    <Compile Include="Math\GetOffsetCurveBulge.cs" />
+    <Compile Include="Math\MathHelper.cs" />
     <Compile Include="myPlugin.cs" />
     <Compile Include="ACADCommands.cs" />
+    <Compile Include="PolylineGetter\Algorithm\Divider.cs" />
+    <Compile Include="PolylineGetter\Algorithm\Geometry.cs" />
+    <Compile Include="PolylineGetter\Algorithm\MathGeometry.cs" />
+    <Compile Include="PolylineGetter\Algorithm\MyNode.cs" />
+    <Compile Include="PolylineGetter\Algorithm\MyPolyline.cs" />
+    <Compile Include="PolylineGetter\PolylineGetter.cs" />
+    <Compile Include="PolylineGetter\Tools\CADHelper.cs" />
+    <Compile Include="PolylineGetter\Tools\myCommands.cs" />
+    <Compile Include="PolylineGetter\Tools\myCommands.Designer.cs">
+      <DependentUpon>myCommands.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="PolylineGetter\Tools\mytools.cs" />
+    <Compile Include="Prompts\Calculators\Calculator.xaml.cs">
+      <DependentUpon>Calculator.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Prompts\Calculators\CalculatorItem.cs" />
+    <Compile Include="Prompts\Calculators\CalculatorViewModel.cs" />
+    <Compile Include="Prompts\Calculators\OneCalculatorViewModel.cs" />
+    <Compile Include="Prompts\ControlType.cs" />
+    <Compile Include="Prompts\Converter\PromptValueToCheckedConverter.cs" />
+    <Compile Include="Prompts\Converter\PromptValueToIntConverter.cs" />
+    <Compile Include="Prompts\Converter\PromptValueToVisibilityConverter.cs" />
+    <Compile Include="Prompts\InverseBooleanConverter.cs" />
+    <Compile Include="Prompts\PromptItem.cs" />
+    <Compile Include="Prompts\PromptsViewModel.cs" />
+    <Compile Include="Prompts\PromptWindow.xaml.cs">
+      <DependentUpon>PromptWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Prompts\SpreadExplorer.xaml.cs">
+      <DependentUpon>SpreadExplorer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -139,12 +255,41 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="SpreadCustomFunctions\Degrees.cs" />
+    <Compile Include="SpreadCustomFunctions\GetARCAngle.cs" />
+    <Compile Include="SpreadCustomFunctions\GetARCAttlitude.cs" />
+    <Compile Include="SpreadCustomFunctions\GetARCHord.cs" />
+    <Compile Include="SpreadCustomFunctions\GetARCLength.cs" />
+    <Compile Include="SpreadCustomFunctions\GetARCRadius.cs" />
+    <Compile Include="SpreadCustomFunctions\GetBulge.cs" />
+    <Compile Include="SpreadCustomFunctions\GetBulgeA.cs" />
+    <Compile Include="SpreadCustomFunctions\GetEQ1.cs" />
+    <Compile Include="SpreadCustomFunctions\GetEQ2.cs" />
+    <Compile Include="SpreadCustomFunctions\GetEQH.cs" />
+    <Compile Include="SpreadCustomFunctions\GetEQV.cs" />
+    <Compile Include="SpreadCustomFunctions\MyTitle.cs" />
+    <Compile Include="SpreadCustomFunctions\ParentName.cs" />
+    <Compile Include="SpreadCustomFunctions\PartLength.cs" />
+    <Compile Include="SpreadCustomFunctions\PartQuantity.cs" />
+    <Compile Include="SpreadCustomFunctions\PartThickness.cs" />
+    <Compile Include="SpreadCustomFunctions\PARTTHICKNESSM.cs" />
+    <Compile Include="SpreadCustomFunctions\PartWidth.cs" />
+    <Compile Include="SpreadCustomFunctions\PNT.cs" />
+    <Compile Include="SpreadCustomFunctions\Radians.cs" />
+    <Compile Include="SpreadCustomFunctions\RangeToString.cs" />
+    <Compile Include="SpreadCustomFunctions\Vectors.cs" />
+    <Compile Include="Spread\SpreadHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ACADCommands.resx">
       <DependentUpon>ACADCommands.cs</DependentUpon>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ACADCommands.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PolylineGetter\Tools\myCommands.resx">
+      <DependentUpon>myCommands.cs</DependentUpon>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>myCommands.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -175,32 +320,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dimeng.LinkToMicrocad.Drawing\Dimeng.LinkToMicrocad.Drawing.csproj">
-      <Project>{2716b2f9-588c-4c6a-ad7f-23150bf62229}</Project>
-      <Name>Dimeng.LinkToMicrocad.Drawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Dimeng.LinkToMicrocad.Logging\Dimeng.LinkToMicrocad.Logging.csproj">
-      <Project>{ae2c711a-a774-4d97-a609-5ea0e05598e4}</Project>
-      <Name>Dimeng.LinkToMicrocad.Logging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Dimeng.WoodEngine.Business\Dimeng.WoodEngine.Business.csproj">
-      <Project>{141c71ba-0000-4d93-85f6-5ba6180d47cf}</Project>
-      <Name>Dimeng.WoodEngine.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Dimeng.WoodEngine.Entities\Dimeng.WoodEngine.Entities.csproj">
-      <Project>{10017e17-2464-4d53-8ac8-fc5575a27659}</Project>
-      <Name>Dimeng.WoodEngine.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Dimeng.WoodEngine.Prompts\Dimeng.WoodEngine.Prompts.csproj">
-      <Project>{aff5a573-b7d4-463c-a239-6c013a9ba5f7}</Project>
-      <Name>Dimeng.WoodEngine.Prompts</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+    <None Include="Prompts\app.config" />
+    <None Include="Prompts\packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Resources\Log4net.config" />
     <None Include="Resources\MicrovellumProject.mdb" />
   </ItemGroup>
   <ItemGroup>
@@ -208,6 +334,33 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ProductList.mdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Entities\Checks\Sub\" />
+    <Folder Include="Prompts\Subassemblies\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Prompts\Calculators\Calculator.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Prompts\PromptWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Prompts\SpreadExplorer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Prompts\Images\Calculator.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Prompts\Images\Order.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Prompts\Images\refresh.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
