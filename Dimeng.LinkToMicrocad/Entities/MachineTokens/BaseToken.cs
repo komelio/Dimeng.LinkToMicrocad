@@ -108,6 +108,9 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             return true;
         }
 
-      
+        public BaseToken Clone()
+        {
+            return this.MemberwiseClone() as BaseToken;
+        }
     }
 }

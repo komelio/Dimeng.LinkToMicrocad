@@ -113,14 +113,21 @@ namespace Dimeng.WoodEngine.Business
                 Logger.GetLogger().Debug(string.Format("{0}/{1}/{2}/{3}/{4}", partName, 1, width, length, isDraw3d));
             }
 
+            tokens.ForEach(t => t.Part = parts[0]);
             MachineTokenChecker mChecker = new MachineTokenChecker(errors);
             parts.ForEach(it =>
             {
-                it.MachineTokens = tokens.Where(t =>
+                var tempTokens = new List<BaseToken>();
+                foreach (var t in tokens)
                 {
-                    t.Part = it;
-                    return t.Valid(mChecker);
-                }).ToList();
+                    if (t.Valid(mChecker))
+                    {
+                        var tempToken = t.Clone();
+                        tempToken.Part = it;
+                        tempTokens.Add(tempToken);
+                    }
+                }
+                it.MachineTokens = tempTokens;
             });
 
             return errors;
