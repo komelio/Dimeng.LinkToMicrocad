@@ -6,52 +6,55 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@Html.ActionLink("导入", "Import", null, new { @class = "btn btn-primary btn-sm" })
-@Html.ActionLink("导出", "Output", null, new { @class = "btn btn-primary btn-sm" })
-@Html.ActionLink("自动匹配", "AutoCompare", null, new { @class = "btn btn-primary btn-sm" })
-@Html.Raw(TempData["msg"])
+<div class="container">
+    @Html.ActionLink("导入", "Import", null, new { @class = "btn btn-primary btn-sm" })
+    @Html.ActionLink("导出", "Output", null, new { @class = "btn btn-primary btn-sm" })
+    @Html.ActionLink("自动匹配", "AutoCompare", null, new { @class = "btn btn-primary btn-sm" })
+    @Html.Raw(TempData["msg"])
 
-<table class="table">
-    <caption>材料清单</caption>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>名称</th>
-            <th>材质</th>
-            <th>操作</th>
-        </tr>
-    </thead>
+    <table class="table">
+        <caption>材料清单</caption>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>名称</th>
+                <th>材质</th>
+                <th>操作</th>
+            </tr>
+        </thead>
 
-    @foreach (var item in Model.Materials)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaterialId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @if (item.Texture != null)
-                {
-                    @Html.DisplayFor(modelItem => item.Texture.Name);
+        @foreach (var item in Model.Materials)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaterialId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @if (item.Texture != null)
+                    {
+                        @Html.DisplayFor(modelItem => item.Texture.Name);
+                    }
+                    else
+                    {
+                        @:无材质
                 }
-                else
-                {
-                    @:无材质
-                }
 
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.MaterialId }) 
-            </td>
-        </tr>
-    }
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.MaterialId })
+                </td>
+            </tr>
+        }
 
-</table>
+    </table>
 
-<div class="pull-right">
-    <ul class="pagination pagination-sm">
-        @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x }))
-    </ul>
+    <div class="pull-right">
+        <ul class="pagination pagination-sm">
+            @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x }))
+        </ul>
+    </div>
+
 </div>

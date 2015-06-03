@@ -16,7 +16,7 @@ namespace Dimeng.WoodEngine.Business
     {
         private List<ModelError> errors = new List<ModelError>();
 
-        public List<ModelError> GetPartsFromOneLine(IRange partRange, IProduct product, List<Part> parts,
+        public List<ModelError> GetPartsFromOneLine(IRange partRange, IRange machineRange, IProduct product, List<Part> parts,
             IWorkbookSet books, List<Material> tempMaterials, List<EdgeBanding> tempEdgebandings)
         {
             PartChecker check = new PartChecker(partRange, getLocation(product), errors);
@@ -63,7 +63,7 @@ namespace Dimeng.WoodEngine.Business
 
             check.IsMaterialFitPartLengthAndWidth(length, width, material, errors);
 
-            List<BaseToken> tokens = getTokens(partRange);
+            List<BaseToken> tokens = getTokens(partRange, machineRange);
 
             bool isEQPart = check.IsEQPart();
             if (isEQPart)
@@ -133,7 +133,7 @@ namespace Dimeng.WoodEngine.Business
             return errors;
         }
 
-        private List<BaseToken> getTokens(IRange partRow)
+        private List<BaseToken> getTokens(IRange partRow, IRange machineColumn)
         {
             List<BaseToken> tokens = new List<BaseToken>();
 
@@ -144,6 +144,65 @@ namespace Dimeng.WoodEngine.Business
                 if (String.IsNullOrEmpty(fullToken))
                 {
                     break;
+                }
+
+                if (i == 90)
+                {
+                    for (int x = 0; x <= machineColumn.Rows.RowCount; x += 10)
+                    {
+                        string xfullToken = machineColumn[x, 0].Text;
+
+                        if (String.IsNullOrEmpty(xfullToken))
+                        {
+                            break;
+                        }
+
+                        double xv;
+                        if (double.TryParse(xfullToken, out xv) && xv == 0)
+                        {
+                            continue;
+                        }
+
+                        string xtokenName = GetTokenFromMachiningTokenString(xfullToken);
+
+                        string xtypeFullName = "Dimeng.WoodEngine.Entities.MachineTokens." + xtokenName + "MachiningToken";
+
+                        //提前检查是否含有这个指令
+                        if (ModelAssemblyLoader.GetInstance().Types.Find(it => it.FullName == xtypeFullName) == null)
+                        {
+                            continue;
+                        }
+
+                        try
+                        {
+                            object[] parms = new object[] { 
+                                                                                machineColumn[x,0].Text, 
+                                                                                machineColumn[x+1,0].Text, 
+                                                                                machineColumn[x+2,0].Text, 
+                                                                                machineColumn[x+3,0].Text, 
+                                                                                machineColumn[x+4,0].Text, 
+                                                                                machineColumn[x+5,0].Text, 
+                                                                                machineColumn[x+6,0].Text, 
+                                                                                machineColumn[x+7,0].Text, 
+                                                                                machineColumn[x+8,0].Text, 
+                                                                                machineColumn[x+9,0].Text, 
+                                                                      };
+
+                            BaseToken token = (BaseToken)Activator.CreateInstance(
+                                ModelAssemblyLoader.GetInstance().Assembly.GetType(
+                                    xtypeFullName,
+                                    true,
+                                    true
+                                    )
+                                , parms);
+
+                            tokens.Add(token);
+                        }
+                        catch (Exception error)
+                        {
+                            throw error;
+                        }
+                    }
                 }
 
                 double v;
@@ -189,11 +248,6 @@ namespace Dimeng.WoodEngine.Business
                 }
                 catch (Exception error)
                 {
-                    //logger.Error(string.Format("分析指令{0}过程中出现错误：{1}\n{2}",
-                    //                            fulltoken,
-                    //                            error.Message,
-                    //                            error.StackTrace
-                    //                            ));
                     throw error;
                 }
             }

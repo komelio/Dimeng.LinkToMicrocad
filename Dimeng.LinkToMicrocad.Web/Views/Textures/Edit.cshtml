@@ -7,6 +7,12 @@
 
 <h2>@ViewBag.Title</h2>
 
+<script type=”text/javascript”>
+    $(document).ready(function(){
+         $("#contactform").validate();
+    });
+</script>
+
 @using (Html.BeginForm("Edit", "Textures", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <div class="form-horizontal">
@@ -24,7 +30,7 @@
             <div class="col-md-10">
                 <a class='btn' href='javascript:;'>
                     Choose File...
-                    <input type="file" name="Image" size="40"
+                    <input type="file" name="file" size="40"
                            style="position:absolute;z-index:2;top:0;
                            left:0;filter: alpha(opacity=0); opacity:0;
                            background-color:transparent;color:transparent;"

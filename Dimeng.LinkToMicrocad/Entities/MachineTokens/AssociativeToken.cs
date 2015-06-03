@@ -52,6 +52,24 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                         continue;
                     }
 
+                    if (this.CanAssociativePartsList != null && this.CanAssociativePartsList.Length > 0)
+                    {
+                        bool findit = false;
+                        foreach (var pname in this.CanAssociativePartsList)
+                        {
+                            if (pname.ToUpper() == part.PartName.ToUpper())
+                            {
+                                findit = true;
+                                break;
+                            }
+                        }
+
+                        if (!findit)
+                        {
+                            continue;
+                        }
+                    }
+
                     foreach (PartFace face in part.Faces)
                     {
                         if (pf.IsAssocaitedWithAnotherFace(face, associateDist, tolerenceDist))

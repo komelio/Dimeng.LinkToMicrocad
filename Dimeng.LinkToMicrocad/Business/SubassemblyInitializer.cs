@@ -61,8 +61,9 @@ namespace Dimeng.WoodEngine.Business
                 var partCells = bookSub.Worksheets[0].Cells;
                 var subCells = bookSub.Worksheets[2].Cells;
                 var hwrCells = bookSub.Worksheets[1].Cells;
+                var machineCells = bookSub.Worksheets[4].Cells;
 
-                errors.AddRange(PartsLoader.GetParts(sub, partCells, books, tempMaterials, tempEdgebandings));
+                errors.AddRange(PartsLoader.GetParts(sub, partCells, machineCells, books, tempMaterials, tempEdgebandings));
             }
             catch
             {

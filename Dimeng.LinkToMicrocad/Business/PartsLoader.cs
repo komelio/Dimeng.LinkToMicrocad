@@ -10,7 +10,7 @@ namespace Dimeng.WoodEngine.Business
 {
     public class PartsLoader
     {
-        public static IEnumerable<ModelError> GetParts(IProduct product, IRange cutPartCells,
+        public static IEnumerable<ModelError> GetParts(IProduct product, IRange cutPartCells, IRange machineCells,
             IWorkbookSet workBookSet, List<Material> tempMaterials, List<EdgeBanding> tempEdgebandings)
         {
             Logger.GetLogger().Info(string.Format("Getting parts from product:{0}", product.Description));
@@ -28,10 +28,11 @@ namespace Dimeng.WoodEngine.Business
                 }
 
                 IRange partRow = cutPartCells[i, 0].EntireRow;
+                IRange machineColumn = machineCells[0, i].EntireColumn;
 
                 List<Part> tempParts = new List<Part>();
                 var partInitializer = new PartInitializer();
-                var errorList = partInitializer.GetPartsFromOneLine(partRow, product, tempParts,
+                var errorList = partInitializer.GetPartsFromOneLine(partRow, machineColumn, product, tempParts,
                                     workBookSet, tempMaterials, tempEdgebandings);
 
                 errors.AddRange(errorList);

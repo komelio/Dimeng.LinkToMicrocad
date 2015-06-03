@@ -18,10 +18,8 @@ namespace Dimeng.LinkToMicrocad.Web
                 "",
                 new
                 {
-                    controller = "Products",
-                    action = "List",
-                    category = (string)null,
-                    page = 1
+                    controller = "Home",
+                    action = "Index",
                 }
             );
 

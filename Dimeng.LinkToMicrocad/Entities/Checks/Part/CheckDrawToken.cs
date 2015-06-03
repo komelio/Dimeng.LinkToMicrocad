@@ -18,6 +18,11 @@ namespace Dimeng.WoodEngine.Entities.Checks
                 string[] words = text.Split(' ');
                 if (words.Length > 1)
                 {
+                    if (words[1].ToUpper() == "MVFREEZE")
+                    {
+                        IsDraw3d = false;//特殊图层
+                    }
+
                     return "3D_" + words[1];
                 }
                 else

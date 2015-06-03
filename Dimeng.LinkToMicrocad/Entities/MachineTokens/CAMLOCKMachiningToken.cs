@@ -5,6 +5,7 @@ using System.Text;
 using Autodesk.AutoCAD.Geometry;
 using Dimeng.WoodEngine.Entities.Machinings;
 using Dimeng.WoodEngine.Entities.Checks;
+using Dimeng.LinkToMicrocad.Logging;
 
 namespace Dimeng.WoodEngine.Entities.MachineTokens
 {
@@ -31,7 +32,6 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             Backset = check.GetDoubleValue(this.Par7, @"Camlock/par7", false, check.Errors);
 
             camlockFaceChecker();
-            Dimeng.LinkToMicrocad.Logging.Logger.GetLogger().Debug(this.Par8 + "//" + this.CamFaceNumber.ToString());
 
             this.DrillFromOppsiteFace = check.GetBoolValue(this.Par9, @"Camlock/par9", false, false, check.Errors);
             ListCamVBoreXY = GetCamVBoreXYList();
@@ -83,11 +83,14 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         public override void ToMachining(double tolerenceDist, Entities.ToolFile toolFile)
         {
+            Logger.GetLogger().Fatal(string.Format("Camlock ToMachining!{0}/{1}/{2}/{3}/{4}/{5}", this.Token, this.Par1, this.Par2, this.Par3, this.Par4, this.Part));
             FindAssociatedFaces(0, tolerenceDist);
 
             PartFace pf = this.Part.GetPartFaceByNumber(FaceNumber);
             if (this.AssociatedPartFaces.Count != 0)//数量不为0，说明有关联的板件
             {
+                Logger.GetLogger().Fatal("Camlock Faces:" + this.AssociatedPartFaces.Count.ToString());
+
                 List<HDrilling> TempHDrills = new List<HDrilling>();
 
                 foreach (double d in this.PointsPosition)
@@ -104,6 +107,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
                 foreach (PartFace f in this.AssociatedPartFaces)
                 {
+                    Logger.GetLogger().Fatal(string.Format("CamlockAssociateFace:{0}/{1}", f.Part.ToString(), f.FaceNumber));
                     if (!f.IsHorizontalFace)//如果关联的面是面5或面6
                     {
                         foreach (HDrilling hdrill in TempHDrills)

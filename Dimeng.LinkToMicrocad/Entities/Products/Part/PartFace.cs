@@ -100,12 +100,6 @@ namespace Dimeng.WoodEngine.Entities
                 return false;
             }
 
-            ////如果两个面的距离大于一定距离也就不关联
-            //if (anotherFace.Plane.DistanceTo(this.Point1) > dist)
-            //{
-            //    return false;
-            //}
-
             //计算所在面的四个点，共有几个点落在另一个面的板件范围内
             int PtInPartsCount = this.Points.Count(pt => anotherFace.IsPointIn(pt, associateDist, tolerenceDist));
             //对于所关联的面是面5、面6或者是4个边，对点的数量要求也不同
@@ -139,15 +133,30 @@ namespace Dimeng.WoodEngine.Entities
                 throw new Exception("Tolerence dist value could not below zero!");
             }
 
-            //先把世界坐标系下的pt转换成mp坐标系下
-            pt = pt.TransformBy(Matrix3d.AlignCoordinateSystem(this.Part.MovedMPPoint,
-                                                               this.Part.MovedMPXAxis,
-                                                               this.Part.MovedMPYAxis,
-                                                               this.Part.MovedMPZAxis,
-                                                               Point3d.Origin,
-                                                               Vector3d.XAxis,
-                                                               Vector3d.YAxis,
-                                                               Vector3d.ZAxis));
+            if (FaceNumber == 5 || FaceNumber == 6)
+            {
+                //先把世界坐标系下的pt转换成mp坐标系下
+                pt = pt.TransformBy(Matrix3d.AlignCoordinateSystem(this.Part.MovedMPPoint,
+                                                                   this.Part.MovedMPXAxis,
+                                                                   this.Part.MovedMPYAxis,
+                                                                   this.Part.MovedMPZAxis,
+                                                                   Point3d.Origin,
+                                                                   Vector3d.XAxis,
+                                                                   Vector3d.YAxis,
+                                                                   Vector3d.ZAxis));
+            }
+            else
+            {
+                //先把世界坐标系下的pt转换成face坐标系下
+                pt = pt.TransformBy(Matrix3d.AlignCoordinateSystem(this.Point1,
+                                                                   this.Point2 - this.Point1,
+                                                                   this.Point3 - this.Point1,
+                                                                   this.Normal,
+                                                                   Point3d.Origin,
+                                                                   Vector3d.XAxis,
+                                                                   Vector3d.YAxis,
+                                                                   Vector3d.ZAxis));
+            }
             //取有效数字两个，是为了避免精确计算的情况下的误差导致判断错误
             double z = System.Math.Round(pt.Z, 2);
 

@@ -77,6 +77,7 @@ namespace Dimeng.LinkToMicrocad
             }
             catch (Exception error)
             {
+                MessageBox.Show("绘制过程中发生错误，:(");
                 throw new Exception("Error occured during drawing....", error);
             }
         }

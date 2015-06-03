@@ -5,58 +5,55 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>产品管理</h2>
+<div class="container">
+        <h2>产品管理</h2>
+        <div class="pull-right">
+            @Html.ActionLink("导入", "Import", null, new { @class = "btn btn-primary btn-sm" })
+            @Html.ActionLink("创建", "Create", null, new { @class = "btn btn-primary btn-sm" })
+            @Html.ActionLink("生成", "Output", null, new { @class = "btn btn-primary btn-sm" })
+            @Html.ActionLink("清除", "Clear", null, new { @class = "btn btn-primary btn-sm" })
+        </div>
 
-<div class="pull-right">
-    @Html.ActionLink("导入", "Import", null, new { @class = "btn btn-primary btn-sm" })
-    @Html.ActionLink("生成", "Output", null, new { @class = "btn btn-primary btn-sm" })
-    @Html.ActionLink("清除", "Clear", null, new { @class = "btn btn-primary btn-sm" })
-</div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>名称</th>
+                    <th>描述</th>
+                    <th>离地高度</th>
+                    <th>分类</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in Model.Products)
+                {
+                    <tr>
+                        <td>@p.Id</td>
+                        <td>@p.Name</td>
+                        <td>@p.Description</td>
+                        <td>@p.Elevation</td>
+                        <td>@p.Category</td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { productId = p.Id }, new { @class = "btn btn-xs btn-primary" })
+                            @*@Html.ActionLink("Details", "Details", new { id = p.Id }, new { @class = "btn btn-xs btn-primary" })
+                            @Html.ActionLink("Delete", "Delete", new { id = p.Id }, new { @class = "btn btn-xs btn-danger" })*@
+                            @*@Ajax.ActionLink("test", "TestAjax", new { name = "test" }, new AjaxOptions()
+                            {
+                                UpdateTargetId = "tableData",
+                                LoadingElementId = "loading"
+                            })*@
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>名称</th>
-            <th>描述</th>
-            <th>宽</th>
-            <th>高</th>
-            <th>深</th>
-            <th>离地高度</th>
-            <th>分类</th>
-            <th>操作</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var p in Model.Products)
-        {
-            <tr>
-                <td>@p.Id</td>
-                <td>@p.Name</td>
-                <td>@p.Description</td>
-                <td>@p.Width</td>
-                <td>@p.Height</td>
-                <td>@p.Depth</td>
-                <td>@p.Elevation</td>
-                <td>@p.Category</td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { productId = p.Id }, new { @class = "btn btn-xs btn-primary" })
-                    @*@Html.ActionLink("Details", "Details", new { id = p.Id }, new { @class = "btn btn-xs btn-primary" })
-                    @Html.ActionLink("Delete", "Delete", new { id = p.Id }, new { @class = "btn btn-xs btn-danger" })*@
-                    @*@Ajax.ActionLink("test", "TestAjax", new { name = "test" }, new AjaxOptions()
-                                                           {
-                                                               UpdateTargetId = "tableData",
-                                                               LoadingElementId = "loading"
-                                                           })*@
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+        <div class="pull-right">
+            <ul class="pagination pagination-sm">
+                @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x, category = @Model.CurrentCategory }))
+            </ul>
+        </div>
+    </div>
 
-<div class="pull-right">
-    <ul class="pagination pagination-sm">
-        @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x, category = @Model.CurrentCategory }))
-    </ul>
-</div>
 

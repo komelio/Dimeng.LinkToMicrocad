@@ -2,6 +2,7 @@
 using Dimeng.LinkToMicrocad.Web.Domain.Abstract;
 using Dimeng.LinkToMicrocad.Web.Domain.Entities;
 using Dimeng.LinkToMicrocad.Web.Models;
+using Dimeng.LinkToMicrocad.Web.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -78,31 +79,56 @@ namespace Dimeng.LinkToMicrocad.Web.Controllers
         }
 
         [HttpGet]
-        public ViewResult Edit(int productId)
+        public ViewResult Edit(int productId = 0)
         {
+            if (productId == 0)
+            {
+                return View(new ProductViewModel());
+            }
             Product product = repository.Products.FirstOrDefault(x => x.Id == productId);
             return View(product);
         }
 
         [HttpPost]
-        public ActionResult Edit(Product product)
+        public ActionResult Edit(ProductViewModel viewmodel)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                if (product.Id > 0)
-                {
-                    repository.ApplyModel(product);
-                }
-                else
-                {
-                    repository.Add(product);
-                }
-                return RedirectToAction("List");
+                return View(viewmodel);
             }
-            else
-            {
-                return View(product);
-            }
+
+            return RedirectToAction("List");
+            //if (ModelState.IsValid)
+            //{
+            //    //if (file != null)
+            //    //{
+            //    //    //texture.ImageName = image.FileName.Substring(image.FileName.LastIndexOf("\\") + 1);
+            //    //    string savePath = Server.MapPath(configuration.PathToOutput);
+            //    //    file.SaveAs(Path.Combine(savePath, "Library", "Products", ));
+            //    //    //TempData["message"] = "done!";
+            //    //}
+
+            //    if (product.Id > 0)
+            //    {
+            //        repository.ApplyModel(product);
+            //    }
+            //    else
+            //    {
+            //        repository.Add(product);
+            //    }
+            //    return RedirectToAction("List");
+            //}
+            //else
+            //{
+            //    return View(product);
+            //}
+        }
+
+        [HttpGet]
+        public ViewResult Create()
+        {
+            Product product = new Product();
+            return View(product);
         }
     }
 }

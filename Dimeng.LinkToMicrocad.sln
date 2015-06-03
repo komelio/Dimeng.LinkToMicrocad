@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dimeng.LinkToMicrocad.Web.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dimeng.LinkToMicrocad.Web.Business", "Dimeng.LinkToMicrocad.Web.Business\Dimeng.LinkToMicrocad.Web.Business.csproj", "{C239A562-57AA-4E9F-BB12-95DC5CF9950D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Update client", "3 - Update client", "{5E2948CA-8DD6-41AA-B8C2-7238E2743803}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "Updater\Updater.csproj", "{50936494-5A9B-4559-A54F-BBDEE8DBB3D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,10 @@ Global
 		{C239A562-57AA-4E9F-BB12-95DC5CF9950D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C239A562-57AA-4E9F-BB12-95DC5CF9950D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C239A562-57AA-4E9F-BB12-95DC5CF9950D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50936494-5A9B-4559-A54F-BBDEE8DBB3D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50936494-5A9B-4559-A54F-BBDEE8DBB3D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50936494-5A9B-4559-A54F-BBDEE8DBB3D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50936494-5A9B-4559-A54F-BBDEE8DBB3D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,5 +56,6 @@ Global
 		{A9370CFF-9136-4F01-B20C-405B223F5D5C} = {E0DD4FC4-01A4-4866-A767-03D40D578B39}
 		{B61DA03E-FC7B-4EF6-A3F0-05E418892B46} = {E0DD4FC4-01A4-4866-A767-03D40D578B39}
 		{C239A562-57AA-4E9F-BB12-95DC5CF9950D} = {E0DD4FC4-01A4-4866-A767-03D40D578B39}
+		{50936494-5A9B-4559-A54F-BBDEE8DBB3D4} = {5E2948CA-8DD6-41AA-B8C2-7238E2743803}
 	EndGlobalSection
 EndGlobal

@@ -74,7 +74,7 @@ namespace Dimeng.WoodEngine.Business
                 }
             }
 
-            product.CombinedParts.ForEach(p => p.MachineTokens.ForEach(m => m.ToMachining(0.1, null)));
+            product.CombinedParts.ForEach(p => p.MachineTokens.ForEach(m => m.ToMachining(1, null)));
         }
 
         private IEnumerable<ModelError> getIProductElements(IProduct product, IWorkbook book)
@@ -83,10 +83,11 @@ namespace Dimeng.WoodEngine.Business
             IRange cutPartCells = book.Worksheets[0].Cells;
             IRange subassembliesCells = book.Worksheets[2].Cells;
             IRange hardwareCells = book.Worksheets[1].Cells;
+            IRange machineCells = book.Worksheets[4].Cells;
 
             List<ModelError> errors = new List<ModelError>();
 
-            errors.AddRange(PartsLoader.GetParts(product, cutPartCells, workBookSet, tempMaterials, tempEdgebandings));
+            errors.AddRange(PartsLoader.GetParts(product, cutPartCells, machineCells, workBookSet, tempMaterials, tempEdgebandings));
             //errors.AddRange(getParts(product, cutPartCells));
             errors.AddRange(getHardwares(product, hardwareCells));
             errors.AddRange(getSubassemblies(product, subassembliesCells));

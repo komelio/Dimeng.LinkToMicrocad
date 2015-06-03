@@ -1,45 +1,52 @@
 ﻿@model Dimeng.LinkToMicrocad.Web.Models.TextureListViewModel
 
 @{
-    ViewBag.Title = "List";
+    ViewBag.Title = "材质管理";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>材质</h2>
+<div class="container">
 
-<p>
-    @Html.ActionLink("创建新材质", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>Id</th>
-        <th>名称</th>
-        <th>图片</th>
-        <th>操作</th>
-    </tr>
 
-@foreach (var item in Model.Textures) {
-    <tr>
-        <td>
-            @item.TextureId
-        </td>
-        <td>
-            @item.Name
-        </td>
-        <td>
-            @item.ImageName
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { textureId = item.TextureId }) 
-            @Html.ActionLink("Delete", "Delete", new { textureId=item.TextureId})
-        </td>
-    </tr>
-}
+    <h2>材质</h2>
+    <div class="pull-right">
+        @Html.ActionLink("创建新材质", "Create", null, new { @class = "btn btn-primary btn-sm" })
+    </div>
 
-</table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>名称</th>
+                <th>图片</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        @foreach (var item in Model.Textures)
+        {
+            <tr>
+                <td>
+                    @item.TextureId
+                </td>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.ImageName
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { textureId = item.TextureId })
+                    @Html.ActionLink("Delete", "Delete", new { textureId = item.TextureId })
+                </td>
+            </tr>
+        }
 
-<div class="pull-right">
-    <ul class="pagination pagination-sm">
-        @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x }))
-    </ul>
+    </table>
+
+    <div class="pull-right">
+        <ul class="pagination pagination-sm">
+            @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x }))
+        </ul>
+    </div>
+
 </div>

@@ -6,44 +6,123 @@
     <title>@ViewBag.Title</title>
     <link href="~/Content/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap-theme.css" rel="stylesheet" type="text/css" />
-    <script src="~/Scripts/jquery-1.9.1.js" ></script>
-    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <link href="~/Content/app.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/jquery-1.9.1.js" type="text/javascript"></script>
+    <script src="~/Scripts/bootstrap.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js" type="text/javascript"></script>
 </head>
 <body>
-    <div class="navbar navbar-default">
-        <nav class="navbar navbar-default">
-            <a href="#" class="navbar-brand"><strong>缔盟科技</strong></a>
-            <ul class="nav navbar-nav">
-                <li>@Html.ActionLink("产品", "List", "Products", null, null)</li>
-                <li>@Html.ActionLink("材料","List","Materials",null,null)</li>
-                <li>@Html.ActionLink("材质", "List", "Textures", null, null)</li>
-                <li><a href="">设置</a></li>
-                <li><a href="">关于</a></li>
-            </ul>
-        </nav>
-        @*<div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <p class="navbar-brand">缔盟科技</p>
-                    @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav"></ul>
+    <div class="navbar navbar-inverse navbar-fixed-top bs-docs-nav">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="./" id="brand"></a>
+            </div>
 
-                </div>
-            </div>*@
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>@Html.ActionLink("首页", "Index", "Home", null, null)</li>
+                    <li>@Html.ActionLink("发布", "Index", "Releases", null, null)</li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            数据
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>@Html.ActionLink("产品", "List", "Products", null, null)</li>
+                            <li>@Html.ActionLink("材料", "List", "Materials", null, null)</li>
+                            <li>@Html.ActionLink("材质", "List", "Textures", null, null)</li>
+                        </ul>
+                    </li>
+                    <li>@Html.ActionLink("支持", "Support", "Home", null, null)</li>
+                    <li>@Html.ActionLink("关于", "About", "Home", null, null)</li>
+                    <li><a href="">设置</a></li>
+                    <li><a href="">关于</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
 
-    <div class="container body-content">
+    <div id="mainbody">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year </p>
-        </footer>
     </div>
+   
+
+    <footer class="bs-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                    <ul class="footer-links">
+                        <h4 class="">How It Works</h4>
+                        <li><a href="./how-it-works/#deploy" track="deploy footer">Deploy</a></li>
+                        <li><a href="./how-it-works/#clouds" track="clouds footer">Clouds</a></li>
+                        <li><a href="./how-it-works/#life-cycle-editor" track="lce footer">Lifecycle Editor</a></li>
+                        <li><a href="./how-it-works/#collaboration" track="collaboration footer">Collaboration</a></li>
+                        <li><a href="./how-it-works/#box-overview" track="boxes footer">Boxes</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                    <ul class="footer-links">
+                        <h4 class="">Enterprise</h4>
+                        <li><a href="./enterprise/#unified-enterprise" track="unified enterprise footer">Unified Enterprise</a></li>
+                        <li><a href="./enterprise/#use-cases" track="use cases footer">Use Cases</a></li>
+                        <li><a href="./enterprise/#access-control" track="access control footer">Access Control</a></li>
+                        <li><a href="./enterprise/#workspaces" track="workspaces footer">Workspaces</a></li>
+                        <li><a href="./enterprise/#editions" track="editions footer">Editions</a></li>
+                        <li><a href="./enterprise/#editions-contact" track="contact footer">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                    <ul class="footer-links">
+                        <h4 class="">Resources</h4>
+                        <li><a href="./appliance" track="appliance footer">Virtual Appliance</a></li>
+                        <li><a href="./documentation" track="documenation footer">Documentation</a></li>
+                        <li><a href="./releases" target="blank" track="release notes footer">Release Notes</a></li>
+                        <li><a href="./terms-of-service" target="blank" track="terms of service footer">Terms of Service</a></li>
+                        <li><a href="./privacy" target="blank" track="privacy policy footer">Privacy Policy</a></li>
+                        <li><a href="./support" target="blank" track="support-policies footer">Support Policies</a></li>
+                        <li><a href="http://status.elasticbox.com/" target="blank" track="status footer">Status</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6">
+                    <ul class="footer-links">
+                        <h4 class="">About</h4>
+                        <li><a href="./about" track="about footer">Company</a></li>
+                        <li><a href="./blog" track="blog footer">Blog</a></li>
+                        <li><a href="./news" track="news footer">News</a></li>
+                        <li><a href="./careers" track="careers footer">Careers</a><em class="hiring">We're Hiring!</em></li>
+                        <li><a href="mailto:info@elasticbox.com" track="">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
+                    <ul class="footer-links social-buttons">
+                        <h4 class="">Connect</h4>
+                        <li><a track="social github" href="https://github.com/ElasticBox" target="blank"><i class="social-github"></i>GitHub</a></li>
+                        <li><a track="social twitter" href="https://twitter.com/ElasticBox" target="blank"><i class="social-twitter"></i>Twitter</a></li>
+                        <li><a track="social google" href="https://plus.google.com/106309790790896390635" target="blank"><i class="social-google"></i>Google+</a></li>
+                        <li><a track="social facebook" href="http://facebook.com/ElasticBox" target="blank"><i class="social-facebook"></i>Facebook</a></li>
+                        <li><a track="social linkedin" href="http://www.linkedin.com/company/elasticbox" target="blank"><i class="social-linkedin"></i>LinkedIn</a></li>
+                    </ul>
+
+
+                    <br>
+                    <ul class="footer-links">
+                        <br>
+                        <li><h4 class="">Call</h4><a href="tel:+14157660907">+1 415 766 0907</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row copyright">
+                <a href="./">
+                    <img class="footer-brand" src="~/img/Logo.png" />
+                </a>
+                <div class="footer-legal pull-right">
+                    &copy;  &nbsp; 缔盟（厦门）软件科技有限公司 @DateTime.Now.Year &nbsp; 版权所有
+                </div>
+            </div>
+        </div>
+
+    </footer>
 </body>
 </html>
