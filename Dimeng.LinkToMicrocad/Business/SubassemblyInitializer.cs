@@ -13,7 +13,7 @@ namespace Dimeng.WoodEngine.Business
     {
         public List<ModelError> GetSubassembliesFromOneLine(IRange range, IProduct product,
             List<Subassembly> subs, IWorkbookSet books, List<Material> tempMaterials,
-            List<EdgeBanding> tempEdgebandings, List<Hardware> tempHardwares, IMVLibrary library)
+            List<EdgeBanding> tempEdgebandings, List<HardwareType> tempHardwares, IMVLibrary library)
         {
             List<ModelError> errors = new List<ModelError>();
 

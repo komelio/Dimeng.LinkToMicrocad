@@ -119,6 +119,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ACADCommands.resx</DependentUpon>
     </Compile>
+    <Compile Include="Business\HardwareLoader.cs" />
     <Compile Include="Business\ModelAssemblyLoader.cs" />
     <Compile Include="Business\PartInitializer.cs" />
     <Compile Include="Business\PartsLoader.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="Drawing\ProductDrawer.cs" />
     <Compile Include="Entities\Checks\Check.cs" />
     <Compile Include="Entities\Checks\CheckSubFileName.cs" />
+    <Compile Include="Entities\Checks\Hardware\HardwareChecker.cs" />
     <Compile Include="Entities\Checks\MachineTokenChecker.cs" />
     <Compile Include="Entities\Checks\Part\CheckBasePoint.cs" />
     <Compile Include="Entities\Checks\Part\CheckDrawToken.cs" />
@@ -187,6 +189,7 @@
     <Compile Include="Entities\Materials\EdgeBanding.cs" />
     <Compile Include="Entities\Materials\EdgebandingType.cs" />
     <Compile Include="Entities\Materials\Grain.cs" />
+    <Compile Include="Entities\Materials\HardwareType.cs" />
     <Compile Include="Entities\Materials\Material.cs" />
     <Compile Include="Entities\Materials\Stock.cs" />
     <Compile Include="Entities\Products\Hardware.cs" />
