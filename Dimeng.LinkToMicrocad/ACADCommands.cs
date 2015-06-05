@@ -28,7 +28,8 @@ namespace Dimeng.LinkToMicrocad
         public void NewBlock()
         {
             Logging.Logger.GetLogger().Info("Call command 'New_dm'");
-
+            
+            //MessageBox.Show("New_dm");
             try
             {
                 var dmHelper = new DimengHelper();
@@ -49,15 +50,6 @@ namespace Dimeng.LinkToMicrocad
         public void EditBlock()
         {
             Logging.Logger.GetLogger().Info("Call command 'Edit_dm'");
-
-            //Document doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-            //Editor ed = doc.Editor;
-
-            //PromptPointOptions option = new PromptPointOptions("mm");
-            //PromptPointResult ppr = ed.GetPoint(option);
-            //if (ppr.Status == PromptStatus.OK)
-            //    MessageBox.Show(ppr.Value.ToString());
-
 
             try
             {

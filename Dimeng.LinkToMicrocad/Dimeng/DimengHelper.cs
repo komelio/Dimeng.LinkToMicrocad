@@ -126,7 +126,7 @@ namespace Dimeng.LinkToMicrocad
         private IEnumerable<string> getMaterialList(Product mvProduct)
         {
             //todo:combinedparts
-            return mvProduct.Parts.Select(it => it.Material.Name).Distinct();
+            return mvProduct.CombinedParts.Select(it => it.Material.Name).Distinct();
         }
 
         private void updateAKProductWHD(AKProduct product, IWorkbookSet bookset)
