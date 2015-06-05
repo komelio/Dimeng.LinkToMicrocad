@@ -245,3 +245,6 @@ Dimeng.LinkToMicrocad.Web/Output/Dms/Library/Template/封边文件.edgx
 Dimeng.LinkToMicrocad.Web/Output/Dms/Library/Template/缔盟产品规格组.bin
 *.dsvx
 *.tlfx
+/Dimeng.LinkToMicrocad.Web/ImportSources/Subassemblies/0-V2组件库
+/Dimeng.LinkToMicrocad.Web/Output/Dms/Library/Subassemblies/0-V2组件库
+/Dimeng.LinkToMicrocad.Web/Output/Dms/Library/Template

@@ -12,5 +12,16 @@ namespace QuoteExport
     /// </summary>
     public partial class App : Application
     {
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            if(e.Args.Length==0)
+            {
+                MessageBox.Show("Parameter should not be blank!");
+                this.Shutdown();
+            }
+
+            MainWindow mainWindow = new MainWindow(e.Args[0]);
+            mainWindow.ShowDialog();
+        }
     }
 }
