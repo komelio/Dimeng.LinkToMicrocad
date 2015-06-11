@@ -30,7 +30,7 @@ namespace Dimeng.LinkToMicrocad
                     return double.Parse(str.Substring(0, str.Length - 1)) * 100;
                 }
 
-                throw new Exception("未知的单位:" + str);
+                return double.Parse(str);
             }
             catch (Exception error)
             {

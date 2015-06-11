@@ -60,8 +60,6 @@ namespace Dimeng.LinkToMicrocad
             {
                 Logging.Logger.GetLogger().Error(error);
             }
-
-          
             //MessageBox.Show("Edit_dm");
         }
 

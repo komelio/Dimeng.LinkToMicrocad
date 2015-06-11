@@ -33,7 +33,7 @@ namespace PolylineGetter
                 if (pl1 != null && pl2 != null)
                 {
                     Point3dCollection points1 = new Point3dCollection();
-                    pl1.IntersectWith(pl2, Intersect.OnBothOperands, points1, 0, 0);
+                    pl1.IntersectWith(pl2, Intersect.OnBothOperands, points1, IntPtr.Zero, IntPtr.Zero);
 
                     ed.WriteMessage("A和B的坐标：\n");
                     CADHelper.PrintAllPolylineData(pl1);

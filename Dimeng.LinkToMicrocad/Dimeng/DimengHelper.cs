@@ -4,6 +4,7 @@ using Dimeng.LinkToMicrocad.Logging;
 using Dimeng.WoodEngine.Business;
 using Dimeng.WoodEngine.Entities;
 using Dimeng.WoodEngine.Prompts;
+using Dimeng.WoodEngine.Spread;
 using Microsoft.Win32;
 using SpreadsheetGear;
 using System;
@@ -38,48 +39,140 @@ namespace Dimeng.LinkToMicrocad
                     product.GetUIVarValue("ManufacturingFolder"));
                 Context.GetContext().CurrentProject = project;
 
-                Product mvProduct = getProductFromProject(product, project);
-                SpecificationGroup specificationGroup =
-                    project.SpecificationGroups.Find(it => it.Name == mvProduct.MatFile);
-                var bookset = showPromptWindow(product,
-                                               project,
-                                               specificationGroup,
-                                               mvProduct,
-                                               Context.GetContext().MVDataContext.GetLatestRelease());
+                if (product.SubInfo == null)//不是组件
+                {
+                    Product mvProduct = getProductFromProject(product, project);
+                    project.Products.Add(mvProduct);
 
-                bookset.GetLock();//lock the work book set
+                    SpecificationGroup specificationGroup =
+                        project.SpecificationGroups.Find(it => it.Name == mvProduct.MatFile);
+                    var bookset = showPromptWindow(product,
+                                                   project,
+                                                   specificationGroup,
+                                                   mvProduct,
+                                                   Context.GetContext().MVDataContext.GetLatestRelease());
 
-                updateAKProductWHD(product, bookset);
-                mvProduct.Width = product.Tab.VarX;
-                mvProduct.Height = product.Tab.VarZ;
-                mvProduct.Depth = product.Tab.VarY;
-                project.UpdateProduct(mvProduct);
+                    bookset.GetLock();//lock the work book set
 
-                ProductAnalyst analyst = new ProductAnalyst(
-                    Context.GetContext().MVDataContext.GetLatestRelease());
-                var errors = analyst.Analysis(mvProduct, bookset);
-                bookset.Workbooks["L"].SaveAs(mvProduct.GetProductCutxFileName(),
-                                              FileFormat.OpenXMLWorkbook);
-                bookset.ReleaseLock();//release the work book set
+                    updateAKProductWHD(product, bookset);
+                    mvProduct.Width = product.Tab.VarX;
+                    mvProduct.Height = product.Tab.VarZ;
+                    mvProduct.Depth = product.Tab.VarY;
+                    project.UpdateProduct(mvProduct);
 
-                outputErrors(errors);
+                    ProductAnalyst analyst = new ProductAnalyst(
+                        Context.GetContext().MVDataContext.GetLatestRelease());
+                    var errors = analyst.Analysis(mvProduct, bookset);
+                    bookset.Workbooks["L"].SaveAs(mvProduct.GetProductCutxFileName(),
+                                                  FileFormat.OpenXMLWorkbook);
+                    bookset.ReleaseLock();//release the work book set
 
-                var offsetVector = new Vector3d(0, 0, 0); //getAcutualWHD(product, mvProduct);
-                Logger.GetLogger().Debug("XXXXXX    " + offsetVector.ToString());
+                    outputErrors(errors);
 
-                //write the temp.xml back to autodecco
-                IEnumerable<string> materialList = getMaterialList(mvProduct);
-                (new TempXMLWriter()).WriteFile(tempXMLPath, product, materialList);
+                    var offsetVector = new Vector3d(0, 0, 0); //getAcutualWHD(product, mvProduct);
+                    Logger.GetLogger().Debug("XXXXXX    " + offsetVector.ToString());
 
-                ProductDrawer drawer = new ProductDrawer(offsetVector);
-                drawer.DrawAndSaveAsDWG(mvProduct,
-                    bookset, Path.Combine(folderPath, product.Tab.DWG + ".dwg"));
+                    //write the temp.xml back to autodecco
+                    IEnumerable<string> materialList = getMaterialList(mvProduct);
+                    (new TempXMLWriter()).WriteFile(tempXMLPath, product, materialList);
+
+                    ProductDrawer drawer = new ProductDrawer(offsetVector);
+                    drawer.DrawAndSaveAsDWG(mvProduct,
+                        bookset, Path.Combine(folderPath, product.Tab.DWG + ".dwg"));
+                }
+                else
+                {
+                    Product mvProduct = getSubassemblyParentFromProject(product, project);//从组件信息中获取产品
+                    SpecificationGroup specificationGroup =
+                        project.SpecificationGroups.Find(it => it.Name == mvProduct.MatFile);
+
+                    string subname;
+                    var bookset = showSubPromptWindow(product,
+                                                   project,
+                                                   specificationGroup,
+                                                   mvProduct,
+                                                   Context.GetContext().MVDataContext.GetLatestRelease(),
+                                                   out subname);
+
+
+                    bookset.GetLock();//lock the work book set
+
+                    updateAKProductWHD(product, bookset);
+                    mvProduct.Width = product.Tab.VarX;
+                    mvProduct.Height = product.Tab.VarZ;
+                    mvProduct.Depth = product.Tab.VarY;
+                    project.UpdateProduct(mvProduct);
+
+                    ProductAnalyst analyst = new ProductAnalyst(
+                        Context.GetContext().MVDataContext.GetLatestRelease());
+                    var errors = analyst.Analysis(mvProduct, bookset);
+                    bookset.Workbooks["L"].SaveAs(mvProduct.GetProductCutxFileName(),
+                                                  FileFormat.OpenXMLWorkbook);
+                    bookset.Workbooks["S"].SaveAs(subname,  //TODO:组件的文件名
+                                                  FileFormat.OpenXMLWorkbook);
+                    bookset.ReleaseLock();//release the work book set
+
+                    outputErrors(errors);
+
+                    var offsetVector = new Vector3d(0, 0, 0); //getAcutualWHD(product, mvProduct);
+                    Logger.GetLogger().Debug("XXXXXX    " + offsetVector.ToString());
+
+                    //write the temp.xml back to autodecco
+                    IEnumerable<string> materialList = getMaterialList(mvProduct);
+                    (new TempXMLWriter()).WriteFile(tempXMLPath, product, materialList);
+
+                    ProductDrawer drawer = new ProductDrawer(offsetVector);
+                    drawer.DrawAndSaveAsDWG(mvProduct,
+                        bookset, Path.Combine(folderPath, product.Tab.DWG + ".dwg"));
+                }
             }
             catch (Exception error)
             {
                 MessageBox.Show("绘制过程中发生错误，:(");
                 throw new Exception("Error occured during drawing....", error);
             }
+        }
+
+        private IWorkbookSet showSubPromptWindow(AKProduct product, Project project, SpecificationGroup specificationGroup,
+            Product mvProduct, IMVLibrary library, out string subFileName)
+        {
+            string globalGvfx = Path.Combine(project.JobPath, specificationGroup.GlobalFileName);
+            string cutPartsCtpx = Path.Combine(project.JobPath, specificationGroup.CutPartsFileName);
+            string edgeEdgx = Path.Combine(project.JobPath, specificationGroup.EdgeBandFileName);
+            string hardwareHwrx = Path.Combine(project.JobPath, specificationGroup.HardwareFileName);
+            string doorstyleDsvx = Path.Combine(project.JobPath, specificationGroup.DoorWizardFileName);
+
+            string subassemblyCutx = project.AddSubToProduct(mvProduct, product, library.Library);
+            subFileName = subassemblyCutx;
+
+            var bookset = SpreadHelper.GetProductSubassemblyBookSet(mvProduct.GetProductCutxFileName(),
+                globalGvfx, cutPartsCtpx, edgeEdgx, hardwareHwrx, doorstyleDsvx, subassemblyCutx);
+
+            PromptsViewModel viewmodel = new PromptsViewModel(bookset,
+                product.Tab.Name, product.Tab.VarX, product.Tab.VarZ, product.Tab.VarY,
+                product.Tab.VarElevation, library, "S", project.JobPath, mvProduct.Handle);
+
+            PromptWindow prompt = new PromptWindow();
+            prompt.ViewModel = viewmodel;
+            prompt.ShowDialog();
+
+            mvProduct.Comments = viewmodel.Comments;
+
+            product.Tab.VarElevation = prompt.ViewModel.Elevation;//更新离地高度
+
+            return viewmodel.BookSet;
+        }
+
+        private Product getSubassemblyParentFromProject(AKProduct akProduct, Project project)
+        {
+            var product = project.Products.Find(it => it.Handle.ToUpper() == akProduct.SubInfo.MainA.ToUpper());
+
+            if (product == null)
+            {
+                throw new Exception(string.Format("Product {0} not found in this project!", akProduct.SubInfo.MainA));
+            }
+            else
+            { return product; }
         }
 
         private Vector3d getAcutualWHD(AKProduct product, Product mvProduct)
@@ -161,9 +254,12 @@ namespace Dimeng.LinkToMicrocad
             string hardwareHwrx = Path.Combine(project.JobPath, specificationGroup.HardwareFileName);
             string doorstyleDsvx = Path.Combine(project.JobPath, specificationGroup.DoorWizardFileName);
 
-            PromptsViewModel viewmodel = new PromptsViewModel(mvProduct.GetProductCutxFileName(),
-                globalGvfx, cutPartsCtpx, edgeEdgx, hardwareHwrx, doorstyleDsvx,
-                product.Tab.Name, product.Tab.Photo, product.Tab.VarX, product.Tab.VarZ, product.Tab.VarY, product.Tab.VarElevation, library);
+            var bookset = SpreadHelper.GetProductBaseicBookSet(mvProduct.GetProductCutxFileName(),
+                                                               globalGvfx, cutPartsCtpx, hardwareHwrx, doorstyleDsvx, edgeEdgx);
+
+            PromptsViewModel viewmodel = new PromptsViewModel(bookset,
+                product.Tab.Name, product.Tab.VarX, product.Tab.VarZ,
+                product.Tab.VarY, product.Tab.VarElevation, library, "L", project.JobPath, mvProduct.Handle);
 
             PromptWindow prompt = new PromptWindow();
             prompt.ViewModel = viewmodel;

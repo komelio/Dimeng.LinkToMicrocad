@@ -30,6 +30,29 @@ namespace Dimeng.WoodEngine.Spread
             return books;
         }
 
+        public static IWorkbookSet GetProductSubassemblyBookSet(string productCutx, string globalGvfx, string cutpartsCtpx, string hardwareHwrx, string doorstyleDrx, string edgeEdgx, string subCutx)
+        {
+            IWorkbookSet books = Factory.GetWorkbookSet();
+            IWorkbook bookL = books.Workbooks.Open(productCutx);
+            bookL.FullName = "L";
+            var bookG = books.Workbooks.Open(globalGvfx);
+            bookG.FullName = "G";
+            var bookM = books.Workbooks.Open(cutpartsCtpx);
+            bookM.FullName = "M";
+            var bookE = books.Workbooks.Open(edgeEdgx);
+            bookE.FullName = "E";
+            var bookH = books.Workbooks.Open(hardwareHwrx);
+            bookH.FullName = "H";
+            var bookD = books.Workbooks.Open(doorstyleDrx);
+            bookD.FullName = "D";
+            var bookS = books.Workbooks.Open(subCutx);
+            bookS.FullName = "S";
+
+            loadCustomFunctions(books);
+
+            return books;
+        }
+
         private static void loadCustomFunctions(IWorkbookSet books)
         {
             books.Add(GetEQ1.geteq1);

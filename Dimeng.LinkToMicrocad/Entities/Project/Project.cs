@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using Dapper;
 using SpreadsheetGear;
+using Dimeng.LinkToMicrocad;
 
 namespace Dimeng.WoodEngine.Entities
 {
@@ -198,6 +199,49 @@ namespace Dimeng.WoodEngine.Entities
             }
         }
 
+        public string AddSubToProduct(Product product, AKProduct aksub, string libraryPath)
+        {
+            string[] files = Directory.GetFileSystemEntries(libraryPath, aksub.TabA.ID + ".cutx", SearchOption.AllDirectories);
+            if (files.Length == 0)
+            {
+                throw new Exception("Subassembly not found:" + aksub.TabA.Name);
+            }
+
+            var book = Factory.GetWorkbook(product.GetProductCutxFileName());
+            var cells = book.Worksheets["Subassemblies"].Cells;
+            for (int i = 0; i < cells.Rows.RowCount; i++)
+            {
+                if (string.IsNullOrEmpty(cells[i, 16].Text.Trim()))
+                {
+                    cells[i, 16].Value = aksub.TabA.Name;
+                    cells[i, 17].Value = 1;
+                    cells[i, 18].Value = aksub.TabA.VarX;
+                    cells[i, 19].Value = aksub.TabA.VarZ;
+                    cells[i, 20].Value = aksub.TabA.VarY;
+                    cells[i, 29].Value = -aksub.SubInfo.Position.X + aksub.SubInfo.RefPoint.X;
+                    cells[i, 30].Value = -aksub.SubInfo.Position.Y + aksub.SubInfo.RefPoint.Y;
+                    cells[i, 31].Value = -aksub.SubInfo.Position.Z + aksub.SubInfo.RefPoint.Z;
+                    book.Save();
+
+                    string path = Path.Combine(this.jobPath, "Subassemblies", string.Format("{0}_({1}){2}.cutx", product.Handle, aksub.TabA.Name, i + 1));
+
+                    File.Copy(files[0], path);
+
+                    //拷贝后，把长宽高输入进去
+                    var bookS = Factory.GetWorkbook(path);
+                    var cellsS = bookS.Worksheets["Prompts"].Cells;
+                    cellsS[0, 1].Value = aksub.TabA.VarX;
+                    cellsS[1, 1].Value = aksub.TabA.VarZ;
+                    cellsS[2, 1].Value = aksub.TabA.VarY;
+                    bookS.Save();
+
+                    return path;
+                }
+            }
+
+            throw new Exception("Add subassembly to product error!");
+        }
+
         public void DeleteProduct(string productId)
         {
             string connstr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + this.ProductListMDBPath;
@@ -219,7 +263,7 @@ namespace Dimeng.WoodEngine.Entities
             {
                 conn.Open();
                 string query = "Width='{1}',Height='{2}',Depth='{3}'";
-                if(product.Comments!=null && product.Comments.Length>0)
+                if (product.Comments != null && product.Comments.Length > 0)
                 {
                     query = query + ",Comments='" + product.Comments + "'";
                 }

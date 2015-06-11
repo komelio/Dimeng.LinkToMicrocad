@@ -24,6 +24,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SpreadsheetGear;
 using Dimeng.LinkToMicrocad.Logging;
+using Dimeng.LinkToMicrocad.Prompts.Subassemblies;
 
 namespace Dimeng.WoodEngine.Prompts
 {
@@ -216,7 +217,7 @@ namespace Dimeng.WoodEngine.Prompts
 
                     TextBox tb = new TextBox();
                     //tb.MouseDoubleClick += tb_MouseDoubleClick;
-                    tb.AddHandler(UIElement.MouseEnterEvent, new RoutedEventHandler(tb_MouseLeftButtonDown), true);
+                    //tb.AddHandler(UIElement.MouseEnterEvent, new RoutedEventHandler(tb_MouseLeftButtonDown), true);
                     tb.DataContext = prompt;
                     tb.SetBinding(TextBox.TextProperty, new Binding("PromptValue"));
                     tb.SetBinding(TextBox.VisibilityProperty, new Binding("Visible") { Converter = new PromptValueToVisibilityConverter() });
@@ -237,7 +238,7 @@ namespace Dimeng.WoodEngine.Prompts
                     cb.Foreground = getBrushById(prompt.ColorIndex);
                     cb.Margin = new Thickness(0, 3, 0, 3);
                     cb.DataContext = prompt;
-                    cb.AddHandler(UIElement.MouseEnterEvent, new RoutedEventHandler(tb_MouseLeftButtonDown), true);
+                    //cb.AddHandler(UIElement.MouseEnterEvent, new RoutedEventHandler(tb_MouseLeftButtonDown), true);
                     cb.SetBinding(CheckBox.IsCheckedProperty, new Binding("PromptValue") { Converter = new PromptValueToCheckedConverter() });
                     cb.SetBinding(CheckBox.ContentProperty, new Binding("Name"));
                     cb.SetBinding(CheckBox.VisibilityProperty, new Binding("Visible") { Converter = new PromptValueToVisibilityConverter() });
@@ -257,7 +258,7 @@ namespace Dimeng.WoodEngine.Prompts
                     ComboBox combo = new ComboBox();
                     combo.Foreground = getBrushById(prompt.ColorIndex);
                     combo.DataContext = prompt;
-                    combo.AddHandler(UIElement.MouseEnterEvent, new RoutedEventHandler(tb_MouseLeftButtonDown), true);
+                    //combo.AddHandler(UIElement.MouseEnterEvent, new RoutedEventHandler(tb_MouseLeftButtonDown), true);
                     combo.SetBinding(ComboBox.SelectedValueProperty, new Binding("PromptValue") { Converter = new PromptValueToIntConverter() });//
                     combo.SetBinding(ComboBox.VisibilityProperty, new Binding("Visible") { Converter = new PromptValueToVisibilityConverter() });
                     combo.SetBinding(ComboBox.ToolTipProperty, new Binding("HelpMessage"));
@@ -285,7 +286,7 @@ namespace Dimeng.WoodEngine.Prompts
                     rb.Foreground = getBrushById(prompt.ColorIndex);
                     rb.Margin = new Thickness(0, 5, 0, 5);
                     rb.DataContext = prompt;
-                    rb.AddHandler(UIElement.MouseEnterEvent, new RoutedEventHandler(tb_MouseLeftButtonDown), true);
+                    //rb.AddHandler(UIElement.MouseEnterEvent, new RoutedEventHandler(tb_MouseLeftButtonDown), true);
                     rb.SetBinding(RadioButton.ContentProperty, new Binding("Name"));
                     rb.SetBinding(RadioButton.IsCheckedProperty, new Binding("PromptValue") { Converter = new PromptValueToCheckedConverter() });
                     rb.SetBinding(RadioButton.VisibilityProperty, new Binding("Visible") { Converter = new PromptValueToVisibilityConverter() });
@@ -303,7 +304,7 @@ namespace Dimeng.WoodEngine.Prompts
                         rb2.Foreground = getBrushById(prompt.ColorIndex);
                         rb2.Margin = new Thickness(0, 5, 0, 5);
                         rb2.DataContext = nextPrompt;
-                        rb2.AddHandler(UIElement.MouseEnterEvent, new RoutedEventHandler(tb_MouseLeftButtonDown), true);
+                        //rb2.AddHandler(UIElement.MouseEnterEvent, new RoutedEventHandler(tb_MouseLeftButtonDown), true);
                         rb2.SetBinding(RadioButton.ContentProperty, new Binding("Name"));
                         rb2.SetBinding(RadioButton.IsCheckedProperty, new Binding("PromptValue") { Converter = new PromptValueToCheckedConverter() });
                         rb2.SetBinding(RadioButton.VisibilityProperty, new Binding("Visible") { Converter = new PromptValueToVisibilityConverter() });
@@ -312,51 +313,6 @@ namespace Dimeng.WoodEngine.Prompts
                     }
                 }
             }
-        }
-
-        void tb_MouseLeftButtonDown(object sender, RoutedEventArgs e)
-        {
-            ////事件：当textbox按下鼠标时，去检查是否有图片关联并显示
-            //var prompt = (sender as Control).DataContext as PromptItem;
-
-            //if (prompt == null)
-            //{
-            //    return;
-            //}
-
-            //if (prompt.Picture == string.Empty)
-            //{
-            //    return;
-            //}
-
-            //string picPath = System.IO.Path.Combine(app.CurrentConfiguration.PathToMicroViewModelData,
-            //    "Graphics\\Product Prompt Pictures", prompt.Picture);//TODO: 这个路径要管理
-
-            //if (System.IO.File.Exists(picPath))
-            //{
-            //    this.ViewModel.Image = new BitmapImage(new Uri(picPath));
-            //}
-        }
-
-        /// <summary>
-        /// 从图形量取两点之间的尺寸
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void tb_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            //var prompt = (sender as TextBox).DataContext as PromptItem;
-
-            //if (prompt == null)
-            //    return;
-
-            //Editor ed = Autodesk.AutoCAD.ApplicationServices.Application.DocumentViewModel.MdiActiveDocument.Editor;
-            //PromptDoubleResult dis = ed.GetDistance("在图形中量取所需要的尺寸");
-            //if (dis.Status == PromptStatus.OK)
-            //{
-            //    logger.Debug("尺寸为:" + dis.Value.ToString());
-            //    prompt.PromptValue = Math.Round(dis.Value, 3).ToString();//对量取的尺寸取三位小数
-            //}
         }
 
         /// <summary>
@@ -452,7 +408,13 @@ namespace Dimeng.WoodEngine.Prompts
 
         private void SubassemblyMenuItem_Click(object sender, RoutedEventArgs e)
         {
-
+            SubassembliesViewModel viewmodel = new SubassembliesViewModel(this.ViewModel.Book.Worksheets["Subassemblies"].Cells);
+            viewmodel.BookSet = this.ViewModel.BookSet;
+            viewmodel.Library = this.ViewModel.Library;
+            viewmodel.ProjectPath = this.ViewModel.ProjectPath;
+            viewmodel.Handle = this.ViewModel.Handle;
+            Subassemblies window = new Subassemblies(viewmodel);
+            window.ShowDialog();
         }
 
         private void ContextMenu_Loaded(object sender, RoutedEventArgs e)

@@ -45,40 +45,33 @@ namespace Dimeng.WoodEngine.Prompts
             this.Name = name;
             Logger.GetLogger().Debug(string.Format("Name:{0}", name));
 
-            this.ProductImagePath = imagePath + ".jpg";
-            Logger.GetLogger().Debug(string.Format("ProductImagePath:{0}.jpg", imagePath));
-
             this.Library = library;
             Logger.GetLogger().Debug(string.Format("Library:{0}", library.Library));
         }
 
-        public PromptsViewModel(string cutxFilePath,
-                                string globalFilePath,
-                                string cutpartsFilePath,
-                                string edgebandFilePath,
-                                string hardwareFilePath,
-                                string doorstyleFilePath,
+        public PromptsViewModel(IWorkbookSet bookset,
                                 string name,
-                                string imagePath,
                                 double width,
                                 double height,
                                 double depth,
                                 double elevation,
-                                IMVLibrary library)
+                                IMVLibrary library,
+                                string title,
+                                string projectPath,
+                                string handle)
             : this()
         {
             this.Width = width;
             this.Height = height;
             this.Depth = depth;
             this.Name = name;
-            this.ProductImagePath = imagePath + ".jpg";
             this.Library = library;
             this.Elevation = elevation;
+            this.BookSet = bookset;
+            this.ProjectPath = projectPath;
+            this.Handle = handle;
 
-            BookSet = SpreadHelper.GetProductBaseicBookSet(cutxFilePath, globalFilePath,
-                cutpartsFilePath, hardwareFilePath, doorstyleFilePath, edgebandFilePath);
-
-            Book = BookSet.Workbooks["L"];
+            Book = BookSet.Workbooks[title];
             var sheet = Book.Worksheets["Prompts"];
             PromptCells = sheet.Cells;
 
@@ -325,23 +318,14 @@ namespace Dimeng.WoodEngine.Prompts
             }
         }
 
-        private string productImagePath;
-
-        public string ProductImagePath
-        {
-            get { return productImagePath; }
-            set
-            {
-                productImagePath = value;
-                Logger.GetLogger().Debug(string.Format("ProductImagePath:{0}", productImagePath));
-                base.RaisePropertyChanged("ProductImagePath");
-            }
-        }
+        public string ProjectPath { get; private set; }
 
         public Action<List<PromptItem>> ControlTypeChangedAction { get; set; }
         public IWorkbook Book { get; private set; }
         public IWorkbookSet BookSet { get; private set; }
         public IMVLibrary Library { get; private set; }
         //public Project Project { get; private set; }
+
+        public string Handle { get; set; }
     }
 }

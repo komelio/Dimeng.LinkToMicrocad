@@ -6,15 +6,18 @@ using System.Xml.Linq;
 using Dimeng.LinkToMicrocad;
 using Dimeng.WoodEngine.Entities;
 using System.IO;
+using Autodesk.AutoCAD.Geometry;
 
 namespace Dimeng.LinkToMicrocad
 {
-    internal class AKProduct
+    public class AKProduct
     {
         public TabInfo Tab { get; set; }
+        public TabInfo TabA { get; set; }
         public List<UIVar> UIVars { get; set; }
+        public SubInfo SubInfo { get; set; }
 
-        internal static AKProduct Load(string tempXMLFilePath)
+        public static AKProduct Load(string tempXMLFilePath)
         {
             Logging.Logger.GetLogger().Debug("Getting cabinet information from temp.xml file...");
             Logging.Logger.GetLogger().Debug("File path:" + tempXMLFilePath);
@@ -22,7 +25,7 @@ namespace Dimeng.LinkToMicrocad
             AKProduct product = new AKProduct();
 
             XElement xml = XElement.Load(tempXMLFilePath);
-            var uivars = from n in xml.Elements("UIVar")
+            var uivars = from n in xml.Elements("UIVar").Where(it => it.Attribute("Name") != null)
                          select new UIVar(
                                 (string)n.Attribute("Name"),
                                 (string)n.Attribute("Value")
@@ -39,7 +42,7 @@ namespace Dimeng.LinkToMicrocad
             product.Tab.Name = tabNode.Attribute("Name").Value;
             product.Tab.DWG = tabNode.Attribute("DWG").Value;
             product.Tab.ID = tabNode.Attribute("ID").Value;
-            product.Tab.DMID = tabNode.Attribute("DMID").Value;
+            product.Tab.DMID = tabNode.Attribute("DMID").Value.Replace("_", "");
             product.Tab.Photo = tabNode.Attribute("Photo").Value;
             product.Tab.Description = tabNode.Attribute("Descprition") == null ?
                                         string.Empty : tabNode.Attribute("Description").Value;
@@ -67,7 +70,91 @@ namespace Dimeng.LinkToMicrocad
                 }
             }
 
+            getSubInfo(product);
+
+            var tabA = from t in xml.Elements("TabA")
+                       select t;
+            var tabANode = tabA.SingleOrDefault();
+            if(tabANode!=null)
+            {
+                product.TabA = new TabInfo();
+                product.TabA.Name = tabANode.Attribute("Name").Value;
+                product.TabA.DWG = tabANode.Attribute("DWG").Value;
+                product.TabA.ID = tabANode.Attribute("ID").Value;
+                product.TabA.DMID = tabANode.Attribute("DMID").Value.Replace("_", "");
+                product.TabA.Photo = tabANode.Attribute("Photo").Value;
+                product.TabA.Description = tabANode.Attribute("Descprition") == null ?
+                                            string.Empty : tabANode.Attribute("Description").Value;
+                product.TabA.CatalogPath = tabANode.Attribute("Path").Value;
+                var varsA = from t in xml.Elements("TabA").Elements("Var")
+                            select t;
+
+                foreach (var v in varsA)
+                {
+                    switch (v.Attribute("Name").Value.ToString())
+                    {
+                        case "X":
+                            product.TabA.VarX = UnitConverter.GetValueFromString(v.Attribute("Value").Value);
+                            break;
+                        case "Y":
+                            product.TabA.VarY = UnitConverter.GetValueFromString(v.Attribute("Value").Value);
+                            break;
+                        case "Z":
+                            product.TabA.VarZ = UnitConverter.GetValueFromString(v.Attribute("Value").Value);
+                            break;
+                        case "Elevation":
+                            product.TabA.VarElevation = UnitConverter.GetValueFromString(v.Attribute("Value").Value);
+                            break;
+                    }
+                }
+            }
+
             return product;
+        }
+
+        private static void getSubInfo(AKProduct product)
+        {
+            var mainA = product.UIVars.Find(it => it.Name == "MainA");
+            if (mainA == null)
+            {
+                return;
+            }
+
+            mainA.Value = mainA.Value.Replace("_", "");//因为所有id都不能包含下划线
+
+            var refPoint = product.UIVars.Find(it => it.Name == "RefPoint");
+            var position = product.UIVars.Find(it => it.Name == "Position");
+            var vx = product.UIVars.Find(it => it.Name == "vX");
+            var vy = product.UIVars.Find(it => it.Name == "vY");
+            var vz = product.UIVars.Find(it => it.Name == "vZ");
+
+            SubInfo subinfo = new SubInfo();
+            subinfo.MainA = mainA.Value;
+            subinfo.Position = getPoint(position.Value);
+            subinfo.RefPoint = getPoint(refPoint.Value);
+            subinfo.VX = getVector(vx.Value);
+            subinfo.VY = getVector(vy.Value);
+            subinfo.VZ = getVector(vz.Value);
+
+            product.SubInfo = subinfo;
+        }
+
+        private static Vector3d getVector(string array)
+        {
+            string[] ar = array.Split(',');
+            double x = double.Parse(ar[0]);
+            double y = double.Parse(ar[1]);
+            double z = double.Parse(ar[2]);
+            return new Vector3d(x, y, z);
+        }
+
+        private static Point3d getPoint(string array)
+        {
+            string[] ar = array.Split(',');
+            double x = double.Parse(ar[0]);
+            double y = double.Parse(ar[1]);
+            double z = double.Parse(ar[2]);
+            return new Point3d(x, y, z);
         }
 
         public string GetUIVarValue(string parameter)
@@ -78,7 +165,17 @@ namespace Dimeng.LinkToMicrocad
         }
     }
 
-    internal class TabInfo
+    public class SubInfo
+    {
+        public string MainA { get; set; }
+        public Point3d RefPoint { get; set; }
+        public Point3d Position { get; set; }
+        public Vector3d VX { get; set; }
+        public Vector3d VY { get; set; }
+        public Vector3d VZ { get; set; }
+    }
+
+    public class TabInfo
     {
         public string Name { get; set; }
         public string ID { get; set; }
@@ -94,7 +191,7 @@ namespace Dimeng.LinkToMicrocad
         public double VarElevation { get; set; }
     }
 
-    internal class UIVar
+    public class UIVar
     {
         public string Name { get; set; }
         public string Value { get; set; }
