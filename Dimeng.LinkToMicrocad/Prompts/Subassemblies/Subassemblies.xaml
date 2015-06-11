@@ -19,7 +19,7 @@
             <ListView.ContextMenu>
                 <ContextMenu >
                     <MenuItem Header="提示屏" Command="{Binding ShowPromptCommand}"/>
-                    <MenuItem Header="属性"/>
+                    <MenuItem Header="属性" Command="{Binding ShowPropertyCommand}"/>
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.View>

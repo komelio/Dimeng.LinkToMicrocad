@@ -22,6 +22,7 @@ namespace Dimeng.LinkToMicrocad.Prompts.Subassemblies
         {
             Items = new ObservableCollection<SubassemblyViewModel>();
             this.ShowPromptCommand = new RelayCommand(this.showPrompt);
+            this.ShowPropertyCommand = new RelayCommand(this.showProperty);
             this.cells = subCells;
 
             for (int i = 0; i < cells.Rows.RowCount; i++)
@@ -51,6 +52,7 @@ namespace Dimeng.LinkToMicrocad.Prompts.Subassemblies
 
         public ObservableCollection<SubassemblyViewModel> Items { get; private set; }
         public RelayCommand ShowPromptCommand { get; private set; }
+        public RelayCommand ShowPropertyCommand { get; private set; }
 
         private SubassemblyViewModel selectedItem;
         public SubassemblyViewModel SelectedItem
@@ -135,5 +137,19 @@ namespace Dimeng.LinkToMicrocad.Prompts.Subassemblies
         }
 
         public IWorkbookSet BookSet { get; set; }
+
+        public void showProperty()
+        {
+            if (this.selectedItem == null)
+            {
+                Logger.GetLogger().Debug("当前SelectedItem为null");
+                return;
+            }
+            else
+            {
+                SubPropertyWindow window = new SubPropertyWindow(this.selectedItem);
+                window.ShowDialog();
+            }
+        }
     }
 }

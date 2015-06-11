@@ -1,0 +1,27 @@
+﻿<Window x:Class="Dimeng.LinkToMicrocad.Prompts.Subassemblies.SubPropertyWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="组件属性" Height="300" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="229*"/>
+            <RowDefinition Height="40*"/>
+        </Grid.RowDefinitions>
+        <Button HorizontalAlignment="Left" Margin="10,11,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="Button_Click" Content="确定" />
+        <Label Content="宽度" HorizontalAlignment="Left" Margin="23,25,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="71,28,0,0" TextWrapping="Wrap" Text="{Binding Width.PropertyValue}" VerticalAlignment="Top" Width="120"/>
+        <Label Content="高度" HorizontalAlignment="Left" Margin="23,53,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="71,56,0,0" TextWrapping="Wrap" Text="{Binding Height.PropertyValue}" VerticalAlignment="Top" Width="120"/>
+        <Label Content="深度" HorizontalAlignment="Left" Margin="23,81,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="71,84,0,0" TextWrapping="Wrap" Text="{Binding Depth.PropertyValue}" VerticalAlignment="Top" Width="120"/>
+        <Label Content="X坐标" HorizontalAlignment="Left" Margin="23,109,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="71,112,0,0" TextWrapping="Wrap" Text="{Binding XOrigin.PropertyValue}" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Y坐标" HorizontalAlignment="Left" Margin="23,137,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="71,140,0,0" TextWrapping="Wrap" Text="{Binding YOrigin.PropertyValue}" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Z坐标" HorizontalAlignment="Left" Margin="23,165,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="71,168,0,0" TextWrapping="Wrap" Text="{Binding ZOrigin.PropertyValue}" VerticalAlignment="Top" Width="120"/>
+        <Label Content="数量" HorizontalAlignment="Left" Margin="23,193,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="71,196,0,0" TextWrapping="Wrap" Text="{Binding Qty.PropertyValue}" VerticalAlignment="Top" Width="120"/>
+
+    </Grid>
+</Window>
