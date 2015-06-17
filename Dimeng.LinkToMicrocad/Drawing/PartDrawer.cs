@@ -47,6 +47,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
             Solid3d panel = (new BaseSolidStructer()).Draw(part);
             (new VDrillDrawer()).Draw(panel, part);
             (new HDrillDrawer()).Draw(panel, part);
+            (new RouteDrawer(Context.GetContext().MVDataContext.GetLatestRelease().CurrentToolFile)).Draw(panel, part);
 
             panel.TransformBy(Matrix3d.Rotation(part.TXRotation * System.Math.PI / 180, Vector3d.XAxis, Point3d.Origin));
             panel.TransformBy(Matrix3d.Rotation(part.TYRotation * System.Math.PI / 180, Vector3d.YAxis, Point3d.Origin));

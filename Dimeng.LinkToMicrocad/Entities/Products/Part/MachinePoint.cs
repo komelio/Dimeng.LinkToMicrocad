@@ -21,8 +21,11 @@ namespace Dimeng.WoodEngine.Entities
             }
 
             MP = mp;
+
+            PointNumber = int.Parse(mp.Trim().Replace("M", ""));
         }
         public bool IsRotated { get; private set; }
         public string MP { get; private set; }
+        public int PointNumber { get; private set; }
     }
 }

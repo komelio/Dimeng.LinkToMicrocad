@@ -12,5 +12,6 @@ namespace Dimeng.WoodEngine.Entities
         string Subassemblies { get; }
         string Template { get; }
         string Toolfiles { get; }
+        ToolFile CurrentToolFile { get; }
     }
 }

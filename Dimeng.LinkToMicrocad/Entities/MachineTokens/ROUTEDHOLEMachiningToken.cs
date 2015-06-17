@@ -3,35 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Autodesk.AutoCAD.Geometry;
+using Dimeng.WoodEngine.Entities.Checks;
 
 namespace Dimeng.WoodEngine.Entities.MachineTokens
 {
     public class ROUTEDHOLEMachiningToken : BaseToken
     {
-        public ROUTEDHOLEMachiningToken(string token, string par1, string par2, string par3, string par4, string par5, string par6, string par7, string par8, string par9, int row, int column, Part p)
-            : base(token, par1, par2, par3, par4, par5, par6, par7, par8, par9, row, column, p)
+        public ROUTEDHOLEMachiningToken(string token, string par1, string par2, string par3, string par4, string par5, string par6, string par7, string par8, string par9)
+            : base(token, par1, par2, par3, par4, par5, par6, par7, par8, par9)
         {
-           
+
         }
 
-        public override bool Valid(Logger logger)
+        public override bool Valid(MachineTokenChecker check)
         {
-            this.logger = logger;
-
-            base.faceNumberChecker(this.Token, 10, new int[] { 5, 6 });
+            this.FaceNumber = check.FaceNumber(Token, 10, new int[] { 5, 6 });
             if (FaceNumber == 6)
                 this.OnFace5 = false;
             else this.OnFace5 = true;
 
-            StartX = base.DoubleChecker(Par1, "铣圆指令/X起始坐标", false);
-            StartY = base.DoubleChecker(Par2, "铣圆指令/Y起始坐标", false);
-            Depth = base.DoubleChecker(Par3, "铣圆指令/深度", true);
-            Radius = base.DoubleChecker(Par4, "铣圆指令/圆半径", true);
-            IsPocket = base.BoolChecker(Par5, "铣圆指令/袋式加工", false, false);
-            ToolName = base.notEmptyStringChecker(Par7, "铣圆指令/刀具名称");
-            IsDrawOnly = base.BoolChecker(Par8, "铣圆指令/仅用于绘图", false, false);
+            StartX = check.GetDoubleValue(Par1, "铣圆指令/X起始坐标", false, check.Errors);
+            StartY = check.GetDoubleValue(Par2, "铣圆指令/Y起始坐标", false, check.Errors);
+            Depth = check.GetDoubleValue(Par3, "铣圆指令/深度", true, check.Errors);
+            Radius = check.GetDoubleValue(Par4, "铣圆指令/圆半径", true, check.Errors);
+            IsPocket = check.GetBoolValue(Par5, "铣圆指令/袋式加工", false, false, check.Errors);
+            ToolName = check.ToolName(Par7, "铣圆指令/刀具名称");
+            IsDrawOnly = check.GetBoolValue(Par8, "铣圆指令/仅用于绘图", false, false, check.Errors);
 
-            return this.IsValid;
+            if (check.Errors.Count == 0)
+            {
+                return true;
+            }
+            else return false;
         }
 
         public double StartX { get; set; }
@@ -65,7 +68,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             Machinings.Routing route = new Machinings.Routing();
             route.Bulges = bulges;
             route.Points = points;
-            route.ToolComp = ToolComp.Left;
+            route.ToolComp = ToolComp.Right;
             route.Part = this.Part;
             route.OnFace5 = this.OnFace5;
             route.ToolName = this.ToolName;
@@ -81,10 +84,10 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         private void PocketMachining(double diameter)
         {
-            List<Point3d> points = new List<Point3d>();
-            List<double> bulges = new List<double>();
+            //List<Point3d> points = new List<Point3d>();
+            //List<double> bulges = new List<double>();
 
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }

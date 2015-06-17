@@ -74,7 +74,7 @@ namespace Dimeng.WoodEngine.Business
                 }
             }
 
-            product.CombinedParts.ForEach(p => p.MachineTokens.ForEach(m => m.ToMachining(1, null)));
+            product.CombinedParts.ForEach(p => p.MachineTokens.ForEach(m => m.ToMachining(1, library.CurrentToolFile)));
         }
 
         private IEnumerable<ModelError> getIProductElements(IProduct product, IWorkbook book)

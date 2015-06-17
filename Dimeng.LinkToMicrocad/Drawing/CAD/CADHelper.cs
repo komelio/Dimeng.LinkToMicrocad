@@ -1,5 +1,6 @@
 ﻿using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.Geometry;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -62,6 +63,48 @@ namespace Dimeng.LinkToMicrocad.Drawing.CAD
                 }
                 throw new System.Exception("未找到属于该dwg的多段线截面数据" + path);
             }
+        }
+
+        public static bool CheckPolylineSelfIntersect(Polyline polyline)
+        {
+            using (DBObjectCollection entities = new DBObjectCollection())
+            {
+                polyline.Explode(entities);
+                for (int i = 0; i < entities.Count; ++i)
+                {
+                    for (int j = i + 1; j < entities.Count; ++j)
+                    {
+                        Curve curve1 = entities[i] as Curve;
+                        Curve curve2 = entities[j] as Curve;
+                        Point3dCollection points = new Point3dCollection();
+                        curve1.IntersectWith(curve2, Intersect.OnBothOperands, points, IntPtr.Zero, IntPtr.Zero);
+
+                        foreach (Point3d point in points)
+                        {
+                            // Make a check to skip the start/end points     
+                            // since they are connected vertices        
+                            if (point == curve1.StartPoint ||
+                                point == curve1.EndPoint)
+                            {
+                                if (point == curve2.StartPoint ||
+                                    point == curve2.EndPoint)
+                                {
+                                    // If two consecutive segments, then skip    
+                                    if (j == i + 1)
+                                    {
+                                        continue;
+                                    }
+                                }
+                            }
+                            return true;
+                        }
+                    }
+                    // Need to be disposed explicitely      
+                    // since entities are not DB resident       
+                    entities[i].Dispose();
+                }
+            }
+            return false;
         }
     }
 }

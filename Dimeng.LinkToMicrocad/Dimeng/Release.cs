@@ -1,5 +1,7 @@
 ﻿using Dimeng.LinkToMicrocad.Logging;
 using Dimeng.WoodEngine.Entities;
+using Dimeng.WoodEngine.Entities.Machines.Tools;
+using SpreadsheetGear;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,6 +36,39 @@ namespace Dimeng.LinkToMicrocad
             Logger.GetLogger().Debug(string.Format("Template:{0}", this.Template));
             this.Toolfiles = Path.Combine(folderPath, "Toolfiles");
             Logger.GetLogger().Debug(string.Format("Toolfiles:{0}", this.Toolfiles));
+
+            loadToolfile();
+        }
+
+        private void loadToolfile()
+        {
+            var files = Directory.GetFiles(this.Toolfiles, "*.tlfx");
+            if (files.Length == 0)
+            {
+                throw new Exception("Toolfiles number is 0!");
+            }
+
+            var toolfile = new ToolFile();
+
+            IWorkbook wb = Factory.GetWorkbook(files[0]);
+            IRange cells = wb.Worksheets[0].Cells;
+
+            for (int i = 0; i < cells.Rows.RowCount; i++)
+            {
+                if (cells[i, 0].Text == string.Empty)
+                    break;
+
+                Tool tool = new Tool();
+                tool.Description = cells[i, 0].Text;
+                tool.ToolName = cells[i, 1].Text;
+                tool.Diameter = Convert.ToDouble(cells[i, 2].Text);
+                //tool.FaceNumber = int.Parse(cells[i, 3].Text);
+                tool.ToolType = string.IsNullOrEmpty(cells[i, 8].Text) ? ToolType.Router : (ToolType)(int.Parse(cells[i, 8].Text));
+
+                toolfile.Tools.Add(tool);
+            }
+
+            CurrentToolFile = toolfile;
         }
 
         private void getReleaseNumber(string path)
@@ -56,5 +91,7 @@ namespace Dimeng.LinkToMicrocad
         public string Toolfiles { get; private set; }
 
         public string ReleaseNumber { get; private set; }
+
+        public ToolFile CurrentToolFile { get; private set; }
     }
 }
