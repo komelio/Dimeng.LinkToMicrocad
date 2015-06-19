@@ -14,7 +14,7 @@ namespace QuoteExport
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            if(e.Args.Length==0)
+            if (e.Args.Length == 0)
             {
                 MessageBox.Show("Parameter should not be blank!");
                 this.Shutdown();

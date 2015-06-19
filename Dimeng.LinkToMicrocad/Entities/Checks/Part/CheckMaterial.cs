@@ -70,7 +70,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
                         {
                             if (i == 3)//到最后一张表的时候,表示还没找到,那就说明这个材料在M中没有,就记录一下
                             {
-                                material = new Material(name, 0);
+                                material = new Material(name, 0, string.Empty);
                                 tempMaterials.Add(material);
                             }
                             break;
@@ -111,6 +111,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
         {
             string name = entireRow[0, 0].Text;
             double thick = GetDoubleValue(entireRow[0, 1].Text, "Material thickness", true, errors);
+            string code = entireRow[0, 3].Text;
 
             Grain grain = Grain.None;
             if (string.IsNullOrEmpty(entireRow[0, 2].Text.Trim()))
@@ -121,7 +122,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
             {
                 grain = (Grain)GetIntValue(entireRow[0, 2].Text, "材料纹理", true, errors);
             }
-            Material material = new Material(name, thick);
+            Material material = new Material(name, thick, code);
             material.Grain = grain;
 
             for (int i = 9; i < 10; i += 9)
@@ -152,7 +153,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
             if (!material.HasFitStock(length, width))
             {
                 this.PartError(
-                    string.Format("材料[{0}]没有足够的尺寸容纳板件{1}/{2}", 
+                    string.Format("材料[{0}]没有足够的尺寸容纳板件{1}/{2}",
                         material.Name, length, width)
                     );
             }

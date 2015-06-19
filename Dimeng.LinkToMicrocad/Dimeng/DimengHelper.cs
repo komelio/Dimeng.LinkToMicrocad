@@ -9,6 +9,7 @@ using Microsoft.Win32;
 using SpreadsheetGear;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -79,6 +80,10 @@ namespace Dimeng.LinkToMicrocad
                     ProductDrawer drawer = new ProductDrawer(offsetVector);
                     drawer.DrawAndSaveAsDWG(mvProduct,
                         bookset, Path.Combine(folderPath, product.Tab.DWG + ".dwg"));
+
+                    BackgroundWorker worker = new BackgroundWorker();
+                    worker.DoWork += worker_DoWork;
+                    worker.RunWorkerAsync(mvProduct);
                 }
                 else
                 {
@@ -124,12 +129,33 @@ namespace Dimeng.LinkToMicrocad
                     ProductDrawer drawer = new ProductDrawer(offsetVector);
                     drawer.DrawAndSaveAsDWG(mvProduct,
                         bookset, Path.Combine(folderPath, product.Tab.DWG + ".dwg"));
+
+                    BackgroundWorker worker = new BackgroundWorker();
+                    worker.DoWork += worker_DoWork;
+                    worker.RunWorkerAsync(mvProduct);
                 }
             }
             catch (Exception error)
             {
                 MessageBox.Show("绘制过程中发生错误，:(");
                 throw new Exception("Error occured during drawing....", error);
+            }
+        }
+
+        void worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                Product product = (Product)e.Argument;
+                var exporter = new ERPExporter(product);
+
+                Logger.GetLogger().Fatal("Start exporting excel files....");
+
+                exporter.Output();
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message + error.StackTrace);
             }
         }
 

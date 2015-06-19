@@ -84,6 +84,14 @@ namespace Dimeng.WoodEngine.Entities
             this.TXRotation = this.XRotation;
             this.TYRotation = this.YRotation;
             this.TZRotation = this.ZRotation;
+
+            calculateCutSize();
+        }
+
+        private void calculateCutSize()
+        {
+            this.CutWidth = this.Width - this.EBL1.Thickness - this.EBL2.Thickness;
+            this.CutLength = this.Length - this.EBW1.Thickness - this.EBW2.Thickness;
         }
 
         private Product _product;
@@ -137,6 +145,8 @@ namespace Dimeng.WoodEngine.Entities
         public int Qty { get; set; }
         public double Width { get; set; }
         public double Length { get; set; }
+        public double CutWidth { get; private set; }
+        public double CutLength { get; private set; }
         public Material Material { get; set; }
         public double Thickness { get; set; }
         public EdgeBanding EBW1 { get; set; }

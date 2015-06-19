@@ -31,21 +31,6 @@ namespace Offset
             return seg;
         }
 
-        public static SEG GetNegativeLineSegmentOffset(Point2d p1, Point2d p2, double offsetDistance, out Point2d endofseg)
-        {
-            Vector2d parellelVector = new Vector2d(p2.X - p1.X, p2.Y - p1.Y);
-            Vector2d orthogonalVector = NegativeOrthogonalOfVector2d(parellelVector);
-            Vector2d unitNormalOrthogonalVector = UnitNormalOfVector2d(orthogonalVector);
-            Point2d lineSegStart2d = MoveOfPoint2d(p1, unitNormalOrthogonalVector, offsetDistance);
-            Point2d lineSegEnd2d = MoveOfPoint2d(p2, unitNormalOrthogonalVector, offsetDistance);
-            Point3d lineSegStart3d = Point2dToPoint3d(lineSegStart2d);
-            Point3d lineSegEnd3d = Point2dToPoint3d(lineSegEnd2d);
-            Line lineOffsetSegment = new Line(lineSegStart3d, lineSegEnd3d);
-            endofseg = lineSegEnd2d;
-            SEG seg = new SEG(lineSegStart2d, 0);
-            return seg;
-        }
-
         public static SEG GetPositiveArcSegmentOffset(SEG seg1, SEG seg2, double offsetDistance, out Point2d endofseg)
         {
             double centralAngle = Math.Atan(Math.Abs(seg1.bulge)) * 4;//圆心角
@@ -85,47 +70,7 @@ namespace Offset
             return seg;
         }
 
-        public static SEG GetNegativeArcSegmentOffset(SEG seg1, SEG seg2, double offsetDistance, out Point2d endofseg)
-        {
-            double centralAngle = Math.Atan(Math.Abs(seg1.bulge)) * 4;//圆心角
-            Vector2d chord = new Vector2d(seg2.point.X - seg1.point.X, seg2.point.Y - seg1.point.Y);//弦的方向向量
-            double chordLength = NormOfVector2d(chord);//弦长
-            double arcHeight = seg1.bulge * (chordLength / 2);//拱高
-            Vector2d orthogonalVectorOfChord;//弦的法向量
-            if (seg1.bulge < 0)
-            {
-                orthogonalVectorOfChord = PositiveOrthogonalOfVector2d(chord);
-            }
-            else
-            {
-                orthogonalVectorOfChord = NegativeOrthogonalOfVector2d(chord);
-            }
-            Point2d midPoint2dOfChord = MidPoint2d(seg1.point, seg2.point);//弦的中点
-
-            Point2d midPoint2dOfArc = MoveOfPoint2d(midPoint2dOfChord, orthogonalVectorOfChord, arcHeight);//圆弧段的中点
-            Vector2d arcHeightVector = TheVectorOfTwoPoint2ds(midPoint2dOfArc, midPoint2dOfChord);//指向圆心的向量
-            Vector2d midPoint2dOfChordToCenter = arcHeightVector / (seg1.bulge * Math.Tan(centralAngle / 2));
-            Point2d center = MoveOfPoint2d(midPoint2dOfChord, midPoint2dOfChordToCenter);//圆心
-            Vector2d orthogonalStartVectorOfTangentVector = TheVectorOfTwoPoint2ds(center, seg1.point);
-            Vector2d orthogonalEndVectorOfTangentVector = TheVectorOfTwoPoint2ds(center, seg2.point);
-            Point2d startArcSegPoint = MoveOfPoint2d(seg1.point, orthogonalStartVectorOfTangentVector, offsetDistance);
-            Point2d endArcSegPoint = MoveOfPoint2d(seg2.point, orthogonalEndVectorOfTangentVector, offsetDistance);
-            SEG seg = new SEG(startArcSegPoint, seg1.bulge);
-            endofseg = endArcSegPoint;
-            if (seg1.bulge < 0)
-            {
-                orthogonalStartVectorOfTangentVector = TheVectorOfTwoPoint2ds(seg2.point, center);
-                orthogonalEndVectorOfTangentVector = TheVectorOfTwoPoint2ds(seg1.point, center);
-                startArcSegPoint = MoveOfPoint2d(seg2.point, orthogonalStartVectorOfTangentVector, offsetDistance);
-                endArcSegPoint = MoveOfPoint2d(seg1.point, orthogonalEndVectorOfTangentVector, offsetDistance);
-                seg = new SEG(endArcSegPoint, seg1.bulge);
-                endofseg = startArcSegPoint;
-
-            }
-            return seg;
-
-        }
-
+      
         public static double NormOfVector2d(Vector2d vector)
         {
             return Math.Sqrt(Math.Pow(vector.X, 2) + Math.Pow(vector.Y, 2));

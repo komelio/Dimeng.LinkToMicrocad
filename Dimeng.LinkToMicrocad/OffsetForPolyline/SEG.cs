@@ -22,17 +22,6 @@ namespace Offset
             set;
         }
 
-        public override bool Equals(object obj)
-        {
-            if (!(obj is SEG) || obj==null)
-                return false;
-            else
-            {
-                SEG seg = obj as SEG;
-                return point == seg.point && bulge == seg.bulge;
-            }
-        }
-
         public SEG(Point2d p, double b)
         {
             point = p;
@@ -109,11 +98,6 @@ namespace Offset
                 newSeg1 = new SEG(this.point, bulge1);
                 newSeg2 = new SEG(pToAdd, bulge2);
         }
-
-        //public SEG ExtendeSeg(Point2d extendp)
-        //{
-            
-        //}
 
         public override string ToString()
         {

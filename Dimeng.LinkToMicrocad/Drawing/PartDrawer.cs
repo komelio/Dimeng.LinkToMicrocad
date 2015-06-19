@@ -41,6 +41,14 @@ namespace Dimeng.LinkToMicrocad.Drawing
         {
             Logger.GetLogger().Debug(string.Format("Drawing part {0}/{1}/{2}/{3}/{4}",
                         part.PartName, part.Width, part.Length, part.Thickness, part.Material));
+            Logger.GetLogger().Debug(string.Format("Drawing part {0}/{1}",
+                        part.EBW1.Name, part.EBW1.Thickness));
+            Logger.GetLogger().Debug(string.Format("Drawing part {0}/{1}",
+             part.EBW2.Name, part.EBW2.Thickness));
+            Logger.GetLogger().Debug(string.Format("Drawing part {0}/{1}",
+            part.EBL1.Name, part.EBL1.Thickness));
+            Logger.GetLogger().Debug(string.Format("Drawing part {0}/{1}",
+            part.EBL2.Name, part.EBL2.Thickness));
             Logger.GetLogger().Debug(string.Format("-- Positions: {0}",
                         part.CenterVector));
 

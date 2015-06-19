@@ -83,13 +83,13 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         public override void ToMachining(double tolerenceDist, Entities.ToolFile toolFile)
         {
-            Logger.GetLogger().Fatal(string.Format("Camlock ToMachining!{0}/{1}/{2}/{3}/{4}/{5}", this.Token, this.Par1, this.Par2, this.Par3, this.Par4, this.Part));
+            Logger.GetLogger().Debug(string.Format("Camlock ToMachining!{0}/{1}/{2}/{3}/{4}/{5}", this.Token, this.Par1, this.Par2, this.Par3, this.Par4, this.Part));
             FindAssociatedFaces(0, tolerenceDist);
 
             PartFace pf = this.Part.GetPartFaceByNumber(FaceNumber);
             if (this.AssociatedPartFaces.Count != 0)//数量不为0，说明有关联的板件
             {
-                Logger.GetLogger().Fatal("Camlock Faces:" + this.AssociatedPartFaces.Count.ToString());
+                Logger.GetLogger().Debug("Camlock Faces:" + this.AssociatedPartFaces.Count.ToString());
 
                 List<HDrilling> TempHDrills = new List<HDrilling>();
 
@@ -107,7 +107,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
                 foreach (PartFace f in this.AssociatedPartFaces)
                 {
-                    Logger.GetLogger().Fatal(string.Format("CamlockAssociateFace:{0}/{1}", f.Part.ToString(), f.FaceNumber));
+                    Logger.GetLogger().Debug(string.Format("CamlockAssociateFace:{0}/{1}", f.Part.ToString(), f.FaceNumber));
                     if (!f.IsHorizontalFace)//如果关联的面是面5或面6
                     {
                         foreach (HDrilling hdrill in TempHDrills)
@@ -163,9 +163,6 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                 this.CamFaceNumber = 5;
                 return;
             }
-
-            //this.IsValid = false;
-            //this.writeError("Camlock指令参数par8错误：" + Par8, false);
         }
 
         private void depthChecker(string par6, MachineTokenChecker checker)

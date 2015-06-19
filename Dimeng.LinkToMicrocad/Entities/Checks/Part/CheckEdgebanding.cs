@@ -60,22 +60,23 @@ namespace Dimeng.WoodEngine.Entities.Checks
             }
 
             var sheet = bookE.Worksheets[1];
-            for(int i=0 ; i<sheet.Cells.RowCount;i++)
+            for (int i = 0; i < sheet.Cells.RowCount; i++)
             {
                 string _name = sheet.Cells[i, 0].Text;
 
-                if(string.IsNullOrEmpty(_name.Trim()))
+                if (string.IsNullOrEmpty(_name.Trim()))
                 {
                     break;
                 }
 
-                if(_name.ToUpper() == edgeName)
+                if (_name.ToUpper() == edgeName)
                 {
                     double thick = GetDoubleValue(sheet.Cells[i, 1].Text, "Edgebanding thickness", true, errors);
+                    string code = sheet.Cells[i, 3].Text;
 
-                    if(thick>0)
+                    if (thick > 0)
                     {
-                        tempEdgeBandings.Add(new EdgeBanding(edgeName, thick));
+                        tempEdgeBandings.Add(new EdgeBanding(edgeName, thick, code));
                     }
                 }
             }

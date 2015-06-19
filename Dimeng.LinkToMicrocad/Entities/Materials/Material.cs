@@ -11,14 +11,16 @@ namespace Dimeng.WoodEngine.Entities
         {
             Stocks = new List<Stock>();
         }
-        public Material(string name, double thick)
+        public Material(string name, double thick, string code)
             : this()
         {
             this.Name = name;
+            this.Code = code;
             this.Thickness = thick;
         }
 
         public string Name { get; set; }
+        public string Code { get; set; }
         public double Thickness { get; set; }
         public List<Stock> Stocks { get; private set; }
         public Grain Grain { get; set; }

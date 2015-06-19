@@ -37,6 +37,7 @@ namespace Offset
         public List<offsetSegment> GetPositiveOffsetSegments(MyPolyline myp, double offdist)
         {
             List<offsetSegment> poffsetsegments = new List<offsetSegment>();
+            
             offsetSegment ofs;
             for (int i = 0; i < myp.segments.Count - 1; i++)
             {
@@ -71,12 +72,15 @@ namespace Offset
             offsetsegments_collection_positive = ((Func<MyPolyline, double, List<OffsetSegmentsCollection.offsetSegment>>)MethodsToGetOffsetSegments[0])(mypAfterPretreatment, offsetdist);
             offsetsegments_collection_negative = ((Func<MyPolyline, double, List<OffsetSegmentsCollection.offsetSegment>>)MethodsToGetOffsetSegments[1])(mypAfterPretreatment, offsetdist);
             originalCurve = mypAfterPretreatment.ConvertTooffsegsementType();
+            
             pline1utr = GetUntrimmedOffsetCurves(offsetsegments_collection_positive, mypAfterPretreatment);
             GetUntrimmedOffsetCurves(pline1utr);
             pline1 = plineutr;
+            
             pline1utr = GetUntrimmedOffsetCurves(offsetsegments_collection_negative, mypAfterPretreatment);
             GetUntrimmedOffsetCurves(pline1utr);
             pline2 = plineutr;
+
             mp = mypAfterPretreatment;
             plinetodrawing = offsetsegments_collection_positive;
         }

@@ -445,6 +445,7 @@ namespace Offset
             tmpArray2 = new List<List<offsetSegment>>();
             List<offsetSegment> tmppicol = new List<offsetSegment>();
             finalResultArray = new List<List<offsetSegment>>();
+
             //步骤1b的情况一
             List<Point2d> intersectionPoints = GetIntersectionPointsOfP1(pline_1, pline_2);
             List<Point2d> SelfIntersectionPoints = GetSelfintersectionPoints(pline_1);
@@ -488,6 +489,8 @@ namespace Offset
                 }
 
             }
+
+            //最后把集合中的集合合并为一个大线条
             List<offsetSegment> tmpPline = ConvertFrom(tmpArray1);
             for (int h = 0; h < tmpPline.Count - 1; h++)
             {

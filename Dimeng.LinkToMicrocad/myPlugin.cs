@@ -26,8 +26,6 @@ namespace Dimeng.LinkToMicrocad
 
         void IExtensionApplication.Terminate()
         {
-            // Do plug-in application clean up here
-           // Dimeng.LinkToMicrocad.Logging.ConsoleHelper.Hide();
         }
 
     }
