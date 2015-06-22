@@ -18,8 +18,6 @@ namespace Dimeng.LinkToMicrocad
         public ERPExporter(Product prodakt)
         {
             this.prodakt = prodakt;
-            this.product = getPauchieProduct(prodakt);
-
             foreach (var sub in prodakt.Subassemblies)
             {
                 drawers.Add(sub);
@@ -30,6 +28,9 @@ namespace Dimeng.LinkToMicrocad
             }
             drawers = drawers.Where(it => it.Parts.Any(i => i.PartName.StartsWith("CT")))
                              .ToList();
+            Logger.GetLogger().Debug(string.Format("drawer`s count :{0}", drawers.Count));
+
+            this.product = getPauchieProduct(prodakt);//放在最后，因为涉及抽屉号码计算，需要先统计数量
         }
 
         public void Output()
@@ -121,12 +122,25 @@ namespace Dimeng.LinkToMicrocad
         {
             if (!part.PartName.StartsWith("CT"))
             {
+                Logger.GetLogger().Debug(string.Format("{0} is not a CT part", part.PartName));
                 return 0;
             }
 
-            var sub = drawers.Find(it => it == part.Parent as Subassembly);
+            if (!(part.Parent is Subassembly))
+            {
+                Logger.GetLogger().Debug(string.Format("{0}`s parent is not a subassembly", part.PartName));
+                return 0;
+            }
+
+            var s = part.Parent as Subassembly;
+
+            var sub = drawers.Find(it =>
+                {
+                    return it == s;
+                });
             if (sub == null)
             {
+                Logger.GetLogger().Debug(string.Format("{0}`s parent not found in drawers list", part.PartName));
                 return 0;
             }
 
