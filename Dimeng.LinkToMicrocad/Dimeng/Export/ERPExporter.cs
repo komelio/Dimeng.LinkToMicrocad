@@ -29,7 +29,7 @@ namespace Dimeng.LinkToMicrocad
                 }
             }
             drawers = drawers.Where(it => it.Parts.Any(i => i.PartName.StartsWith("CT")))
-                .ToList();
+                             .ToList();
         }
 
         public void Output()
@@ -90,7 +90,7 @@ namespace Dimeng.LinkToMicrocad
         {
             PauchiePart ppart = new PauchiePart();
             //ppart.Index = part.PartsCounter;
-            //ppart.Color = 
+            ppart.Color = part.Material.Name;
             ppart.PartName = part.PartName;
             ppart.Category = part.PartName;
 
@@ -110,6 +110,7 @@ namespace Dimeng.LinkToMicrocad
             ppart.DrawerNumber = getPartDrawerNumber(part);
 
             ppart.EdgeSKU = getPartEdgeSKU(part);
+            ppart.EdgeColor = part.EBW1.Name;
 
             ppart.MachiningArea = getPartMachiningArea(part);
             //ppart.FileName = part.FileName;

@@ -69,8 +69,7 @@ namespace Dimeng.LinkToMicrocad
 
             int i = 4;
             foreach (var part in product.Parts)
-            {
-                
+            {               
                 cells[i, 0].Value = part.Index;
                 cells[i, 1].Value = part.Color;
                 cells[i, 2].Value = part.PartName;

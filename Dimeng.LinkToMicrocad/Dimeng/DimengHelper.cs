@@ -172,7 +172,7 @@ namespace Dimeng.LinkToMicrocad
             subFileName = subassemblyCutx;
 
             var bookset = SpreadHelper.GetProductSubassemblyBookSet(mvProduct.GetProductCutxFileName(),
-                globalGvfx, cutPartsCtpx, edgeEdgx, hardwareHwrx, doorstyleDsvx, subassemblyCutx);
+                globalGvfx, cutPartsCtpx, hardwareHwrx, doorstyleDsvx, edgeEdgx, subassemblyCutx);
 
             PromptsViewModel viewmodel = new PromptsViewModel(bookset,
                 product.Tab.Name, product.Tab.VarX, product.Tab.VarZ, product.Tab.VarY,

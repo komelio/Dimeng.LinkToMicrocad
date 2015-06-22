@@ -1,4 +1,5 @@
-﻿using Dimeng.WoodEngine.Entities;
+﻿using Dimeng.LinkToMicrocad.Logging;
+using Dimeng.WoodEngine.Entities;
 using SpreadsheetGear;
 using System;
 using System.Collections.Generic;
@@ -48,17 +49,23 @@ namespace Dimeng.WoodEngine.Entities.Checks
             }
 
             string edgeName = range[0, index].Text.ToUpper();
+            Logger.GetLogger().Debug(edgeName);
+
             if (string.IsNullOrEmpty(edgeName.Trim()))
             {
+                Logger.GetLogger().Debug("None edge");
                 return EdgeBanding.Default();
             }
 
             EdgeBanding edge = tempEdgeBandings.Find(it => it.Name.Trim().ToUpper() == edgeName);
-            if (edge.Name != string.Empty)
+            if (!string.IsNullOrEmpty(edge.Name))
             {
+                Logger.GetLogger().Debug(string.Format("Return edge {0}/{1}/{2}", edge.Name, edge.Thickness, edge.Code));
                 return edge;
             }
 
+            Logger.GetLogger().Debug("Edgebanding sheet total numbers:" + bookE.Worksheets.Count.ToString());
+            Logger.GetLogger().Debug(bookE.Worksheets[0].Cells[0, 0].Text);
             var sheet = bookE.Worksheets[1];
             for (int i = 0; i < sheet.Cells.RowCount; i++)
             {
@@ -76,7 +83,10 @@ namespace Dimeng.WoodEngine.Entities.Checks
 
                     if (thick > 0)
                     {
-                        tempEdgeBandings.Add(new EdgeBanding(edgeName, thick, code));
+                        var edgeX = new EdgeBanding(edgeName, thick, code);
+                        tempEdgeBandings.Add(edgeX);
+                        Logger.GetLogger().Debug(string.Format("Return edge {0}/{1}/{2}", edgeName, thick, code));
+                        return edgeX;
                     }
                 }
             }

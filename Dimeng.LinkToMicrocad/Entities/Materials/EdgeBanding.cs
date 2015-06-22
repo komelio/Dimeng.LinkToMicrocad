@@ -25,7 +25,7 @@ namespace Dimeng.WoodEngine.Entities
 
         public override string ToString()
         {
-            return Name;
+            return string.Format("{0}/{1}/{2}", Name, Thickness, Code);
         }
     }
 }

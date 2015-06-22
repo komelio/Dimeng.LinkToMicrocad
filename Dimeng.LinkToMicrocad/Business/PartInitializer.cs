@@ -87,6 +87,7 @@ namespace Dimeng.WoodEngine.Business
                         product);
                     parts.Add(part);
                     Logger.GetLogger().Debug(string.Format("{0}/{1}/{2}/{3}/{4}", partName, 1, width, length, isDraw3d));
+                    Logger.GetLogger().Debug(string.Format("{0}/{1}/{2}/{3}", part.EBL1, part.EBL2, part.EBW1, part.EBW2));
                 }
             }
             else
@@ -110,7 +111,8 @@ namespace Dimeng.WoodEngine.Business
                     product);
 
                 parts.Add(part);
-                Logger.GetLogger().Debug(string.Format("{0}/{1}/{2}/{3}/{4}", partName, 1, width, length, isDraw3d));
+                Logger.GetLogger().Debug(string.Format("{0}/{1}/{2}/{3}/{4}", partName, qty, width, length, isDraw3d));
+                Logger.GetLogger().Debug(string.Format("{0}/{1}/{2}/{3}", part.EBL1, part.EBL2, part.EBW1, part.EBW2));
             }
 
             tokens.ForEach(t => t.Part = parts[0]);
