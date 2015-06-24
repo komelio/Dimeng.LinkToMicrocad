@@ -29,6 +29,11 @@ namespace Dimeng.LinkToMicrocad.Drawing
 
             foreach (var r in part.Routings)
             {
+                if(r.Points.Count>2)
+                {
+                    continue;//绘制有问题，先跳过复杂的铣型，后面再来改进
+                }
+
                 Tool tool = toolfile.GetRouteToolByName(r.ToolName);
                 if (tool == null)
                 {

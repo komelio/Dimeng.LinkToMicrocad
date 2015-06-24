@@ -35,19 +35,32 @@ namespace Dimeng.LinkToMicrocad
 
         public void Output()
         {
-            string path = Path.Combine(prodakt.Project.JobPath, "Output", "BOM Output");
-            Logger.GetLogger().Fatal(path);
+            string path = Path.Combine(prodakt.Project.JobPath, "Output", prodakt.Handle);
+            Logger.GetLogger().Debug(path);
 
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
+            }
+            else
+            {
+                //删除原有的所有内容
+                var files = Directory.GetFiles(path);
+                foreach (var f in files)
+                {
+                    File.Delete(f);
+                }
             }
 
             IWorkbook book = Factory.GetWorkbook();
             (new ExcelBuilder(this.product)).Build(book);
             book.SaveAs(Path.Combine(path, string.Format("{0}.xlsx", prodakt.Handle)), FileFormat.OpenXMLWorkbook);
 
-            string pathToMachineCode = Path.Combine(prodakt.Project.JobPath, "Output", "Machinings");
+            string pathToMachineCode = Path.Combine(path, "Machinings");
+            if (!Directory.Exists(pathToMachineCode))
+            {
+                Directory.CreateDirectory(pathToMachineCode);
+            }
 
         }
 
@@ -56,7 +69,7 @@ namespace Dimeng.LinkToMicrocad
             PauchieProduct pProudct = new PauchieProduct();
             pProudct.Description = prodakt.Description;
             pProudct.LineNumber = prodakt.Project.Products.IndexOf(prodakt) + 1;
-            //pProudct.Qty = prodakt.Qty;
+            pProudct.Qty = 1;
             //pProudct.OrderNumber = prodakt.Project.ProjectInfo.JobName;
 
             //foreach (var hw in prodakt.CombinedHardwares)
@@ -89,7 +102,7 @@ namespace Dimeng.LinkToMicrocad
 
         private PauchiePart getPauchiePart(Part part)
         {
-            PauchiePart ppart = new PauchiePart();
+            PauchiePart ppart = new PauchiePart(part);
             //ppart.Index = part.PartsCounter;
             ppart.Color = part.Material.Name;
             ppart.PartName = part.PartName;
@@ -110,11 +123,21 @@ namespace Dimeng.LinkToMicrocad
             ppart.Square = Math.Round(part.Length * part.Width / 1000000, 2);
             ppart.DrawerNumber = getPartDrawerNumber(part);
 
-            ppart.EdgeSKU = getPartEdgeSKU(part);
-            ppart.EdgeColor = part.EBW1.Name;
+            string edgeColor;
+            ppart.EdgeSKU = getPartEdgeSKU(part, out edgeColor);
+            ppart.EdgeColor = edgeColor;
 
             ppart.MachiningArea = getPartMachiningArea(part);
-            //ppart.FileName = part.FileName;
+
+            if (part.HasFace5Machining())
+            {
+                ppart.FileName = part.FileName;
+            }
+
+            if (part.HasFace6Machining())
+            {
+                ppart.Face6FileName = part.Face6FileName;
+            }
 
             return ppart;
         }
@@ -147,13 +170,14 @@ namespace Dimeng.LinkToMicrocad
             return drawers.IndexOf(sub) + 1;
         }
 
-        private string getPartEdgeSKU(Part part)
+        private string getPartEdgeSKU(Part part, out string color)
         {
             var edges = new List<EdgeBanding>(new EdgeBanding[] { part.EBW1, part.EBW2, part.EBL1, part.EBL2 });
             edges = edges.Where(it => it.Name != EdgeBanding.Default().Name).ToList();
 
             if (edges.Count == 0)
             {
+                color = string.Empty;
                 return string.Empty;
             }
 
@@ -165,7 +189,7 @@ namespace Dimeng.LinkToMicrocad
             var edge = edges[0];
             var cdes = edge.Code == null ? new string[] { } : edge.Code.Split(';');
 
-
+            color = edge.Name;
             if (Math.Abs(part.Thickness - 18) < 1)
             {
                 if (cdes.Length == 0)

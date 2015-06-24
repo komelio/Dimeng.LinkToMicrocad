@@ -135,6 +135,7 @@
     <Compile Include="Dimeng\DimengHelper.cs" />
     <Compile Include="Dimeng\Export\ERPExporter.cs" />
     <Compile Include="Dimeng\Export\ExcelBuilder.cs" />
+    <Compile Include="Dimeng\Export\MachiningExporter.cs" />
     <Compile Include="Dimeng\Export\PauchieDrawerSubassembly.cs" />
     <Compile Include="Dimeng\Export\PauchieHardware.cs" />
     <Compile Include="Dimeng\Export\PauchiePart.cs" />

@@ -72,7 +72,7 @@ namespace Dimeng.WoodEngine.Business
 
                 if (errors.Count > 0)
                 {
-                    Logger.GetLogger().Info("Part got errors !");
+                    Logger.GetLogger().Error("Part got errors !");
                     //return errors; //有问题的板件还是画
                 }
 
@@ -172,6 +172,7 @@ namespace Dimeng.WoodEngine.Business
                         //提前检查是否含有这个指令
                         if (ModelAssemblyLoader.GetInstance().Types.Find(it => it.FullName == xtypeFullName) == null)
                         {
+                            Logger.GetLogger().Fatal("Token unknown:" + xtokenName);
                             continue;
                         }
 
@@ -197,6 +198,8 @@ namespace Dimeng.WoodEngine.Business
                                     true
                                     )
                                 , parms);
+
+                            Logger.GetLogger().Debug("Token add:" + token.Token);
 
                             tokens.Add(token);
                         }
@@ -245,7 +248,7 @@ namespace Dimeng.WoodEngine.Business
                             true
                             )
                         , parms);
-
+                    Logger.GetLogger().Debug("Token add:" + token.Token);
                     tokens.Add(token);
                 }
                 catch (Exception error)

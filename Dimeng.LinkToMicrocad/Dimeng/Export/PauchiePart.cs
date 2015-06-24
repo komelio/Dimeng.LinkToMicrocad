@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dimeng.WoodEngine.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +8,12 @@ namespace Dimeng.LinkToMicrocad
 {
     public class PauchiePart
     {
+        public PauchiePart(Part part)
+        {
+            this.Part = part;
+        }
+        public Part Part { get; private set; }
+
         public int Index { get; set; }
         public string Color { get; set; }
         public string PartName { get; set; }
@@ -27,5 +34,7 @@ namespace Dimeng.LinkToMicrocad
         public int MachiningArea { get; set; }
         public int DrawerNumber { get; set; }
         public string FileName { get; set; }
+
+        public object Face6FileName { get; set; }
     }
 }

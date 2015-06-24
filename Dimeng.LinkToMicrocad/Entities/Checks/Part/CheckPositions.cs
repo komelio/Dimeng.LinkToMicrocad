@@ -23,15 +23,28 @@ namespace Dimeng.WoodEngine.Entities.Checks
 
         public double XPosition()
         {
+            if (string.IsNullOrEmpty(range[0, 29].Text))
+            {
+                return 0;
+            }
             return GetDoubleValue(range[0, 29].Text, "板件X坐标", false, errors);
         }
         public double YPosition()
         {
+            if (string.IsNullOrEmpty(range[0, 30].Text))
+            {
+                return 0;
+            }
             return GetDoubleValue(range[0, 30].Text, "板件Y坐标", false, errors);
         }
 
         public double ZPosition()
         {
+            if (string.IsNullOrEmpty(range[0, 31].Text))
+            {
+                return 0;
+            }
+
             return GetDoubleValue(range[0, 31].Text, "板件Z坐标" + range[0, 31].Formula, false, errors);
         }
 

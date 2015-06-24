@@ -32,8 +32,8 @@ namespace Dimeng.WoodEngine.Entities.Checks
                 }
             }
 
-            Errors.Add(new ModelError("Wrong face number!"));
-            //TODO:需要报错信息
+            //todo
+            //Errors.Add(new ModelError(string.Format("Wrong face number!{0}/{1}", par, startIndex)));
             return valueRange[0];
         }
 
@@ -84,7 +84,11 @@ namespace Dimeng.WoodEngine.Entities.Checks
 
             if (hasError)
             {
-                Errors.Add(new ModelError("xxxxxxxx"));
+                Errors.Add(
+                        new ModelError(
+                            string.Format("Wrong point positions!Data: {0}", par)
+                                      )
+                                      );
             }
 
             return points;
@@ -123,7 +127,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
             string[] valueStringArray = par.Split(';');
             foreach (var s in valueStringArray)
             {
-                if(string.IsNullOrEmpty(s))
+                if (string.IsNullOrEmpty(s))
                 {
                     values.Add(0);
                     continue;

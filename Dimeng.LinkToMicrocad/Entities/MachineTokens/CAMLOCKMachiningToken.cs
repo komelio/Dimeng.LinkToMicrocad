@@ -175,7 +175,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             }
             else
             {
-                checker.Errors.Add(new ModelError("xxxx"));
+                checker.Errors.Add(new ModelError("Wrong camlock depth:" + par6));
             }
         }
 
@@ -189,7 +189,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             }
             else
             {
-                checker.Errors.Add(new ModelError("xxxx"));
+                checker.Errors.Add(new ModelError("Wrong camlock diameter:" + par5));
             }
         }
     }

@@ -85,7 +85,41 @@ namespace Dimeng.WoodEngine.Entities
             this.TYRotation = this.YRotation;
             this.TZRotation = this.ZRotation;
 
+            //使用Guid来生成
+            //todo 风险在于并行的时候可能产生重复的号码
+            this.FileName = Guid.NewGuid().ToString();
+            this.Face6FileName = Guid.NewGuid().ToString();
+
             calculateCutSize();
+        }
+
+        public bool HasFace5Machining()
+        {
+            if (this.VDrillings.Count > 0)
+            { return true; }
+
+            //todo:draw only
+            if (this.Routings.Count > 0)
+            { return true; }
+
+            return false;
+        }
+
+        public bool HasFace6Machining()
+        {
+            int drillNum = this.VDrillings.Count(it => it.FaceNumber == 6);
+            if (drillNum < this.VDrillings.Count)
+            {
+                return true;
+            }
+
+            int routeNum = this.Routings.Count(it => !it.OnFace5);
+            if (routeNum < this.Routings.Count)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private void calculateCutSize()
@@ -180,6 +214,9 @@ namespace Dimeng.WoodEngine.Entities
         public List<Routing> Routings { get; private set; }
         public List<Sawing> Sawings { get; private set; }
         public List<Profile> Profiles { get; private set; }
+
+        public string FileName { get; set; }
+        public string Face6FileName { get; set; }
 
         #region 与空间定位相关的内容
         /// <summary>

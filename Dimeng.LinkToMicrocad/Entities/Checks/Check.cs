@@ -56,7 +56,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
             {
                 errors.Add(
                         new ModelError(
-                            string.Format("{0} can not be converted to double type!Original data:{1}", errorPrefix, value)
+                            string.Format("{0} can not be converted to int type!Original data:{1}", errorPrefix, value)
                                       )
                               );
                 return 0;
@@ -92,7 +92,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
             {
                 errors.Add(
                         new ModelError(
-                            string.Format("{0} can not be converted to double type!Original data:{1}", errorPrefix, value)
+                            string.Format("{0} can not be converted to int type!Original data:{1}", errorPrefix, value)
                                       )
                               );
                 return 0;
@@ -109,7 +109,11 @@ namespace Dimeng.WoodEngine.Entities.Checks
                 }
                 else
                 {
-                    errors.Add(new ModelError("xxxxx"));
+                    errors.Add(
+                        new ModelError(
+                            string.Format("{0} can not be empty!Original data:{1}", errorPrefix, text)
+                                      )
+                                      );
                     return defaultValue;
                 }
             }
@@ -124,7 +128,11 @@ namespace Dimeng.WoodEngine.Entities.Checks
                 }
                 else
                 {
-                    errors.Add(new ModelError("xxxxx"));
+                    errors.Add(
+                       new ModelError(
+                           string.Format("{0} can not be converted to boolean value!Original data:{1}", errorPrefix, text)
+                                     )
+                                     );
                     return defaultValue;
                 }
             }

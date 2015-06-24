@@ -65,12 +65,12 @@ namespace Dimeng.LinkToMicrocad
             cells[3, 16].Value = "封边条颜色";
             cells[3, 17].Value = "加工工位";
             cells[3, 18].Value = "抽屉编号";
-            cells[3, 19].Value = "机加工信息";
-
+            cells[3, 19].Value = "正面机加工信息";
+            cells[3, 20].Value = "反面机加工信息";
             int i = 4;
             foreach (var part in product.Parts)
-            {               
-                cells[i, 0].Value = part.Index;
+            {
+                cells[i, 0].Value = i - 3;//序号
                 cells[i, 1].Value = part.Color;
                 cells[i, 2].Value = part.PartName;
                 cells[i, 3].Value = part.Category;
@@ -90,6 +90,7 @@ namespace Dimeng.LinkToMicrocad
                 cells[i, 17].Value = part.MachiningArea;
                 cells[i, 18].Value = part.DrawerNumber;
                 cells[i, 19].Value = part.FileName;
+                cells[i, 20].Value = part.Face6FileName;
                 i++;
             }
         }
