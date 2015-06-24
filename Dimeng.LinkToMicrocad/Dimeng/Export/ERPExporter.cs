@@ -85,7 +85,7 @@ namespace Dimeng.LinkToMicrocad
             //    }
             //}
 
-            foreach (var part in prodakt.CombinedParts)
+            foreach (var part in prodakt.CombinedParts.Where(it => !it.Material.IsFake))
             {
                 pProudct.Parts.Add(getPauchiePart(part));
 

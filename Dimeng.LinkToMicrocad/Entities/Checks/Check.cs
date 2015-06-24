@@ -17,7 +17,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
                 {
                     errors.Add(
                         new ModelError(
-                            string.Format("{0} should not below zero!Original data:{1}", errorPrefix, value)
+                            string.Format("{0} should not below zero!Original data:{1}", errorPrefix, rangeText)
                                       )
                               );
                     return 0;
@@ -29,7 +29,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
             {
                 errors.Add(
                         new ModelError(
-                            string.Format("{0} can not be converted to double type!Original data:{1}", errorPrefix, value)
+                            string.Format("{0} can not be converted to double type!Original data:{1}", errorPrefix, rangeText)
                                       )
                               );
                 return 0;
@@ -45,7 +45,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
                 {
                     errors.Add(
                         new ModelError(
-                            string.Format("{0} should not below zero!Original data:{1}", errorPrefix, value)
+                            string.Format("{0} should not below zero!Original data:{1}", errorPrefix, rangeText)
                             ));
                     return 0;
                 }
@@ -56,7 +56,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
             {
                 errors.Add(
                         new ModelError(
-                            string.Format("{0} can not be converted to int type!Original data:{1}", errorPrefix, value)
+                            string.Format("{0} can not be converted to int type!Original data:{1}", errorPrefix, rangeText)
                                       )
                               );
                 return 0;
@@ -72,7 +72,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
                 {
                     errors.Add(
                         new ModelError(
-                            string.Format("{0} can not below zero!Original data:{1}", errorPrefix, value)
+                            string.Format("{0} can not below zero!Original data:{1}", errorPrefix, rangeText)
                             ));
                     return 0;
                 }
@@ -81,7 +81,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
                 {
                     errors.Add(
                         new ModelError(
-                            string.Format("{0} should be in range {2}!Original data:{1}", errorPrefix, value, ranges)
+                            string.Format("{0} should be in range {2}!Original data:{1}", errorPrefix, value, rangeText)
                             ));
                     return 0;
                 }
@@ -92,7 +92,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
             {
                 errors.Add(
                         new ModelError(
-                            string.Format("{0} can not be converted to int type!Original data:{1}", errorPrefix, value)
+                            string.Format("{0} can not be converted to int type!Original data:{1}", errorPrefix, rangeText)
                                       )
                               );
                 return 0;
@@ -123,7 +123,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
                 if (double.TryParse(text, out value))
                 {
                     if (value == 1)
-                    {return true;}
+                    { return true; }
                     else { return false; }
                 }
                 else

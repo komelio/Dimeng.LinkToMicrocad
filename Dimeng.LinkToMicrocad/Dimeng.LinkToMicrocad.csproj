@@ -200,11 +200,14 @@
     <Compile Include="Entities\Machinings\Routing.cs" />
     <Compile Include="Entities\Machinings\Sawing.cs" />
     <Compile Include="Entities\Machinings\VDrilling.cs" />
+    <Compile Include="Entities\Materials\BuyoutMaterial.cs" />
+    <Compile Include="Entities\Materials\CutPartMaterial.cs" />
     <Compile Include="Entities\Materials\EdgeBanding.cs" />
     <Compile Include="Entities\Materials\EdgebandingType.cs" />
     <Compile Include="Entities\Materials\Grain.cs" />
     <Compile Include="Entities\Materials\HardwareType.cs" />
     <Compile Include="Entities\Materials\Material.cs" />
+    <Compile Include="Entities\Materials\SolidMaterial.cs" />
     <Compile Include="Entities\Materials\Stock.cs" />
     <Compile Include="Entities\Products\Hardware.cs" />
     <Compile Include="Entities\Products\IProduct.cs" />

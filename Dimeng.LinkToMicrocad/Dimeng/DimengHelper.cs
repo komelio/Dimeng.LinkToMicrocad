@@ -149,7 +149,7 @@ namespace Dimeng.LinkToMicrocad
                 Product product = (Product)e.Argument;
                 var exporter = new ERPExporter(product);
 
-                Logger.GetLogger().Fatal("Start exporting excel files....");
+                Logger.GetLogger().Info("Start exporting excel files....");
 
                 exporter.Output();
             }
@@ -341,7 +341,7 @@ namespace Dimeng.LinkToMicrocad
         {
             if (Context.GetContext().CurrentProject == null)
             {
-                MessageBox.Show("当前未有打开的任务！");
+                MessageBox.Show("当前未有打开的任务！如果已经打开，则请至少重新绘制产品后再重试");
                 return;
             }
 
@@ -352,12 +352,18 @@ namespace Dimeng.LinkToMicrocad
 
             foreach (string s in readIdFromDeleteXML(tempXMLPath))
             {
-                if (Context.GetContext().CurrentProject.HasProduct(s))
+                if (Context.GetContext().CurrentProject.HasProduct(s.Replace("_", "")))
                 {
                     Logger.GetLogger().Debug("Deleting product id :" + s);
                     Context.GetContext().CurrentProject.DeleteProduct(s);
                 }
+                else
+                {
+                    Logger.GetLogger().Error("Product not found,id :" + s);
+                }
             }
+
+            File.Delete(tempXMLPath);
         }
 
         private IEnumerable<string> readIdFromDeleteXML(string tempXMLPath)

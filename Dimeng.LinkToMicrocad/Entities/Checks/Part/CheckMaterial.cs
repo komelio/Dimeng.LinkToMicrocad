@@ -78,7 +78,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
 
                         if (_name.ToUpper() == name.ToUpper())
                         {
-                            material = getMaterial(sheet.Cells.Rows[r, 1].EntireRow, errors);
+                            material = getMaterial(sheet.Cells.Rows[r, 1].EntireRow, errors, i);
                             tempMaterials.Add(material);
                             findit = true;
                             break;
@@ -107,55 +107,75 @@ namespace Dimeng.WoodEngine.Entities.Checks
             }
         }
 
-        private Material getMaterial(IRange entireRow, List<ModelError> errors)
+        private Material getMaterial(IRange entireRow, List<ModelError> errors, int index)
         {
             string name = entireRow[0, 0].Text;
             double thick = GetDoubleValue(entireRow[0, 1].Text, "Material thickness", true, errors);
             string code = entireRow[0, 3].Text;
 
-            Grain grain = Grain.None;
-            if (string.IsNullOrEmpty(entireRow[0, 2].Text.Trim()))
+            if (index == 1)
             {
-                grain = Grain.None;
-            }
-            else
-            {
-                grain = (Grain)GetIntValue(entireRow[0, 2].Text, "材料纹理", true, errors);
-            }
-            Material material = new Material(name, thick, code);
-            material.Grain = grain;
-
-            for (int i = 9; i < 10; i += 9)
-            {
-                if (string.IsNullOrEmpty(entireRow[0, i].Text.Trim()))
+                Grain grain = Grain.None;
+                if (string.IsNullOrEmpty(entireRow[0, 2].Text.Trim()))
                 {
-                    break;
+                    grain = Grain.None;
+                }
+                else
+                {
+                    grain = (Grain)GetIntValue(entireRow[0, 2].Text, "材料纹理", true, errors);
                 }
 
-                Stock stock = Stock.Default;
-                stock.Qty = GetIntValue(entireRow[0, i].Text, "材料库存数量", true, errors);
-                stock.Price = GetDoubleValue(entireRow[0, i + 3].Text, "材料单价", true, errors);
-                stock.Width = GetDoubleValue(entireRow[0, i + 1].Text, "材料宽度", true, errors);
-                stock.Length = GetDoubleValue(entireRow[0, i + 2].Text, "材料长度", true, errors);
-                stock.TopTrimValue = GetDoubleValue(entireRow[0, i + 4].Text, "材料上修边", true, errors);
-                stock.BottomTrimValue = GetDoubleValue(entireRow[0, i + 5].Text, "材料下修边", true, errors);
-                stock.LeftTrimValue = GetDoubleValue(entireRow[0, i + 6].Text, "材料左修边", true, errors);
-                stock.RightTrimValue = GetDoubleValue(entireRow[0, i + 7].Text, "材料友修边", true, errors);
+                CutPartMaterial material = new CutPartMaterial(name, thick, code);
+                material.Grain = grain;
 
-                material.Stocks.Add(stock);
+                for (int i = 9; i < 10; i += 9)
+                {
+                    if (string.IsNullOrEmpty(entireRow[0, i].Text.Trim()))
+                    {
+                        break;
+                    }
+
+                    Stock stock = Stock.Default;
+                    stock.Qty = GetIntValue(entireRow[0, i].Text, "材料库存数量", true, errors);
+                    stock.Price = GetDoubleValue(entireRow[0, i + 3].Text, "材料单价", true, errors);
+                    stock.Width = GetDoubleValue(entireRow[0, i + 1].Text, "材料宽度", true, errors);
+                    stock.Length = GetDoubleValue(entireRow[0, i + 2].Text, "材料长度", true, errors);
+                    stock.TopTrimValue = GetDoubleValue(entireRow[0, i + 4].Text, "材料上修边", true, errors);
+                    stock.BottomTrimValue = GetDoubleValue(entireRow[0, i + 5].Text, "材料下修边", true, errors);
+                    stock.LeftTrimValue = GetDoubleValue(entireRow[0, i + 6].Text, "材料左修边", true, errors);
+                    stock.RightTrimValue = GetDoubleValue(entireRow[0, i + 7].Text, "材料友修边", true, errors);
+
+                    material.Stocks.Add(stock);
+                }
+
+                return material;
+            }
+            else if (index == 3)
+            {
+                BuyoutMaterial material = new BuyoutMaterial(name, thick, code);
+                return material;
+            }
+            else if (index == 2)
+            {
+                SolidMaterial material = new SolidMaterial(name, thick, code);
+                return material;
             }
 
-            return material;
+            throw new Exception("Unknown material sheet number!");
         }
 
         public void IsMaterialFitPartLengthAndWidth(double length, double width, Material material, List<ModelError> errors)
         {
-            if (!material.HasFitStock(length, width))
+            if (material is CutPartMaterial)
             {
-                this.PartError(
-                    string.Format("材料[{0}]没有足够的尺寸容纳板件{1}/{2}",
-                        material.Name, length, width)
-                    );
+                var m = (CutPartMaterial)material;
+                if (!m.HasFitStock(length, width))
+                {
+                    this.PartError(
+                        string.Format("材料[{0}]没有足够的尺寸容纳板件{1}/{2}",
+                            material.Name, length, width)
+                        );
+                }
             }
         }
     }

@@ -44,8 +44,53 @@ namespace Dimeng.WoodEngine.Entities
 
             loadProducts();
 
+            loadCounter();
+
             //this.ProjectInfo.JobName = (new DirectoryInfo(path)).Name;
         }
+
+        private void loadCounter()
+        {
+            Counter = 0;
+
+            string path = Path.Combine(this.jobPath, "counter.txt");
+            if (File.Exists(path))
+            {
+                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+                using (StreamReader sr = new StreamReader(fs, Encoding.Default))
+                {
+                    string value = sr.ReadLine();
+                    if (String.IsNullOrEmpty(value))
+                    {
+                        return;
+                    }
+
+                    int v;
+                    if (int.TryParse(value, out v))
+                    {
+                        Counter = v;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+            }
+        }
+        private int addCounter()
+        {
+            Counter++;
+            string path = Path.Combine(this.jobPath, "counter.txt");
+
+            using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite))
+            using (StreamWriter sw = new StreamWriter(fs, Encoding.Default))
+            {
+                sw.WriteLine(Counter.ToString());
+            }
+
+            return Counter;
+        }
+
 
         private void checkPaths()
         {
@@ -135,7 +180,7 @@ namespace Dimeng.WoodEngine.Entities
         public string SubassembliesPath { get; private set; }
         public List<SpecificationGroup> SpecificationGroups { get; private set; }
         public ProjectInfo ProjectInfo { get; private set; }
-
+        public int Counter { get; private set; }
 
         public override string ToString()
         {
@@ -159,14 +204,16 @@ namespace Dimeng.WoodEngine.Entities
 
         public Product AddProduct(string name, string id, double width, double height, double depth, string libraryProductPath)
         {
-            string filename = id + ".cutx";
+            int counter = addCounter();
+
+            string filename = counter + ".cutx";
 
             string connstr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + this.ProductListMDBPath;
             using (OleDbConnection conn = new OleDbConnection(connstr))
             {
                 conn.Open();
                 string cmdtext = string.Format("Insert Into ProductList (ItemNumber,Description,Qty,Width,Height,Depth,MatFile,FileName,Handle,ReleaseNumber,Parent1) Values('{0}','{1}',{2},{3},{4},{5},'{6}','{7}','{8}','{9}','{10}')",
-                    string.Format("{0}.00", Products.Count + 1),
+                    string.Format("{0}.00", counter),
                     name,
                     1,
                     width,
@@ -187,12 +234,7 @@ namespace Dimeng.WoodEngine.Entities
                 product.Project = this;
                 this.Products.Add(product);
 
-                ////add product cutx file to project
                 IWorkbook book = Factory.GetWorkbook(libraryProductPath);
-                //var cells = book.Worksheets["Prompts"].Cells;
-                //cells[0, 1].Value = width;
-                //cells[1, 1].Value = height;
-                //cells[2, 1].Value = depth;
                 book.SaveAs(Path.Combine(JobPath, filename), FileFormat.OpenXMLWorkbook);
 
                 return product;
@@ -253,6 +295,12 @@ namespace Dimeng.WoodEngine.Entities
                 cmd.Connection = conn;
                 cmd.CommandText = cmdtext;
                 cmd.ExecuteNonQuery();
+            }
+
+            var p = this.Products.Find(it => it.Handle == productId);
+            if (p != null)
+            {
+                this.Products.Remove(p);
             }
         }
 

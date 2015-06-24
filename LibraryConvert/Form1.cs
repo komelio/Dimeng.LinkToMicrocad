@@ -56,15 +56,48 @@ namespace LibraryConvert
                         }
                         c.Items.Add(item);
 
-                        File.Copy(f.FullName, Path.Combine(finalPath, "Library", "Products", item.Id + ".cutx"),true);
+                        File.Copy(f.FullName, Path.Combine(finalPath, "Library", "Products", item.Id + ".cutx"), true);
 
                         string pic = Path.Combine(f.Directory.ToString(), filename + ".jpg");
                         if (File.Exists(pic))
                         {
-                            File.Copy(pic, Path.Combine(finalPath, "Photos", "dmsobj", item.Id + ".jpg"),true);
+                            File.Copy(pic, Path.Combine(finalPath, "Photos", "dmsobj", item.Id + ".jpg"), true);
                         }
                     }
                 }
+            }
+
+            string subPath = @"C:\Users\xspxs_000\Desktop\组件库\组件库";
+            DirectoryInfo di2 = new DirectoryInfo(subPath);
+            var dis2 = di2.GetDirectories();
+
+            List<Category> subCategories = new List<Category>();
+            int counter = 0;
+            foreach (var d in dis2)
+            {
+                Category ct = new Category();
+                ct.Name = d.Name;
+                foreach (var f in d.GetFiles("*.cutx"))
+                {
+                    counter++;
+                    string filename = f.Name.Replace(".cutx", "");
+
+                    Item item = new Item();
+                    item.Id = counter.ToString();
+                    item.Name = filename;
+
+                    ct.Items.Add(item);
+
+                    File.Copy(f.FullName, Path.Combine(finalPath, "Library", "Products", item.Id + ".cutx"), true);
+
+                    string pic = Path.Combine(f.Directory.ToString(), filename + ".jpg");
+                    if (File.Exists(pic))
+                    {
+                        File.Copy(pic, Path.Combine(finalPath, "Photos", "dmsobj", item.Id + ".jpg"), true);
+                    }
+                }
+
+                subCategories.Add(ct);
             }
 
             XDocument doc = new XDocument();
@@ -116,6 +149,41 @@ namespace LibraryConvert
 
                 dimengCategory.Add(category);
             }
+            var subCategory = new XElement("I",
+                                   new XAttribute("Name", "组件库"),
+                                   new XAttribute("ToolTip", "组件库"),
+                                   new XAttribute("Photo", "组件库")
+                                   );
+            foreach (var sc in subCategories)
+            {
+                var category2 = new XElement("I",
+                                   new XAttribute("Name", sc.Name),
+                                   new XAttribute("ToolTip", sc.Name),
+                                   new XAttribute("Photo", sc.Name)
+                               );
+                foreach (var p in sc.Items)
+                {
+                    var productXml = new XElement("I",
+                                        new XAttribute("SubA", 1),
+                                        new XAttribute("Name", p.Name),
+                                        new XAttribute("Photo", p.Id),
+                                        new XAttribute("DWG", p.Id),
+                                        new XAttribute("DMID", ""),
+                                        new XAttribute("Units", "mm"),
+                                        new XAttribute("Elevation", 0),
+                                        new XAttribute("Z", 0),
+                                        new XAttribute("Y", 0),
+                                        new XAttribute("X", 0),
+                                        new XAttribute("LongText", string.Empty),
+                                        new XAttribute("ID", p.Id)
+                                        );
+
+                    category2.Add(productXml);
+                }
+                subCategory.Add(category2);
+            }
+            dimengCategory.Add(subCategory);
+
             root.Add(dimengCategory);
             doc.Add(root);
 
