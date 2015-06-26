@@ -125,6 +125,22 @@ namespace QuoteExport
                     Products.Add(product);
                 }
             }
+
+            using (OleDbConnection conn = new OleDbConnection(connectStr))
+            {
+                conn.Open();
+                StringBuilder sb = new StringBuilder();
+                foreach (var p in Products)
+                {
+                    sb.Append(string.Format("'{0}'", p.Handle));
+                    if (Products.IndexOf(p) != Products.Count - 1)
+                    { sb.Append(","); }
+                }
+                string delStr = string.Format("Delete from ProductList Where Handle NOT IN ({0})", sb.ToString());
+                OleDbCommand cmd = new OleDbCommand(delStr, conn);
+                cmd.ExecuteNonQuery();
+            }
+
         }
 
         private void startWork()

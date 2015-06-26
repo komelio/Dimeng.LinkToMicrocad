@@ -1,7 +1,7 @@
 ﻿<Window x:Class="QuoteExport.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Autodecco" Height="666.25" Width="780" ResizeMode="NoResize" Icon="2015062603524335_easyicon_net_32.ico">
+        Title="Autodecco" Height="666.25" Width="780" ResizeMode="NoResize" Icon="2015062603524335_easyicon_net_32.ico" WindowStartupLocation="CenterScreen">
     <Window.InputBindings>
         <KeyBinding Gesture="F2" Command="{Binding ShowConfiguration}"/>
     </Window.InputBindings>
