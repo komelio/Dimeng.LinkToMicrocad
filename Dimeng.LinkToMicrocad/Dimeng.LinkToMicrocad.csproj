@@ -136,6 +136,7 @@
     <Compile Include="Dimeng\Export\ERPExporter.cs" />
     <Compile Include="Dimeng\Export\ExcelBuilder.cs" />
     <Compile Include="Dimeng\Export\MachiningExporter.cs" />
+    <Compile Include="Dimeng\Export\PartMachiningType.cs" />
     <Compile Include="Dimeng\Export\PauchieDrawerSubassembly.cs" />
     <Compile Include="Dimeng\Export\PauchieHardware.cs" />
     <Compile Include="Dimeng\Export\PauchiePart.cs" />
@@ -414,12 +415,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Prompts\Images\refresh.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\QuoteExport\QuoteExport.csproj">
-      <Project>{3f724d16-b066-4e93-aaa8-a22455982ece}</Project>
-      <Name>QuoteExport</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

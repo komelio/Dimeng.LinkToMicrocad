@@ -1,7 +1,18 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="QuoteExport.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="FTPServer" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ftp://c1993319.oicp.net</Value>
+    </Setting>
+    <Setting Name="FTPUser" Type="System.String" Scope="User">
+      <Value Profile="(Default)">p2admin</Value>
+    </Setting>
+    <Setting Name="FTPPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)">311@ftp.com</Value>
+    </Setting>
+    <Setting Name="QuoteExport_Pauchie_PauchieWebServiceService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://c1993319.oicp.net:8000/soap/PAUCHIEWEBSERVICE</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

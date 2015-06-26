@@ -22,6 +22,5 @@ namespace Dimeng.LinkToMicrocad
 
         public AKInfo AKInfo { get; private set; }
         public MVDataContext MVDataContext { get; set; }
-        public Project CurrentProject { get; set; }
     }
 }

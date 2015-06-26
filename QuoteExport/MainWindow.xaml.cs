@@ -24,7 +24,7 @@ namespace QuoteExport
         {
             InitializeComponent();
 
-            this.DataContext = new MainViewModel();
+            this.DataContext = new MainViewModel(xmlpath);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

@@ -62,6 +62,17 @@ namespace Dimeng.LinkToMicrocad
                 Directory.CreateDirectory(pathToMachineCode);
             }
 
+            //先删除掉原有的csv文件
+            foreach(var f in Directory.GetFiles(pathToMachineCode))
+            {
+                File.Delete(f);
+            }
+
+            foreach (var part in this.prodakt.CombinedParts)
+            {
+                MachiningExporter me = new MachiningExporter(part, pathToMachineCode);
+                me.Export();
+            }
         }
 
         private PauchieProduct getPauchieProduct(Product prodakt)

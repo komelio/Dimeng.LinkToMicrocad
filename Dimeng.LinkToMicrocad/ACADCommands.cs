@@ -28,7 +28,7 @@ namespace Dimeng.LinkToMicrocad
         public void NewBlock()
         {
             Logging.Logger.GetLogger().Info("Call command 'New_dm'");
-            
+
             //MessageBox.Show("New_dm");
             try
             {
@@ -46,7 +46,7 @@ namespace Dimeng.LinkToMicrocad
         /// <summary>
         /// Read temp.xml and then directly draw a autocad block dwg file.
         /// </summary>
-        [CommandMethod("AK", "Edit_dm", CommandFlags.Modal )]
+        [CommandMethod("AK", "Edit_dm", CommandFlags.Modal)]
         public void EditBlock()
         {
             Logging.Logger.GetLogger().Info("Call command 'Edit_dm'");
@@ -67,7 +67,7 @@ namespace Dimeng.LinkToMicrocad
         public void DelProduct()
         {
             Logging.Logger.GetLogger().Info("Call command 'Del_dm'");
-
+            MessageBox.Show("Del_dm");
             try
             {
                 var dmHelper = new DimengHelper();
@@ -77,12 +77,6 @@ namespace Dimeng.LinkToMicrocad
             {
                 Logging.Logger.GetLogger().Error(error);
             }
-        }
-
-        [CommandMethod("AK","showdebug",CommandFlags.Modal)]
-        public void Showdebug()
-        {
-            Dimeng.LinkToMicrocad.Logging.ConsoleHelper.Show();
         }
     }
 

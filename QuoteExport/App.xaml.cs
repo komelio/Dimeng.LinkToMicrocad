@@ -19,9 +19,11 @@ namespace QuoteExport
                 MessageBox.Show("Parameter should not be blank!");
                 this.Shutdown();
             }
-
-            MainWindow mainWindow = new MainWindow(e.Args[0]);
-            mainWindow.ShowDialog();
+            else
+            {
+                MainWindow mainWindow = new MainWindow(e.Args[0]);
+                mainWindow.ShowDialog();
+            }
         }
     }
 }

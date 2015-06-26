@@ -38,7 +38,6 @@ namespace Dimeng.LinkToMicrocad
 
                 var project = ProjectManager.CreateOrOpenProject(
                     product.GetUIVarValue("ManufacturingFolder"));
-                Context.GetContext().CurrentProject = project;
 
                 if (product.SubInfo == null)//不是组件
                 {
@@ -339,46 +338,60 @@ namespace Dimeng.LinkToMicrocad
 
         public void DeleteProduct()
         {
-            if (Context.GetContext().CurrentProject == null)
-            {
-                MessageBox.Show("当前未有打开的任务！如果已经打开，则请至少重新绘制产品后再重试");
-                return;
-            }
-
             string folderPath = getTempFolderPath(
                     Context.GetContext().AKInfo.Path);
             string tempXMLPath = Path.Combine(folderPath,
                 "Delete.xml");
 
-            foreach (string s in readIdFromDeleteXML(tempXMLPath))
+            foreach (var s in readIdFromDeleteXML(tempXMLPath))
             {
-                if (Context.GetContext().CurrentProject.HasProduct(s.Replace("_", "")))
+                var project = ProjectManager.CreateOrOpenProject(s.Path);
+
+                if (project.HasProduct(s.Id.Replace("_", "")))
                 {
-                    Logger.GetLogger().Debug("Deleting product id :" + s);
-                    Context.GetContext().CurrentProject.DeleteProduct(s);
+                    Logger.GetLogger().Debug("Deleting product id :" + s.Id);
+                    project.DeleteProduct(s.Id.Replace("_", ""));
                 }
                 else
                 {
-                    Logger.GetLogger().Error("Product not found,id :" + s);
+                    Logger.GetLogger().Error("Product not found,id :" + s.Id);
                 }
             }
 
             File.Delete(tempXMLPath);
         }
 
-        private IEnumerable<string> readIdFromDeleteXML(string tempXMLPath)
+        private IEnumerable<DelItem> readIdFromDeleteXML(string tempXMLPath)
         {
-            List<string> values = new List<string>();
+            List<DelItem> values = new List<DelItem>();
 
             XElement xml = XElement.Load(tempXMLPath);
             var ids = from e in xml.Elements("D")
                       select e;
-            foreach (var x in ids)
-            {
-                values.Add(x.Attribute("Name").Value);
-            }
 
+            try
+            {
+                foreach (var x in ids)
+                {
+                    values.Add(new DelItem(x.Attribute("Name").Value, x.Attribute("ManufacturingFolder").Value));
+                }
+            }
+            catch
+            {
+                MessageBox.Show("删除产品时发生错误，请确认当前ad版本已经为最新版本");
+            }
             return values;
+        }
+
+        private struct DelItem
+        {
+            public DelItem(string id, string path)
+            {
+                this.Id = id;
+                this.Path = path;
+            }
+            public string Id;
+            public string Path;
         }
     }
 }

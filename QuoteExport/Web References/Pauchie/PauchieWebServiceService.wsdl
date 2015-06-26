@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.Pauchie.com/" name="PauchieWebServiceService" targetNamespace="http://www.Pauchie.com/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema>
+      <xsd:import schemaLocation="http://c1993319.oicp.net:8000/soap/PAUCHIEWEBSERVICE?xsd=1" namespace="http://www.Pauchie.com/" />
+    </xsd:schema>
+  </types>
+  <message name="doDASSM">
+    <part name="parameters" element="tns:doDASSM" />
+  </message>
+  <message name="doDASSMResponse">
+    <part name="parameters" element="tns:doDASSMResponse" />
+  </message>
+  <message name="writeExcel">
+    <part name="parameters" element="tns:writeExcel" />
+  </message>
+  <message name="writeExcelResponse">
+    <part name="parameters" element="tns:writeExcelResponse" />
+  </message>
+  <message name="readExcel">
+    <part name="parameters" element="tns:readExcel" />
+  </message>
+  <message name="readExcelResponse">
+    <part name="parameters" element="tns:readExcelResponse" />
+  </message>
+  <message name="writeCsv">
+    <part name="parameters" element="tns:writeCsv" />
+  </message>
+  <message name="writeCsvResponse">
+    <part name="parameters" element="tns:writeCsvResponse" />
+  </message>
+  <message name="getAllBaseInfo">
+    <part name="parameters" element="tns:getAllBaseInfo" />
+  </message>
+  <message name="getAllBaseInfoResponse">
+    <part name="parameters" element="tns:getAllBaseInfoResponse" />
+  </message>
+  <message name="getIncrementBaseInfo">
+    <part name="parameters" element="tns:getIncrementBaseInfo" />
+  </message>
+  <message name="getIncrementBaseInfoResponse">
+    <part name="parameters" element="tns:getIncrementBaseInfoResponse" />
+  </message>
+  <message name="notifyOptimizationToBeFinished">
+    <part name="parameters" element="tns:notifyOptimizationToBeFinished" />
+  </message>
+  <message name="notifyOptimizationToBeFinishedResponse">
+    <part name="parameters" element="tns:notifyOptimizationToBeFinishedResponse" />
+  </message>
+  <portType name="PauchieWebService">
+    <operation name="doDASSM">
+      <input message="tns:doDASSM" />
+      <output message="tns:doDASSMResponse" />
+    </operation>
+    <operation name="writeExcel">
+      <input message="tns:writeExcel" />
+      <output message="tns:writeExcelResponse" />
+    </operation>
+    <operation name="readExcel">
+      <input message="tns:readExcel" />
+      <output message="tns:readExcelResponse" />
+    </operation>
+    <operation name="writeCsv">
+      <input message="tns:writeCsv" />
+      <output message="tns:writeCsvResponse" />
+    </operation>
+    <operation name="getAllBaseInfo">
+      <input message="tns:getAllBaseInfo" />
+      <output message="tns:getAllBaseInfoResponse" />
+    </operation>
+    <operation name="getIncrementBaseInfo">
+      <input message="tns:getIncrementBaseInfo" />
+      <output message="tns:getIncrementBaseInfoResponse" />
+    </operation>
+    <operation name="notifyOptimizationToBeFinished">
+      <input message="tns:notifyOptimizationToBeFinished" />
+      <output message="tns:notifyOptimizationToBeFinishedResponse" />
+    </operation>
+  </portType>
+  <binding name="PauchieWebServicePortBinding" type="tns:PauchieWebService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="doDASSM">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="writeExcel">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="readExcel">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="writeCsv">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="getAllBaseInfo">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="getIncrementBaseInfo">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="notifyOptimizationToBeFinished">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <service name="PauchieWebServiceService">
+    <port name="PauchieWebServicePort" binding="tns:PauchieWebServicePortBinding">
+      <soap:address location="http://c1993319.oicp.net:8000/soap/PAUCHIEWEBSERVICE" />
+    </port>
+  </service>
+</definitions>
