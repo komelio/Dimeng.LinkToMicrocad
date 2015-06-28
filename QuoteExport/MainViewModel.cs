@@ -90,7 +90,8 @@ namespace QuoteExport
 
         private void showConfiguration()
         {
-            MessageBox.Show("hehe");
+            ConfigurationForm form = new ConfigurationForm();
+            form.ShowDialog();
         }
 
         private void init(string xmlFileName)
