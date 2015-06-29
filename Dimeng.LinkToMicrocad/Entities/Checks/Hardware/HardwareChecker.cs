@@ -35,19 +35,48 @@ namespace Dimeng.WoodEngine.Entities.Checks
             return 0;
         }
 
+        public double AssociateRotation(out bool isHaveAssociateRotation, out double tAssociateRotationAngle)
+        {
+            double Angle;
+            if (double.TryParse(range[0, 35].Text, out Angle))
+            {
+                tAssociateRotationAngle = Angle;
+                isHaveAssociateRotation = true;
+                return Angle;
+            }
+            else
+            {
+                tAssociateRotationAngle = 0;
+                isHaveAssociateRotation = false;
+                return 0;
+            }
+        }
+
         public double Width()
         {
+            if (string.IsNullOrEmpty(range[0, 18].Text))
+            {
+                return 0;
+            }
             return GetDoubleValue(range[0, 18].Text, "Hardware Width", true, errors);
         }
 
         public double Height()
         {
-            return GetDoubleValue(range[0, 18].Text, "Hardware Height", true, errors);
+            if (string.IsNullOrEmpty(range[0, 19].Text))
+            {
+                return 0;
+            }
+            return GetDoubleValue(range[0, 19].Text, "Hardware Height", true, errors);
         }
 
         public double Depth()
         {
-            return GetDoubleValue(range[0, 18].Text, "Hardware Depth", true, errors);
+            if (string.IsNullOrEmpty(range[0, 20].Text))
+            {
+                return 0;
+            }
+            return GetDoubleValue(range[0, 20].Text, "Hardware Depth", true, errors);
         }
 
         public bool IsEQ()
@@ -64,16 +93,28 @@ namespace Dimeng.WoodEngine.Entities.Checks
 
         public double XPosition()
         {
-            return GetDoubleValue(range[0, 29].Text, "板件X坐标", false, errors);
+            if (string.IsNullOrEmpty(range[0, 29].Text))
+            {
+                return 0;
+            }
+            return GetDoubleValue(range[0, 29].Text, "五金件X坐标", false, errors);
         }
         public double YPosition()
         {
-            return GetDoubleValue(range[0, 30].Text, "板件Y坐标", false, errors);
+            if (string.IsNullOrEmpty(range[0, 30].Text))
+            {
+                return 0;
+            }
+            return GetDoubleValue(range[0, 30].Text, "五金件Y坐标", false, errors);
         }
 
         public double ZPosition()
         {
-            return GetDoubleValue(range[0, 31].Text, "板件Z坐标" + range[0, 31].Formula, false, errors);
+            if (string.IsNullOrEmpty(range[0, 31].Text))
+            {
+                return 0;
+            }
+            return GetDoubleValue(range[0, 31].Text, "五金件Z坐标" + range[0, 31].Formula, false, errors);
         }
 
 
@@ -229,6 +270,66 @@ namespace Dimeng.WoodEngine.Entities.Checks
             {
                 doubles.Add(new double[] { xorigin, yorigin, DownBorder + (UpperBorder - DownBorder) / (qty + 1) * (i + 1) - thick / 2 });
             }
+        }
+
+        public HardwareType Hardwaretype(IWorkbook bookH, List<HardwareType> hardwareTypes)
+        {
+            string name = this.HardwareName();
+            if (string.IsNullOrEmpty(name))
+            {
+                return HardwareType.Default();
+            }
+
+            var hw = hardwareTypes.Find(it => it.HardwareName.ToLower() == name.ToLower());
+            if (hw.HardwareName != HardwareType.Default().HardwareName)
+            {
+                return hw;
+            }
+            else
+            {
+                IRange cells = bookH.Worksheets[1].Cells;
+                IRange cells2 = bookH.Worksheets[2].Cells;
+
+                for (int i = 0; i < cells.Rows.RowCount; i++)
+                {
+                    string hwName = cells[i, 0].Text;
+                    if (string.IsNullOrEmpty(hwName.Trim()))
+                    {
+                        break;
+                    }
+
+                    var tokens = new List<HardwareToken>();
+                    for (int x = 0; x < cells2.Columns.ColumnCount; x += 10)
+                    {
+                        string tokenName = cells2[i, x].Text;
+                        if (string.IsNullOrEmpty(tokenName))
+                        {
+                            break;
+                        }
+
+                        HardwareToken token = new HardwareToken(tokenName,
+                                                                cells2[i, x + 1].Text,
+                                                                 cells2[i, x + 2].Text,
+                                                                  cells2[i, x + 3].Text,
+                                                                   cells2[i, x + 4].Text,
+                                                                    cells2[i, x + 5].Text,
+                                                                     cells2[i, x + 6].Text,
+                                                                      cells2[i, x + 7].Text,
+                                                                       cells2[i, x + 8].Text,
+                                                                        cells2[i, x + 9].Text);
+                        tokens.Add(token);
+                    }
+
+                    if (name.ToLower() == hwName.ToLower())
+                    {
+                        HardwareType ht = new HardwareType(hwName, cells[i, 3].Text, tokens);
+                        hardwareTypes.Add(ht);
+                        return ht;
+                    }
+                }
+            }
+
+            return HardwareType.Default();
         }
     }
 }

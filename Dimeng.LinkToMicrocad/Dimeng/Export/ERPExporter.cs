@@ -63,7 +63,7 @@ namespace Dimeng.LinkToMicrocad
             }
 
             //先删除掉原有的csv文件
-            foreach(var f in Directory.GetFiles(pathToMachineCode))
+            foreach (var f in Directory.GetFiles(pathToMachineCode))
             {
                 File.Delete(f);
             }
@@ -83,18 +83,18 @@ namespace Dimeng.LinkToMicrocad
             pProudct.Qty = 1;
             //pProudct.OrderNumber = prodakt.Project.ProjectInfo.JobName;
 
-            //foreach (var hw in prodakt.CombinedHardwares)
-            //{
-            //    var pHw = pProudct.Hardwares.Find(it => it.Description.ToLower() == hw.Name.ToLower() && it.SKU.ToLower() == hw..HardwareCode);
-            //    if (pHw != null)
-            //    {
-            //        pHw.Number += hw.Qty;
-            //    }
-            //    else
-            //    {
-            //        pProudct.Hardwares.Add(getPauchieHardware(hw));
-            //    }
-            //}
+            foreach (var hw in prodakt.CombinedHardwares)
+            {
+                var pHw = pProudct.Hardwares.Find(it => it.Description.ToLower() == hw.Name.ToLower() && it.SKU.ToLower() == hw.HardwareType.HardwareCode);
+                if (pHw != null)
+                {
+                    pHw.Number += hw.Qty;
+                }
+                else
+                {
+                    pProudct.Hardwares.Add(getPauchieHardware(hw));
+                }
+            }
 
             foreach (var part in prodakt.CombinedParts.Where(it => !it.Material.IsFake))
             {
@@ -280,11 +280,10 @@ namespace Dimeng.LinkToMicrocad
         private PauchieHardware getPauchieHardware(Hardware hw)
         {
             PauchieHardware pHw = new PauchieHardware();
-            //pHw.Description = hw.Name;
-            //pHw.SKU = hw.Code == null ? string.Empty : hw.Code;
-            //pHw.Number = hw.Qty;
-            //pHw.Unit = "EACH";
-
+            pHw.Description = hw.Name;
+            pHw.SKU = hw.HardwareType.HardwareCode == null ? string.Empty : hw.HardwareType.HardwareCode;
+            pHw.Number = hw.Qty;
+            pHw.Unit = "EACH";
 
             return pHw;
         }

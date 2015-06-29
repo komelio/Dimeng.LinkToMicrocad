@@ -76,7 +76,7 @@ namespace Dimeng.LinkToMicrocad
                     IEnumerable<string> materialList = getMaterialList(mvProduct);
                     (new TempXMLWriter()).WriteFile(tempXMLPath, product, materialList);
 
-                    ProductDrawer drawer = new ProductDrawer(offsetVector);
+                    ProductDrawer drawer = new ProductDrawer(offsetVector, Context.GetContext().MVDataContext.GetLatestRelease());
                     drawer.DrawAndSaveAsDWG(mvProduct,
                         bookset, Path.Combine(folderPath, product.Tab.DWG + ".dwg"));
 
@@ -125,7 +125,7 @@ namespace Dimeng.LinkToMicrocad
                     IEnumerable<string> materialList = getMaterialList(mvProduct);
                     (new TempXMLWriter()).WriteFile(tempXMLPath, product, materialList);
 
-                    ProductDrawer drawer = new ProductDrawer(offsetVector);
+                    ProductDrawer drawer = new ProductDrawer(offsetVector, Context.GetContext().MVDataContext.GetLatestRelease());
                     drawer.DrawAndSaveAsDWG(mvProduct,
                         bookset, Path.Combine(folderPath, product.Tab.DWG + ".dwg"));
 

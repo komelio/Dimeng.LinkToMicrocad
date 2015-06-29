@@ -65,6 +65,48 @@ namespace Dimeng.LinkToMicrocad.Drawing.CAD
             }
         }
 
+        public static void AddDwgAsBlock(Database CurDb, FileInfo file, Point3d pt, Vector3d xaxis, Vector3d yaxis, Vector3d zaxis, double angle)
+        {
+            string blockName = file.Name.Substring(0, file.Name.LastIndexOf(file.Extension));
+
+            ObjectId id;
+            using (Transaction Trans = CurDb.TransactionManager.StartTransaction())
+            {
+                BlockTable bt = (BlockTable)Trans.GetObject(CurDb.BlockTableId, OpenMode.ForRead);
+                BlockTableRecord btr = (BlockTableRecord)Trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
+                if (bt.Has(blockName))
+                {
+                    id = Trans.GetObject(bt[blockName], OpenMode.ForRead).Id;
+                }
+                else
+                {
+                    using (Database OpenDb = new Database(false, true))
+                    {
+                        OpenDb.ReadDwgFile(file.FullName, FileShare.ReadWrite, true, "");
+                        id = CurDb.Insert(blockName, OpenDb, true);
+                    }
+                }
+
+                BlockReference br = new BlockReference(Point3d.Origin, id);
+
+                br.TransformBy(Matrix3d.AlignCoordinateSystem(Point3d.Origin,
+                                                              Vector3d.XAxis,
+                                                              Vector3d.YAxis,
+                                                              Vector3d.ZAxis,
+                                                              Point3d.Origin,
+                                                              xaxis,
+                                                              yaxis,
+                                                              zaxis));
+                br.TransformBy(Matrix3d.Rotation(angle / 180 * System.Math.PI, zaxis, Point3d.Origin));
+                br.TransformBy(Matrix3d.Displacement(pt - Point3d.Origin));
+
+                btr.AppendEntity(br);
+                Trans.AddNewlyCreatedDBObject(br, true);
+
+                Trans.Commit();
+            }
+        }
+
         public static bool CheckPolylineSelfIntersect(Polyline polyline)
         {
             using (DBObjectCollection entities = new DBObjectCollection())

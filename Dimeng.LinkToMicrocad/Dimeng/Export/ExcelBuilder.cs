@@ -1,4 +1,5 @@
-﻿using Dimeng.WoodEngine.Entities;
+﻿using Dimeng.LinkToMicrocad.Logging;
+using Dimeng.WoodEngine.Entities;
 using SpreadsheetGear;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,9 @@ namespace Dimeng.LinkToMicrocad
 
         public void Build(IWorkbook book)
         {
+            Logger.GetLogger().Debug("Part total number:" + product.Parts.Count.ToString());
+            Logger.GetLogger().Debug("Hardware total number:" + product.Hardwares.Count.ToString());
+
             buildPartsSheet(book);
             buildHardwareSheet(book);
         }

@@ -15,7 +15,6 @@ namespace Dimeng.WoodEngine.Business
             IWorkbookSet workBookSet, List<HardwareType> hardwareTypes)
         {
             Logger.GetLogger().Info(string.Format("Getting hardwares from product:{0}", product.Description));
-
             List<ModelError> errors = new List<ModelError>();
 
             for (int i = 0; i < hardwareCells.Rows.RowCount; i++)
@@ -45,6 +44,12 @@ namespace Dimeng.WoodEngine.Business
                 hwr.Width = check.Width();
                 hwr.Height = check.Height();
                 hwr.Depth = check.Depth();
+                hwr.HardwareType = check.Hardwaretype(workBookSet.Workbooks["H"], hardwareTypes);
+                bool isHaveAssociateRotation;
+                double tAssociateAngle;
+                hwr.AssociatedRotation = check.AssociateRotation(out isHaveAssociateRotation, out tAssociateAngle);
+                hwr.IsHaveAssocaitedRotation = isHaveAssociateRotation;
+                hwr.TAssociatedRotation = tAssociateAngle;
 
                 bool isEQ = check.IsEQ();
                 if (isEQ)
@@ -62,6 +67,9 @@ namespace Dimeng.WoodEngine.Business
                         hwr.XOrigin = d[0];
                         hwr.YOrigin = d[1];
                         hwr.ZOrigin = d[2];
+                        hwr.TXOrigin = d[0];
+                        hwr.TYOrigin = d[1];
+                        hwr.TZOrigin = d[2];
                         tempHardwares.Add(hwr);
                         Logger.GetLogger().Debug(string.Format("Add hardware {0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}", hwr.Name, hwr.Qty, hwr.Width, hwr.Height, hwr.Depth));
                     }
@@ -81,8 +89,11 @@ namespace Dimeng.WoodEngine.Business
                     hwr.XOrigin = xPos;
                     hwr.YOrigin = yPos;
                     hwr.ZOrigin = zPos;
+                    hwr.TXOrigin = xPos;
+                    hwr.TYOrigin = yPos;
+                    hwr.TZOrigin = zPos;
                     tempHardwares.Add(hwr);
-                    Logger.GetLogger().Debug(string.Format("Add hardware {0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}/{8}", hwr.Name, hwr.Qty, hwr.Width, hwr.Height, hwr.Depth, hwr.XOrigin, hwr.YOrigin, hwr.ZOrigin, hwr.ZRotation));
+                    Logger.GetLogger().Debug(string.Format("Add hardware {0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}/{8}", hwr.Name, hwr.Qty, hwr.Width, hwr.Height, hwr.Depth, hwr.XOrigin, hwr.YOrigin, hwr.ZOrigin, hwr.AssociatedRotation));
                 }
 
                 if (tempHardwares.Count > 0)

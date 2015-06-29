@@ -59,21 +59,28 @@ namespace Dimeng.WoodEngine.Business
                 Logger.GetLogger().Debug(
                     string.Format("Sub:{0}/{1}/{2}/{3}/{4}", sub.Description, sub.Width, sub.Height, sub.Depth, sub.Rotation));
 
+                Point3d subOrigin = new Point3d(sub.XOrigin, sub.YOrigin, sub.ZOrigin);
                 sub.Parts.ForEach(it => it.CalculateLocationInfo(
-                    new Point3d(sub.XOrigin, sub.YOrigin, sub.ZOrigin), sub.Rotation));
+                    subOrigin, sub.Rotation));
+                sub.Hardwares.ForEach(it => it.SetLocation(
+                    subOrigin, sub.Rotation));
                 product.CombinedHardwares.AddRange(sub.Hardwares);
                 product.CombinedParts.AddRange(sub.Parts);
 
                 foreach (var sub2 in sub.Subassemblies)
                 {
+                    Point3d nestSubOrigin = new Point3d(sub.XOrigin + sub2.XOrigin, sub.YOrigin + sub2.YOrigin, sub.ZOrigin + sub2.ZOrigin);
                     sub2.Parts.ForEach(it => it.CalculateLocationInfo(
-                        new Point3d(sub.XOrigin + sub2.XOrigin, sub.YOrigin + sub2.YOrigin, sub.ZOrigin + sub2.ZOrigin), sub.Rotation + sub2.Rotation));
+                        nestSubOrigin, sub.Rotation + sub2.Rotation));
+                    sub2.Hardwares.ForEach(it => it.SetLocation(
+                        nestSubOrigin, sub.Rotation + sub2.Rotation));
 
                     product.CombinedHardwares.AddRange(sub2.Hardwares);
                     product.CombinedParts.AddRange(sub2.Parts);
                 }
             }
 
+            product.CombinedHardwares.ForEach(it => it.FindAssociatedPart(product));
             product.CombinedParts.ForEach(p => p.MachineTokens.ForEach(m => m.ToMachining(1, library.CurrentToolFile)));
         }
 

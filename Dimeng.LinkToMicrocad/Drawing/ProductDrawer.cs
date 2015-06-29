@@ -15,8 +15,10 @@ namespace Dimeng.LinkToMicrocad.Drawing
     public class ProductDrawer
     {
         Vector3d offsetVector;
-        public ProductDrawer(Vector3d offsetVector)
+        IMVLibrary library;
+        public ProductDrawer(Vector3d offsetVector, IMVLibrary library)
         {
+            this.library = library;
             this.offsetVector = offsetVector;
         }
 
@@ -48,6 +50,11 @@ namespace Dimeng.LinkToMicrocad.Drawing
                     {
                         (new PartDrawer(db, offsetVector)).Draw(part);
                     }
+                }
+
+                foreach (var hw in product.CombinedHardwares)
+                {
+                    (new HardwareDrawer(db, library)).Draw(hw);
                 }
 
                 HostApplicationServices.WorkingDatabase = oDb;//重要，否则会导致很多问题，比如图层加入了却找不到

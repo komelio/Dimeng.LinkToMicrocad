@@ -149,6 +149,7 @@
     <Compile Include="Dimeng\UnitConverter.cs" />
     <Compile Include="Drawing\CAD\CADHelper.cs" />
     <Compile Include="Drawing\CAD\LayerHelper.cs" />
+    <Compile Include="Drawing\Hardware\HardwareDrawer.cs" />
     <Compile Include="Drawing\PartBendDrawer.cs" />
     <Compile Include="Drawing\PartDrawer.cs" />
     <Compile Include="Drawing\Part\BaseSolidStructer.cs" />
