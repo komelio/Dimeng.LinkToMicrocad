@@ -88,7 +88,8 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                             PosStartX,
                             PosStartY + HoleGap * i * yfactor * sin,
                             PosStartZ,
-                            Part);
+                            Part,
+                            this);
                         Part.HDrillings.Add(hdrill);
                     }
                 }
@@ -106,7 +107,8 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                             depth,
                             PosStartY + HoleGap * i * yfactor * sin,
                             PosStartZ,
-                            Part);
+                            Part,
+                            this);
                         Part.HDrillings.Add(hdrill);
                     }
                 }
@@ -120,7 +122,8 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                             PosStartY,
                             PosStartX + HoleGap * i * xfactor * cos,
                             PosStartZ,
-                            Part);
+                            Part,
+                            this);
                         Part.HDrillings.Add(hdrill);
                     }
                 }
@@ -135,7 +138,8 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                             depth,
                             PosStartX + HoleGap * i * xfactor * cos,
                             PosStartZ,
-                            Part);
+                            Part,
+                            this);
                         Part.HDrillings.Add(hdrill);
                     }
                 }
@@ -156,13 +160,14 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                             PosStartY + HoleGap * i * yfactor * sin,
                             Diameter,
                             PosStartZ,
-                            Part);
+                            Part,
+                            this);
 
                         Part.VDrillings.Add(vdrill);
                     }
                 }
 
-                Part.VDrillings.Add(new Machinings.VDrilling(this.FaceNumber, PosStartX, PosStartY, Diameter, PosStartZ, Part));
+                Part.VDrillings.Add(new Machinings.VDrilling(this.FaceNumber, PosStartX, PosStartY, Diameter, PosStartZ, Part, this));
             }
         }
     }

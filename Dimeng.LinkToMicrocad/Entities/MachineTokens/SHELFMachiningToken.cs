@@ -102,7 +102,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                             double dimx = holeposition.X;
                             double dimy = holeposition.Y;
 
-                            VDrilling vdrill = new VDrilling(f.FaceNumber, dimx, dimy, this.FaceHoleDiameter, this.FaceHoleDepth, f.Part);
+                            VDrilling vdrill = new VDrilling(f.FaceNumber, dimx, dimy, this.FaceHoleDiameter, this.FaceHoleDepth, f.Part,this);
                             f.Part.VDrillings.Add(vdrill);
                         }
                     }

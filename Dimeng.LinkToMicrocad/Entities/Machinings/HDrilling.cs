@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Autodesk.AutoCAD.Geometry;
+using Dimeng.WoodEngine.Entities.MachineTokens;
 
 namespace Dimeng.WoodEngine.Entities.Machinings
 {
     public class HDrilling
     {
-        public HDrilling(int facenumber, double diameter, double depth, double position, double zvalue, Part p)
+        public HDrilling(int facenumber, double diameter, double depth, double position, double zvalue, Part p, BaseToken token)
         {
             FaceNumber = facenumber;
             Diameter = diameter;
@@ -16,6 +17,7 @@ namespace Dimeng.WoodEngine.Entities.Machinings
             Position = position;
             ZValue = zvalue;
             Part = p;
+            this.Token = token;
         }
 
         public int FaceNumber { get; private set; }
@@ -24,6 +26,7 @@ namespace Dimeng.WoodEngine.Entities.Machinings
         public double Position { get; private set; }
         public double ZValue { get; private set; }
         public Part Part { get; private set; }
+        public BaseToken Token { get; private set; }
 
         /// <summary>
         /// 根据板件是否旋转以及所在边获取孔的方位向量，用于绘制Hdrill时使用

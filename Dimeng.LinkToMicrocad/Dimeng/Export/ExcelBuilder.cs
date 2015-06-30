@@ -120,7 +120,7 @@ namespace Dimeng.LinkToMicrocad
             int i = 4;
             foreach (var hw in product.Hardwares.OrderBy(it => it.Index))
             {
-                cells[i, 0].Value = hw.Index;
+                cells[i, 0].Value = i - 3;
                 cells[i, 1].Value = hw.SKU;
                 cells[i, 2].Value = hw.Description;
                 cells[i, 3].Value = hw.Number;

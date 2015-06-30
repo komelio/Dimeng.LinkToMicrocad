@@ -1,7 +1,9 @@
 ﻿<Window x:Class="Dimeng.WoodEngine.Prompts.PromptWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="产品提示屏" Height="607" Width="700" Icon="Images/Order.ico" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
+        Title="产品提示屏" Height="607" Width="700" Icon="Images/Order.ico" 
+        WindowStartupLocation="CenterScreen" 
+        Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />

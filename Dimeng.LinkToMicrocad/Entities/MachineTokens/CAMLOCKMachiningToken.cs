@@ -95,13 +95,13 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
                 foreach (double d in this.PointsPosition)
                 {
-                    HDrilling hdrill = new HDrilling(this.FaceNumber, this.EdgeBoreDiameter, this.EdgeBoreDepth, d, this.ZValue, Part);
+                    HDrilling hdrill = new HDrilling(this.FaceNumber, this.EdgeBoreDiameter, this.EdgeBoreDepth, d, this.ZValue, Part,this);
                     TempHDrills.Add(hdrill);
                 }
 
                 foreach (StructXY xy in this.ListCamVBoreXY)
                 {
-                    VDrilling vdrill = new VDrilling(this.CamFaceNumber, xy.X, xy.Y, this.CamFaceBoreDiameter, this.CamFaceBoreDepth, Part);
+                    VDrilling vdrill = new VDrilling(this.CamFaceNumber, xy.X, xy.Y, this.CamFaceBoreDiameter, this.CamFaceBoreDepth, Part,this);
                     Part.VDrillings.Add(vdrill);
                 }
 
@@ -119,7 +119,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                             double dimx = holeposition.X;
                             double dimy = holeposition.Y;
 
-                            VDrilling vdrill = new VDrilling(f.FaceNumber, dimx, dimy, this.FaceBoreDiameter, this.FaceBoreDepth, f.Part);
+                            VDrilling vdrill = new VDrilling(f.FaceNumber, dimx, dimy, this.FaceBoreDiameter, this.FaceBoreDepth, f.Part,this);
                             f.Part.VDrillings.Add(vdrill);
                         }
                     }

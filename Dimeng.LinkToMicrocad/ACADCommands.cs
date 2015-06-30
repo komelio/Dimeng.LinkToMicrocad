@@ -68,7 +68,7 @@ namespace Dimeng.LinkToMicrocad
         public void DelProduct()
         {
             Logging.Logger.GetLogger().Info("Call command 'Del_dm'");
-            MessageBox.Show("Del_dm");
+            //MessageBox.Show("Del_dm");
             try
             {
                 var dmHelper = new DimengHelper();

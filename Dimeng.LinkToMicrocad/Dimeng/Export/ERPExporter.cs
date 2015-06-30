@@ -1,5 +1,6 @@
 ﻿using Dimeng.LinkToMicrocad.Logging;
 using Dimeng.WoodEngine.Entities;
+using Dimeng.WoodEngine.Entities.MachineTokens;
 using SpreadsheetGear;
 using System;
 using System.Collections.Generic;
@@ -100,7 +101,7 @@ namespace Dimeng.LinkToMicrocad
             {
                 pProudct.Parts.Add(getPauchiePart(part));
 
-                //getTokenHardwares(part, pProudct.Hardwares);
+                getTokenHardwares(part, pProudct.Hardwares);
             }
 
             return pProudct;
@@ -108,7 +109,76 @@ namespace Dimeng.LinkToMicrocad
 
         private void getTokenHardwares(Part part, List<PauchieHardware> list)
         {
-            throw new NotImplementedException();
+            foreach (var hd in part.HDrillings)
+            {
+                if (hd.Token != null)
+                {
+                    if (hd.Token.Token.IndexOf("三合一") > -1)
+                    {
+                        Logger.GetLogger().Debug(string.Format("{0}三合一拉杆,Token:{1}", part.PartName, hd.Token.Token));
+                        addHardwareToList("三合一拉杆", "", "个", 1, list);
+                    }
+                    else if (hd.Token.Token.IndexOf("木榫") > -1)
+                    {
+                        Logger.GetLogger().Debug(string.Format("{0}木榫,Token:{1}", part.PartName, hd.Token.Token));
+                        addHardwareToList("木榫", "", "个", 1, list);
+                    }
+                }
+            }
+
+            foreach (var vd in part.VDrillings)
+            {
+                if (vd.Token == null)
+                {
+                    return;
+                }
+
+                if (vd.Token is CAMLOCKMachiningToken)
+                {
+                    var camlock = vd.Token as CAMLOCKMachiningToken;
+                    if (vd.Token.Token.IndexOf("三合一") > -1)
+                    {
+                        if (vd.Diameter == camlock.CamFaceBoreDiameter)
+                        {
+                            Logger.GetLogger().Debug(string.Format("{0}三合一锁扣盖,Token:{1}", part.PartName, vd.Token.Token));
+                            addHardwareToList("三合一锁扣盖", "", "个", 1, list);
+                            addHardwareToList("三合一锁扣", "", "个", 1, list);
+                        }
+                        else if (vd.Diameter == camlock.FaceBoreDiameter)
+                        {
+                            Logger.GetLogger().Debug(string.Format("{0}三合一胶粒,Token:{1}", part.PartName, vd.Token.Token));
+                            addHardwareToList("三合一胶粒", "", "个", 1, list);
+                        }
+                    }
+                    else if (vd.Token.Token.IndexOf("二合一") > -1)
+                    {
+                        if (vd.Diameter == camlock.CamFaceBoreDiameter)
+                        {
+                            Logger.GetLogger().Debug(string.Format("{0}二合一,Token:{1}", part.PartName, vd.Token.Token));
+                            addHardwareToList("二合一", "", "个", 1, list);
+                        }
+                    }
+                }
+                else if (vd.Token.Token.IndexOf("活动层板") > -1)
+                {
+                    Logger.GetLogger().Debug(string.Format("{0}活动层板托,Token:{1}", part.PartName, vd.Token.Token));
+                    addHardwareToList("活动层板托", "", "个", 1, list);
+                }
+
+            }
+        }
+
+        private void addHardwareToList(string name, string sku, string unit, int qty, List<PauchieHardware> hwrs)
+        {
+            var hw = hwrs.Find(it => it.Description.ToUpper() == name.ToUpper());
+            if (hw == null)
+            {
+                hwrs.Add(new PauchieHardware() { Description = name, Number = qty, SKU = sku, Unit = unit });
+            }
+            else
+            {
+                hw.Number += qty;
+            }
         }
 
         private PauchiePart getPauchiePart(Part part)

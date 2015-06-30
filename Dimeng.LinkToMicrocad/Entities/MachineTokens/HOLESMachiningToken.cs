@@ -64,7 +64,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                 {
                     foreach (double d in this.PointsPosition)//遍历所欲的孔位坐标
                     {
-                        HDrilling hdrill = new HDrilling(this.FaceNumber, this.EdgeBoreDiameter, this.EdgeBoreDepth, d, this.ZValue, Part);
+                        HDrilling hdrill = new HDrilling(this.FaceNumber, this.EdgeBoreDiameter, this.EdgeBoreDepth, d, this.ZValue, Part,this);
                         TempHDrills.Add(hdrill);
                     }
                 }
@@ -98,7 +98,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                                 double dimx = holeposition.X;
                                 double dimy = holeposition.Y;
 
-                                VDrilling vdrill = new VDrilling(f.FaceNumber, dimx, dimy, this.FaceBoreDiameter, this.FaceBoreDepth, f.Part);
+                                VDrilling vdrill = new VDrilling(f.FaceNumber, dimx, dimy, this.FaceBoreDiameter, this.FaceBoreDepth, f.Part,this);
                                 f.Part.VDrillings.Add(vdrill);
                             }
                         }
