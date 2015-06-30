@@ -16,6 +16,10 @@ namespace Dimeng.LinkToMicrocad.Drawing
     {
         public Solid3d Draw(Part part)
         {
+            //Solid3d solid = new Solid3d();
+            //solid.CreateBox(part.Length, part.Width, part.Thickness);
+            //return solid;
+
             Polyline routePLine = new Polyline();
             Polyline pline = getRectanglePolyline(part);
             //addToDrawing(pline);
@@ -34,6 +38,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
                 if (routePLine.Normal.Z < 0)//会出现这种情况，是因为机加工原点在wcs的下方，导致MPZAxis是朝下的，这样画出来的bulge就会相反，所以要进行二次纠正
                 {
                     Polyline newPline = new Polyline();
+
                     for (int i = 0; i < routePLine.NumberOfVertices; i++)
                     {
                         var pt = routePLine.GetPoint3dAt(i);
@@ -43,7 +48,6 @@ namespace Dimeng.LinkToMicrocad.Drawing
                     //addToDrawing(newPline);
                 }
 
-                
                 PolylineGetter.PolylineGetter plineTrimer = new PolylineGetter.PolylineGetter();
 
                 var lines = plineTrimer.CalculatePolyline(pline, routePLine, isLeft);
@@ -51,6 +55,11 @@ namespace Dimeng.LinkToMicrocad.Drawing
                 if (lines.Count != 1)
                 {
                     throw new Exception("计算刀补图形时发生错误");
+                }
+
+                for (int i = 1; i < lines.Count; i++)
+                {
+                    lines[i].Dispose();
                 }
 
                 pline = lines[0];
@@ -64,14 +73,23 @@ namespace Dimeng.LinkToMicrocad.Drawing
                 DBObjectCollection regs = new DBObjectCollection();
                 regs.Add(pline);
                 var regions = Region.CreateFromCurves(regs);
-                Region region = (Region)regions[0];
-                solidOut.Extrude(region, part.Thickness, 0);
-                solidOut.TransformBy(Matrix3d.Displacement(new Vector3d(0, 0, -part.Thickness / 2)));
-                return solidOut;
+
+                using (Region region = (Region)regions[0])//重要！否则及其容易导致崩溃，内存错误等问题
+                {
+                    solidOut.Extrude(region, part.Thickness, 0);
+                    solidOut.TransformBy(Matrix3d.Displacement(new Vector3d(0, 0, -part.Thickness / 2)));
+
+                    for (int i = 1; i < regions.Count; i++)
+                    {
+                        regions[i].Dispose();
+                    }
+
+                    return solidOut;
+                }
             }
             catch
             {
-                addToDrawing(pline);
+                //addToDrawing(pline);
 
                 Solid3d panel = new Solid3d();
                 panel.CreateBox(part.Length, part.Width, part.Thickness);

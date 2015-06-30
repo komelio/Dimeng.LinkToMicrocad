@@ -9,7 +9,7 @@ namespace Dimeng.WoodEngine.Entities
     {
         public static EdgeBanding Default()
         {
-            return new EdgeBanding();
+            return new EdgeBanding(string.Empty, 0, string.Empty);
         }
 
         public EdgeBanding(string name, double thick, string code)

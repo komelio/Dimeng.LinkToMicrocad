@@ -99,21 +99,18 @@ namespace Dimeng.LinkToMicrocad
                                                    out subname);
 
 
-                    bookset.GetLock();//lock the work book set
+                    bookset.Workbooks["S"].SaveAs(subname,  //TODO:组件的文件名
+                                                  FileFormat.OpenXMLWorkbook);
 
-                    updateAKProductWHD(product, bookset);
-                    mvProduct.Width = product.Tab.VarX;
-                    mvProduct.Height = product.Tab.VarZ;
-                    mvProduct.Depth = product.Tab.VarY;
-                    project.UpdateProduct(mvProduct);
+                    bookset.GetLock();//lock the work book set
 
                     ProductAnalyst analyst = new ProductAnalyst(
                         Context.GetContext().MVDataContext.GetLatestRelease());
+                    
                     var errors = analyst.Analysis(mvProduct, bookset);
                     bookset.Workbooks["L"].SaveAs(mvProduct.GetProductCutxFileName(),
                                                   FileFormat.OpenXMLWorkbook);
-                    bookset.Workbooks["S"].SaveAs(subname,  //TODO:组件的文件名
-                                                  FileFormat.OpenXMLWorkbook);
+
                     bookset.ReleaseLock();//release the work book set
 
                     outputErrors(errors);

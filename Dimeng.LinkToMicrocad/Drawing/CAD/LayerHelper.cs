@@ -25,8 +25,8 @@ namespace Dimeng.LinkToMicrocad.Drawing
 
                     lt.Add(ltr);
                     tran.AddNewlyCreatedDBObject(ltr, true);
-                    tran.Commit();
                 }
+                tran.Commit();
             }
 
             return layerName;

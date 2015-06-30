@@ -54,7 +54,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
 
                 foreach (var hw in product.CombinedHardwares)
                 {
-                    (new HardwareDrawer(db, library)).Draw(hw);
+                    //(new HardwareDrawer(db, library)).Draw(hw);
                 }
 
                 HostApplicationServices.WorkingDatabase = oDb;//重要，否则会导致很多问题，比如图层加入了却找不到

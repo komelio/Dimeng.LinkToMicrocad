@@ -29,6 +29,7 @@ namespace Dimeng.LinkToMicrocad
         {
             Logging.Logger.GetLogger().Info("Call command 'New_dm'");
 
+
             //MessageBox.Show("New_dm");
             try
             {

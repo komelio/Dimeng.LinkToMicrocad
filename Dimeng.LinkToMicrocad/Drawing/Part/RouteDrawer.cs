@@ -24,12 +24,9 @@ namespace Dimeng.LinkToMicrocad.Drawing
 
         public void Draw(Solid3d solid, Part part)
         {
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            Database db = doc.Database;
-
             foreach (var r in part.Routings)
             {
-                if(r.Points.Count>2)
+                if (r.Points.Count > 2)
                 {
                     continue;//绘制有问题，先跳过复杂的铣型，后面再来改进
                 }
@@ -45,11 +42,11 @@ namespace Dimeng.LinkToMicrocad.Drawing
                 }
 
                 using (Polyline3d plSection = getRouteSharp(tool, r))
-                using(Polyline3d plSectionHalf = getRouteSharpHalf(tool,r))
+                using (Polyline3d plSectionHalf = getRouteSharpHalf(tool, r))
                 {
                     double depth = r.Points.Max(it => it.Z);
 
-                    foreach(var s in getPathSolids(plSection,plSectionHalf,r,tool))
+                    foreach (var s in getPathSolids(plSection, plSectionHalf, r, tool))
                     {
                         moveSolidToDepth(r, s, depth);
                         solid.BooleanOperation(BooleanOperationType.BoolSubtract, s);
@@ -142,6 +139,10 @@ namespace Dimeng.LinkToMicrocad.Drawing
                 curveSolid.TransformBy(Matrix3d.Displacement(pt - Point3d.Origin));
 
                 solids.Add(curveSolid);
+
+                solidToolFrustum.Dispose();
+                curve.Dispose();
+                plSectionClone.Dispose();
 
                 //addToDrawing(line);
 
@@ -238,7 +239,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
             rob.DraftAngle = 0;
             rob.TwistAngle = 0;
             solidToolFrustum.CreateRevolvedSolid(plSect, Point3d.Origin, Vector3d.ZAxis, 2 * System.Math.PI, 0, rob.ToRevolveOptions());
-        }   
+        }
 
         private void rotateEntityToZPlane(Polyline3d plSection, Routing route)
         {

@@ -64,8 +64,6 @@ namespace Dimeng.WoodEngine.Entities.Checks
                 return edge;
             }
 
-            Logger.GetLogger().Debug("Edgebanding sheet total numbers:" + bookE.Worksheets.Count.ToString());
-            Logger.GetLogger().Debug(bookE.Worksheets[0].Cells[0, 0].Text);
             var sheet = bookE.Worksheets[1];
             for (int i = 0; i < sheet.Cells.RowCount; i++)
             {
@@ -93,8 +91,14 @@ namespace Dimeng.WoodEngine.Entities.Checks
 
             //errors.Add()
 
-            tempEdgeBandings.Add(EdgeBanding.Default());
-            return EdgeBanding.Default();
+            var e = new EdgeBanding(edgeName, 0, string.Empty);
+            tempEdgeBandings.Add(e);
+
+            errors.Add(
+                new ModelError(string.Format("Edgeband {0} not found in edgx file!", edgeName))
+                );
+
+            return e;
         }
     }
 }
