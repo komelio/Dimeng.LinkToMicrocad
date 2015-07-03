@@ -42,7 +42,11 @@ namespace Dimeng.LinkToMicrocad.Drawing
                     Logger.GetLogger().Info("Start Drawing Part:" + part.PartName);
                     Logger.GetLogger().Info("Part Bending:" + part.IsBend.ToString());
 
-                    if (part.IsBend)
+                    if (part.IsMolding)
+                    {
+                        (new PartMoldingDrawer(part, db, Path.Combine(Context.GetContext().MVDataContext.GetLatestRelease().MicrovellumData, "Graphics", "Moldings"))).Draw();
+                    }
+                    else if (part.IsBend)
                     {
                         (new PartBendDrawer(part, Point3d.Origin, db, offsetVector)).Draw();
                     }

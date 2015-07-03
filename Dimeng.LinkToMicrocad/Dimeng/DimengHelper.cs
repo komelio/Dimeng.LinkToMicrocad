@@ -98,7 +98,6 @@ namespace Dimeng.LinkToMicrocad
                                                    Context.GetContext().MVDataContext.GetLatestRelease(),
                                                    out subname);
 
-
                     bookset.Workbooks["S"].SaveAs(subname,  //TODO:组件的文件名
                                                   FileFormat.OpenXMLWorkbook);
 
@@ -106,7 +105,7 @@ namespace Dimeng.LinkToMicrocad
 
                     ProductAnalyst analyst = new ProductAnalyst(
                         Context.GetContext().MVDataContext.GetLatestRelease());
-                    
+
                     var errors = analyst.Analysis(mvProduct, bookset);
                     bookset.Workbooks["L"].SaveAs(mvProduct.GetProductCutxFileName(),
                                                   FileFormat.OpenXMLWorkbook);
@@ -164,7 +163,8 @@ namespace Dimeng.LinkToMicrocad
             string hardwareHwrx = Path.Combine(project.JobPath, specificationGroup.HardwareFileName);
             string doorstyleDsvx = Path.Combine(project.JobPath, specificationGroup.DoorWizardFileName);
 
-            string subassemblyCutx = project.AddSubToProduct(mvProduct, product, library.Library);
+            int lineNumber = 0;
+            string subassemblyCutx = project.AddSubToProduct(mvProduct, product, library.Library, ref lineNumber);
             subFileName = subassemblyCutx;
 
             var bookset = SpreadHelper.GetProductSubassemblyBookSet(mvProduct.GetProductCutxFileName(),
@@ -181,6 +181,14 @@ namespace Dimeng.LinkToMicrocad
             mvProduct.Comments = viewmodel.Comments;
 
             product.Tab.VarElevation = prompt.ViewModel.Elevation;//更新离地高度
+
+            //把组件的长宽高再保存回产品
+            bookset.Workbooks["L"].Worksheets["Subassemblies"].Cells[lineNumber, 18].Value
+                = bookset.Workbooks["S"].Worksheets["Prompts"].Cells[0, 1].Value;
+            bookset.Workbooks["L"].Worksheets["Subassemblies"].Cells[lineNumber, 19].Value
+                = bookset.Workbooks["S"].Worksheets["Prompts"].Cells[1, 1].Value;
+            bookset.Workbooks["L"].Worksheets["Subassemblies"].Cells[lineNumber, 20].Value
+                = bookset.Workbooks["S"].Worksheets["Prompts"].Cells[2, 1].Value;
 
             return viewmodel.BookSet;
         }

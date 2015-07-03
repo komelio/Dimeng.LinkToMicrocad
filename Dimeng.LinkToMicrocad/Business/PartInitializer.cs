@@ -172,7 +172,7 @@ namespace Dimeng.WoodEngine.Business
                         //提前检查是否含有这个指令
                         if (ModelAssemblyLoader.GetInstance().Types.Find(it => it.FullName == xtypeFullName) == null)
                         {
-                            Logger.GetLogger().Fatal("Token unknown:" + xtokenName);
+                            Logger.GetLogger().Warn("Token unknown:" + xtokenName);
                             continue;
                         }
 
@@ -223,6 +223,7 @@ namespace Dimeng.WoodEngine.Business
                 //提前检查是否含有这个指令
                 if (ModelAssemblyLoader.GetInstance().Types.Find(it => it.FullName == typeFullName) == null)
                 {
+                    Logger.GetLogger().Warn("Token unknown:" + tokenName);
                     continue;
                 }
 
@@ -301,6 +302,7 @@ namespace Dimeng.WoodEngine.Business
             if (temp.StartsWith("MITER")) return "MITER";
             if (temp.StartsWith("PROFILE")) return "PROFILE";
             if (temp.StartsWith("BENDING")) return "BENDING";
+            if (temp.StartsWith("MOULDING")) return "MOULDING";
 
             //正则匹配，最后两位是数字的，就去掉最后两个返回
             //只有一位是数字的，就去掉最后一个

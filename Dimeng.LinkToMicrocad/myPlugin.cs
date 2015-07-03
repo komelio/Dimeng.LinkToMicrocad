@@ -27,7 +27,6 @@ namespace Dimeng.LinkToMicrocad
         void IExtensionApplication.Terminate()
         {
         }
-
     }
 
 }

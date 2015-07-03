@@ -90,8 +90,12 @@ namespace Dimeng.WoodEngine.Entities
             this.FileName = Guid.NewGuid().ToString();
             this.Face6FileName = Guid.NewGuid().ToString();
 
+            this.IsMolding = false;
+
             calculateCutSize();
         }
+
+        public bool IsMolding { get; set; }//是否Moulding
 
         public bool HasFace5Machining()
         {
@@ -214,6 +218,7 @@ namespace Dimeng.WoodEngine.Entities
         public List<Routing> Routings { get; private set; }
         public List<Sawing> Sawings { get; private set; }
         public List<Profile> Profiles { get; private set; }
+        public Molding Molding { get; set; }
 
         public string FileName { get; set; }
         public string Face6FileName { get; set; }

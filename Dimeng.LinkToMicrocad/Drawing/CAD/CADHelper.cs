@@ -11,10 +11,9 @@ namespace Dimeng.LinkToMicrocad.Drawing.CAD
 {
     public class CADHelper
     {
-        public static Entity AddDwgEntities(string path, Transaction Trans)
+        public static Entity AddDwgEntities(string path, Transaction Trans,Database db)
         {
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            Database CurDb = doc.Database;
+            Database CurDb = db;
             ObjectIdCollection collection = new ObjectIdCollection();
 
             //看来不能直接新创建一个Transaction来获取结果，因为返回之后这个Trans就结束了   

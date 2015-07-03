@@ -2,6 +2,7 @@
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 using Dimeng.LinkToMicrocad.Drawing.CAD;
+using Dimeng.LinkToMicrocad.Logging;
 using Dimeng.WoodEngine.Entities;
 using Dimeng.WoodEngine.Entities.Machinings;
 using System;
@@ -14,10 +15,12 @@ namespace Dimeng.LinkToMicrocad.Drawing
 {
     public class ProfileDrawer
     {
+        Database db;
         string graphicPath;
 
-        public ProfileDrawer(string graphicPath)
+        public ProfileDrawer(string graphicPath, Database db)
         {
+            this.db = db;
             this.graphicPath = graphicPath;
         }
 
@@ -25,9 +28,6 @@ namespace Dimeng.LinkToMicrocad.Drawing
         {
             foreach (var profile in part.Profiles)
             {
-                Document doc = Application.DocumentManager.MdiActiveDocument;
-                Database db = doc.Database;
-
                 using (Transaction trans = db.TransactionManager.StartTransaction())
                 {
                     BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
@@ -44,10 +44,12 @@ namespace Dimeng.LinkToMicrocad.Drawing
 
                             if (!File.Exists(file))
                             {
-                                throw new FileNotFoundException(file + " not found!!!!!!By profile drawer");
+                                Logger.GetLogger().Warn(string.Format("Profile dwg file {0} not found!", file));
+                                return;
+                                //throw new FileNotFoundException(file + " not found!!!!!!By profile drawer");
                             }
 
-                            Entity sectionOld = CADHelper.AddDwgEntities(file, trans);
+                            Entity sectionOld = CADHelper.AddDwgEntities(file, trans, db);
                             section = sectionOld.Clone() as Entity;
                             sectionOld.Erase();//删去旧的
                         }
@@ -80,8 +82,12 @@ namespace Dimeng.LinkToMicrocad.Drawing
                         proSolid.CreateSweptSolid(section, line, sob.ToSweepOptions());
                         solid.BooleanOperation(BooleanOperationType.BoolSubtract, proSolid);
 
-                        btr.AppendEntity(proSolid);
-                        trans.AddNewlyCreatedDBObject(proSolid, true);
+                        line.Dispose();
+                        proSolid.Dispose();
+                        section.Dispose();
+
+                        //btr.AppendEntity(proSolid);
+                        //trans.AddNewlyCreatedDBObject(proSolid, true);
                         trans.Commit();
                     }
                     catch

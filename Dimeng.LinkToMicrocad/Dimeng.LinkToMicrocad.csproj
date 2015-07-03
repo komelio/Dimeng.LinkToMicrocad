@@ -171,6 +171,7 @@
     <Compile Include="Drawing\Hardware\HardwareDrawer.cs" />
     <Compile Include="Drawing\PartBendDrawer.cs" />
     <Compile Include="Drawing\PartDrawer.cs" />
+    <Compile Include="Drawing\PartMoldingDrawer.cs" />
     <Compile Include="Drawing\Part\BaseSolidStructer.cs" />
     <Compile Include="Drawing\Part\HDrillDrawer.cs" />
     <Compile Include="Drawing\Part\ProfileDrawer.cs" />
@@ -206,6 +207,7 @@
     <Compile Include="Entities\MachineTokens\CUTOUTMachiningToken.cs" />
     <Compile Include="Entities\MachineTokens\DADOMachiningToken.cs" />
     <Compile Include="Entities\MachineTokens\HOLESMachiningToken.cs" />
+    <Compile Include="Entities\MachineTokens\MOULDINGMachiningToken.cs" />
     <Compile Include="Entities\MachineTokens\PLINEMachiningToken.cs" />
     <Compile Include="Entities\MachineTokens\PROFILEMachiningToken.cs" />
     <Compile Include="Entities\MachineTokens\RCORNERNOTCHMachiningToken.cs" />
@@ -217,6 +219,7 @@
     <Compile Include="Entities\MachineTokens\ToolComp.cs" />
     <Compile Include="Entities\MachineTokens\UnAssociativeToken.cs" />
     <Compile Include="Entities\Machinings\HDrilling.cs" />
+    <Compile Include="Entities\Machinings\Molding.cs" />
     <Compile Include="Entities\Machinings\Profile.cs" />
     <Compile Include="Entities\Machinings\Routing.cs" />
     <Compile Include="Entities\Machinings\Sawing.cs" />

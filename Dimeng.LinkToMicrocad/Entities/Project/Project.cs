@@ -241,7 +241,7 @@ namespace Dimeng.WoodEngine.Entities
             }
         }
 
-        public string AddSubToProduct(Product product, AKProduct aksub, string libraryPath)
+        public string AddSubToProduct(Product product, AKProduct aksub, string libraryPath, ref int line)
         {
             string[] files = Directory.GetFileSystemEntries(libraryPath, aksub.TabA.ID + ".cutx", SearchOption.AllDirectories);
             if (files.Length == 0)
@@ -264,6 +264,8 @@ namespace Dimeng.WoodEngine.Entities
                     cells[i, 30].Value = -aksub.SubInfo.Position.Y + aksub.SubInfo.RefPoint.Y;
                     cells[i, 31].Value = -aksub.SubInfo.Position.Z + aksub.SubInfo.RefPoint.Z;
                     book.Save();
+
+                    line = i;
 
                     string path = Path.Combine(this.jobPath, "Subassemblies", string.Format("{0}_({1}){2}.cutx", product.Handle, aksub.TabA.Name, i + 1));
 
