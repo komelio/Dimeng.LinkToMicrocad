@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Dimeng.LinkToMicrocad.Prompts.Subassemblies.SubPropertyWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="组件属性" Height="300" Width="300">
+        Title="组件属性" Height="332" Width="300">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="229*"/>
@@ -20,8 +20,10 @@
         <TextBox HorizontalAlignment="Left" Height="23" Margin="71,140,0,0" TextWrapping="Wrap" Text="{Binding YOrigin.PropertyValue}" VerticalAlignment="Top" Width="120"/>
         <Label Content="Z坐标" HorizontalAlignment="Left" Margin="23,165,0,0" VerticalAlignment="Top"/>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="71,168,0,0" TextWrapping="Wrap" Text="{Binding ZOrigin.PropertyValue}" VerticalAlignment="Top" Width="120"/>
-        <Label Content="数量" HorizontalAlignment="Left" Margin="23,193,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="71,196,0,0" TextWrapping="Wrap" Text="{Binding Qty.PropertyValue}" VerticalAlignment="Top" Width="120"/>
+        <Label Content="旋转角" HorizontalAlignment="Left" Margin="23,193,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="71,196,0,0" TextWrapping="Wrap" Text="{Binding ZRotation.PropertyValue}" VerticalAlignment="Top" Width="120"/>
+        <Label Content="数量" HorizontalAlignment="Left" Margin="23,221,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="71,224,0,0" TextWrapping="Wrap" Text="{Binding Qty.PropertyValue}" VerticalAlignment="Top" Width="120"/>
 
     </Grid>
 </Window>

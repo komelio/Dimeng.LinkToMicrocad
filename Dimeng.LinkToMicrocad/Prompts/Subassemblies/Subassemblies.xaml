@@ -32,6 +32,7 @@
                     <GridViewColumn Header="X坐标" Width="50" DisplayMemberBinding="{Binding XOrigin.PropertyValue}"/>
                     <GridViewColumn Header="Y坐标" Width="50" DisplayMemberBinding="{Binding YOrigin.PropertyValue}"/>
                     <GridViewColumn Header="Z坐标" Width="50" DisplayMemberBinding="{Binding ZOrigin.PropertyValue}"/>
+                    <GridViewColumn Header="旋转" Width="50" DisplayMemberBinding="{Binding ZRotation.PropertyValue}"/>
                 </GridView>
             </ListView.View>
         </ListView>
