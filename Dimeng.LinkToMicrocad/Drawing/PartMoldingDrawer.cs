@@ -42,14 +42,15 @@ namespace Dimeng.LinkToMicrocad.Drawing
                     BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
                     BlockTableRecord btr = (BlockTableRecord)trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
 
-                    Solid3d panel = getSolid(filePath);
+                    Solid3d panel = getSolid(filePath, part.BasePoint);
                     panel.Layer = part.Material.Name;
 
                     panel.TransformBy(Matrix3d.Rotation(part.TXRotation * System.Math.PI / 180, Vector3d.XAxis, Point3d.Origin));
                     panel.TransformBy(Matrix3d.Rotation(part.TYRotation * System.Math.PI / 180, Vector3d.YAxis, Point3d.Origin));
                     panel.TransformBy(Matrix3d.Rotation(part.TZRotation * System.Math.PI / 180, Vector3d.ZAxis, Point3d.Origin));
 
-                    panel.TransformBy(Matrix3d.Displacement(part.GetPartPointPositionByNumber(1).GetAsVector()));
+
+                    panel.TransformBy(Matrix3d.Displacement(new Vector3d(part.TXOrigin, part.TYOrigin, part.TZOrigin)));
 
                     btr.AppendEntity(panel);
                     trans.AddNewlyCreatedDBObject(panel, true);
@@ -63,8 +64,15 @@ namespace Dimeng.LinkToMicrocad.Drawing
             }
         }
 
-        private Solid3d getSolid(string file)
+        private Solid3d getSolid(string file, int basePoint)
         {
+            double offset1 = 0;
+            double offset2 = 0;
+            double maxY = 0;
+            double minY = 0;
+            double maxX = 0;
+            double minX = 0;
+
             ObjectIdCollection collection = new ObjectIdCollection();
 
             //看来不能直接新创建一个Transaction来获取结果，因为返回之后这个Trans就结束了   
@@ -113,36 +121,167 @@ namespace Dimeng.LinkToMicrocad.Drawing
                             {
                                 Curve curve = entity as Curve;
                                 Logger.GetLogger().Debug("Curve is closed:" + curve.Closed.ToString());
-                                //if (!curve.Closed)
-                                //{
-                                //    if (curve is Circle || curve is Ellipse)
-                                //    {
-                                //        Solid3d solid = new Solid3d();
-                                //        solid.CreateExtrudedSolid(curve, new Vector3d(0, 0, -part.Length), new SweepOptions());
-                                //        solid.TransformBy(Matrix3d.Rotation(-Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
-                                //        solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
-                                //        Trans.Commit();
-                                //        return solid;
-                                //    }
-                                //    continue;
-                                //}
 
-                                //if (curve is Polyline || curve is Polyline2d)
-                                //{
+                                if (curve is Circle)
+                                {
+                                    Circle circle = curve as Circle;
+                                    offset1 = circle.Diameter;
+                                    offset2 = circle.Diameter;
+                                }
+                                else if (curve is Polyline)
+                                {
+                                    Polyline pl = curve as Polyline;
+                                    for (int i = 0; i < pl.NumberOfVertices; i++)
+                                    {
+                                        double y = pl.GetPoint2dAt(i).Y;
+                                        double x = pl.GetPoint2dAt(i).X;
+
+                                        if (i == 0)
+                                        {
+                                            maxY = y;
+                                            minY = y;
+                                            maxX = x;
+                                            minX = x;
+                                        }
+
+                                        if (y > maxY)
+                                        {
+                                            maxY = y;
+                                        }
+                                        if (y < minY)
+                                        {
+                                            minY = y;
+                                        }
+                                        if (x > maxX)
+                                        {
+                                            maxX = x;
+                                        }
+                                        if (x < minX)
+                                        {
+                                            minX = x;
+                                        }
+                                    }
+                                    offset1 = maxY - minY;
+                                    offset2 = maxX - minX;
+                                }
+                                else if (curve is Polyline2d)
+                                {
+                                    Polyline2d pl2d = curve as Polyline2d;
+
+                                    int i = 0;
+                                    foreach (ObjectId vId in pl2d)
+                                    {
+                                        Vertex2d v2d = (Vertex2d)Trans.GetObject(vId, OpenMode.ForRead);
+                                        double y = v2d.Position.Y;
+                                        double x = v2d.Position.X;
+
+                                        if (i == 0)
+                                        {
+                                            maxY = y;
+                                            minY = y;
+                                            maxX = x;
+                                            minX = x;
+                                        }
+
+                                        if (y > maxY)
+                                        {
+                                            maxY = y;
+                                        }
+                                        if (y < minY)
+                                        {
+                                            minY = y;
+                                        }
+                                        if (x > maxX)
+                                        {
+                                            maxX = x;
+                                        }
+                                        if (x < minX)
+                                        {
+                                            minX = x;
+                                        }
+
+                                        i++;
+                                    }
+                                    offset1 = maxY - minY;
+                                    offset2 = maxX - minX;
+                                }
+
+                                Logger.GetLogger().Debug("Molding Offset1:" + offset1.ToString());
+                                Logger.GetLogger().Debug("Molding Offset2:" + offset2.ToString());
+
                                 Solid3d solid = new Solid3d();
                                 SweepOptionsBuilder sob = new SweepOptionsBuilder();
                                 sob.Align = SweepOptionsAlignOption.AlignSweepEntityToPath;
-                                //sob.BasePoint = Point3d.Origin;
-                                solid.CreateExtrudedSolid(curve, new Vector3d(0, 0, -part.Length), sob.ToSweepOptions());
-                                //solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, 0, part.Length / 2)));
-                                solid.TransformBy(Matrix3d.Rotation(-Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
-                                //solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
+                                if (basePoint == 1)
+                                {
+                                    solid.CreateExtrudedSolid(curve, new Vector3d(0, 0, part.Length), sob.ToSweepOptions());
+                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
+                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
+                                }
+                                else if (basePoint == 2)
+                                {
+                                    solid.CreateExtrudedSolid(curve, new Vector3d(0, 0, part.Length), sob.ToSweepOptions());
+                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
+                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
+                                    solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, 0, -offset2)));
+                                }
+                                else if (basePoint == 3)
+                                {
+                                    solid.CreateExtrudedSolid(curve, new Vector3d(0, 0, part.Length), sob.ToSweepOptions());
+                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
+                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
+                                    solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, -offset1, 0)));
+                                }
+                                else if (basePoint == 4)
+                                {
+                                    solid.CreateExtrudedSolid(curve, new Vector3d(0, 0, part.Length), sob.ToSweepOptions());
+                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
+                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
+
+                                    solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, -offset1, 0)));
+                                    solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, 0, -offset2)));
+
+                                }
+                                else if (basePoint == 5)
+                                {
+                                    solid.CreateExtrudedSolid(curve, new Vector3d(0, 0, -part.Length), sob.ToSweepOptions());
+                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
+                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
+
+                                    solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, -offset1, 0)));
+                                }
+                                else if (basePoint == 6)
+                                {
+                                    solid.CreateExtrudedSolid(curve, new Vector3d(0, 0, -part.Length), sob.ToSweepOptions());
+                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
+                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
+
+                                    solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, -offset1, 0)));
+                                    solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, 0, -offset2)));
+                                }
+                                else if (basePoint == 7)
+                                {
+                                    solid.CreateExtrudedSolid(curve, new Vector3d(0, 0, -part.Length), sob.ToSweepOptions());
+                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
+                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
+                                }
+                                else//base point 8
+                                {
+                                    solid.CreateExtrudedSolid(curve, new Vector3d(0, 0, -part.Length), sob.ToSweepOptions());
+                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
+                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
+                                    solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, 0, -offset2)));
+                                }
+
+                                entity.Erase();
+
                                 Trans.Commit();
                                 return solid;
                                 //}
                             }
-
+                            //entity.Erase();
                         }
+                        Trans.Commit();
                     }
                 }
             }
