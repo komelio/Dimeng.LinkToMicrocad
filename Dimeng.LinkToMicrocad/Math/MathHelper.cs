@@ -85,6 +85,57 @@ namespace Dimeng.WoodEngine.Math
             return resultPts;
         }
 
+        public static List<int> FindSelfIntersectPline(Polyline2d polyline)
+        {
+            List<int> resultPts = new List<int>();
+
+            DBObjectCollection entities = new DBObjectCollection();
+            polyline.Explode(entities);
+
+            for (int i = 0; i < entities.Count; ++i)
+            {
+                for (int j = i + 1; j < entities.Count; ++j)
+                {
+                    Curve curve1 = entities[i] as Curve;
+                    Curve curve2 = entities[j] as Curve;
+
+                    Autodesk.AutoCAD.Geometry.Point3dCollection points = new Autodesk.AutoCAD.Geometry.Point3dCollection();
+                    curve1.IntersectWith(
+                        curve2,
+                        Intersect.OnBothOperands,
+                        points,
+                        IntPtr.Zero,
+                        IntPtr.Zero);
+
+                    foreach (Point3d point in points)
+                    {
+                        // Make a check to skip the start/end points
+                        // since they are connected vertices
+                        if (point == curve1.StartPoint ||
+                            point == curve1.EndPoint)
+                        {
+                            if (point == curve2.StartPoint ||
+                                point == curve2.EndPoint)
+                            {
+                                // If two consecutive segments, then skip
+                                if (j == i + 1)
+                                {
+                                    continue;
+                                }
+                            }
+                        }
+
+                        resultPts.Add(j);
+                    }
+                }
+
+                // Need to be disposed explicitely
+                // since entities are not DB resident
+                entities[i].Dispose();
+            }
+            return resultPts;
+        }
+
         public static Polyline GetOffsetPolyline(Polyline line, bool IsLeftComp, double r)
         {
             Polyline newLine = new Polyline();

@@ -189,6 +189,36 @@ namespace LibraryConvert
 
             doc.Save(Path.Combine(finalPath, "Dms.xml"));
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string finalPath = @"C:\Users\xspxs_000\Desktop\output";
+            DirectoryInfo dc = new DirectoryInfo(@"C:\Users\xspxs_000\Desktop\ad\Products");
+            foreach (var f in dc.GetFiles("*.cutx", SearchOption.AllDirectories))
+            {
+                string filename = f.Name.Replace(".cutx", "");
+                Item item = new Item();
+
+                if (f.Directory.Name.StartsWith("0"))
+                {
+                    item.Name = filename.Substring(0, filename.Length - 5);
+                    item.Id = filename.Substring(filename.Length - 5);
+                }
+                else
+                {
+                    item.Name = filename.Substring(0, filename.Length - 6);
+                    item.Id = filename.Substring(filename.Length - 6);
+                }
+
+                File.Copy(f.FullName, Path.Combine(finalPath, "Library", "Products", item.Id + ".cutx"), true);
+
+                //string pic = Path.Combine(f.Directory.ToString(), filename + ".jpg");
+                //if (File.Exists(pic))
+                //{
+                //    File.Copy(pic, Path.Combine(finalPath, "Photos", "dmsobj", item.Id + ".jpg"), true);
+                //}
+            }
+        }
     }
 
     public class Category

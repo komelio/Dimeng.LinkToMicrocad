@@ -1,6 +1,7 @@
 ﻿using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
+using Dimeng.LinkToMicrocad.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +12,7 @@ namespace Dimeng.LinkToMicrocad.Drawing.CAD
 {
     public class CADHelper
     {
-        public static Entity AddDwgEntities(string path, Transaction Trans,Database db)
+        public static Entity AddDwgEntities(string path, Transaction Trans, Database db)
         {
             Database CurDb = db;
             ObjectIdCollection collection = new ObjectIdCollection();
@@ -28,13 +29,15 @@ namespace Dimeng.LinkToMicrocad.Drawing.CAD
                     foreach (var a in btr)
                     {
                         Entity entity = (Entity)openTrans.GetObject(a, OpenMode.ForWrite);
-                        collection.Add(a);
+                        if (entity != null && !entity.IsErased)
+                        { collection.Add(a); }
                     }
                     openTrans.Commit();
                 }
 
                 BlockTable Bt = (BlockTable)Trans.GetObject(CurDb.BlockTableId, OpenMode.ForWrite);
                 BlockTableRecord btr2 = (BlockTableRecord)Trans.GetObject(Bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
+
                 IdMapping map = new IdMapping();
                 CurDb.WblockCloneObjects(collection, btr2.ObjectId, map, DuplicateRecordCloning.Replace, false);//把dwg文件里的文件拷贝到当前的Database       
 
@@ -62,6 +65,46 @@ namespace Dimeng.LinkToMicrocad.Drawing.CAD
                 }
                 throw new System.Exception("未找到属于该dwg的多段线截面数据" + path);
             }
+        }
+
+        public static Polyline RebuildPolyline(Entity line, Database db)
+        {
+            if (line is Polyline)
+            {
+                Polyline ol = (Polyline)line;
+                Polyline pl = new Polyline();
+                for (int i = 0; i < ol.NumberOfVertices; i++)
+                {
+                    Point2d pt = ol.GetPoint2dAt(i);
+                    pl.AddVertexAt(i, new Point2d(Math.Round(pt.X, 0), Math.Round(pt.Y, 0)), ol.GetBulgeAt(i), 0, 0);
+                }
+                pl.Closed = true;
+                return pl;
+            }
+            if (line is Polyline2d)
+            {
+                Polyline2d ol = (Polyline2d)line;
+
+                using (Transaction tran = db.TransactionManager.StartTransaction())
+                {
+                    Polyline pl = new Polyline();
+
+                    int i = 0;
+                    foreach (ObjectId id in ol)
+                    {
+                        Vertex2d v2d = (Vertex2d)tran.GetObject(id, OpenMode.ForRead);
+                        Logger.GetLogger().Warn("Polyline2d vertex3d Position:" + v2d.Position.ToString());
+                        pl.AddVertexAt(i, new Point2d(Math.Round(v2d.Position.X, 0), Math.Round(v2d.Position.Y, 0)), v2d.Bulge, 0, 0);
+                        i++;
+                    }
+                    pl.Closed = true;
+
+                    return pl;
+                }
+
+            }
+
+            throw new Exception("Unknown supported type for polyline!");
         }
 
         public static void AddDwgAsBlock(Database CurDb, FileInfo file, Point3d pt, Vector3d xaxis, Vector3d yaxis, Vector3d zaxis, double angle)

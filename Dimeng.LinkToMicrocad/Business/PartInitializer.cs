@@ -57,7 +57,7 @@ namespace Dimeng.WoodEngine.Business
 
             if (width <= 0 || length <= 0 || thick <= 0)
             {
-                Logger.GetLogger().Info("Part got errors !");
+                Logger.GetLogger().Info(string.Format("Part got errors !{0}/{1}/{2}", width, length, thick));
                 return errors;
             }
 
@@ -73,6 +73,7 @@ namespace Dimeng.WoodEngine.Business
                 if (errors.Count > 0)
                 {
                     Logger.GetLogger().Error("Part got errors !");
+                    errors.ForEach(it => Logger.GetLogger().Error(it.Message));
                     //return errors; //有问题的板件还是画
                 }
 
@@ -98,7 +99,8 @@ namespace Dimeng.WoodEngine.Business
 
                 if (errors.Count > 0)
                 {
-                    Logger.GetLogger().Info("Part got errors !");
+                    Logger.GetLogger().Error("Part got errors !");
+                    errors.ForEach(it => Logger.GetLogger().Error(it.Message));
                     //return errors; //有问题的板件还是画
                 }
 

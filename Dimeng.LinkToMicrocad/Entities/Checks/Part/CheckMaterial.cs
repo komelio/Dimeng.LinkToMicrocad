@@ -128,7 +128,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
                 CutPartMaterial material = new CutPartMaterial(name, thick, code);
                 material.Grain = grain;
 
-                for (int i = 9; i < 10; i += 9)
+                for (int i = 9; i < 100; i += 9)
                 {
                     if (string.IsNullOrEmpty(entireRow[0, i].Text.Trim()))
                     {
@@ -169,6 +169,11 @@ namespace Dimeng.WoodEngine.Entities.Checks
             if (material is CutPartMaterial)
             {
                 var m = (CutPartMaterial)material;
+                if (m.IsFake)
+                {
+                    return;
+                }
+
                 if (!m.HasFitStock(length, width))
                 {
                     this.PartError(

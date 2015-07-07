@@ -207,6 +207,7 @@
     <Compile Include="Entities\MachineTokens\CUTOUTMachiningToken.cs" />
     <Compile Include="Entities\MachineTokens\DADOMachiningToken.cs" />
     <Compile Include="Entities\MachineTokens\HOLESMachiningToken.cs" />
+    <Compile Include="Entities\MachineTokens\MITERMachiningToken.cs" />
     <Compile Include="Entities\MachineTokens\MOULDINGMachiningToken.cs" />
     <Compile Include="Entities\MachineTokens\PLINEMachiningToken.cs" />
     <Compile Include="Entities\MachineTokens\PROFILEMachiningToken.cs" />

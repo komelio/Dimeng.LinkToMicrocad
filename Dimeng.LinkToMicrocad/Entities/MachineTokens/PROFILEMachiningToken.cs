@@ -44,8 +44,8 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             profile.IsSharpFromFile = true;
             profile.SharpFile = this.ProfileFile;
 
-            profile.StartPointNumber = this.FaceNumber.ToString();
-            profile.EndPointNumber = this.EdgeNumber.ToString();
+            profile.StartPointNumber = this.FaceNumber;
+            profile.EndPointNumber = this.EdgeNumber;
 
             this.Part.Profiles.Add(profile);
         }

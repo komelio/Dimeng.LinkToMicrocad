@@ -1,5 +1,6 @@
 ﻿using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
+using Dimeng.LinkToMicrocad.Drawing.CAD;
 using Dimeng.LinkToMicrocad.Logging;
 using Dimeng.WoodEngine.Entities;
 using System;
@@ -212,65 +213,69 @@ namespace Dimeng.LinkToMicrocad.Drawing
                                 Solid3d solid = new Solid3d();
                                 SweepOptionsBuilder sob = new SweepOptionsBuilder();
                                 sob.Align = SweepOptionsAlignOption.AlignSweepEntityToPath;
-                                if (basePoint == 1)
-                                {
-                                    solid.CreateExtrudedSolid(curve, new Vector3d(0, 0, part.Length), sob.ToSweepOptions());
-                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
-                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
-                                }
-                                else if (basePoint == 2)
-                                {
-                                    solid.CreateExtrudedSolid(curve, new Vector3d(0, 0, part.Length), sob.ToSweepOptions());
-                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
-                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
-                                    solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, 0, -offset2)));
-                                }
-                                else if (basePoint == 3)
-                                {
-                                    solid.CreateExtrudedSolid(curve, new Vector3d(0, 0, part.Length), sob.ToSweepOptions());
-                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
-                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
-                                    solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, -offset1, 0)));
-                                }
-                                else if (basePoint == 4)
-                                {
-                                    solid.CreateExtrudedSolid(curve, new Vector3d(0, 0, part.Length), sob.ToSweepOptions());
-                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
-                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
 
-                                    solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, -offset1, 0)));
-                                    solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, 0, -offset2)));
+                                using (Polyline newPolyline = CADHelper.RebuildPolyline(curve, db))
+                                {
+                                    if (basePoint == 1)
+                                    {
+                                        solid.CreateExtrudedSolid(newPolyline, new Vector3d(0, 0, part.Length), sob.ToSweepOptions());
+                                        solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
+                                        solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
+                                    }
+                                    else if (basePoint == 2)
+                                    {
+                                        solid.CreateExtrudedSolid(newPolyline, new Vector3d(0, 0, part.Length), sob.ToSweepOptions());
+                                        solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
+                                        solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
+                                        solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, 0, -offset2)));
+                                    }
+                                    else if (basePoint == 3)
+                                    {
+                                        solid.CreateExtrudedSolid(newPolyline, new Vector3d(0, 0, part.Length), sob.ToSweepOptions());
+                                        solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
+                                        solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
+                                        solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, -offset1, 0)));
+                                    }
+                                    else if (basePoint == 4)
+                                    {
+                                        solid.CreateExtrudedSolid(newPolyline, new Vector3d(0, 0, part.Length), sob.ToSweepOptions());
+                                        solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
+                                        solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
 
-                                }
-                                else if (basePoint == 5)
-                                {
-                                    solid.CreateExtrudedSolid(curve, new Vector3d(0, 0, -part.Length), sob.ToSweepOptions());
-                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
-                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
+                                        solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, -offset1, 0)));
+                                        solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, 0, -offset2)));
 
-                                    solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, -offset1, 0)));
-                                }
-                                else if (basePoint == 6)
-                                {
-                                    solid.CreateExtrudedSolid(curve, new Vector3d(0, 0, -part.Length), sob.ToSweepOptions());
-                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
-                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
+                                    }
+                                    else if (basePoint == 5)
+                                    {
+                                        solid.CreateExtrudedSolid(newPolyline, new Vector3d(0, 0, -part.Length), sob.ToSweepOptions());
+                                        solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
+                                        solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
 
-                                    solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, -offset1, 0)));
-                                    solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, 0, -offset2)));
-                                }
-                                else if (basePoint == 7)
-                                {
-                                    solid.CreateExtrudedSolid(curve, new Vector3d(0, 0, -part.Length), sob.ToSweepOptions());
-                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
-                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
-                                }
-                                else//base point 8
-                                {
-                                    solid.CreateExtrudedSolid(curve, new Vector3d(0, 0, -part.Length), sob.ToSweepOptions());
-                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
-                                    solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
-                                    solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, 0, -offset2)));
+                                        solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, -offset1, 0)));
+                                    }
+                                    else if (basePoint == 6)
+                                    {
+                                        solid.CreateExtrudedSolid(newPolyline, new Vector3d(0, 0, -part.Length), sob.ToSweepOptions());
+                                        solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
+                                        solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
+
+                                        solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, -offset1, 0)));
+                                        solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, 0, -offset2)));
+                                    }
+                                    else if (basePoint == 7)
+                                    {
+                                        solid.CreateExtrudedSolid(newPolyline, new Vector3d(0, 0, -part.Length), sob.ToSweepOptions());
+                                        solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
+                                        solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
+                                    }
+                                    else//base point 8
+                                    {
+                                        solid.CreateExtrudedSolid(newPolyline, new Vector3d(0, 0, -part.Length), sob.ToSweepOptions());
+                                        solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.YAxis, Point3d.Origin));
+                                        solid.TransformBy(Matrix3d.Rotation(Math.PI / 2, Vector3d.XAxis, Point3d.Origin));
+                                        solid.TransformBy(Matrix3d.Displacement(new Vector3d(0, 0, -offset2)));
+                                    }
                                 }
 
                                 entity.Erase();

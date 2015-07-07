@@ -40,7 +40,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
                 foreach (var part in product.CombinedParts.Where(it => it.IsDrawOn3D))
                 {
                     Logger.GetLogger().Info("Start Drawing Part:" + part.PartName);
-                    Logger.GetLogger().Info("Part Bending:" + part.IsBend.ToString());
+                    Logger.GetLogger().Debug("Part Bending:" + part.IsBend.ToString());
 
                     if (part.IsMolding)
                     {

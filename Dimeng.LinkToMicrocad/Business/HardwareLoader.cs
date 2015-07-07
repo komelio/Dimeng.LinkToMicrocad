@@ -82,7 +82,7 @@ namespace Dimeng.WoodEngine.Business
 
                     if (errors.Count > 0)
                     {
-                        Logger.GetLogger().Info("Part got errors !");
+                        Logger.GetLogger().Info("Hardware got errors !");
                         //return errors; //有问题的板件还是画
                     }
 

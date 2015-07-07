@@ -5,6 +5,7 @@ using Dimeng.LinkToMicrocad.Drawing.CAD;
 using Dimeng.LinkToMicrocad.Logging;
 using Dimeng.WoodEngine.Entities;
 using Dimeng.WoodEngine.Entities.Machinings;
+using Dimeng.WoodEngine.Math;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,7 +34,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
                     BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
                     BlockTableRecord btr = (BlockTableRecord)trans.GetObject(db.CurrentSpaceId, OpenMode.ForWrite);
 
-                    Entity section;//截面
+                    Polyline section;//截面
 
                     try
                     {
@@ -50,8 +51,49 @@ namespace Dimeng.LinkToMicrocad.Drawing
                             }
 
                             Entity sectionOld = CADHelper.AddDwgEntities(file, trans, db);
-                            section = sectionOld.Clone() as Entity;
+                            section = CADHelper.RebuildPolyline(sectionOld, db);//.Clone() as Entity;
                             sectionOld.Erase();//删去旧的
+                            //btr.AppendEntity(section);
+                            //trans.AddNewlyCreatedDBObject(section, true);
+
+                            //if (section is Polyline)
+                            //{
+                            //    Polyline pl = section as Polyline;
+                            //    var points = Dimeng.WoodEngine.Math.MathHelper.FindSelfIntersectPline(pl);
+                            //    if (points.Count > 0)
+                            //    {
+
+                            //        StringBuilder sb = new StringBuilder();
+                            //        foreach (int i in points)
+                            //        {
+                            //            sb.Append(i);
+                            //            sb.Append(",");
+                            //        }
+                            //        Logger.GetLogger().Warn("Section is intersectSelf!" + sb.ToString());
+                            //        //section.Erase();
+                            //        section.Dispose();
+                            //        continue;
+                            //    }
+                            //}
+                            //else if (section is Polyline2d)
+                            //{
+                            //    Polyline2d pl = section as Polyline2d;
+                            //    var points = Dimeng.WoodEngine.Math.MathHelper.FindSelfIntersectPline(pl);
+                            //    if (points.Count > 0)
+                            //    {
+
+                            //        StringBuilder sb = new StringBuilder();
+                            //        foreach (int i in points)
+                            //        {
+                            //            sb.Append(i);
+                            //            sb.Append(",");
+                            //        }
+                            //        Logger.GetLogger().Warn("Section is intersectSelf!" + sb.ToString());
+                            //        section.Erase();
+                            //        section.Dispose();
+                            //        continue;
+                            //    }
+                            //}
                         }
                         else
                         {
@@ -73,6 +115,12 @@ namespace Dimeng.LinkToMicrocad.Drawing
 
                         Line line = new Line(startPt, endPt);//扫掠的路径
 
+                        //btr.AppendEntity(line);
+                        //trans.AddNewlyCreatedDBObject(line, true);
+                        //btr.AppendEntity(section);
+                        //trans.AddNewlyCreatedDBObject(section, true);
+
+
                         Solid3d proSolid = new Solid3d();
                         SweepOptionsBuilder sob = new SweepOptionsBuilder();
                         sob.Align = SweepOptionsAlignOption.AlignSweepEntityToPath;
@@ -84,6 +132,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
 
                         line.Dispose();
                         proSolid.Dispose();
+                        //section.Erase();
                         section.Dispose();
 
                         //btr.AppendEntity(proSolid);
@@ -100,31 +149,55 @@ namespace Dimeng.LinkToMicrocad.Drawing
 
         private static void RotateSection(Profile profile, Entity section, Part part, out Point3d startPt, out Point3d endPt)
         {
-            startPt = part.GetPartPointByNumber(profile.StartPointNumber);
-            endPt = part.GetPartPointByNumber(profile.EndPointNumber);
-            bool longSide = true;//沿着板件的长度方向    
-            if (startPt.X == endPt.X)//判断起点的终点的X是否相同       
-            { longSide = false; }
-            else { longSide = true; }
-            Vector3d xaxis, yaxis, zaxis;
-            if (longSide)
+            startPt = part.GetPartPointByNumber(profile.StartPointNumber.ToString());
+            endPt = part.GetPartPointByNumber(profile.EndPointNumber.ToString());
+
+            int gap = Math.Abs(profile.StartPointNumber - profile.EndPointNumber);
+            if (gap == 2 || gap == 6)
             {
-                GetXYAxisByPointNumberLongSide(profile.StartPointNumber, out xaxis, out yaxis, out zaxis);
+                bool longSide = true;//沿着板件的长度方向    
+                if (startPt.X == endPt.X)//判断起点的终点的X是否相同       
+                { longSide = false; }
+                else { longSide = true; }
+
+                Vector3d xaxis, yaxis, zaxis;
+                if (longSide)
+                {
+                    GetXYAxisByPointNumberLongSide(profile.StartPointNumber.ToString(), out xaxis, out yaxis, out zaxis);
+                }
+                else
+                {
+                    GetXYAxisByPointNumberWidthSide(profile.StartPointNumber.ToString(), out xaxis, out yaxis, out zaxis);
+                }
+
+                section.TransformBy(Matrix3d.AlignCoordinateSystem(
+                    Point3d.Origin,
+                    Vector3d.XAxis,
+                    Vector3d.YAxis,
+                    Vector3d.ZAxis,
+                    part.GetPartPointByNumber(profile.StartPointNumber.ToString()),
+                    xaxis,
+                    yaxis,
+                    zaxis));
+                return;
             }
-            else
+            else if (gap == 1)
             {
-                GetXYAxisByPointNumberWidthSide(profile.StartPointNumber, out xaxis, out yaxis, out zaxis);
+                Vector3d xaxis, yaxis, zaxis;
+                GetXYAxisByPointNumberThickSide(profile.StartPointNumber.ToString(), out xaxis, out yaxis, out zaxis);
+                section.TransformBy(Matrix3d.AlignCoordinateSystem(
+                    Point3d.Origin,
+                    Vector3d.XAxis,
+                    Vector3d.YAxis,
+                    Vector3d.ZAxis,
+                    part.GetPartPointByNumber(profile.StartPointNumber.ToString()),
+                    xaxis,
+                    yaxis,
+                    zaxis));
+                return;
             }
 
-            section.TransformBy(Matrix3d.AlignCoordinateSystem(
-                Point3d.Origin,
-                Vector3d.XAxis,
-                Vector3d.YAxis,
-                Vector3d.ZAxis,
-                part.GetPartPointByNumber(profile.StartPointNumber),
-                xaxis,
-                yaxis,
-                zaxis));
+            throw new Exception(string.Format("Unknown profile start point and end point!{0}/{1}", profile.StartPointNumber, profile.EndPointNumber));
         }
 
         private static void GetXYAxisByPointNumberLongSide(string ptNum, out Vector3d xaxis, out Vector3d yaxis, out Vector3d zaxis)
@@ -219,6 +292,55 @@ namespace Dimeng.LinkToMicrocad.Drawing
                     xaxis = -Vector3d.XAxis;
                     yaxis = -Vector3d.ZAxis;
                     zaxis = Vector3d.YAxis;
+                    break;
+                default:
+                    throw new System.Exception("未知的点:" + ptNum);
+            }
+        }
+
+        private static void GetXYAxisByPointNumberThickSide(string ptNum, out Vector3d xaxis, out Vector3d yaxis, out Vector3d zaxis)
+        {
+            switch (ptNum)
+            {
+                case "1":
+                    xaxis = Vector3d.XAxis;
+                    yaxis = Vector3d.YAxis;
+                    zaxis = Vector3d.ZAxis;
+                    break;
+                case "2":
+                    xaxis = Vector3d.XAxis;
+                    yaxis = Vector3d.YAxis;
+                    zaxis = -Vector3d.ZAxis;
+                    break;
+                case "3":
+                    xaxis = Vector3d.XAxis;
+                    yaxis = -Vector3d.YAxis;
+                    zaxis = Vector3d.ZAxis;
+                    break;
+                case "4":
+                    xaxis = Vector3d.XAxis;
+                    yaxis = -Vector3d.YAxis;
+                    zaxis = -Vector3d.ZAxis;
+                    break;
+                case "5":
+                    xaxis = -Vector3d.XAxis;
+                    yaxis = -Vector3d.YAxis;
+                    zaxis = Vector3d.ZAxis;
+                    break;
+                case "6":
+                    xaxis = -Vector3d.XAxis;
+                    yaxis = -Vector3d.YAxis;
+                    zaxis = -Vector3d.ZAxis;
+                    break;
+                case "7":
+                    xaxis = -Vector3d.XAxis;
+                    yaxis = Vector3d.YAxis;
+                    zaxis = Vector3d.ZAxis;
+                    break;
+                case "8":
+                    xaxis = -Vector3d.XAxis;
+                    yaxis = Vector3d.YAxis;
+                    zaxis = -Vector3d.ZAxis;
                     break;
                 default:
                     throw new System.Exception("未知的点:" + ptNum);

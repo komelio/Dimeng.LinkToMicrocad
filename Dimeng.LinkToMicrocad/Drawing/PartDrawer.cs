@@ -49,8 +49,16 @@ namespace Dimeng.LinkToMicrocad.Drawing
             part.EBL1.Name, part.EBL1.Thickness));
             Logger.GetLogger().Debug(string.Format("Drawing part {0}/{1}",
             part.EBL2.Name, part.EBL2.Thickness));
-            Logger.GetLogger().Debug(string.Format("-- Positions: {0}",
+            Logger.GetLogger().Debug(string.Format("-- Position: {0}",
                         part.CenterVector));
+            Logger.GetLogger().Debug(string.Format("-- Routings: {0}",
+                        part.Routings.Count));
+            Logger.GetLogger().Debug(string.Format("-- VDrillings: {0}",
+                        part.VDrillings.Count));
+            Logger.GetLogger().Debug(string.Format("-- HDrillings: {0}",
+                        part.HDrillings.Count));
+            Logger.GetLogger().Debug(string.Format("-- Profiles: {0}",
+                        part.Profiles.Count));
 
             Solid3d panel = (new BaseSolidStructer()).Draw(part);
             (new VDrillDrawer()).Draw(panel, part);
