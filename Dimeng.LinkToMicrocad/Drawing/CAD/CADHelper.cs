@@ -93,7 +93,7 @@ namespace Dimeng.LinkToMicrocad.Drawing.CAD
                     foreach (ObjectId id in ol)
                     {
                         Vertex2d v2d = (Vertex2d)tran.GetObject(id, OpenMode.ForRead);
-                        Logger.GetLogger().Warn("Polyline2d vertex3d Position:" + v2d.Position.ToString());
+                        Logger.GetLogger().Debug("Polyline2d vertex3d Position:" + v2d.Position.ToString());
                         pl.AddVertexAt(i, new Point2d(Math.Round(v2d.Position.X, 0), Math.Round(v2d.Position.Y, 0)), v2d.Bulge, 0, 0);
                         i++;
                     }

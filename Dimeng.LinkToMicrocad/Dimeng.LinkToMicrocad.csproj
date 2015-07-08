@@ -216,6 +216,7 @@
     <Compile Include="Entities\MachineTokens\ROUTEMachiningTokne.cs" />
     <Compile Include="Entities\MachineTokens\SHELFMachiningToken.cs" />
     <Compile Include="Entities\MachineTokens\SHLFMachiningToken.cs" />
+    <Compile Include="Entities\MachineTokens\SLIDEMachiningToken.cs" />
     <Compile Include="Entities\MachineTokens\StructXY.cs" />
     <Compile Include="Entities\MachineTokens\ToolComp.cs" />
     <Compile Include="Entities\MachineTokens\UnAssociativeToken.cs" />

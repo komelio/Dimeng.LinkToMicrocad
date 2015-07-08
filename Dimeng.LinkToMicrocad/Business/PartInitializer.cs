@@ -130,6 +130,10 @@ namespace Dimeng.WoodEngine.Business
                         tempToken.Part = it;
                         tempTokens.Add(tempToken);
                     }
+                    else
+                    {
+                        errors.AddRange(mChecker.Errors);
+                    }
                 }
                 it.MachineTokens = tempTokens;
             });
