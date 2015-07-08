@@ -24,12 +24,12 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
             if (FaceNumber == EdgeNumber)
             {
-                check.Errors.Add(new ModelError("PROFILE指令的两个点不能相同:" + this.Token));
+                this.Errors.Add(new ModelError("PROFILE指令的两个点不能相同:" + this.Token));
             }
 
             ProfileFile = check.TokenFileName(this.Par1, "PROFILE/文件名");
 
-            if (check.Errors.Count > 0)
+            if (this.Errors.Count > 0)
             {
                 return false;
             }

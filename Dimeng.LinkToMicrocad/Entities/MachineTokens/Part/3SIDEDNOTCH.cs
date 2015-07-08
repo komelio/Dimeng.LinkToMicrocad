@@ -19,9 +19,9 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             this.FaceNumber = check.FaceNumber(Token, 13, new int[] { 1, 2, 3, 4 });
             this.EdgeNumber = check.EdgeNumber(Token, 11, new int[] { 5, 6 });
 
-            StartX = check.GetDoubleValue(Par1, "三面切口指令/X起始坐标", false, check.Errors);
-            StartY = check.GetDoubleValue(Par2, "三面切口指令/Y起始坐标", false, check.Errors);
-            Depth = check.GetDoubleValue(Par3, "三面切口指令/深度", true, check.Errors);
+            StartX = check.GetDoubleValue(Par1, "三面切口指令/X起始坐标", false, this.Errors);
+            StartY = check.GetDoubleValue(Par2, "三面切口指令/Y起始坐标", false, this.Errors);
+            Depth = check.GetDoubleValue(Par3, "三面切口指令/深度", true, this.Errors);
 
             if (EdgeNumber == 1 || EdgeNumber == 2)
             {
@@ -29,7 +29,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             }
             else
             {
-                EndY = check.GetDoubleValue(Par5, "三面切口指令/Y起始坐标", false, check.Errors);
+                EndY = check.GetDoubleValue(Par5, "三面切口指令/Y起始坐标", false, this.Errors);
             }
 
             if (EdgeNumber == 3 || EdgeNumber == 4)
@@ -38,16 +38,16 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             }
             else
             {
-                EndX = check.GetDoubleValue(Par4, "三面切口指令/Y起始坐标", false, check.Errors);
+                EndX = check.GetDoubleValue(Par4, "三面切口指令/Y起始坐标", false, this.Errors);
             }
 
-            this.LeadIn = check.GetDoubleValue(Par6, "三面切口指令/下刀引线长度", false, check.Errors);
+            this.LeadIn = check.GetDoubleValue(Par6, "三面切口指令/下刀引线长度", false, this.Errors);
 
             ToolName = check.ToolName(Par7, "三面切口指令/刀具名称");
 
-            IsDrawOnly = check.GetBoolValue(Par8, "三面切口指令/只用于绘图", false, false, check.Errors);
+            IsDrawOnly = check.GetBoolValue(Par8, "三面切口指令/只用于绘图", false, false, this.Errors);
 
-            if (check.Errors.Count == 0)
+            if (this.Errors.Count == 0)
             {
                 return true;
             }

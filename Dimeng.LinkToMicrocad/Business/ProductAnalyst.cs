@@ -95,11 +95,8 @@ namespace Dimeng.WoodEngine.Business
             List<ModelError> errors = new List<ModelError>();
 
             errors.AddRange(PartsLoader.GetParts(product, cutPartCells, machineCells, workBookSet, tempMaterials, tempEdgebandings));
-            //errors.AddRange(getParts(product, cutPartCells));
             errors.AddRange(HardwareLoader.GetHardwares(product, hardwareCells, workBookSet, tempHardwares));
             errors.AddRange(getSubassemblies(product, subassembliesCells));
-            //TODO:Subassemblies
-            //TODO:Hardwares
 
             return errors;
         }

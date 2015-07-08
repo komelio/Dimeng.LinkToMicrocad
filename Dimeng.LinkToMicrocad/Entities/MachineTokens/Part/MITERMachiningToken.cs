@@ -22,17 +22,17 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
             if (FaceNumber == EdgeNumber)
             {
-                check.Errors.Add(new ModelError("MITER", "面与边不能相等", ErrorLevel.Error));
+                this.Errors.Add(new ModelError("MITER", "面与边不能相等", ErrorLevel.Error));
             }
 
-            Angle = check.GetDoubleValue(Par1, "MITER/角度", true, check.Errors);
+            Angle = check.GetDoubleValue(Par1, "MITER/角度", true, this.Errors);
             if (Angle >= 90 || Angle < 0)
             {
-                check.Errors.Add(new ModelError("MITER", "角度范围在0到90度之间", ErrorLevel.Error));
+                this.Errors.Add(new ModelError("MITER", "角度范围在0到90度之间", ErrorLevel.Error));
             }
             Angle = Angle / 180 * System.Math.PI;
 
-            if (check.Errors.Count == 0)
+            if (this.Errors.Count == 0)
             {
                 return true;
             }

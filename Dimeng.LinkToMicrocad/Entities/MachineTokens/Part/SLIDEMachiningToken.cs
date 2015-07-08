@@ -22,29 +22,29 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
         {
             this.FaceNumber = check.FaceNumber(this.Token, 4, new int[] { 5, 6 });
 
-            this.DistToBottom = check.GetDoubleValue(this.Par1, "SLIDE/Par1", false, check.Errors);
-            this.DistToFirstBore = check.GetDoubleValue(this.Par2, "SLIDE/Par2", false, check.Errors);
-            this.DistToSecondBore = check.GetDoubleValue(this.Par3, "SLIDE/Par3", false, check.Errors);
-            this.AssociateGap = check.GetDoubleValue(this.Par8, "SLIDE/Par8", true, check.Errors);
+            this.DistToBottom = check.GetDoubleValue(this.Par1, "SLIDE/Par1", false, this.Errors);
+            this.DistToFirstBore = check.GetDoubleValue(this.Par2, "SLIDE/Par2", false, this.Errors);
+            this.DistToSecondBore = check.GetDoubleValue(this.Par3, "SLIDE/Par3", false, this.Errors);
+            this.AssociateGap = check.GetDoubleValue(this.Par8, "SLIDE/Par8", true, this.Errors);
 
-            this.DistToThirdBore = string.IsNullOrEmpty(this.Par4.Trim()) ? 0 : check.GetDoubleValue(this.Par4, "SLIDE/Par4", true, check.Errors);
+            this.DistToThirdBore = string.IsNullOrEmpty(this.Par4.Trim()) ? 0 : check.GetDoubleValue(this.Par4, "SLIDE/Par4", true, this.Errors);
 
-            this.DistToForthBore = string.IsNullOrEmpty(this.Par5.Trim()) ? 0 : check.GetDoubleValue(this.Par5, "SLIDE/Par5", true, check.Errors);
+            this.DistToForthBore = string.IsNullOrEmpty(this.Par5.Trim()) ? 0 : check.GetDoubleValue(this.Par5, "SLIDE/Par5", true, this.Errors);
 
-            this.DistToFifthBore = string.IsNullOrEmpty(this.Par6.Trim()) ? 0 : check.GetDoubleValue(this.Par6, "SLIDE/Par6", true, check.Errors);
+            this.DistToFifthBore = string.IsNullOrEmpty(this.Par6.Trim()) ? 0 : check.GetDoubleValue(this.Par6, "SLIDE/Par6", true, this.Errors);
 
             string[] values = this.Par7.Split('|');
             if (values.Length != 2)
             {
-                check.Errors.Add(new ModelError("SLIDE/Par7", "没有用分隔符隔开", ErrorLevel.Error));
+                this.Errors.Add(new ModelError("SLIDE/Par7", "没有用分隔符隔开", ErrorLevel.Error));
             }
             else
             {
-                this.FaceBoreDepth = check.GetDoubleValue(values[0], "SLIDE/Par7", true, check.Errors);
-                this.FaceBoreDiameter = check.GetDoubleValue(values[1], "SLIDE/Par7", true, check.Errors);
+                this.FaceBoreDepth = check.GetDoubleValue(values[0], "SLIDE/Par7", true, this.Errors);
+                this.FaceBoreDiameter = check.GetDoubleValue(values[1], "SLIDE/Par7", true, this.Errors);
             }
 
-            if (check.Errors.Count == 0)
+            if (this.Errors.Count == 0)
             {
                 return true;
             }

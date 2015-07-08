@@ -34,7 +34,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             this.ToolName = check.ToolName(this.Par7, "PLINE/刀具名称");
             this.ToolComp = check.GetToolComp(this.Par8, "PLINE/刀具补偿");
 
-            if (check.Errors.Count == 0)
+            if (this.Errors.Count == 0)
             {
                 return true;
             }

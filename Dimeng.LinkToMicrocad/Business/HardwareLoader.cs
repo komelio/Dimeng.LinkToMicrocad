@@ -58,20 +58,32 @@ namespace Dimeng.WoodEngine.Business
 
                     if (errors.Count > 0)
                     {
-                        Logger.GetLogger().Info("Hardware got errors !");
+                        Logger.GetLogger().Warn("Hardware got errors !");
                         //return errors; //有问题的板件还是画
                     }
 
                     foreach (var d in origins)
                     {
-                        hwr.XOrigin = d[0];
-                        hwr.YOrigin = d[1];
-                        hwr.ZOrigin = d[2];
-                        hwr.TXOrigin = d[0];
-                        hwr.TYOrigin = d[1];
-                        hwr.TZOrigin = d[2];
-                        tempHardwares.Add(hwr);
-                        Logger.GetLogger().Debug(string.Format("Add hardware {0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}", hwr.Name, hwr.Qty, hwr.Width, hwr.Height, hwr.Depth));
+                        Hardware cloneHwr = new Hardware();
+                        cloneHwr.Name = hwr.Name;
+                        cloneHwr.Qty = 1;
+                        cloneHwr.Width = hwr.Width;
+                        cloneHwr.Height = hwr.Height;
+                        cloneHwr.Depth = hwr.Depth;
+                        cloneHwr.HardwareType = hwr.HardwareType;
+                        cloneHwr.AssociatedRotation = hwr.AssociatedRotation;
+                        cloneHwr.IsHaveAssocaitedRotation = hwr.IsHaveAssocaitedRotation;
+                        cloneHwr.TAssociatedRotation = hwr.TAssociatedRotation;
+                        cloneHwr.XOrigin = d[0];
+                        cloneHwr.YOrigin = d[1];
+                        cloneHwr.ZOrigin = d[2];
+                        cloneHwr.TXOrigin = d[0];
+                        cloneHwr.TYOrigin = d[1];
+                        cloneHwr.TZOrigin = d[2];
+
+                        tempHardwares.Add(cloneHwr);
+                        Logger.GetLogger().Debug(string.Format("Add hardware {0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}/{8}",
+                            cloneHwr.Name, cloneHwr.Qty, cloneHwr.Width, cloneHwr.Height, cloneHwr.Depth, cloneHwr.XOrigin, cloneHwr.YOrigin, cloneHwr.ZOrigin, cloneHwr.AssociatedRotation));
                     }
                 }
                 else
@@ -93,7 +105,8 @@ namespace Dimeng.WoodEngine.Business
                     hwr.TYOrigin = yPos;
                     hwr.TZOrigin = zPos;
                     tempHardwares.Add(hwr);
-                    Logger.GetLogger().Debug(string.Format("Add hardware {0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}/{8}", hwr.Name, hwr.Qty, hwr.Width, hwr.Height, hwr.Depth, hwr.XOrigin, hwr.YOrigin, hwr.ZOrigin, hwr.AssociatedRotation));
+                    Logger.GetLogger().Debug(string.Format("Add hardware {0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}/{8}",
+                        hwr.Name, hwr.Qty, hwr.Width, hwr.Height, hwr.Depth, hwr.XOrigin, hwr.YOrigin, hwr.ZOrigin, hwr.AssociatedRotation));
                 }
 
                 if (tempHardwares.Count > 0)

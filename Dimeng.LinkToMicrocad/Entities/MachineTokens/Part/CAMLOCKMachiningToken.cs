@@ -23,20 +23,20 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             //todo:其实深度和直径是用逗号区分的,存在两种尺寸并排的情况要处理
             this.FaceNumber = check.FaceNumber(this.Token, 7, new int[] { 1, 2, 3, 4 });
             PointsPosition = check.PointPositions(this.Par1);
-            EdgeBoreDiameter = check.GetDoubleValue(this.Par2, @"Camlock/边孔直径", true, check.Errors);
-            EdgeBoreDepth = check.GetDoubleValue(this.Par3, @"Camlock/边孔深度", true, check.Errors);
+            EdgeBoreDiameter = check.GetDoubleValue(this.Par2, @"Camlock/边孔直径", true, this.Errors);
+            EdgeBoreDepth = check.GetDoubleValue(this.Par3, @"Camlock/边孔深度", true, this.Errors);
             ZValue = (string.IsNullOrEmpty(this.Par4)) ?
-                Part.Thickness / 2 : check.GetDoubleValue(this.Par4, @"Camlock/par4", true, check.Errors);
+                Part.Thickness / 2 : check.GetDoubleValue(this.Par4, @"Camlock/par4", true, this.Errors);
             diameterChecker(this.Par5, check);
             depthChecker(this.Par6, check);
-            Backset = check.GetDoubleValue(this.Par7, @"Camlock/par7", false, check.Errors);
+            Backset = check.GetDoubleValue(this.Par7, @"Camlock/par7", false, this.Errors);
 
             camlockFaceChecker();
 
-            this.DrillFromOppsiteFace = check.GetBoolValue(this.Par9, @"Camlock/par9", false, false, check.Errors);
+            this.DrillFromOppsiteFace = check.GetBoolValue(this.Par9, @"Camlock/par9", false, false, this.Errors);
             ListCamVBoreXY = GetCamVBoreXYList();
 
-            if (check.Errors.Count == 0)
+            if (this.Errors.Count == 0)
             {
                 return true;
             }

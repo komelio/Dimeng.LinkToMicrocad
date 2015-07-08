@@ -22,16 +22,16 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
         {
             this.FaceNumber = check.FaceNumber(this.Token, 5, new int[] { 1, 2, 3, 4 });
 
-            DistToBottom = check.GetDoubleValue(this.Par1, "关联的层板孔（类型2）/到底部距离", true, check.Errors);
-            DistToFirstHole = check.GetDoubleValue(this.Par2, "关联的层板孔（类型2）/至第1排孔的距离", false, check.Errors);
-            FaceHoleDepth = check.GetDoubleValue(this.Par3, "关联的层板孔（类型2）/面孔深度", true, check.Errors);
-            DistToTop = check.GetDoubleValue(this.Par4, "关联的层板孔（类型2）/至顶部的距离", true, check.Errors);
-            DistToSecondHole = check.GetDoubleValue(this.Par5, "关联的层板孔（类型2）/至第二排孔的距离", false, check.Errors);
-            FaceHoleDiameter = check.GetDoubleValue(this.Par6, "关联的层板孔（类型2）/面孔直径", true, check.Errors);
-            DistBetweenTwoHoles = string.IsNullOrEmpty(this.Par7) ? 32 : check.GetDoubleValue(this.Par7, "关联的层板孔（类型2）/面孔直径", true, check.Errors);
-            GapDist = check.GetDoubleValue(Par8, "关联的层板孔（类型2）/两孔距离", true, check.Errors);
+            DistToBottom = check.GetDoubleValue(this.Par1, "关联的层板孔（类型2）/到底部距离", true, this.Errors);
+            DistToFirstHole = check.GetDoubleValue(this.Par2, "关联的层板孔（类型2）/至第1排孔的距离", false, this.Errors);
+            FaceHoleDepth = check.GetDoubleValue(this.Par3, "关联的层板孔（类型2）/面孔深度", true, this.Errors);
+            DistToTop = check.GetDoubleValue(this.Par4, "关联的层板孔（类型2）/至顶部的距离", true, this.Errors);
+            DistToSecondHole = check.GetDoubleValue(this.Par5, "关联的层板孔（类型2）/至第二排孔的距离", false, this.Errors);
+            FaceHoleDiameter = check.GetDoubleValue(this.Par6, "关联的层板孔（类型2）/面孔直径", true, this.Errors);
+            DistBetweenTwoHoles = string.IsNullOrEmpty(this.Par7) ? 32 : check.GetDoubleValue(this.Par7, "关联的层板孔（类型2）/面孔直径", true, this.Errors);
+            GapDist = check.GetDoubleValue(Par8, "关联的层板孔（类型2）/两孔距离", true, this.Errors);
 
-            if (check.Errors.Count == 0)
+            if (this.Errors.Count == 0)
             {
                 return true;
             }

@@ -18,12 +18,12 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
         {
             this.FaceNumber = check.FaceNumber(Token, 5, new int[] { 5, 6 });
 
-            this.PosStartX = check.GetDoubleValue(Par1, "直线立铣/X起始位置", false, check.Errors);
-            this.PosStartY = check.GetDoubleValue(Par2, "直线立铣/Y起始位置", false, check.Errors);
-            this.StartDepth = check.GetDoubleValue(Par3, "直线立铣/起始深度", true, check.Errors);
-            this.PosEndX = check.GetDoubleValue(Par4, "直线立铣/X终止位置", false, check.Errors);
-            this.PosEndY = check.GetDoubleValue(Par5, "直线立铣/Y终止位置", false, check.Errors);
-            this.EndDepth = check.GetDoubleValue(Par6, "直线立铣/终止深度", true, check.Errors);
+            this.PosStartX = check.GetDoubleValue(Par1, "直线立铣/X起始位置", false, this.Errors);
+            this.PosStartY = check.GetDoubleValue(Par2, "直线立铣/Y起始位置", false, this.Errors);
+            this.StartDepth = check.GetDoubleValue(Par3, "直线立铣/起始深度", true, this.Errors);
+            this.PosEndX = check.GetDoubleValue(Par4, "直线立铣/X终止位置", false, this.Errors);
+            this.PosEndY = check.GetDoubleValue(Par5, "直线立铣/Y终止位置", false, this.Errors);
+            this.EndDepth = check.GetDoubleValue(Par6, "直线立铣/终止深度", true, this.Errors);
             this.ToolName = check.ToolName(Par7, "直线立铣/刀具名称");
 
             if (Par8 == "R")
@@ -32,9 +32,9 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                 ToolComp = ToolComp.Left;
             else ToolComp = ToolComp.None;
 
-            IsDrawOnly = check.GetBoolValue(Par9, "直线立铣/仅用于绘图", false, false, check.Errors);
+            IsDrawOnly = check.GetBoolValue(Par9, "直线立铣/仅用于绘图", false, false, this.Errors);
 
-            if (check.Errors.Count == 0)
+            if (this.Errors.Count == 0)
             {
                 return true;
             }

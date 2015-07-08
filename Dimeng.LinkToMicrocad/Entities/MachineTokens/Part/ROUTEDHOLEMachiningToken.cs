@@ -22,15 +22,15 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                 this.OnFace5 = false;
             else this.OnFace5 = true;
 
-            StartX = check.GetDoubleValue(Par1, "铣圆指令/X起始坐标", false, check.Errors);
-            StartY = check.GetDoubleValue(Par2, "铣圆指令/Y起始坐标", false, check.Errors);
-            Depth = check.GetDoubleValue(Par3, "铣圆指令/深度", true, check.Errors);
-            Radius = check.GetDoubleValue(Par4, "铣圆指令/圆半径", true, check.Errors);
-            IsPocket = check.GetBoolValue(Par5, "铣圆指令/袋式加工", false, false, check.Errors);
+            StartX = check.GetDoubleValue(Par1, "铣圆指令/X起始坐标", false, this.Errors);
+            StartY = check.GetDoubleValue(Par2, "铣圆指令/Y起始坐标", false, this.Errors);
+            Depth = check.GetDoubleValue(Par3, "铣圆指令/深度", true, this.Errors);
+            Radius = check.GetDoubleValue(Par4, "铣圆指令/圆半径", true, this.Errors);
+            IsPocket = check.GetBoolValue(Par5, "铣圆指令/袋式加工", false, false, this.Errors);
             ToolName = check.ToolName(Par7, "铣圆指令/刀具名称");
-            IsDrawOnly = check.GetBoolValue(Par8, "铣圆指令/仅用于绘图", false, false, check.Errors);
+            IsDrawOnly = check.GetBoolValue(Par8, "铣圆指令/仅用于绘图", false, false, this.Errors);
 
-            if (check.Errors.Count == 0)
+            if (this.Errors.Count == 0)
             {
                 return true;
             }

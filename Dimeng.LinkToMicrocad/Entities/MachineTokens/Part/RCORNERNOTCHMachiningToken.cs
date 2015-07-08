@@ -23,12 +23,12 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                 OnFace5 = false;
             else OnFace5 = true;
 
-            Radius = check.GetDoubleValue(Par1, "RCORNERNOTCH/圆半径", true, check.Errors);
-            Depth = check.GetDoubleValue(Par3, "RCORNERNOTCH/深度", true, check.Errors);
-            LeadIn = check.GetDoubleValue(Par4, "RCORNERNOTCH/进退刀距离", true, check.Errors);
+            Radius = check.GetDoubleValue(Par1, "RCORNERNOTCH/圆半径", true, this.Errors);
+            Depth = check.GetDoubleValue(Par3, "RCORNERNOTCH/深度", true, this.Errors);
+            LeadIn = check.GetDoubleValue(Par4, "RCORNERNOTCH/进退刀距离", true, this.Errors);
             ToolName = check.ToolName(Par7, "RCORNERNOTCH/刀具名称");
 
-            if (check.Errors.Count == 0)
+            if (this.Errors.Count == 0)
             {
                 return true;
             }

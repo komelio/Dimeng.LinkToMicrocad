@@ -34,6 +34,8 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             getReferenceString();
 
             this.IsDrawOnly = false;
+
+            Errors = new List<ModelError>();
         }
 
         protected virtual void getReferenceString()
@@ -112,5 +114,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
         {
             return this.MemberwiseClone() as BaseToken;
         }
+
+        public List<ModelError> Errors { get; private set; }
     }
 }

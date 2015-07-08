@@ -132,7 +132,7 @@ namespace Dimeng.WoodEngine.Business
                     }
                     else
                     {
-                        errors.AddRange(mChecker.Errors);
+                        mChecker.Errors.AddRange(t.Errors);
                     }
                 }
                 it.MachineTokens = tempTokens;

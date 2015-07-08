@@ -20,14 +20,14 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             this.FaceNumber = check.FaceNumber(this.Token, 11, new int[] { 5, 6 });
             this.EdgeNumber = check.EdgeNumber(this.Token, 13, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
 
-            XDist = check.GetDoubleValue(Par1, "直角切口/X上距离", false, check.Errors);
-            YDist = check.GetDoubleValue(Par2, "直角切口/Y上距离", false, check.Errors);
-            Depth = check.GetDoubleValue(Par3, "直角切口/深度", true, check.Errors);
-            LeadIn = string.IsNullOrEmpty(Par4) ? 0 : check.GetDoubleValue(Par4, "直角切口/进退刀距离", true, check.Errors);
+            XDist = check.GetDoubleValue(Par1, "直角切口/X上距离", false, this.Errors);
+            YDist = check.GetDoubleValue(Par2, "直角切口/Y上距离", false, this.Errors);
+            Depth = check.GetDoubleValue(Par3, "直角切口/深度", true, this.Errors);
+            LeadIn = string.IsNullOrEmpty(Par4) ? 0 : check.GetDoubleValue(Par4, "直角切口/进退刀距离", true, this.Errors);
             ToolName = check.ToolName(this.Par7, "直角切口/刀具名称");
-            IsDrawOnly = check.GetBoolValue(this.Par8, "直接切口/仅用于绘图", false, false, check.Errors);
+            IsDrawOnly = check.GetBoolValue(this.Par8, "直接切口/仅用于绘图", false, false, this.Errors);
 
-            if (check.Errors.Count == 0)
+            if (this.Errors.Count == 0)
             {
                 return true;
             }

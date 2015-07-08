@@ -18,13 +18,13 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
         public override bool Valid(MachineTokenChecker check)
         {
             this.FaceNumber = check.FaceNumber(this.Token, 4, new int[] { 1, 2, 3, 4, 5, 6 });
-            PosStartX = check.GetDoubleValue(this.Par1, @"BORE/X起始坐标", false, check.Errors);
-            PosStartY = check.GetDoubleValue(this.Par2, @"BORE/Y起始坐标", false, check.Errors);
-            PosStartZ = check.GetDoubleValue(this.Par3, @"BORE/Z起始坐标", true, check.Errors);
-            Diameter = check.GetDoubleValue(this.Par4, @"BORE/孔直径", false, check.Errors);
-            PosEndX = (string.IsNullOrEmpty(Par5)) ? PosStartX : check.GetDoubleValue(this.Par5, @"BORE/X结束坐标", false, check.Errors);
-            PosEndY = (string.IsNullOrEmpty(Par6)) ? PosStartY : check.GetDoubleValue(this.Par6, @"BORE/Y结束坐标", false, check.Errors);
-            HoleGap = (string.IsNullOrEmpty(Par7)) ? 0 : check.GetDoubleValue(this.Par7, @"BORE/孔间距", true, check.Errors);
+            PosStartX = check.GetDoubleValue(this.Par1, @"BORE/X起始坐标", false, this.Errors);
+            PosStartY = check.GetDoubleValue(this.Par2, @"BORE/Y起始坐标", false, this.Errors);
+            PosStartZ = check.GetDoubleValue(this.Par3, @"BORE/Z起始坐标", true, this.Errors);
+            Diameter = check.GetDoubleValue(this.Par4, @"BORE/孔直径", false, this.Errors);
+            PosEndX = (string.IsNullOrEmpty(Par5)) ? PosStartX : check.GetDoubleValue(this.Par5, @"BORE/X结束坐标", false, this.Errors);
+            PosEndY = (string.IsNullOrEmpty(Par6)) ? PosStartY : check.GetDoubleValue(this.Par6, @"BORE/Y结束坐标", false, this.Errors);
+            HoleGap = (string.IsNullOrEmpty(Par7)) ? 0 : check.GetDoubleValue(this.Par7, @"BORE/孔间距", true, this.Errors);
 
             if (PosEndX == PosStartX &&
                 PosStartY == PosEndY)
@@ -34,7 +34,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
             CheckFaceNumber();
 
-            if (check.Errors.Count == 0)
+            if (this.Errors.Count == 0)
             { return true; }
             else { return false; }
         }

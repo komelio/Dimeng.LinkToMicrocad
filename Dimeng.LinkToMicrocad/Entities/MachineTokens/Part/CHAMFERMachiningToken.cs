@@ -20,15 +20,15 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             this.FaceNumber = check.FaceNumber(this.Token, 7, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
             this.EdgeNumber = check.EdgeNumber(this.Token, 9, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
 
-            DistX = check.GetDoubleValue(Par1, "CHAMFER/X距离", true, check.Errors);
-            DistY = check.GetDoubleValue(Par2, "CHAMFER/Y距离", true, check.Errors);
-            Depth = check.GetDoubleValue(Par2, "CHAMFER/深度", true, check.Errors);
+            DistX = check.GetDoubleValue(Par1, "CHAMFER/X距离", true, this.Errors);
+            DistY = check.GetDoubleValue(Par2, "CHAMFER/Y距离", true, this.Errors);
+            Depth = check.GetDoubleValue(Par2, "CHAMFER/深度", true, this.Errors);
 
-            this.LeadIn = check.GetDoubleValue(Par4, "CHAMFER/下刀引线长度", true, check.Errors);
+            this.LeadIn = check.GetDoubleValue(Par4, "CHAMFER/下刀引线长度", true, this.Errors);
 
             ToolName = check.ToolName(Par7, "CHAMFER/刀具名称");
 
-            this.IsDrawOnly = check.GetBoolValue(Par8, "CHAMFER/只用于绘图", false, false, check.Errors);
+            this.IsDrawOnly = check.GetBoolValue(Par8, "CHAMFER/只用于绘图", false, false, this.Errors);
 
             //TODO 纳入modelerror
             if (DistY <= 0 || DistX <= 0 || LeadIn < 0)
@@ -36,7 +36,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                 throw new Exception("距离值不能小于等于0");
             }
 
-            if (check.Errors.Count == 0)
+            if (this.Errors.Count == 0)
             {
                 return true;
             }

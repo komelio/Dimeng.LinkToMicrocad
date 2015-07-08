@@ -22,15 +22,15 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
         {
 
             this.FaceNumber = check.FaceNumber(this.Token, 4, new int[] { 1, 2, 3, 4 });
-            LeadIn = (string.IsNullOrEmpty(Par1)) ? 0 : check.GetDoubleValue(Par1, "DADO/进刀引线长度", true, check.Errors);
-            ReverseDirection = check.GetBoolValue(Par2, "DADO/反向加工", false, false, check.Errors);
-            Depth = check.GetDoubleValue(Par3, "DADO/加工深度", true, check.Errors);
-            LeadOut = (string.IsNullOrEmpty(Par4)) ? 0 : check.GetDoubleValue(Par4, "DADO/退刀引线长度", true, check.Errors);
-            DADOThick = check.GetDoubleValue(Par5, "DADO/槽宽", true, check.Errors);
+            LeadIn = (string.IsNullOrEmpty(Par1)) ? 0 : check.GetDoubleValue(Par1, "DADO/进刀引线长度", true, this.Errors);
+            ReverseDirection = check.GetBoolValue(Par2, "DADO/反向加工", false, false, this.Errors);
+            Depth = check.GetDoubleValue(Par3, "DADO/加工深度", true, this.Errors);
+            LeadOut = (string.IsNullOrEmpty(Par4)) ? 0 : check.GetDoubleValue(Par4, "DADO/退刀引线长度", true, this.Errors);
+            DADOThick = check.GetDoubleValue(Par5, "DADO/槽宽", true, this.Errors);
             ToolName = check.ToolName(Par7, "DADO/刀具名称");
-            Penetration = check.GetDoubleValue(Par8, "DADO/背板与槽间隙", false, check.Errors);
+            Penetration = check.GetDoubleValue(Par8, "DADO/背板与槽间隙", false, this.Errors);
 
-            if (check.Errors.Count == 0)
+            if (this.Errors.Count == 0)
             {
                 return true;
             }

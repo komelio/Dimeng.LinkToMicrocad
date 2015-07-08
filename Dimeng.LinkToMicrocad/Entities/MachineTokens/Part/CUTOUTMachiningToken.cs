@@ -17,21 +17,21 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
         public override bool Valid(MachineTokenChecker check)
         {
             this.FaceNumber = check.FaceNumber(this.Token, 6, new int[] { 5, 6 });
-            StartX = check.GetDoubleValue(Par1, "CUTOUT/X起始坐标", false, check.Errors);
-            StartY = check.GetDoubleValue(Par2, "CUTOUT/Y起始坐标", false, check.Errors);
-            Depth = check.GetDoubleValue(Par3, "CUTOUT/深度", true, check.Errors);
-            EndX = check.GetDoubleValue(Par4, "CUTOUT/X结束坐标", false, check.Errors);
-            EndY = check.GetDoubleValue(Par5, "CUTOUT/Y起始坐标", false, check.Errors);
-            IsPocket = check.GetBoolValue(Par6, "CUTOUT/袋式加工", false, false, check.Errors);
+            StartX = check.GetDoubleValue(Par1, "CUTOUT/X起始坐标", false, this.Errors);
+            StartY = check.GetDoubleValue(Par2, "CUTOUT/Y起始坐标", false, this.Errors);
+            Depth = check.GetDoubleValue(Par3, "CUTOUT/深度", true, this.Errors);
+            EndX = check.GetDoubleValue(Par4, "CUTOUT/X结束坐标", false, this.Errors);
+            EndY = check.GetDoubleValue(Par5, "CUTOUT/Y起始坐标", false, this.Errors);
+            IsPocket = check.GetBoolValue(Par6, "CUTOUT/袋式加工", false, false, this.Errors);
             ToolName = check.ToolName(Par7, "CUTOUT/刀具名称");
-            IsDrawOnly = check.GetBoolValue(Par8, "CUTOUT/仅用于图形绘制", false, false, check.Errors);
+            IsDrawOnly = check.GetBoolValue(Par8, "CUTOUT/仅用于图形绘制", false, false, this.Errors);
 
             lowX = (StartX >= EndX) ? EndX : StartX;
             lowY = (StartY >= EndY) ? EndY : StartY;
             highX = (StartX >= EndX) ? StartX : EndX;
             highY = (StartY >= EndY) ? StartY : EndY;
 
-            if (check.Errors.Count == 0)
+            if (this.Errors.Count == 0)
             {
                 return true;
             }
