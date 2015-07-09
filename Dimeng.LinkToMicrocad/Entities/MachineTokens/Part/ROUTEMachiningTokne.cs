@@ -16,7 +16,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         public override bool Valid(MachineTokenChecker check)
         {
-            this.FaceNumber = check.FaceNumber(Token, 5, new int[] { 5, 6 });
+            this.FaceNumber = check.FaceNumber(Token, 5, new int[] { 5, 6 }, this.Errors);
 
             this.PosStartX = check.GetDoubleValue(Par1, "直线立铣/X起始位置", false, this.Errors);
             this.PosStartY = check.GetDoubleValue(Par2, "直线立铣/Y起始位置", false, this.Errors);
@@ -24,7 +24,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             this.PosEndX = check.GetDoubleValue(Par4, "直线立铣/X终止位置", false, this.Errors);
             this.PosEndY = check.GetDoubleValue(Par5, "直线立铣/Y终止位置", false, this.Errors);
             this.EndDepth = check.GetDoubleValue(Par6, "直线立铣/终止深度", true, this.Errors);
-            this.ToolName = check.ToolName(Par7, "直线立铣/刀具名称");
+            this.ToolName = check.ToolName(Par7, "直线立铣/刀具名称", this.Errors);
 
             if (Par8 == "R")
                 ToolComp = ToolComp.Right;

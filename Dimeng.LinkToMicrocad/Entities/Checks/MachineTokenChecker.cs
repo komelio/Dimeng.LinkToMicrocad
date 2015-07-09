@@ -8,12 +8,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
 {
     public class MachineTokenChecker : Check
     {
-        public List<ModelError> Errors { get; private set; }
-        public MachineTokenChecker(List<ModelError> errors)
-        {
-            this.Errors = errors;
-        }
-        public int FaceNumber(string par, int startIndex, int[] valueRange)
+        public int FaceNumber(string par, int startIndex, int[] valueRange,List<ModelError> errors)
         {
             if (valueRange.Length == 0)
             {
@@ -37,7 +32,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
             return valueRange[0];
         }
 
-        public int EdgeNumber(string par, int startIndex, int[] valueRange)
+        public int EdgeNumber(string par, int startIndex, int[] valueRange, List<ModelError> errors)
         {
             if (valueRange.Length == 0)
             {
@@ -56,12 +51,12 @@ namespace Dimeng.WoodEngine.Entities.Checks
                 }
             }
 
-            Errors.Add(new ModelError("Wrong edge number!"));
+            errors.Add(new ModelError("Wrong edge number!"));
             //TODO:需要报错信息
             return valueRange[0];
         }
 
-        public List<double> PointPositions(string par)
+        public List<double> PointPositions(string par, List<ModelError> errors)
         {
             List<double> points = new List<double>();
             string[] strValues = par.Split('|');
@@ -84,7 +79,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
 
             if (hasError)
             {
-                Errors.Add(
+                errors.Add(
                         new ModelError(
                             string.Format("Wrong point positions!Data: {0}", par)
                                       )
@@ -94,11 +89,11 @@ namespace Dimeng.WoodEngine.Entities.Checks
             return points;
         }
 
-        public string ToolName(string par, string tokenName)
+        public string ToolName(string par, string tokenName, List<ModelError> errors)
         {
             if (string.IsNullOrEmpty(par.Trim()))
             {
-                this.Errors.Add(new ModelError(tokenName + " could not be empty!"));
+                errors.Add(new ModelError(tokenName + " could not be empty!"));
             }
 
             return par;
@@ -120,7 +115,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
             }
         }
 
-        internal List<double> GetBulges(string par)
+        internal List<double> GetBulges(string par, List<ModelError> errors)
         {
             List<Double> values = new List<double>();
 
@@ -133,19 +128,19 @@ namespace Dimeng.WoodEngine.Entities.Checks
                     continue;
                 }
 
-                values.Add(this.GetDoubleValue(s, "PLine/Bulges", false, this.Errors));
+                values.Add(this.GetDoubleValue(s, "PLine/Bulges", false, errors));
             }
 
             return values;
         }
 
-        internal List<Point3d> GetPoints(string par)
+        internal List<Point3d> GetPoints(string par, List<ModelError> errors)
         {
             List<Point3d> points = new List<Point3d>();
 
             if (string.IsNullOrEmpty(par))
             {
-                this.Errors.Add(new ModelError("No points!"));
+                errors.Add(new ModelError("No points!"));
                 return points;
             }
 
@@ -155,13 +150,13 @@ namespace Dimeng.WoodEngine.Entities.Checks
                 string[] xyzArray = s.Split(';');
                 if (xyzArray.Length != 3)
                 {
-                    this.Errors.Add(new ModelError("Error point data!"));
+                    errors.Add(new ModelError("Error point data!"));
                     return points;
                 }
 
-                double x = this.GetDoubleValue(xyzArray[0], "PLine/PointX", false, this.Errors);
-                double y = this.GetDoubleValue(xyzArray[1], "PLine/PointY", false, this.Errors);
-                double z = this.GetDoubleValue(xyzArray[2], "PLine/PointZ", false, this.Errors);
+                double x = this.GetDoubleValue(xyzArray[0], "PLine/PointX", false, errors);
+                double y = this.GetDoubleValue(xyzArray[1], "PLine/PointY", false, errors);
+                double z = this.GetDoubleValue(xyzArray[2], "PLine/PointZ", false, errors);
 
                 points.Add(new Point3d(x, y, z));
             }
@@ -169,11 +164,11 @@ namespace Dimeng.WoodEngine.Entities.Checks
             return points;
         }
 
-        internal string TokenFileName(string par, string tokenName)
+        internal string TokenFileName(string par, string tokenName, List<ModelError> errors)
         {
             if (string.IsNullOrEmpty(par))
             {
-                Errors.Add(new ModelError(tokenName + "文件名称不能为空"));
+                errors.Add(new ModelError(tokenName + "文件名称不能为空"));
                 return par;
             }
 

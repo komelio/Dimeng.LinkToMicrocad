@@ -16,8 +16,8 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         public override bool Valid(MachineTokenChecker check)
         {
-            this.FaceNumber = check.FaceNumber(this.Token, 12, new int[] { 5, 6 });
-            this.EdgeNumber = check.EdgeNumber(this.Token, 14, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+            this.FaceNumber = check.FaceNumber(this.Token, 12, new int[] { 5, 6 }, this.Errors);
+            this.EdgeNumber = check.EdgeNumber(this.Token, 14, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }, this.Errors);
 
             if (FaceNumber == 6)
                 OnFace5 = false;
@@ -26,7 +26,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             Radius = check.GetDoubleValue(Par1, "RCORNERNOTCH/圆半径", true, this.Errors);
             Depth = check.GetDoubleValue(Par3, "RCORNERNOTCH/深度", true, this.Errors);
             LeadIn = check.GetDoubleValue(Par4, "RCORNERNOTCH/进退刀距离", true, this.Errors);
-            ToolName = check.ToolName(Par7, "RCORNERNOTCH/刀具名称");
+            ToolName = check.ToolName(Par7, "RCORNERNOTCH/刀具名称", this.Errors);
 
             if (this.Errors.Count == 0)
             {

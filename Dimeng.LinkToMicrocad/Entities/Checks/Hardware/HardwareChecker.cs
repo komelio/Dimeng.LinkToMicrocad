@@ -1,4 +1,7 @@
-﻿using SpreadsheetGear;
+﻿using Dimeng.LinkToMicrocad.Logging;
+using Dimeng.WoodEngine.Business;
+using Dimeng.WoodEngine.Entities.MachineTokens;
+using SpreadsheetGear;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -298,30 +301,9 @@ namespace Dimeng.WoodEngine.Entities.Checks
                         break;
                     }
 
-                    var tokens = new List<HardwareToken>();
-                    for (int x = 0; x < cells2.Columns.ColumnCount; x += 10)
-                    {
-                        string tokenName = cells2[i, x].Text;
-                        if (string.IsNullOrEmpty(tokenName))
-                        {
-                            break;
-                        }
-
-                        HardwareToken token = new HardwareToken(tokenName,
-                                                                cells2[i, x + 1].Text,
-                                                                 cells2[i, x + 2].Text,
-                                                                  cells2[i, x + 3].Text,
-                                                                   cells2[i, x + 4].Text,
-                                                                    cells2[i, x + 5].Text,
-                                                                     cells2[i, x + 6].Text,
-                                                                      cells2[i, x + 7].Text,
-                                                                       cells2[i, x + 8].Text,
-                                                                        cells2[i, x + 9].Text);
-                        tokens.Add(token);
-                    }
-
                     if (name.ToLower() == hwName.ToLower())
                     {
+                        var tokens = loadTokens(cells2, i);
                         HardwareType ht = new HardwareType(hwName, cells[i, 3].Text, tokens);
                         hardwareTypes.Add(ht);
                         return ht;
@@ -330,6 +312,71 @@ namespace Dimeng.WoodEngine.Entities.Checks
             }
 
             return HardwareType.Default();
+        }
+
+        private List<HardwareToken> loadTokens(IRange cells2, int i)
+        {
+            var tokens = new List<HardwareToken>();
+            for (int x = 0; x < cells2.Columns.ColumnCount; x += 10)
+            {
+                string tokenName = cells2[i, x].Text;
+
+                if (string.IsNullOrEmpty(tokenName))
+                {
+                    break;
+                }
+
+                string fullTokenName = getHardwareToken(tokenName);
+                string fullTypeName = "Dimeng.WoodEngine.Entities.MachineTokens." + fullTokenName + "HardwareToken";
+
+                //提前检查是否含有这个指令
+                if (ModelAssemblyLoader.GetInstance().Types.Find(it => it.FullName == fullTypeName) == null)
+                {
+                    Logger.GetLogger().Warn("Token unknown:" + fullTypeName);
+                    continue;
+                }
+
+                object[] parms = new object[] {       tokenName,
+                                                                cells2[i, x + 1].Text,
+                                                                 cells2[i, x + 2].Text,
+                                                                  cells2[i, x + 3].Text,
+                                                                   cells2[i, x + 4].Text,
+                                                                    cells2[i, x + 5].Text,
+                                                                     cells2[i, x + 6].Text,
+                                                                      cells2[i, x + 7].Text,
+                                                                       cells2[i, x + 8].Text,
+                                                                        cells2[i, x + 9].Text};
+                HardwareToken token = (HardwareToken)Activator.CreateInstance(
+                        ModelAssemblyLoader.GetInstance().Assembly.GetType(
+                            fullTypeName,
+                            true,
+                            true
+                            )
+                        , parms);
+
+                MachineTokenChecker mChecker = new MachineTokenChecker();
+                if (token.Valid(mChecker))
+                {
+                    Logger.GetLogger().Debug("Token add:" + token.Token);
+                    tokens.Add(token);
+                }
+                else
+                {
+                    this.errors.AddRange(token.Errors);
+                }
+            }
+            return tokens;
+        }
+
+        private string getHardwareToken(string tokenName)
+        {
+            int index = tokenName.IndexOf("*");
+            if (index > -1)
+            {
+                return tokenName.Substring(0, index);
+            }
+
+            return tokenName;
         }
     }
 }

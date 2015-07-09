@@ -21,13 +21,13 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
         public override bool Valid(MachineTokenChecker check)
         {
 
-            this.FaceNumber = check.FaceNumber(this.Token, 4, new int[] { 1, 2, 3, 4 });
+            this.FaceNumber = check.FaceNumber(this.Token, 4, new int[] { 1, 2, 3, 4 }, this.Errors);
             LeadIn = (string.IsNullOrEmpty(Par1)) ? 0 : check.GetDoubleValue(Par1, "DADO/进刀引线长度", true, this.Errors);
             ReverseDirection = check.GetBoolValue(Par2, "DADO/反向加工", false, false, this.Errors);
             Depth = check.GetDoubleValue(Par3, "DADO/加工深度", true, this.Errors);
             LeadOut = (string.IsNullOrEmpty(Par4)) ? 0 : check.GetDoubleValue(Par4, "DADO/退刀引线长度", true, this.Errors);
             DADOThick = check.GetDoubleValue(Par5, "DADO/槽宽", true, this.Errors);
-            ToolName = check.ToolName(Par7, "DADO/刀具名称");
+            ToolName = check.ToolName(Par7, "DADO/刀具名称", this.Errors);
             Penetration = check.GetDoubleValue(Par8, "DADO/背板与槽间隙", false, this.Errors);
 
             if (this.Errors.Count == 0)

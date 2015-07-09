@@ -17,9 +17,9 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         public override bool Valid(MachineTokenChecker check)
         {
-            this.FaceNumber = check.FaceNumber(this.Token, 5, new int[] { 5, 6 });
-            this.Points = check.GetPoints(this.Par1);
-            this.Bulges = check.GetBulges(this.Par2);
+            this.FaceNumber = check.FaceNumber(this.Token, 5, new int[] { 5, 6 }, this.Errors);
+            this.Points = check.GetPoints(this.Par1, this.Errors);
+            this.Bulges = check.GetBulges(this.Par2, this.Errors);
 
             //对Bulges不足的情况，用0补上
             if (Bulges.Count < Points.Count)
@@ -31,7 +31,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                 }
             }
 
-            this.ToolName = check.ToolName(this.Par7, "PLINE/刀具名称");
+            this.ToolName = check.ToolName(this.Par7, "PLINE/刀具名称", this.Errors);
             this.ToolComp = check.GetToolComp(this.Par8, "PLINE/刀具补偿");
 
             if (this.Errors.Count == 0)

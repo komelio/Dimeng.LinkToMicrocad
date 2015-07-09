@@ -20,7 +20,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         public override bool Valid(MachineTokenChecker check)
         {
-            this.FaceNumber = check.FaceNumber(this.Token, 4, new int[] { 5, 6 });
+            this.FaceNumber = check.FaceNumber(this.Token, 4, new int[] { 5, 6 }, this.Errors);
 
             this.DistToBottom = check.GetDoubleValue(this.Par1, "SLIDE/Par1", false, this.Errors);
             this.DistToFirstBore = check.GetDoubleValue(this.Par2, "SLIDE/Par2", false, this.Errors);

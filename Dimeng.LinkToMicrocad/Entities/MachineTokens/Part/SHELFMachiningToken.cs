@@ -20,7 +20,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         public override bool Valid(MachineTokenChecker check)
         {
-            this.FaceNumber = check.FaceNumber(this.Token, 5, new int[] { 1, 2, 3, 4 });
+            this.FaceNumber = check.FaceNumber(this.Token, 5, new int[] { 1, 2, 3, 4 }, this.Errors);
 
             DistToBottom = check.GetDoubleValue(this.Par1, "关联的层板孔（类型2）/到底部距离", true, this.Errors);
             DistToFirstHole = check.GetDoubleValue(this.Par2, "关联的层板孔（类型2）/至第1排孔的距离", false, this.Errors);

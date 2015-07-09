@@ -25,12 +25,12 @@ namespace Dimeng.WoodEngine.Entities.Checks
                 return subFileName;
             }
 
-            subFileNameCommon = Path.Combine(projectSubsPath, subFileNameCommon);
-            if (File.Exists(subFileNameCommon))
-            {
-                //Logger.GetLogger().Info(string.Format("Subassembly file found:{0}", subFileNameCommon));
-                return subFileNameCommon;
-            }
+            //subFileNameCommon = Path.Combine(projectSubsPath, subFileNameCommon);
+            //if (File.Exists(subFileNameCommon))
+            //{
+            //    //Logger.GetLogger().Info(string.Format("Subassembly file found:{0}", subFileNameCommon));
+            //    return subFileNameCommon;
+            //}
 
             //Logger.GetLogger().Info("Copying subassembly cutx file from library path");
 
@@ -42,8 +42,8 @@ namespace Dimeng.WoodEngine.Entities.Checks
 
             //Logger.GetLogger().Debug("Library subassembly file path:" + files[0]);
 
-            File.Copy(files[0], subFileNameCommon);
-            return files[0];
+            File.Copy(files[0], subFileName);
+            return subFileName;
         }
     }
 }

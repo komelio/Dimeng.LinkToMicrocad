@@ -89,8 +89,9 @@ namespace Dimeng.WoodEngine.Entities
             }
         }
 
-        public void FindAssociatedPart(Product p)
+        public void FindAssociatedPart(Product p, ToolFile toolfile)
         {
+            //绘制dwg的关联板件
             foreach (var part in p.CombinedParts)
             {
                 if (this.IsInPart(part))
@@ -98,6 +99,17 @@ namespace Dimeng.WoodEngine.Entities
                     this.AssociatedPart = part;
                     break;
                 }
+            }
+
+            //机加工关联的板件
+            if (string.IsNullOrEmpty(this.HardwareType.HardwareName))
+            {
+                return;
+            }
+
+            foreach (var token in this.HardwareType.Tokens)
+            {
+                token.ToMachining(toolfile, p.CombinedParts, this);
             }
         }
     }

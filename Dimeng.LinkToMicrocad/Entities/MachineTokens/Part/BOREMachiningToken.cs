@@ -17,7 +17,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         public override bool Valid(MachineTokenChecker check)
         {
-            this.FaceNumber = check.FaceNumber(this.Token, 4, new int[] { 1, 2, 3, 4, 5, 6 });
+            this.FaceNumber = check.FaceNumber(this.Token, 4, new int[] { 1, 2, 3, 4, 5, 6 }, this.Errors);
             PosStartX = check.GetDoubleValue(this.Par1, @"BORE/X起始坐标", false, this.Errors);
             PosStartY = check.GetDoubleValue(this.Par2, @"BORE/Y起始坐标", false, this.Errors);
             PosStartZ = check.GetDoubleValue(this.Par3, @"BORE/Z起始坐标", true, this.Errors);

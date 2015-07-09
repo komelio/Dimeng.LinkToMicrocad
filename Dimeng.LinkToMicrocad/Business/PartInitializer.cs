@@ -118,7 +118,7 @@ namespace Dimeng.WoodEngine.Business
             }
 
             tokens.ForEach(t => t.Part = parts[0]);
-            MachineTokenChecker mChecker = new MachineTokenChecker(errors);
+            MachineTokenChecker mChecker = new MachineTokenChecker();
             parts.ForEach(it =>
             {
                 var tempTokens = new List<BaseToken>();
@@ -132,7 +132,7 @@ namespace Dimeng.WoodEngine.Business
                     }
                     else
                     {
-                        mChecker.Errors.AddRange(t.Errors);
+                        errors.AddRange(t.Errors);
                     }
                 }
                 it.MachineTokens = tempTokens;

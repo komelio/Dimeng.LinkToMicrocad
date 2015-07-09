@@ -19,15 +19,15 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         public override bool Valid(MachineTokenChecker check)
         {
-            this.FaceNumber = check.FaceNumber(this.Token, 8, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
-            this.EdgeNumber = check.EdgeNumber(this.Token, 10, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+            this.FaceNumber = check.FaceNumber(this.Token, 8, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }, this.Errors);
+            this.EdgeNumber = check.EdgeNumber(this.Token, 10, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }, this.Errors);
 
             if (FaceNumber == EdgeNumber)
             {
                 this.Errors.Add(new ModelError("PROFILE指令的两个点不能相同:" + this.Token));
             }
 
-            ProfileFile = check.TokenFileName(this.Par1, "PROFILE/文件名");
+            ProfileFile = check.TokenFileName(this.Par1, "PROFILE/文件名", this.Errors);
 
             if (this.Errors.Count > 0)
             {

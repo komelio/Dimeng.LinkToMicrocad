@@ -21,8 +21,8 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
         public override bool Valid(MachineTokenChecker check)
         {
             //todo:其实深度和直径是用逗号区分的,存在两种尺寸并排的情况要处理
-            this.FaceNumber = check.FaceNumber(this.Token, 7, new int[] { 1, 2, 3, 4 });
-            PointsPosition = check.PointPositions(this.Par1);
+            this.FaceNumber = check.FaceNumber(this.Token, 7, new int[] { 1, 2, 3, 4 }, this.Errors);
+            PointsPosition = check.PointPositions(this.Par1, this.Errors);
             EdgeBoreDiameter = check.GetDoubleValue(this.Par2, @"Camlock/边孔直径", true, this.Errors);
             EdgeBoreDepth = check.GetDoubleValue(this.Par3, @"Camlock/边孔深度", true, this.Errors);
             ZValue = (string.IsNullOrEmpty(this.Par4)) ?
@@ -95,13 +95,13 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
                 foreach (double d in this.PointsPosition)
                 {
-                    HDrilling hdrill = new HDrilling(this.FaceNumber, this.EdgeBoreDiameter, this.EdgeBoreDepth, d, this.ZValue, Part,this);
+                    HDrilling hdrill = new HDrilling(this.FaceNumber, this.EdgeBoreDiameter, this.EdgeBoreDepth, d, this.ZValue, Part, this);
                     TempHDrills.Add(hdrill);
                 }
 
                 foreach (StructXY xy in this.ListCamVBoreXY)
                 {
-                    VDrilling vdrill = new VDrilling(this.CamFaceNumber, xy.X, xy.Y, this.CamFaceBoreDiameter, this.CamFaceBoreDepth, Part,this);
+                    VDrilling vdrill = new VDrilling(this.CamFaceNumber, xy.X, xy.Y, this.CamFaceBoreDiameter, this.CamFaceBoreDepth, Part, this);
                     Part.VDrillings.Add(vdrill);
                 }
 
@@ -119,7 +119,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                             double dimx = holeposition.X;
                             double dimy = holeposition.Y;
 
-                            VDrilling vdrill = new VDrilling(f.FaceNumber, dimx, dimy, this.FaceBoreDiameter, this.FaceBoreDepth, f.Part,this);
+                            VDrilling vdrill = new VDrilling(f.FaceNumber, dimx, dimy, this.FaceBoreDiameter, this.FaceBoreDepth, f.Part, this);
                             f.Part.VDrillings.Add(vdrill);
                         }
                     }
@@ -170,12 +170,12 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             string[] FDepths = par6.Split(',');
             if (FDepths.Length >= 2)
             {
-                FaceBoreDepth = checker.GetDoubleValue(FDepths[0], @"Camlock/par6", true, checker.Errors);
-                CamFaceBoreDepth = checker.GetDoubleValue(FDepths[1], @"Camlock/par6", true, checker.Errors);
+                FaceBoreDepth = checker.GetDoubleValue(FDepths[0], @"Camlock/par6", true, this.Errors);
+                CamFaceBoreDepth = checker.GetDoubleValue(FDepths[1], @"Camlock/par6", true, this.Errors);
             }
             else
             {
-                checker.Errors.Add(new ModelError("Wrong camlock depth:" + par6));
+                this.Errors.Add(new ModelError("Wrong camlock depth:" + par6));
             }
         }
 
@@ -184,12 +184,12 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             string[] FDiams = par5.Split(',');
             if (FDiams.Length >= 2)
             {
-                FaceBoreDiameter = checker.GetDoubleValue(FDiams[0], @"Camlock/par5", true, checker.Errors);
-                CamFaceBoreDiameter = checker.GetDoubleValue(FDiams[1], @"Camlock/par5", true, checker.Errors);
+                FaceBoreDiameter = checker.GetDoubleValue(FDiams[0], @"Camlock/par5", true, this.Errors);
+                CamFaceBoreDiameter = checker.GetDoubleValue(FDiams[1], @"Camlock/par5", true, this.Errors);
             }
             else
             {
-                checker.Errors.Add(new ModelError("Wrong camlock diameter:" + par5));
+                this.Errors.Add(new ModelError("Wrong camlock diameter:" + par5));
             }
         }
     }

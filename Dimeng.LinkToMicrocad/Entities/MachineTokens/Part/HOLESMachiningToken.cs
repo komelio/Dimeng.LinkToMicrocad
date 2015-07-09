@@ -19,9 +19,9 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         public override bool Valid(MachineTokenChecker check)
         {
-            FaceNumber = check.FaceNumber(this.Token, 5, new int[] { 1, 2, 3, 4 });
+            FaceNumber = check.FaceNumber(this.Token, 5, new int[] { 1, 2, 3, 4 }, this.Errors);
 
-            PointsPosition = check.PointPositions(this.Par1);
+            PointsPosition = check.PointPositions(this.Par1, this.Errors);
 
             EdgeBoreDiameter = check.GetDoubleValue(this.Par2, @"HOLES/边孔直径", true, this.Errors);
             EdgeBoreDepth = check.GetDoubleValue(this.Par3, @"HOLES/边孔深度", true, this.Errors);

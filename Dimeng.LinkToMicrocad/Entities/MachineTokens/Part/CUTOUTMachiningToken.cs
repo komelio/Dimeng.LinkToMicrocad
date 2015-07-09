@@ -16,14 +16,14 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         public override bool Valid(MachineTokenChecker check)
         {
-            this.FaceNumber = check.FaceNumber(this.Token, 6, new int[] { 5, 6 });
+            this.FaceNumber = check.FaceNumber(this.Token, 6, new int[] { 5, 6 }, this.Errors);
             StartX = check.GetDoubleValue(Par1, "CUTOUT/X起始坐标", false, this.Errors);
             StartY = check.GetDoubleValue(Par2, "CUTOUT/Y起始坐标", false, this.Errors);
             Depth = check.GetDoubleValue(Par3, "CUTOUT/深度", true, this.Errors);
             EndX = check.GetDoubleValue(Par4, "CUTOUT/X结束坐标", false, this.Errors);
             EndY = check.GetDoubleValue(Par5, "CUTOUT/Y起始坐标", false, this.Errors);
             IsPocket = check.GetBoolValue(Par6, "CUTOUT/袋式加工", false, false, this.Errors);
-            ToolName = check.ToolName(Par7, "CUTOUT/刀具名称");
+            ToolName = check.ToolName(Par7, "CUTOUT/刀具名称", this.Errors);
             IsDrawOnly = check.GetBoolValue(Par8, "CUTOUT/仅用于图形绘制", false, false, this.Errors);
 
             lowX = (StartX >= EndX) ? EndX : StartX;

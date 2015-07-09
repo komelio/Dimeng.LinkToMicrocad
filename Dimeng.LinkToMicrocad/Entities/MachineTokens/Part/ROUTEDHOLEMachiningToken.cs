@@ -17,7 +17,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         public override bool Valid(MachineTokenChecker check)
         {
-            this.FaceNumber = check.FaceNumber(Token, 10, new int[] { 5, 6 });
+            this.FaceNumber = check.FaceNumber(Token, 10, new int[] { 5, 6 }, this.Errors);
             if (FaceNumber == 6)
                 this.OnFace5 = false;
             else this.OnFace5 = true;
@@ -27,7 +27,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             Depth = check.GetDoubleValue(Par3, "铣圆指令/深度", true, this.Errors);
             Radius = check.GetDoubleValue(Par4, "铣圆指令/圆半径", true, this.Errors);
             IsPocket = check.GetBoolValue(Par5, "铣圆指令/袋式加工", false, false, this.Errors);
-            ToolName = check.ToolName(Par7, "铣圆指令/刀具名称");
+            ToolName = check.ToolName(Par7, "铣圆指令/刀具名称", this.Errors);
             IsDrawOnly = check.GetBoolValue(Par8, "铣圆指令/仅用于绘图", false, false, this.Errors);
 
             if (this.Errors.Count == 0)

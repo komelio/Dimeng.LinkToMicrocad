@@ -17,8 +17,8 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         public override bool Valid(MachineTokenChecker check)
         {
-            this.FaceNumber = check.FaceNumber(this.Token, 7, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
-            this.EdgeNumber = check.EdgeNumber(this.Token, 9, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+            this.FaceNumber = check.FaceNumber(this.Token, 7, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }, this.Errors);
+            this.EdgeNumber = check.EdgeNumber(this.Token, 9, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }, this.Errors);
 
             DistX = check.GetDoubleValue(Par1, "CHAMFER/X距离", true, this.Errors);
             DistY = check.GetDoubleValue(Par2, "CHAMFER/Y距离", true, this.Errors);
@@ -26,7 +26,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
             this.LeadIn = check.GetDoubleValue(Par4, "CHAMFER/下刀引线长度", true, this.Errors);
 
-            ToolName = check.ToolName(Par7, "CHAMFER/刀具名称");
+            ToolName = check.ToolName(Par7, "CHAMFER/刀具名称", this.Errors);
 
             this.IsDrawOnly = check.GetBoolValue(Par8, "CHAMFER/只用于绘图", false, false, this.Errors);
 

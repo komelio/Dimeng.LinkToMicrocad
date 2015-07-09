@@ -27,7 +27,6 @@ namespace Dimeng.WoodEngine.Business
                     break;
                 }
 
-
                 IRange partRow = hardwareCells[i, 0].EntireRow;
                 HardwareChecker check = new HardwareChecker(partRow, getLocation(product), errors);
                 List<Hardware> tempHardwares = new List<Hardware>();

@@ -17,8 +17,8 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         public override bool Valid(Checks.MachineTokenChecker check)
         {
-            this.FaceNumber = check.FaceNumber(this.Token, 6, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
-            this.EdgeNumber = check.EdgeNumber(this.Token, 8, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+            this.FaceNumber = check.FaceNumber(this.Token, 6, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }, this.Errors);
+            this.EdgeNumber = check.EdgeNumber(this.Token, 8, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }, this.Errors);
 
             if (FaceNumber == EdgeNumber)
             {
