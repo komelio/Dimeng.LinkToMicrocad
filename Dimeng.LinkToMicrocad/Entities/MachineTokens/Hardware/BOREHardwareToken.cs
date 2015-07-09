@@ -82,86 +82,112 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
             Logger.GetLogger().Info("Point1 :" + pt.ToString());
 
-            //先假设是发生在关联板件上的
-            Point3d drillPt = new Point3d(pt.X + StartX, pt.Y + StartY, 0);
-            Logger.GetLogger().Info("Point2 :" + drillPt.ToString());
 
-            drillPt = drillPt.TransformBy(
-                Matrix3d.Rotation(angle / 180 * System.Math.PI, Vector3d.ZAxis, pt));
-            Logger.GetLogger().Info("Point3 :" + drillPt.ToString());
+            //step1:获取应该有几个孔
+            double dist = System.Math.Sqrt(System.Math.Abs(StartX - EndX) * System.Math.Abs(StartX - EndX) +
+                System.Math.Abs(StartY - EndY) * System.Math.Abs(StartY - EndY));
+            int count = (this.DistanceBetweenHoles == 0) ? 1 : (int)System.Math.Floor((dist / this.DistanceBetweenHoles));
 
-            //再把点转回到以机加工原点的坐标上
-            Logger.GetLogger().Info(hw.AssociatedPart.MovedMPPoint.ToString());
-            Logger.GetLogger().Info(hw.AssociatedPart.MovedMPXAxis.ToString());
-            Logger.GetLogger().Info(hw.AssociatedPart.MovedMPYAxis.ToString());
-            Logger.GetLogger().Info(hw.AssociatedPart.MovedMPZAxis.ToString());
-            drillPt = drillPt.TransformBy(Matrix3d.AlignCoordinateSystem(Point3d.Origin,
+            double lineAngle = 0;
+            if (count > 1)
+            {
+                lineAngle = System.Math.Atan2(EndX - StartX, EndY - StartY);
+            }
+
+
+
+
+            for (int i = 0; i < count; i++)
+            {
+                Point3d ptFirst = new Point3d(pt.X + StartX + i * DistanceBetweenHoles * System.Math.Cos(lineAngle),
+                                              pt.Y + StartY + i * DistanceBetweenHoles * System.Math.Sin(lineAngle),
+                                              pt.Z + StartZ);
+                ptFirst = ptFirst.TransformBy(Matrix3d.Rotation(angle / 180 * System.Math.PI, Vector3d.ZAxis, pt));
+                ptFirst = ptFirst.TransformBy(Matrix3d.AlignCoordinateSystem(Point3d.Origin,
+                                                                             Vector3d.XAxis,
+                                                                             Vector3d.YAxis,
+                                                                             Vector3d.ZAxis,
+                                                                             ptZero,
+                                                                             vx,
+                                                                             vy,
+                                                                             zaxis));
+
+                foreach (var p in combinedParts)
+                {
+                    if (this.IsPointInPart(ptFirst, p))
+                    {
+                        ptFirst = ptFirst.TransformBy(Matrix3d.AlignCoordinateSystem(Point3d.Origin,
                                                                          Vector3d.XAxis,
                                                                          Vector3d.YAxis,
                                                                          Vector3d.ZAxis,
-                                                                         hw.AssociatedPart.GetPartPointPositionByNumber(3),
-                                                                         hw.AssociatedPart.MovedOrginXAxis,
-                                                                         hw.AssociatedPart.MovedOrginYAxis,
+                                                                         p.GetPartPointPositionByNumber(3),
+                                                                         p.MovedOrginXAxis,
+                                                                         p.MovedOrginYAxis,
                                                                          zaxis
                                                                          ));
-            Logger.GetLogger().Info("Point4 :" + drillPt.ToString());
-
-            drillPt = drillPt.TransformBy(Matrix3d.AlignCoordinateSystem(hw.AssociatedPart.MovedMPPoint,
-                                                                hw.AssociatedPart.MovedMPXAxis,
-                                                                hw.AssociatedPart.MovedMPYAxis,
-                                                                hw.AssociatedPart.MovedMPZAxis,
+                        ptFirst = ptFirst.TransformBy(Matrix3d.AlignCoordinateSystem(p.MovedMPPoint,
+                                                                p.MovedMPXAxis,
+                                                                p.MovedMPYAxis,
+                                                                p.MovedMPZAxis,
                                                                Point3d.Origin,
                                                                Vector3d.XAxis,
                                                                Vector3d.YAxis,
                                                                Vector3d.ZAxis));
-            Logger.GetLogger().Info("Point5 :" + drillPt.ToString());
-            hw.AssociatedPart.VDrillings.Add(
-                new Machinings.VDrilling(getFaceNumber(hw.OnTopFace, hw.AssociatedPart.MachinePoint.MP),
-                    drillPt.X, drillPt.Y, this.Diameter, this.DrillDepth, hw.AssociatedPart, this));
 
-            //foreach (var part in combinedParts)//判断起点是否在某个板件的内部
-            //{
-            //    if (base.IsPointInPart(pt, part))
-            //    {
-            //        Point3d drillPt = new Point3d(pt.X+StartX,pt.Y;
+                        p.VDrillings.Add(
+                            new Machinings.VDrilling(getFaceNumber(ptFirst.Z, p.Thickness),
+                                ptFirst.X, ptFirst.Y, this.Diameter, this.DrillDepth, p, this));
+                        break;
+                    }
+                }
+            }
 
+            ////先假设是发生在关联板件上的
+            //Point3d drillPt = new Point3d(pt.X + StartX, pt.Y + StartY, 0);
+            //Logger.GetLogger().Info("Point2 :" + drillPt.ToString());
 
-            //        int faceNumber = getFaceNumber(hw.OnTopFace, part.MachinePoint.MP);
-            //        double x = S
-            //        part.VDrillings.Add(new Machinings.VDrilling(faceNumber, StartX, StartY, Diameter, DrillDepth, part, this));
+            //drillPt = drillPt.TransformBy(
+            //    Matrix3d.Rotation(angle / 180 * System.Math.PI, Vector3d.ZAxis, pt));
+            //Logger.GetLogger().Info("Point3 :" + drillPt.ToString());
 
-            //        Logger.GetLogger().Info(
-            //            string.Format("Add hardware bore machining:Face{0}/X{1}/Y{2}/D{3}/Dia{4}", faceNumber, StartX, StartY, DrillDepth, Diameter));
-            //    }
-            //}
+            ////再把点转回到以机加工原点的坐标上
+            //Logger.GetLogger().Info(hw.AssociatedPart.MovedMPPoint.ToString());
+            //Logger.GetLogger().Info(hw.AssociatedPart.MovedMPXAxis.ToString());
+            //Logger.GetLogger().Info(hw.AssociatedPart.MovedMPYAxis.ToString());
+            //Logger.GetLogger().Info(hw.AssociatedPart.MovedMPZAxis.ToString());
+            //drillPt = drillPt.TransformBy(Matrix3d.AlignCoordinateSystem(Point3d.Origin,
+            //                                                             Vector3d.XAxis,
+            //                                                             Vector3d.YAxis,
+            //                                                             Vector3d.ZAxis,
+            //                                                             hw.AssociatedPart.GetPartPointPositionByNumber(3),
+            //                                                             hw.AssociatedPart.MovedOrginXAxis,
+            //                                                             hw.AssociatedPart.MovedOrginYAxis,
+            //                                                             zaxis
+            //                                                             ));
+            //Logger.GetLogger().Info("Point4 :" + drillPt.ToString());
+
+            //drillPt = drillPt.TransformBy(Matrix3d.AlignCoordinateSystem(hw.AssociatedPart.MovedMPPoint,
+            //                                                    hw.AssociatedPart.MovedMPXAxis,
+            //                                                    hw.AssociatedPart.MovedMPYAxis,
+            //                                                    hw.AssociatedPart.MovedMPZAxis,
+            //                                                   Point3d.Origin,
+            //                                                   Vector3d.XAxis,
+            //                                                   Vector3d.YAxis,
+            //                                                   Vector3d.ZAxis));
+            //Logger.GetLogger().Info("Point5 :" + drillPt.ToString());
+            //hw.AssociatedPart.VDrillings.Add(
+            //    new Machinings.VDrilling(getFaceNumber(hw.OnTopFace, hw.AssociatedPart.MachinePoint.MP),
+            //        drillPt.X, drillPt.Y, this.Diameter, this.DrillDepth, hw.AssociatedPart, this));
 
         }
 
-        private int getFaceNumber(bool onTopFace, string machinePoint)
+        private int getFaceNumber(double z, double thick)
         {
-            machinePoint = machinePoint.Replace("M", "");
-            if (machinePoint == "1" || machinePoint == "3" || machinePoint == "5" || machinePoint == "5" || machinePoint == "7")
+            if (z > thick / 2)
             {
-                if (onTopFace)
-                {
-                    return 6;
-                }
-                else
-                {
-                    return 5;
-                }
+                return 6;
             }
-            else
-            {
-                if (onTopFace)
-                {
-                    return 5;
-                }
-                else
-                {
-                    return 6;
-                }
-            }
+            return 5;
         }
     }
 }
