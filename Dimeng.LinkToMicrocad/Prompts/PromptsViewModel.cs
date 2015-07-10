@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight;
 using Dimeng.LinkToMicrocad.Logging;
 using Dimeng.WoodEngine.Spread;
 using Dimeng.WoodEngine.Entities;
+using GalaSoft.MvvmLight.Command;
 
 namespace Dimeng.WoodEngine.Prompts
 {
@@ -22,6 +23,14 @@ namespace Dimeng.WoodEngine.Prompts
             PromptsChangedControlType = new List<PromptItem>();
             PromptTabs = new List<string>();
             Calcuators = new List<CalculatorItem>();
+
+            this.ShowSpreadCommand = new RelayCommand(this.showSpread);
+        }
+
+        private void showSpread()
+        {
+            SpreadExplorer se = new SpreadExplorer(this.Book);
+            se.ShowDialog();
         }
 
         public PromptsViewModel(string name,
@@ -327,5 +336,8 @@ namespace Dimeng.WoodEngine.Prompts
         //public Project Project { get; private set; }
 
         public string Handle { get; set; }
+
+        public RelayCommand ShowSpreadCommand { get; private set; }
+
     }
 }

@@ -23,9 +23,9 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             this.StartZ = string.IsNullOrEmpty(this.Par3) ? 0 :
                 check.GetDoubleValue(this.Par3, "Hardware BORE/Par3/StartZ", false, this.Errors);
             this.EndX = string.IsNullOrEmpty(this.Par5) ? 0 :
-                check.GetDoubleValue(this.Par5, "Hardware BORE/Par2/StartY", false, this.Errors);
+                check.GetDoubleValue(this.Par5, "Hardware BORE/Par4/EndX", false, this.Errors);
             this.EndY = string.IsNullOrEmpty(this.Par6) ? 0 :
-                check.GetDoubleValue(this.Par6, "Hardware BORE/Par2/StartY", false, this.Errors);
+                check.GetDoubleValue(this.Par6, "Hardware BORE/Par5/EndY", false, this.Errors);
             this.Diameter = check.GetDoubleValue(this.Par4, "Hardware BORE/Par2/StartY", false, this.Errors);
             this.DistanceBetweenHoles = string.IsNullOrEmpty(this.Par7) ? 0 :
                 check.GetDoubleValue(this.Par7, "Hardware BORE/Par2/StartY", false, this.Errors);
@@ -54,21 +54,18 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                 return;
             }
 
+            Logger.GetLogger().Debug(string.Format("hardware bore token tomachining:{0}/{1}/{2}/{3}/{4}/{5}/{6}",
+                this.StartX, this.StartY, this.StartZ, this.EndX, this.EndY, this.Diameter, this.DistanceBetweenHoles));
+
             //获取五金关于关联板件的点1的相对坐标
             Point3d pt = new Point3d(hw.TXOrigin, hw.TYOrigin, hw.TZOrigin);
-            Logger.GetLogger().Warn("Point0 :" + pt.ToString());
+            Logger.GetLogger().Debug("Point0 :" + pt.ToString());
 
-            Vector3d zaxis = (hw.OnTopFace) ? hw.AssociatedPart.MovedOrginZAxis : -hw.AssociatedPart.MovedOrginZAxis;
-            zaxis = zaxis.GetNormal();
+            Vector3d zaxis = hw.AssociatedPart.MovedOrginZAxis.GetNormal();
             double angle = (!hw.OnTopFace) ? -hw.TAssociatedRotation : hw.TAssociatedRotation;
-            Point3d ptZero = hw.AssociatedPart.GetPartPointPositionByNumber(3);
+            Point3d ptZero = hw.AssociatedPart.GetPartPointPositionByNumber(4);
             Vector3d vx = hw.AssociatedPart.MovedOrginXAxis.GetNormal();
             Vector3d vy = hw.AssociatedPart.MovedOrginYAxis.GetNormal();
-
-            Logger.GetLogger().Info(ptZero.ToString());
-            Logger.GetLogger().Info(vx.ToString());
-            Logger.GetLogger().Info(vy.ToString());
-            Logger.GetLogger().Info(zaxis.ToString());
 
             pt = pt.TransformBy(Matrix3d.AlignCoordinateSystem(ptZero,
                                                                vx,
@@ -80,29 +77,25 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                                                                Vector3d.ZAxis
                                                                ));
 
-            Logger.GetLogger().Info("Point1 :" + pt.ToString());
+            Logger.GetLogger().Debug("Point1 :" + pt.ToString());//五金相对关联板件点4的坐标
 
-
-            //step1:获取应该有几个孔
             double dist = System.Math.Sqrt(System.Math.Abs(StartX - EndX) * System.Math.Abs(StartX - EndX) +
                 System.Math.Abs(StartY - EndY) * System.Math.Abs(StartY - EndY));
-            int count = (this.DistanceBetweenHoles == 0) ? 1 : (int)System.Math.Floor((dist / this.DistanceBetweenHoles));
+            Logger.GetLogger().Debug("Point dist:" + dist.ToString());
 
-            double lineAngle = 0;
-            if (count > 1)
+            int count = (this.DistanceBetweenHoles == 0) ? 0 : (int)System.Math.Floor(System.Math.Round(dist / this.DistanceBetweenHoles, 2));
+            Logger.GetLogger().Debug("count :" + count.ToString());
+
+            double lineAngle = System.Math.Atan2(EndY - StartY, EndX - StartX);
+            Logger.GetLogger().Debug("lineAngle :" + lineAngle.ToString());
+
+            for (int i = 0; i <= count; i++)
             {
-                lineAngle = System.Math.Atan2(EndX - StartX, EndY - StartY);
-            }
-
-
-
-
-            for (int i = 0; i < count; i++)
-            {
-                Point3d ptFirst = new Point3d(pt.X + StartX + i * DistanceBetweenHoles * System.Math.Cos(lineAngle),
-                                              pt.Y + StartY + i * DistanceBetweenHoles * System.Math.Sin(lineAngle),
-                                              pt.Z + StartZ);
-                ptFirst = ptFirst.TransformBy(Matrix3d.Rotation(angle / 180 * System.Math.PI, Vector3d.ZAxis, pt));
+                Point3d ptFirst = new Point3d(pt.X + StartX + (i * DistanceBetweenHoles) * System.Math.Cos(lineAngle),
+                                              pt.Y + StartY + (i * DistanceBetweenHoles) * System.Math.Sin(lineAngle),
+                                              hw.OnTopFace ? StartZ : -hw.AssociatedPart.Thickness - StartZ);
+                Logger.GetLogger().Debug("Point2 :" + ptFirst.ToString());
+                ptFirst = ptFirst.TransformBy(Matrix3d.Rotation((hw.OnTopFace ? -1 : 1) * angle / 180 * System.Math.PI, Vector3d.ZAxis, pt));
                 ptFirst = ptFirst.TransformBy(Matrix3d.AlignCoordinateSystem(Point3d.Origin,
                                                                              Vector3d.XAxis,
                                                                              Vector3d.YAxis,
@@ -111,20 +104,13 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                                                                              vx,
                                                                              vy,
                                                                              zaxis));
+                Logger.GetLogger().Debug("Point3 :" + ptFirst.ToString());//转回世界坐标系的点坐标
 
                 foreach (var p in combinedParts)
                 {
                     if (this.IsPointInPart(ptFirst, p))
                     {
-                        ptFirst = ptFirst.TransformBy(Matrix3d.AlignCoordinateSystem(Point3d.Origin,
-                                                                         Vector3d.XAxis,
-                                                                         Vector3d.YAxis,
-                                                                         Vector3d.ZAxis,
-                                                                         p.GetPartPointPositionByNumber(3),
-                                                                         p.MovedOrginXAxis,
-                                                                         p.MovedOrginYAxis,
-                                                                         zaxis
-                                                                         ));
+                        Logger.GetLogger().Debug("Associated Part :" + p.PartName);
                         ptFirst = ptFirst.TransformBy(Matrix3d.AlignCoordinateSystem(p.MovedMPPoint,
                                                                 p.MovedMPXAxis,
                                                                 p.MovedMPYAxis,
@@ -133,6 +119,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                                                                Vector3d.XAxis,
                                                                Vector3d.YAxis,
                                                                Vector3d.ZAxis));
+                        Logger.GetLogger().Debug("Point4 :" + ptFirst.ToString());
 
                         p.VDrillings.Add(
                             new Machinings.VDrilling(getFaceNumber(ptFirst.Z, p.Thickness),
@@ -141,44 +128,6 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                     }
                 }
             }
-
-            ////先假设是发生在关联板件上的
-            //Point3d drillPt = new Point3d(pt.X + StartX, pt.Y + StartY, 0);
-            //Logger.GetLogger().Info("Point2 :" + drillPt.ToString());
-
-            //drillPt = drillPt.TransformBy(
-            //    Matrix3d.Rotation(angle / 180 * System.Math.PI, Vector3d.ZAxis, pt));
-            //Logger.GetLogger().Info("Point3 :" + drillPt.ToString());
-
-            ////再把点转回到以机加工原点的坐标上
-            //Logger.GetLogger().Info(hw.AssociatedPart.MovedMPPoint.ToString());
-            //Logger.GetLogger().Info(hw.AssociatedPart.MovedMPXAxis.ToString());
-            //Logger.GetLogger().Info(hw.AssociatedPart.MovedMPYAxis.ToString());
-            //Logger.GetLogger().Info(hw.AssociatedPart.MovedMPZAxis.ToString());
-            //drillPt = drillPt.TransformBy(Matrix3d.AlignCoordinateSystem(Point3d.Origin,
-            //                                                             Vector3d.XAxis,
-            //                                                             Vector3d.YAxis,
-            //                                                             Vector3d.ZAxis,
-            //                                                             hw.AssociatedPart.GetPartPointPositionByNumber(3),
-            //                                                             hw.AssociatedPart.MovedOrginXAxis,
-            //                                                             hw.AssociatedPart.MovedOrginYAxis,
-            //                                                             zaxis
-            //                                                             ));
-            //Logger.GetLogger().Info("Point4 :" + drillPt.ToString());
-
-            //drillPt = drillPt.TransformBy(Matrix3d.AlignCoordinateSystem(hw.AssociatedPart.MovedMPPoint,
-            //                                                    hw.AssociatedPart.MovedMPXAxis,
-            //                                                    hw.AssociatedPart.MovedMPYAxis,
-            //                                                    hw.AssociatedPart.MovedMPZAxis,
-            //                                                   Point3d.Origin,
-            //                                                   Vector3d.XAxis,
-            //                                                   Vector3d.YAxis,
-            //                                                   Vector3d.ZAxis));
-            //Logger.GetLogger().Info("Point5 :" + drillPt.ToString());
-            //hw.AssociatedPart.VDrillings.Add(
-            //    new Machinings.VDrilling(getFaceNumber(hw.OnTopFace, hw.AssociatedPart.MachinePoint.MP),
-            //        drillPt.X, drillPt.Y, this.Diameter, this.DrillDepth, hw.AssociatedPart, this));
-
         }
 
         private int getFaceNumber(double z, double thick)

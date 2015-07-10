@@ -1,4 +1,5 @@
 ﻿using Autodesk.AutoCAD.Geometry;
+using Dimeng.LinkToMicrocad.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
         {
         }
 
-        public virtual void ToMachining(ToolFile toolfile, IEnumerable<Part> combinedParts,Hardware hw)
+        public virtual void ToMachining(ToolFile toolfile, IEnumerable<Part> combinedParts, Hardware hw)
         {
 
         }
@@ -30,7 +31,11 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                                                                Vector3d.YAxis,
                                                                Vector3d.ZAxis));
 
-            if (pt.Z > 0 || pt.Z < -p.Thickness)
+            Logger.GetLogger().Debug("Part is point in :" + p.PartName);
+            Logger.GetLogger().Debug(pt.ToString());
+
+            double z = System.Math.Round(pt.Z, 2);
+            if (z > 0 || z < -p.Thickness)
                 return false;
 
             if (!p.MachinePoint.IsRotated)
