@@ -11,6 +11,7 @@ using Dimeng.LinkToMicrocad.Logging;
 using Dimeng.WoodEngine.Spread;
 using Dimeng.WoodEngine.Entities;
 using GalaSoft.MvvmLight.Command;
+using Dimeng.LinkToMicrocad.Properties;
 
 namespace Dimeng.WoodEngine.Prompts
 {
@@ -23,7 +24,7 @@ namespace Dimeng.WoodEngine.Prompts
             PromptsChangedControlType = new List<PromptItem>();
             PromptTabs = new List<string>();
             Calcuators = new List<CalculatorItem>();
-
+            drawHoles = Settings.Default.IsDrawHoles;
             this.ShowSpreadCommand = new RelayCommand(this.showSpread);
         }
 
@@ -31,31 +32,6 @@ namespace Dimeng.WoodEngine.Prompts
         {
             SpreadExplorer se = new SpreadExplorer(this.Book);
             se.ShowDialog();
-        }
-
-        public PromptsViewModel(string name,
-                                string imagePath,
-                                double width,
-                                double height,
-                                double depth,
-                                Project project,
-                                IMVLibrary library)
-            : this()
-        {
-            this.Width = width;
-            Logger.GetLogger().Debug(string.Format("Width:{0}", width));
-
-            this.Height = height;
-            Logger.GetLogger().Debug(string.Format("Height:{0}", height));
-
-            this.Depth = depth;
-            Logger.GetLogger().Debug(string.Format("Depth:{0}", depth));
-
-            this.Name = name;
-            Logger.GetLogger().Debug(string.Format("Name:{0}", name));
-
-            this.Library = library;
-            Logger.GetLogger().Debug(string.Format("Library:{0}", library.Library));
         }
 
         public PromptsViewModel(IWorkbookSet bookset,
@@ -326,6 +302,21 @@ namespace Dimeng.WoodEngine.Prompts
                 base.RaisePropertyChanged("Elevation");
             }
         }
+
+        private bool drawHoles = false;
+
+        public bool DrawHoles
+        {
+            get { return drawHoles; }
+            set
+            {
+                drawHoles = value;
+                Settings.Default.IsDrawHoles = drawHoles;
+                Settings.Default.Save();
+                base.RaisePropertyChanged("DrawHoles");
+            }
+        }
+
 
         public string ProjectPath { get; private set; }
 

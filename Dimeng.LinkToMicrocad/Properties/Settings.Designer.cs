@@ -34,5 +34,17 @@ namespace Dimeng.LinkToMicrocad.Properties {
                 this["MaterialCounter"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsDrawHoles {
+            get {
+                return ((bool)(this["IsDrawHoles"]));
+            }
+            set {
+                this["IsDrawHoles"] = value;
+            }
+        }
     }
 }

@@ -268,22 +268,20 @@ namespace Dimeng.WoodEngine.Entities
                     Vector3d vector = ptRef - ptPos;
 
                     var vt = vector.TransformBy(Matrix3d.AlignCoordinateSystem(
-
-                          ptRef,
+                        ptRef,
                         aksub.SubInfo.VX,
                         aksub.SubInfo.VY,
-                        aksub.SubInfo.VZ ,
+                        aksub.SubInfo.VZ,
                         Point3d.Origin,
                         Vector3d.XAxis,
                         Vector3d.YAxis,
                         Vector3d.ZAxis
-
                         ));
 
 
                     cells[i, 29].Value = vt.X;
                     cells[i, 30].Value = vt.Y;
-                    cells[i, 31].Value = vt.Z;
+                    cells[i, 31].Value = vt.Z - aksub.Tab.VarElevation;
                     book.Save();
 
                     line = i;
