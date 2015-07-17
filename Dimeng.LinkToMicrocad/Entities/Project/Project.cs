@@ -7,6 +7,7 @@ using System.Text;
 using Dapper;
 using SpreadsheetGear;
 using Dimeng.LinkToMicrocad;
+using Autodesk.AutoCAD.Geometry;
 
 namespace Dimeng.WoodEngine.Entities
 {
@@ -260,9 +261,29 @@ namespace Dimeng.WoodEngine.Entities
                     cells[i, 18].Value = aksub.TabA.VarX;
                     cells[i, 19].Value = aksub.TabA.VarZ;
                     cells[i, 20].Value = aksub.TabA.VarY;
-                    cells[i, 29].Value = -aksub.SubInfo.Position.X + aksub.SubInfo.RefPoint.X;
-                    cells[i, 30].Value = -aksub.SubInfo.Position.Y + aksub.SubInfo.RefPoint.Y;
-                    cells[i, 31].Value = -aksub.SubInfo.Position.Z + aksub.SubInfo.RefPoint.Z;
+
+                    Point3d ptRef = new Point3d(aksub.SubInfo.RefPoint.X, aksub.SubInfo.RefPoint.Y, aksub.SubInfo.RefPoint.Z);
+                    Point3d ptPos = new Point3d(aksub.SubInfo.Position.X, aksub.SubInfo.Position.Y, aksub.SubInfo.Position.Z);
+
+                    Vector3d vector = ptRef - ptPos;
+
+                    var vt = vector.TransformBy(Matrix3d.AlignCoordinateSystem(
+
+                          ptRef,
+                        aksub.SubInfo.VX,
+                        aksub.SubInfo.VY,
+                        aksub.SubInfo.VZ ,
+                        Point3d.Origin,
+                        Vector3d.XAxis,
+                        Vector3d.YAxis,
+                        Vector3d.ZAxis
+
+                        ));
+
+
+                    cells[i, 29].Value = vt.X;
+                    cells[i, 30].Value = vt.Y;
+                    cells[i, 31].Value = vt.Z;
                     book.Save();
 
                     line = i;

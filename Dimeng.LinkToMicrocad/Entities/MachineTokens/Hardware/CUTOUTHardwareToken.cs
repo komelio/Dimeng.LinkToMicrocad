@@ -1,5 +1,6 @@
 ﻿using Autodesk.AutoCAD.Geometry;
 using Dimeng.LinkToMicrocad.Logging;
+using Dimeng.WoodEngine.Entities.Machinings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,9 +55,9 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             }
 
             Logger.GetLogger().Debug(string.Format("hardware cutout token tomachining:{0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}",
-                this.StartX, this.StartY, this.StartZ, this.EndX, this.EndY, this.IsPocket, this.ToolName,this.RouteDepth));
+                this.StartX, this.StartY, this.StartZ, this.EndX, this.EndY, this.IsPocket, this.ToolName, this.RouteDepth));
 
-             //获取五金关于关联板件的点1的相对坐标
+            //获取五金关于关联板件的点1的相对坐标
             Point3d pt = new Point3d(hw.TXOrigin, hw.TYOrigin, hw.TZOrigin);
             Logger.GetLogger().Debug("Point0 :" + pt.ToString());
 
@@ -78,49 +79,41 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
             Logger.GetLogger().Debug("Point1 :" + pt.ToString());//五金相对关联板件点4的坐标
 
-            double dist = System.Math.Sqrt(System.Math.Abs(StartX - EndX) * System.Math.Abs(StartX - EndX) +
-                System.Math.Abs(StartY - EndY) * System.Math.Abs(StartY - EndY));
-            Logger.GetLogger().Debug("Point dist:" + dist.ToString());
+            Part p = hw.AssociatedPart;//直接使用五金的关联板间作为加工板间
+            Logger.GetLogger().Debug("Associated Part :" + p.PartName);
 
+            double length = -StartX + EndX;
+            double width = -StartY + EndY;
+            Logger.GetLogger().Debug("length:" + length.ToString());
+            Logger.GetLogger().Debug("width:" + width.ToString());
 
-                Point3d ptFirst = new Point3d(pt.X + StartX + (i * DistanceBetweenHoles) * System.Math.Cos(lineAngle),
-                                              pt.Y + StartY + (i * DistanceBetweenHoles) * System.Math.Sin(lineAngle),
-                                              hw.OnTopFace ? StartZ : -hw.AssociatedPart.Thickness - StartZ);
-                Logger.GetLogger().Debug("Point2 :" + ptFirst.ToString());
-                ptFirst = ptFirst.TransformBy(Matrix3d.Rotation((hw.OnTopFace ? -1 : 1) * angle / 180 * System.Math.PI, Vector3d.ZAxis, pt));
-                ptFirst = ptFirst.TransformBy(Matrix3d.AlignCoordinateSystem(Point3d.Origin,
-                                                                             Vector3d.XAxis,
-                                                                             Vector3d.YAxis,
-                                                                             Vector3d.ZAxis,
-                                                                             ptZero,
-                                                                             vx,
-                                                                             vy,
-                                                                             zaxis));
-                Logger.GetLogger().Debug("Point3 :" + ptFirst.ToString());//转回世界坐标系的点坐标
+            List<Point3d> points = new List<Point3d>();
+            double z = hw.OnTopFace ? RouteDepth : -hw.AssociatedPart.Thickness - RouteDepth;
+            points.Add(new Point3d(pt.X + StartX + length / 2, pt.Y + StartY + width / 2, this.RouteDepth));
+            points.Add(new Point3d(pt.X + StartX, pt.Y + StartY + width / 2, this.RouteDepth));
+            points.Add(new Point3d(pt.X + StartX, pt.Y + StartY + width, this.RouteDepth));
+            points.Add(new Point3d(pt.X + StartX + length, pt.Y + StartY + width, this.RouteDepth));
+            points.Add(new Point3d(pt.X + StartX + length, pt.Y + StartY, this.RouteDepth));
+            points.Add(new Point3d(pt.X + StartX, pt.Y + StartY, this.RouteDepth));
+            points.Add(new Point3d(pt.X + StartX, pt.Y + StartY + width / 4 * 3, this.RouteDepth));
 
-                foreach (var p in combinedParts)
-                {
-                    if (this.IsPointInPart(ptFirst, p))
-                    {
-                        Logger.GetLogger().Debug("Associated Part :" + p.PartName);
-                        ptFirst = ptFirst.TransformBy(Matrix3d.AlignCoordinateSystem(p.MovedMPPoint,
-                                                                p.MovedMPXAxis,
-                                                                p.MovedMPYAxis,
-                                                                p.MovedMPZAxis,
-                                                               Point3d.Origin,
-                                                               Vector3d.XAxis,
-                                                               Vector3d.YAxis,
-                                                               Vector3d.ZAxis));
-                        Logger.GetLogger().Debug("Point4 :" + ptFirst.ToString());
+            List<Point3d> points2 = new List<Point3d>();
+            foreach (var ptFirst in points)
+            {
+                Point3d ptFirst2 = ptFirst.TransformBy(Matrix3d.Rotation((hw.OnTopFace ? -1 : 1) * angle / 180 * System.Math.PI, Vector3d.ZAxis, pt));
+                Logger.GetLogger().Debug("Point3 :" + ptFirst2.ToString());//旋转的点
+                points2.Add(ptFirst2);
+            }
 
-   
-                        break;
-                    }
-                }
+            Routing route = new Routing();
+            route.Points = points2;
+            route.Bulges = new List<double>(new double[] { 0, 0, 0, 0, 0, 0, 0 });
+            route.Part = p;
+            route.OnFace5 = getFaceNumber(StartZ, p.Thickness) == 5 ? true : false;
+            route.ToolName = this.ToolName;
+            route.ToolComp = ToolComp.Right;
 
-
+            p.Routings.Add(route);
         }
     }
-
-
 }

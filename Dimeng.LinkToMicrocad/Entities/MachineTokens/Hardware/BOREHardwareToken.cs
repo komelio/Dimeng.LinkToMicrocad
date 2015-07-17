@@ -129,14 +129,5 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                 }
             }
         }
-
-        private int getFaceNumber(double z, double thick)
-        {
-            if (z > thick / 2)
-            {
-                return 6;
-            }
-            return 5;
-        }
     }
 }

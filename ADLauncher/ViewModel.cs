@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace ADLauncher
 {
@@ -43,14 +45,32 @@ namespace ADLauncher
         private void createNew()
         {
             string erpxml = Path.Combine(ADTempPath, "erp.xml");
-            using (FileStream fs = new FileStream(erpxml, FileMode.CreateNew, FileAccess.Write, FileShare.Write))
-            using (StreamWriter sw = new StreamWriter(fs, Encoding.Default))
+
+            if (File.Exists(erpxml))
             {
-                sw.WriteLine(@"<?xml version=""1.0"" encoding=""UTF-8"" ?>");
-                sw.WriteLine("<root>");
-                sw.WriteLine(string.Format(@"<f Name=""{0}"" Description=""{1}"" o=""N"" /> ", this.projectName, this.projectDescription));
-                sw.WriteLine(@"</root>");
+                File.Delete(erpxml);
             }
+
+            XDocument xml = new XDocument(new XDeclaration("1.0", "utf-8", "no"),
+                new XElement("root",
+                    new XElement("f", new XAttribute("Name", this.projectName),
+                        new XAttribute("Description", this.projectDescription), new XAttribute("o", "N"))));
+
+            using (var writer = new XmlTextWriter(erpxml, new UTF8Encoding(false)))
+            {
+                xml.Save(writer);
+            }
+
+            //MessageBox.Show("hdhehd");
+
+            //using (FileStream fs = new FileStream(erpxml, FileMode.CreateNew, FileAccess.Write, FileShare.Write))
+            //using (StreamWriter sw = new StreamWriter(fs, Encoding.Default))
+            //{
+            //    sw.WriteLine(@"<?xml version=""1.0"" encoding=""UTF-8"" ?>");
+            //    sw.WriteLine("<root>");
+            //    sw.WriteLine(string.Format(@"<f Name=""{0}"" Description=""{1}"" o=""N"" /> ", this.projectName, this.projectDescription));
+            //    sw.WriteLine(@"</root>");
+            //}
             OnCreate();
         }
 
@@ -82,14 +102,29 @@ namespace ADLauncher
         private void openProject(ProjectViewModel vm)
         {
             string erpxml = Path.Combine(ADTempPath, "erp.xml");
-            using (FileStream fs = new FileStream(erpxml, FileMode.CreateNew, FileAccess.Write, FileShare.Write))
-            using (StreamWriter sw = new StreamWriter(fs, Encoding.Default))
+
+            if (File.Exists(erpxml))
             {
-                sw.WriteLine(@"<?xml version=""1.0"" encoding=""UTF-8"" ?>");
-                sw.WriteLine("<root>");
-                sw.WriteLine(string.Format(@"<f Name=""{0}"" Description=""{1}"" o=""M"" /> ", vm.Name, ""));
-                sw.WriteLine(@"</root>");
+                File.Delete(erpxml);
             }
+
+            XElement xml = new XElement(
+                new XElement("root",
+                    new XElement("f", new XAttribute("Name", vm.Name), new XAttribute("Description", ""), new XAttribute("o", "M"))));
+
+            using (var writer = new XmlTextWriter(erpxml, new UTF8Encoding(false)))
+            {
+                xml.Save(writer);
+            }
+
+            //using (FileStream fs = new FileStream(erpxml, FileMode.CreateNew, FileAccess.Write, FileShare.Write))
+            //using (StreamWriter sw = new StreamWriter(fs, Encoding.Default))
+            //{
+            //    sw.WriteLine(@"<?xml version=""1.0"" encoding=""UTF-8"" ?>");
+            //    sw.WriteLine("<root>");
+            //    sw.WriteLine(string.Format(@"<f Name=""{0}"" Description=""{1}"" o=""M"" /> ", vm.Name, ""));
+            //    sw.WriteLine(@"</root>");
+            //}
             OnCreate();
         }
 

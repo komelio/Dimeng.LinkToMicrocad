@@ -30,7 +30,7 @@ namespace Dimeng.LinkToMicrocad
             Logging.Logger.GetLogger().Info("Call command 'New_dm'");
 
 
-            //MessageBox.Show("New_dm");
+            MessageBox.Show("New_dm");
             try
             {
                 var dmHelper = new DimengHelper();
@@ -41,7 +41,7 @@ namespace Dimeng.LinkToMicrocad
                 Logging.Logger.GetLogger().Error(error);
             }
 
-            //MessageBox.Show("New_dm");
+            MessageBox.Show("New_dm");
         }
 
         /// <summary>

@@ -26,8 +26,13 @@ namespace Dimeng.LinkToMicrocad.Drawing
 
         public void Draw(Hardware hw)
         {
-            Logger.GetLogger().Debug(string.Format("Start drawing hardware:{0}/{1}/{2}/{3}",hw.Name,hw.TXOrigin,hw.TYOrigin,hw.TZOrigin));
-            Logger.GetLogger().Debug(string.Format("- Associate Part:{0}",hw.AssociatedPart.PartName));
+            if (hw.AssociatedPart == null)
+            {
+                return;
+            }
+
+            Logger.GetLogger().Debug(string.Format("Start drawing hardware:{0}/{1}/{2}/{3}", hw.Name, hw.TXOrigin, hw.TYOrigin, hw.TZOrigin));
+            Logger.GetLogger().Debug(string.Format("- Associate Part:{0}", hw.AssociatedPart.PartName));
 
             string hwDWGFile = Path.Combine(path, string.Format("3D_{0}.dwg", hw.Name));
             if (!File.Exists(hwDWGFile))
