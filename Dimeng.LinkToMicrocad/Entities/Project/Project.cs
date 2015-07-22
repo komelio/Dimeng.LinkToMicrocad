@@ -343,5 +343,49 @@ namespace Dimeng.WoodEngine.Entities
                 cmd.ExecuteNonQuery();
             }
         }
+
+        internal void CopyProduct(string from, string to)
+        {
+            string connstr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + this.ProductListMDBPath;
+            using (OleDbConnection conn = new OleDbConnection(connstr))
+            {
+                conn.Open();
+
+                Product product = conn.Query<Product>("Select * from ProductList Where Handle='" + from + "'")
+                                      .SingleOrDefault();
+                product.Project = this;
+
+                int counter = addCounter();
+                //拷贝产品
+                File.Copy(Path.Combine(this.jobPath, product.FileName),
+                    Path.Combine(this.jobPath, counter + ".cutx"));
+                //拷贝组件
+                DirectoryInfo di = new DirectoryInfo(this.SubassembliesPath);
+                foreach (var file in di.GetFiles(from + "*"))
+                {
+                    int index = file.Name.IndexOf('_');
+                    string backName = file.Name.Substring(index+1);
+                    string newName = Path.Combine(this.SubassembliesPath, string.Format("{0}_{1}", to, backName));
+                    file.CopyTo(newName, false);
+                }
+
+                string cmdtext = string.Format("Insert Into ProductList (ItemNumber,Description,Qty,Width,Height,Depth,MatFile,FileName,Handle,ReleaseNumber,Parent1) Values('{0}','{1}',{2},{3},{4},{5},'{6}','{7}','{8}','{9}','{10}')",
+                    string.Format("{0}.00", counter),
+                    product.Description,
+                    1,
+                    product.Width,
+                    product.Height,
+                    product.Depth,
+                    this.SpecificationGroups[0].Name,
+                    counter + ".cutx",
+                    to,
+                    "UnNamed",
+                    "Phase 1");
+                var cmd = new OleDbCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = cmdtext;
+                cmd.ExecuteNonQuery();
+            }
+        }
     }
 }

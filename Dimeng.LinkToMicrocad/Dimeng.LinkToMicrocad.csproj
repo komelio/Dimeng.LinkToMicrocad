@@ -301,6 +301,7 @@
     <Compile Include="Prompts\Converter\PromptValueToCheckedConverter.cs" />
     <Compile Include="Prompts\Converter\PromptValueToIntConverter.cs" />
     <Compile Include="Prompts\Converter\PromptValueToVisibilityConverter.cs" />
+    <Compile Include="Prompts\Converter\SubQtyToColorConverter.cs" />
     <Compile Include="Prompts\InverseBooleanConverter.cs" />
     <Compile Include="Prompts\PromptItem.cs" />
     <Compile Include="Prompts\PromptsViewModel.cs" />

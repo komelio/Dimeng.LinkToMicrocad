@@ -79,6 +79,22 @@ namespace Dimeng.LinkToMicrocad
                 Logging.Logger.GetLogger().Error(error);
             }
         }
+
+        [CommandMethod("AK", "Copy_dm", CommandFlags.Modal)]
+        public void CopyProduct()
+        {
+            Logging.Logger.GetLogger().Info("Call command 'Copy_dm'");
+            MessageBox.Show("Copy_dm");
+            try
+            {
+                var dmHelper = new DimengHelper();
+                dmHelper.CopyProduct();
+            }
+            catch(System.Exception error)
+            {
+                Logging.Logger.GetLogger().Error(error);
+            }
+        }
     }
 
 }

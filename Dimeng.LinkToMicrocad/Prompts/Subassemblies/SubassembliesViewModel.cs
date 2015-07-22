@@ -23,6 +23,7 @@ namespace Dimeng.LinkToMicrocad.Prompts.Subassemblies
             Items = new ObservableCollection<SubassemblyViewModel>();
             this.ShowPromptCommand = new RelayCommand(this.showPrompt);
             this.ShowPropertyCommand = new RelayCommand(this.showProperty);
+            this.DeleteCommand = new RelayCommand(this.delete);
             this.cells = subCells;
 
             for (int i = 0; i < cells.Rows.RowCount; i++)
@@ -53,6 +54,7 @@ namespace Dimeng.LinkToMicrocad.Prompts.Subassemblies
         public ObservableCollection<SubassemblyViewModel> Items { get; private set; }
         public RelayCommand ShowPromptCommand { get; private set; }
         public RelayCommand ShowPropertyCommand { get; private set; }
+        public RelayCommand DeleteCommand { get; private set; }
 
         private SubassemblyViewModel selectedItem;
         public SubassemblyViewModel SelectedItem
@@ -149,6 +151,18 @@ namespace Dimeng.LinkToMicrocad.Prompts.Subassemblies
             {
                 SubPropertyWindow window = new SubPropertyWindow(this.selectedItem);
                 window.ShowDialog();
+            }
+        }
+
+        private void delete()
+        {
+            if (this.selectedItem == null)
+            {
+                return;
+            }
+            else
+            {
+                this.selectedItem.Qty.PropertyValue = "0";
             }
         }
     }

@@ -137,6 +137,39 @@ namespace Dimeng.LinkToMicrocad
             }
         }
 
+        public void CopyProduct()
+        {
+            string folderPath = getTempFolderPath(
+                    Context.GetContext().AKInfo.Path);
+            string copyXMLPath = Path.Combine(folderPath,
+                "copy.xml");
+
+            if (!File.Exists(copyXMLPath))
+            {
+                throw new FileNotFoundException("copy.xml未找到", copyXMLPath);
+            }
+
+            XElement xml = XElement.Load(copyXMLPath);
+            var ss = from e in xml.Elements("C")
+                     select e;
+
+            foreach (var s in ss)
+            {
+                string projectPath = s.Attribute("ManufacturingFolder").Value;
+                string from = s.Attribute("From").Value.Replace("_", "");
+                string to = s.Attribute("To").Value.Replace("_", "");
+
+                Logger.GetLogger().Debug(projectPath);
+                Logger.GetLogger().Debug(from);
+                Logger.GetLogger().Debug(to);
+
+                var project = ProjectManager.CreateOrOpenProject(projectPath);
+                project.CopyProduct(from, to);
+            }
+
+            File.Delete(copyXMLPath);
+        }
+
         void worker_DoWork(object sender, DoWorkEventArgs e)
         {
             try
@@ -248,7 +281,6 @@ namespace Dimeng.LinkToMicrocad
 
         private IEnumerable<string> getMaterialList(Product mvProduct)
         {
-            //todo:combinedparts
             return mvProduct.CombinedParts.Select(it => it.Material.Name).Distinct();
         }
 

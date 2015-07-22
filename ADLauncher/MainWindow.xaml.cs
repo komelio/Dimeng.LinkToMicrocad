@@ -53,13 +53,20 @@ namespace ADLauncher
 
         private void initADInfo()
         {
-            RegistryKey hkml = Registry.LocalMachine;
-            RegistryKey akr14 = hkml.OpenSubKey("SOFTWARE\\Microcad\\autodecco_studio\\R11", true);
+            try
+            {
+                RegistryKey hkml = Registry.LocalMachine;
+                RegistryKey akr14 = hkml.OpenSubKey("SOFTWARE\\Microcad\\autodecco_studio\\R11", true);
 
-            string path = akr14.GetValue("").ToString();
-            adPath = path;
-            adTempPath = System.IO.Path.Combine(path, "Temp");
-            adExePath = System.IO.Path.Combine(path, "ad11s.exe");
+                string path = akr14.GetValue("").ToString();
+                adPath = path;
+                adTempPath = System.IO.Path.Combine(path, "Temp");
+                adExePath = System.IO.Path.Combine(path, "ad11s.exe");
+            }
+            catch
+            {
+                MessageBox.Show("获取Autodecco信息时发生错误，请以系统管理员权限运行程序");
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

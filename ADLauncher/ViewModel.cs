@@ -116,15 +116,6 @@ namespace ADLauncher
             {
                 xml.Save(writer);
             }
-
-            //using (FileStream fs = new FileStream(erpxml, FileMode.CreateNew, FileAccess.Write, FileShare.Write))
-            //using (StreamWriter sw = new StreamWriter(fs, Encoding.Default))
-            //{
-            //    sw.WriteLine(@"<?xml version=""1.0"" encoding=""UTF-8"" ?>");
-            //    sw.WriteLine("<root>");
-            //    sw.WriteLine(string.Format(@"<f Name=""{0}"" Description=""{1}"" o=""M"" /> ", vm.Name, ""));
-            //    sw.WriteLine(@"</root>");
-            //}
             OnCreate();
         }
 

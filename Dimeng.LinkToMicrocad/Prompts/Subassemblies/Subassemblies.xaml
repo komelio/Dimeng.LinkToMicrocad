@@ -3,7 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" 
         x:Class="Dimeng.LinkToMicrocad.Prompts.Subassemblies.Subassemblies"
+        xmlns:dd="clr-namespace:Dimeng.WoodEngine.Prompts"
         Title="组件管理" Height="400" Width="600">
+    <Window.Resources>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="12"/>
@@ -15,11 +18,22 @@
             <RowDefinition/>
             <RowDefinition Height="42"/>
         </Grid.RowDefinitions>
-        <ListView x:Name="listView" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
+        <ListView x:Name="listView" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedItem}" >
+            <ListView.Resources>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Qty.PropertyValue}" Value="0">
+                            <Setter Property="Background" Value="Silver" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Resources>
             <ListView.ContextMenu>
                 <ContextMenu >
                     <MenuItem Header="提示屏" Command="{Binding ShowPromptCommand}"/>
                     <MenuItem Header="属性" Command="{Binding ShowPropertyCommand}"/>
+                    <MenuItem Header="删除" Command="{Binding DeleteCommand}"/>
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.View>

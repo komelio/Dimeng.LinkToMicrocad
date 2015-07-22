@@ -329,6 +329,5 @@ namespace Dimeng.WoodEngine.Prompts
         public string Handle { get; set; }
 
         public RelayCommand ShowSpreadCommand { get; private set; }
-
     }
 }
