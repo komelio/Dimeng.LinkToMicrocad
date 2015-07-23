@@ -166,6 +166,7 @@
     <Compile Include="Dimeng\TempXMLWriter.cs" />
     <Compile Include="Dimeng\Texture.cs" />
     <Compile Include="Dimeng\UnitConverter.cs" />
+    <Compile Include="Drawing\BlockDrawer.cs" />
     <Compile Include="Drawing\CAD\CADHelper.cs" />
     <Compile Include="Drawing\CAD\LayerHelper.cs" />
     <Compile Include="Drawing\Hardware\HardwareDrawer.cs" />

@@ -37,6 +37,8 @@ namespace Dimeng.LinkToMicrocad.Drawing
                 Database oDb = HostApplicationServices.WorkingDatabase;
                 HostApplicationServices.WorkingDatabase = db;//重要，否则会导致很多问题，比如图层加入了却找不到
 
+
+
                 foreach (var part in product.CombinedParts)
                 {
                     Logger.GetLogger().Info(string.Format("{0}/DrawOn3D:{1}", part.PartName, part.IsDrawOn3D));
@@ -57,7 +59,15 @@ namespace Dimeng.LinkToMicrocad.Drawing
                     }
                     else
                     {
-                        (new PartDrawer(db, offsetVector)).Draw(part);
+                        string doorBlockPath = Path.Combine(library.MicrovellumData, "Graphics", "Blocks", part.PartName + ".dwg");
+                        if (File.Exists(doorBlockPath))
+                        {
+                            (new BlockDrawer(part, db, doorBlockPath)).Draw();//放在后面 否则与profile等读取dwg文件的有冲突
+                        }
+                        else
+                        {
+                            (new PartDrawer(db, offsetVector)).Draw(part);
+                        }
                     }
                 }
 

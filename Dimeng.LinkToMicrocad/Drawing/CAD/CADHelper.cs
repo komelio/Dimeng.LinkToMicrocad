@@ -54,9 +54,10 @@ namespace Dimeng.LinkToMicrocad.Drawing.CAD
                     {
                         foreach (var a in btr)
                         {
-                            Entity entity = Trans.GetObject(a, OpenMode.ForWrite) as Entity;
-                            if (entity is Polyline || entity is Polyline2d)
+                            Entity entity = Trans.GetObject(a, OpenMode.ForRead) as Entity;
+                            if (entity != null && (entity is Polyline || entity is Polyline2d))
                             {
+                                entity.UpgradeOpen();
                                 return entity;
                             }
                         }
