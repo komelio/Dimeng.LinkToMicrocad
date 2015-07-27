@@ -32,7 +32,7 @@ namespace Dimeng.LinkToMicrocad
                 AKProduct product = AKProduct.Load(tempXMLPath);
 
                 string mvDataContextPath = product.Tab.CatalogPath;
-                mvDataContextPath = Path.Combine(mvDataContextPath, "Library");
+                mvDataContextPath = Path.Combine(Context.GetContext().AKInfo.Path, "catalog", "dms", "Library");
                 MVDataContext mvContext = MVDataContext.GetContext(mvDataContextPath);
                 Context.GetContext().MVDataContext = mvContext;
 
