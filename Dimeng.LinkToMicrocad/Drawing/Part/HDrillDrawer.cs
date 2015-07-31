@@ -24,6 +24,12 @@ namespace Dimeng.LinkToMicrocad.Drawing
                 Logger.GetLogger().Debug(string.Format("水平孔信息,直径{0}/孔深{1}/所在面{2}/坐标{3}",
                                            hdrill.Diameter, hdrill.Depth, hdrill.FaceNumber, hdrill.Position));
 
+                if (hdrill.Diameter <= 0 || hdrill.Depth <= 0)
+                {
+                    Logger.GetLogger().Warn("hdrill`s diameter or depth could be zero!");
+                    continue;
+                }
+
                 //Step1:创建三维实体
                 Solid3d hole = new Solid3d();
                 hole.CreateFrustum(hdrill.Depth * 2, hdrill.Diameter / 2, hdrill.Diameter / 2, hdrill.Diameter / 2);

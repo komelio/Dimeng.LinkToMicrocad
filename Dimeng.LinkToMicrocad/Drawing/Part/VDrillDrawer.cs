@@ -24,6 +24,12 @@ namespace Dimeng.LinkToMicrocad.Drawing
                 Logger.GetLogger().Debug(string.Format("垂直孔信息,直径{0}/孔深{1}/所在面{2}/坐标X{3},Y{4}",
                                            vdrill.Diameter, vdrill.Depth, vdrill.FaceNumber, vdrill.DimX, vdrill.DimY));
 
+                if (vdrill.Diameter <= 0 || vdrill.Depth <= 0)
+                {
+                    Logger.GetLogger().Warn("Vdrill`s diameter or depth could be zero!");
+                    continue;
+                }
+
                 //Step1:创建三维实体
                 Solid3d vbore = new Solid3d();
                 vbore.CreateFrustum(vdrill.Depth * 2, vdrill.Diameter / 2, vdrill.Diameter / 2, vdrill.Diameter / 2);

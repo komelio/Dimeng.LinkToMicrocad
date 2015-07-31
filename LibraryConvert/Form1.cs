@@ -22,53 +22,53 @@ namespace LibraryConvert
         private void button1_Click(object sender, EventArgs e)
         {
             string finalPath = @"C:\Users\xspxs_000\Desktop\output";
-            
-            //string path1 = @"C:\Users\xspxs_000\Desktop\提供给AD的模型库\提供给AD的模型库";
-            //DirectoryInfo di = new DirectoryInfo(path1);
-            //var dis = di.GetDirectories();
 
-            //List<Category> categories = new List<Category>();
-            //foreach (var d in dis)
-            //{
-            //    Category pc = new Category();
-            //    pc.Name = d.Name;
-            //    categories.Add(pc);
+            string path1 = @"C:\Users\xspxs_000\Desktop\ads";
+            DirectoryInfo di = new DirectoryInfo(path1);
+            var dis = di.GetDirectories();
 
-            //    foreach (var dc in d.GetDirectories())
-            //    {
-            //        Category c = new Category();
-            //        c.Name = dc.Name;
-            //        pc.Categories.Add(c);
+            List<Category> categories = new List<Category>();
+            foreach (var d in dis)
+            {
+                Category pc = new Category();
+                pc.Name = d.Name;
+                categories.Add(pc);
 
-            //        foreach (var f in dc.GetFiles("*.cutx", SearchOption.TopDirectoryOnly))
-            //        {
-            //            string filename = f.Name.Replace(".cutx", "");
-            //            Item item = new Item();
+                foreach (var dc in d.GetDirectories())
+                {
+                    Category c = new Category();
+                    c.Name = dc.Name;
+                    pc.Categories.Add(c);
 
-            //            if (d.Name.StartsWith("0"))
-            //            {
-            //                item.Name = filename.Substring(0, filename.Length - 5);
-            //                item.Id = filename.Substring(filename.Length - 5);
-            //            }
-            //            else
-            //            {
-            //                item.Name = filename.Substring(0, filename.Length - 6);
-            //                item.Id = filename.Substring(filename.Length - 6);
-            //            }
-            //            c.Items.Add(item);
+                    foreach (var f in dc.GetFiles("*.cutx", SearchOption.TopDirectoryOnly))
+                    {
+                        string filename = f.Name.Replace(".cutx", "");
+                        Item item = new Item();
 
-            //            File.Copy(f.FullName, Path.Combine(finalPath, "Library", "Products", item.Id + ".cutx"), true);
+                        if (d.Name.StartsWith("0"))
+                        {
+                            item.Name = filename.Substring(0, filename.Length - 5);
+                            item.Id = filename.Substring(filename.Length - 5);
+                        }
+                        else
+                        {
+                            item.Name = filename.Substring(0, filename.Length - 6);
+                            item.Id = filename.Substring(filename.Length - 6);
+                        }
+                        c.Items.Add(item);
 
-            //            string pic = Path.Combine(f.Directory.ToString(), filename + ".jpg");
-            //            if (File.Exists(pic))
-            //            {
-            //                File.Copy(pic, Path.Combine(finalPath, "Photos", "dmsobj", item.Id + ".jpg"), true);
-            //            }
-            //        }
-            //    }
-            //}
+                        File.Copy(f.FullName, Path.Combine(finalPath, "Library", "Products", item.Id + ".cutx"), true);
 
-            string subPath = @"C:\Users\xspxs_000\Desktop\组件库\组件库";
+                        string pic = Path.Combine(f.Directory.ToString(), filename + ".jpg");
+                        if (File.Exists(pic))
+                        {
+                            File.Copy(pic, Path.Combine(finalPath, "Photos", "dmsobj", item.Id + ".jpg"), true);
+                        }
+                    }
+                }
+            }
+
+            string subPath = @"C:\Users\xspxs_000\Desktop\给AD测试产品库\subassemblies";
             DirectoryInfo di2 = new DirectoryInfo(subPath);
             var dis2 = di2.GetDirectories();
 
@@ -107,49 +107,49 @@ namespace LibraryConvert
                                                 new XAttribute("K", "kDiMengObj"),
                                                 new XAttribute("Name", "DiMengObj"),
                                                 new XAttribute("Levels", "3"));
-            //foreach (var c in categories)
-            //{
-            //    var category = new XElement("I",
-            //                       new XAttribute("Name", c.Name),
-            //                       new XAttribute("ToolTip", c.Name),
-            //                       new XAttribute("Photo", c.Name)
-            //                       );
-            //    foreach (var dc in c.Categories)
-            //    {
-            //        var category2 = new XElement("I",
-            //                       new XAttribute("Name", dc.Name),
-            //                       new XAttribute("ToolTip", dc.Name),
-            //                       new XAttribute("Photo", dc.Name)
-            //                       );
-            //        foreach (var p in dc.Items)
-            //        {
-            //            if (c.Categories.IndexOf(dc) == 0 && dc.Items.IndexOf(p) == 0)
-            //            {
-            //                category.Attribute("Photo").Value = p.Id.ToString();
-            //            }
+            foreach (var c in categories)
+            {
+                var category = new XElement("I",
+                                   new XAttribute("Name", c.Name),
+                                   new XAttribute("ToolTip", c.Name),
+                                   new XAttribute("Photo", c.Name)
+                                   );
+                foreach (var dc in c.Categories)
+                {
+                    var category2 = new XElement("I",
+                                   new XAttribute("Name", dc.Name),
+                                   new XAttribute("ToolTip", dc.Name),
+                                   new XAttribute("Photo", dc.Name)
+                                   );
+                    foreach (var p in dc.Items)
+                    {
+                        if (c.Categories.IndexOf(dc) == 0 && dc.Items.IndexOf(p) == 0)
+                        {
+                            category.Attribute("Photo").Value = p.Id.ToString();
+                        }
 
-            //            double elevation = (p.Name.IndexOf("吊") > -1) ? 2200 : 0;
-            //            var productXml = new XElement("I",
-            //                                new XAttribute("Name", p.Name),
-            //                                new XAttribute("Photo", p.Id),
-            //                                new XAttribute("DWG", p.Id),
-            //                                new XAttribute("DMID", ""),
-            //                                new XAttribute("Units", "mm"),
-            //                                new XAttribute("Elevation", elevation),
-            //                                new XAttribute("Z", 0),
-            //                                new XAttribute("Y", 0),
-            //                                new XAttribute("X", 0),
-            //                                new XAttribute("LongText", string.Empty),
-            //                                new XAttribute("ID", p.Id)
-            //                                );
+                        double elevation = (p.Name.IndexOf("吊") > -1) ? 2200 : 0;
+                        var productXml = new XElement("I",
+                                            new XAttribute("Name", p.Name),
+                                            new XAttribute("Photo", p.Id),
+                                            new XAttribute("DWG", p.Id),
+                                            new XAttribute("DMID", ""),
+                                            new XAttribute("Units", "mm"),
+                                            new XAttribute("Elevation", elevation),
+                                            new XAttribute("Z", 0),
+                                            new XAttribute("Y", 0),
+                                            new XAttribute("X", 0),
+                                            new XAttribute("LongText", string.Empty),
+                                            new XAttribute("ID", p.Id)
+                                            );
 
-            //            category2.Add(productXml);
-            //        }
-            //        category.Add(category2);
-            //    }
+                        category2.Add(productXml);
+                    }
+                    category.Add(category2);
+                }
 
-            //    dimengCategory.Add(category);
-            //}
+                dimengCategory.Add(category);
+            }
             var subCategory = new XElement("I",
                                    new XAttribute("Name", "组件库"),
                                    new XAttribute("ToolTip", "组件库"),
