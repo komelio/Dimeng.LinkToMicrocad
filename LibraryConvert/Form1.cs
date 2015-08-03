@@ -23,7 +23,7 @@ namespace LibraryConvert
         {
             string finalPath = @"C:\Users\xspxs_000\Desktop\output";
 
-            string path1 = @"C:\Users\xspxs_000\Desktop\ads";
+            string path1 = @"C:\Users\xspxs_000\Desktop\提供给AD的模型库";
             DirectoryInfo di = new DirectoryInfo(path1);
             var dis = di.GetDirectories();
 
@@ -68,7 +68,7 @@ namespace LibraryConvert
                 }
             }
 
-            string subPath = @"C:\Users\xspxs_000\Desktop\给AD测试产品库\subassemblies";
+            string subPath = @"C:\Users\xspxs_000\Desktop\subassemblies";
             DirectoryInfo di2 = new DirectoryInfo(subPath);
             var dis2 = di2.GetDirectories();
 

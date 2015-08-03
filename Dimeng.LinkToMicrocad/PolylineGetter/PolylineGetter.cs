@@ -2,6 +2,7 @@
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
+using Dimeng.LinkToMicrocad.Logging;
 using PolylineGetter.Algorithm;
 using PolylineGetter.Tools;
 using System;
@@ -15,8 +16,9 @@ namespace PolylineGetter
     {
         public List<Polyline> CalculatePolyline(Polyline mainPolyline, Polyline routeLine, bool isLeftComp)
         {
-            Point3dCollection points1 = new Point3dCollection();
-            mainPolyline.IntersectWith(routeLine, Intersect.OnBothOperands, points1, IntPtr.Zero, IntPtr.Zero);
+            var points1 = GeometryHelper.GetIntersectPoints(mainPolyline, routeLine);
+            //Point3dCollection points1 = new Point3dCollection();
+            //mainPolyline.IntersectWith(routeLine, Intersect.OnBothOperands, points1, IntPtr.Zero, IntPtr.Zero);
             List<MyNode> intersectsNodes = new List<MyNode>();
             foreach (Point3d pt in points1)
             {
@@ -25,6 +27,7 @@ namespace PolylineGetter
 
             MyPolyline objMyPolyline = mytools.GetMyPolylineFrom(mainPolyline);
             MyPolyline knifeMyPolyline = mytools.GetMyPolylineFrom(routeLine);
+            Logger.GetLogger().Debug("KnifeMyPolyline is closed:" + knifeMyPolyline.IsClose().ToString());
 
             List<MyPolyline> result = Divider.getDividResult(objMyPolyline, knifeMyPolyline, intersectsNodes, !isLeftComp, isLeftComp);
 

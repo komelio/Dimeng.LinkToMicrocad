@@ -283,6 +283,7 @@
     <Compile Include="PolylineGetter\Algorithm\MathGeometry.cs" />
     <Compile Include="PolylineGetter\Algorithm\MyNode.cs" />
     <Compile Include="PolylineGetter\Algorithm\MyPolyline.cs" />
+    <Compile Include="PolylineGetter\GeometryHelper.cs" />
     <Compile Include="PolylineGetter\PolylineGetter.cs" />
     <Compile Include="PolylineGetter\Tools\CADHelper.cs" />
     <Compile Include="PolylineGetter\Tools\myCommands.cs" />

@@ -29,6 +29,11 @@ namespace Dimeng.LinkToMicrocad.Drawing
             {
                 routePLine = getRoutePLine(route);
 
+                if (route.Points[0].DistanceTo(route.Points[route.Points.Count - 1]) <= 0.001)
+                {
+                    routePLine.Closed = true;
+                }
+
                 //之前已经过滤没有刀补的铣型了
                 bool isLeft = getRouteComp(route);
 
@@ -44,6 +49,8 @@ namespace Dimeng.LinkToMicrocad.Drawing
                         var pt = routePLine.GetPoint3dAt(i);
                         newPline.AddVertexAt(i, new Point2d(pt.X, pt.Y), -routePLine.GetBulgeAt(i), 0, 0);//注意bulge是负值
                     }
+                    newPline.Closed = routePLine.Closed;
+
                     routePLine = newPline;
                     //addToDrawing(newPline);
                 }
