@@ -33,6 +33,9 @@ namespace Dimeng.LinkToMicrocad
 
                 string mvDataContextPath = product.Tab.CatalogPath;
                 mvDataContextPath = Path.Combine(Context.GetContext().AKInfo.Path, "catalog", "dms", "Library");
+
+                Logger.GetLogger().Info("MV Library Path:" + mvDataContextPath);
+
                 MVDataContext mvContext = MVDataContext.GetContext(mvDataContextPath);
                 Context.GetContext().MVDataContext = mvContext;
 
@@ -132,8 +135,8 @@ namespace Dimeng.LinkToMicrocad
             }
             catch (Exception error)
             {
-                MessageBox.Show("绘制过程中发生错误，:(");
-                throw new Exception("Error occured during drawing....", error);
+                //MessageBox.Show("绘制过程中发生错误，:(");
+                throw new Exception("绘制过程中发生错误，:(", error);
             }
         }
 
@@ -172,14 +175,15 @@ namespace Dimeng.LinkToMicrocad
 
         void worker_DoWork(object sender, DoWorkEventArgs e)
         {
+            //生成各种给erp的文件
             try
             {
-                Product product = (Product)e.Argument;
-                var exporter = new ERPExporter(product);
+                //Product product = (Product)e.Argument;
+                //var exporter = new ERPExporter(product);
 
-                Logger.GetLogger().Info("Start exporting excel files....");
+                //Logger.GetLogger().Info("Start exporting excel files....");
 
-                exporter.Output();
+                //exporter.Output();
             }
             catch (Exception error)
             {

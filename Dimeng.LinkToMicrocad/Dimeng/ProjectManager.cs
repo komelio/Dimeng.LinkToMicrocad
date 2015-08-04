@@ -14,11 +14,12 @@ namespace Dimeng.LinkToMicrocad
     {
         public static Project CreateOrOpenProject(string projectPath)
         {
-            Logger.GetLogger().Debug("Check project path:" + projectPath);
+            Logger.GetLogger().Info("Get project from path:" + projectPath);
+
             if (!Directory.Exists(projectPath))
             {
                 Directory.CreateDirectory(projectPath);
-                Logging.Logger.GetLogger().Debug(string.Format("Directory {0} not found and is created", projectPath));
+                Logging.Logger.GetLogger().Info(string.Format("Directory {0} not found and is created", projectPath));
             }
 
             if (!ValidateProjectPath(projectPath))
@@ -52,14 +53,11 @@ namespace Dimeng.LinkToMicrocad
             }
             Logger.GetLogger().Info("Copy ProductList.mdb from resources.");
 
-
             string mvmdb = Path.Combine(projectPath, "MicrovellumProject.mdb");
             if (!File.Exists(mvmdb))
             {
                 throw new Exception("MicrovellumProject.mdb missing!");
             }
-
-
         }
 
         public static bool ValidateProjectPath(string projectPath)

@@ -142,6 +142,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ACADCommands.resx</DependentUpon>
     </Compile>
+    <Compile Include="BugReport\BugReportViewModel.cs" />
+    <Compile Include="BugReport\BugReportWindow.xaml.cs">
+      <DependentUpon>BugReportWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Business\HardwareLoader.cs" />
     <Compile Include="Business\ModelAssemblyLoader.cs" />
     <Compile Include="Business\PartInitializer.cs" />
@@ -256,6 +260,7 @@
     <Compile Include="Entities\ToolFile\Tool.cs" />
     <Compile Include="Entities\ToolFile\ToolFile.cs" />
     <Compile Include="Entities\ToolFile\ToolType.cs" />
+    <Compile Include="BugReport\FTP.cs" />
     <Compile Include="IOHelper.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\ConsoleHelper.cs" />
@@ -419,6 +424,10 @@
     <Folder Include="Entities\Checks\Sub\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="BugReport\BugReportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Prompts\Calculators\Calculator.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -448,6 +457,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Prompts\Images\refresh.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

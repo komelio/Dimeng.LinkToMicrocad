@@ -29,8 +29,6 @@ namespace Dimeng.LinkToMicrocad
         {
             Logging.Logger.GetLogger().Info("Call command 'New_dm'");
 
-
-            //MessageBox.Show("New_dm");
             try
             {
                 var dmHelper = new DimengHelper();
@@ -39,9 +37,9 @@ namespace Dimeng.LinkToMicrocad
             catch (System.Exception error)
             {
                 Logging.Logger.GetLogger().Error(error);
+                BugReportWindow bug = new BugReportWindow(new BugReportViewModel(error.Message));
+                bug.ShowDialog();
             }
-
-            //MessageBox.Show("New_dm");
         }
 
         /// <summary>
@@ -60,8 +58,9 @@ namespace Dimeng.LinkToMicrocad
             catch (System.Exception error)
             {
                 Logging.Logger.GetLogger().Error(error);
+                BugReportWindow bug = new BugReportWindow(new BugReportViewModel(error.Message));
+                bug.ShowDialog();
             }
-            //MessageBox.Show("Edit_dm");
         }
 
         [CommandMethod("AK", "Del_dm", CommandFlags.Modal)]
@@ -77,6 +76,8 @@ namespace Dimeng.LinkToMicrocad
             catch (System.Exception error)
             {
                 Logging.Logger.GetLogger().Error(error);
+                BugReportWindow bug = new BugReportWindow(new BugReportViewModel(error.Message));
+                bug.ShowDialog();
             }
         }
 
@@ -90,9 +91,11 @@ namespace Dimeng.LinkToMicrocad
                 var dmHelper = new DimengHelper();
                 dmHelper.CopyProduct();
             }
-            catch(System.Exception error)
+            catch (System.Exception error)
             {
                 Logging.Logger.GetLogger().Error(error);
+                BugReportWindow bug = new BugReportWindow(new BugReportViewModel(error.Message));
+                bug.ShowDialog();
             }
         }
     }

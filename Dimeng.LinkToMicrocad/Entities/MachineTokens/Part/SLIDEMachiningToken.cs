@@ -66,16 +66,16 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         public override void ToMachining(double AssociatedDist, ToolFile toolFile)
         {
-            Logger.GetLogger().Info("Slide To machining:");
-            Logger.GetLogger().Info(string.Format("Slide info:{0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}/{8}",
+            Logger.GetLogger().Debug("Slide To machining:");
+            Logger.GetLogger().Debug(string.Format("Slide info:{0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}/{8}",
                 this.DistToBottom, this.DistToFirstBore, this.DistToSecondBore, this.DistToThirdBore, this.DistToForthBore,
                 this.DistToFifthBore, this.FaceBoreDiameter, this.FaceBoreDepth, this.AssociateGap));
 
             int facenumber = getRealFacenumber();//由于MV的Slide指令是从面1所在的那个面来算的
 
             base.FindAssociatedFaces(this.AssociateGap, AssociatedDist);
-            Logger.GetLogger().Info("Slide associated parts total:" + this.AssociatedPartFaces.Count.ToString());
-            Logger.GetLogger().Info("Slide actual part face number:" + facenumber.ToString());
+            Logger.GetLogger().Debug("Slide associated parts total:" + this.AssociatedPartFaces.Count.ToString());
+            Logger.GetLogger().Debug("Slide actual part face number:" + facenumber.ToString());
 
             PartFace pf = this.Part.GetPartFaceByNumber(facenumber);
 

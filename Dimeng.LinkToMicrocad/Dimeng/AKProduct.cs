@@ -7,6 +7,7 @@ using Dimeng.LinkToMicrocad;
 using Dimeng.WoodEngine.Entities;
 using System.IO;
 using Autodesk.AutoCAD.Geometry;
+using Dimeng.LinkToMicrocad.Logging;
 
 namespace Dimeng.LinkToMicrocad
 {
@@ -19,7 +20,7 @@ namespace Dimeng.LinkToMicrocad
 
         public static AKProduct Load(string tempXMLFilePath)
         {
-            Logging.Logger.GetLogger().Debug("Getting cabinet information from temp.xml file...");
+            Logging.Logger.GetLogger().Info("Getting cabinet information from temp.xml file...");
             Logging.Logger.GetLogger().Debug("File path:" + tempXMLFilePath);
 
             AKProduct product = new AKProduct();
@@ -40,8 +41,12 @@ namespace Dimeng.LinkToMicrocad
                       select t;
             var tabNode = tab.SingleOrDefault();
             product.Tab.Name = tabNode.Attribute("Name").Value;
+            Logger.GetLogger().Info("Produt Name:" + product.Tab.Name);
+
             product.Tab.DWG = tabNode.Attribute("DWG").Value;
             product.Tab.ID = tabNode.Attribute("ID").Value;
+            Logger.GetLogger().Info("Produt ID:" + product.Tab.ID);
+
             product.Tab.DMID = tabNode.Attribute("DMID").Value.Replace("_", "");
             product.Tab.Photo = tabNode.Attribute("Photo").Value;
             product.Tab.Description = tabNode.Attribute("Descprition") == null ?
@@ -57,30 +62,39 @@ namespace Dimeng.LinkToMicrocad
                 {
                     case "X":
                         product.Tab.VarX = UnitConverter.GetValueFromString(v.Attribute("Value").Value);
+                        Logger.GetLogger().Info("Produt X:" + product.Tab.VarX.ToString());
                         break;
                     case "Y":
                         product.Tab.VarY = UnitConverter.GetValueFromString(v.Attribute("Value").Value);
+                        Logger.GetLogger().Info("Produt Y:" + product.Tab.VarY.ToString());
                         break;
                     case "Z":
                         product.Tab.VarZ = UnitConverter.GetValueFromString(v.Attribute("Value").Value);
+                        Logger.GetLogger().Info("Produt Z:" + product.Tab.VarZ.ToString());
                         break;
                     case "Elevation":
                         product.Tab.VarElevation = UnitConverter.GetValueFromString(v.Attribute("Value").Value);
+                        Logger.GetLogger().Info("Produt Elevation:" + product.Tab.VarElevation.ToString());
                         break;
                 }
             }
 
             getSubInfo(product);
 
+            //组件的具体信息
             var tabA = from t in xml.Elements("TabA")
                        select t;
             var tabANode = tabA.SingleOrDefault();
-            if(tabANode!=null)
+            if (tabANode != null)
             {
                 product.TabA = new TabInfo();
                 product.TabA.Name = tabANode.Attribute("Name").Value;
+                Logger.GetLogger().Info("Produt Name:" + product.TabA.Name);
+
                 product.TabA.DWG = tabANode.Attribute("DWG").Value;
                 product.TabA.ID = tabANode.Attribute("ID").Value;
+                Logger.GetLogger().Info("Produt ID:" + product.TabA.ID);
+
                 product.TabA.DMID = tabANode.Attribute("DMID").Value.Replace("_", "");
                 product.TabA.Photo = tabANode.Attribute("Photo").Value;
                 product.TabA.Description = tabANode.Attribute("Descprition") == null ?
@@ -95,15 +109,19 @@ namespace Dimeng.LinkToMicrocad
                     {
                         case "X":
                             product.TabA.VarX = UnitConverter.GetValueFromString(v.Attribute("Value").Value);
+                            Logger.GetLogger().Info("Produt X:" + product.TabA.VarX.ToString());
                             break;
                         case "Y":
                             product.TabA.VarY = UnitConverter.GetValueFromString(v.Attribute("Value").Value);
+                            Logger.GetLogger().Info("Produt Y:" + product.TabA.VarY.ToString());
                             break;
                         case "Z":
                             product.TabA.VarZ = UnitConverter.GetValueFromString(v.Attribute("Value").Value);
+                            Logger.GetLogger().Info("Produt Z:" + product.TabA.VarZ.ToString());
                             break;
                         case "Elevation":
                             product.TabA.VarElevation = UnitConverter.GetValueFromString(v.Attribute("Value").Value);
+                            Logger.GetLogger().Info("Produt Elevation:" + product.TabA.VarElevation.ToString());
                             break;
                     }
                 }

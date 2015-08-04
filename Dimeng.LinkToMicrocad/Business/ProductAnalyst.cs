@@ -47,7 +47,7 @@ namespace Dimeng.WoodEngine.Business
 
         private void combinedPartsAndHardwaresAndGetMachining(Product product)
         {
-            Logger.GetLogger().Info("Get product combined collections...");
+            Logger.GetLogger().Info("Getting product combined collections and machinings.");
 
             product.Parts.ForEach(it => it.CalculateLocationInfo(Point3d.Origin, 0));
 
@@ -81,7 +81,7 @@ namespace Dimeng.WoodEngine.Business
             }
 
             product.CombinedHardwares.ForEach(it => it.FindAssociatedPart(product, library.CurrentToolFile));
-            product.CombinedParts.ForEach(p => p.MachineTokens.ForEach(m => m.ToMachining(1, library.CurrentToolFile)));
+            product.CombinedParts.ForEach(p => p.MachineTokens.ForEach(m => m.ToMachining(1, library.CurrentToolFile)));//todo:关联距离是1
         }
 
         private IEnumerable<ModelError> getIProductElements(IProduct product, IWorkbook book)
