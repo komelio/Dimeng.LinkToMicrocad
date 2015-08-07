@@ -68,7 +68,7 @@ namespace LibraryConvert
                 }
             }
 
-            string subPath = @"C:\Users\xspxs_000\Desktop\subassemblies";
+            string subPath = @"C:\Users\xspxs_000\Desktop\组件";
             DirectoryInfo di2 = new DirectoryInfo(subPath);
             var dis2 = di2.GetDirectories();
 

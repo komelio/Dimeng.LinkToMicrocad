@@ -24,22 +24,31 @@ namespace Dimeng.LinkToMicrocad.Web.Controllers
             this.configuration = config;
         }
 
+        public ActionResult TreeList()
+        {
+            return Json(
+                new[] {
+                    new {name="haha"},new {name="ddada"}
+                }, JsonRequestBehavior.AllowGet
+                );
+            //return Json(repository.Products, JsonRequestBehavior.AllowGet);
+        }
         public ViewResult List(string category, int page = 1)
         {
             ProductListViewModel model = new ProductListViewModel();
-            model.Products = repository.Products.Where(p => category == null || category == p.Category)
-                                                .OrderBy(it => it.Id)
-                                                .Skip((page - 1) * pageSize)
-                                                .Take(pageSize);
-            model.PagingInfo = new PagingInfo()
-            {
-                CurrentPage = page,
-                ItemsPerPage = pageSize,
-                TotalItems = repository.Products
-                                       .Where(it => category == null || it.Category == category)
-                                       .Count()
-            };
-            model.CurrentCategory = category;
+            //model.Products = repository.Products.Where(p => category == null || category == p.Category)
+            //                                    .OrderBy(it => it.Id)
+            //                                    .Skip((page - 1) * pageSize)
+            //                                    .Take(pageSize);
+            //model.PagingInfo = new PagingInfo()
+            //{
+            //    CurrentPage = page,
+            //    ItemsPerPage = pageSize,
+            //    TotalItems = repository.Products
+            //                           .Where(it => category == null || it.Category == category)
+            //                           .Count()
+            //};
+            //model.CurrentCategory = category;
 
             return View(model);
         }
@@ -63,12 +72,6 @@ namespace Dimeng.LinkToMicrocad.Web.Controllers
             return "Done!";
 
             //return File(path, System.Net.Mime.MediaTypeNames.Application.Octet, "dms.xml");
-        }
-
-        public string TestAjax()
-        {
-            System.Threading.Thread.Sleep(2000);
-            return "test ajax";
         }
 
         public RedirectToRouteResult Clear()

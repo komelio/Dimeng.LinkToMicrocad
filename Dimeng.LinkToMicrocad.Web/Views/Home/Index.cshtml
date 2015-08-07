@@ -4,15 +4,43 @@
 }
 
 <header>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 centered">
-                <h1>Autodecco 数据管理平台</h1>
-                <h2>让设计无处不在</h2>
-                <a class="btn btn-conf btn-green" href="https://github.com/cachethq/cachet" target="_blank" rel="github"><i class='ion-social-github'></i> View on GitHub</a>
-                <a class="btn btn-conf btn-clear" href="https://demo.cachethq.io" target="_blank" rel="demo">See the demo</a>
+    <div id="content" class="homepage">
+        <div class="container">
+            <div class="modal fade" id="mymodal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                            </button>
+                            <h4 class="modal-title">模态弹出窗标题</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>模态弹出窗主体内容</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary">保存</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+            <div class="row">
+                <h1>灵活设计，精确生产</h1>
+                <h2>autodecco让设计插上生产的翅膀</h2>
+            </div>
+            <div class="row">
+                <button class="btn btn-primary btn-sign-up signup-btn" type="button">登陆</button>
             </div>
         </div>
     </div>
-</header>
 
+    <script>
+    $(function () {
+        $(".btn").click(function () {
+            $("#mymodal").modal("toggle");
+        });
+    });
+    </script>
+
+</header>

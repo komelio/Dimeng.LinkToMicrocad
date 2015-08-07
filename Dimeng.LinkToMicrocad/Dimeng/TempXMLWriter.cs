@@ -100,8 +100,8 @@ namespace Dimeng.LinkToMicrocad
                                     new XAttribute("Layer", m.Key),
                                     new XAttribute("Text", m.Key),
                                     new XAttribute("Material", "material" + (mid + i).ToString()),
-                                    new XAttribute("A_41", texture.ImageName),
-                                    new XAttribute("A_47", texture.A47)
+                                    new XAttribute("A_41", texture.ImageName)
+                                    //new XAttribute("A_47", texture.A47)
                                ));
 
                     i++;
@@ -133,8 +133,8 @@ namespace Dimeng.LinkToMicrocad
                                     new XAttribute("Layer", m.Key),
                                     new XAttribute("Text", m.Key),
                                     new XAttribute("Material", "material" + (mid + i).ToString()),
-                                    new XAttribute("A_41", texture.ImageName),
-                                    new XAttribute("A_47", texture.A47)
+                                    new XAttribute("A_41", texture.ImageName)
+                                    //new XAttribute("A_47", texture.A47)
                                ));
 
                     i++;

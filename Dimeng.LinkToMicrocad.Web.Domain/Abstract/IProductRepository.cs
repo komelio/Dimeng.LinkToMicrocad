@@ -19,4 +19,15 @@ namespace Dimeng.LinkToMicrocad.Web.Domain.Abstract
 
         void ApplyModel(Product product);
     }
+
+    public interface IProductCategoryRepository
+    {
+        IEnumerable<ProductCategory> Categories { get; }
+
+        int Add(ProductCategory category);
+
+        void Clear();
+
+        void ApplyModel(ProductCategory category);
+    }
 }

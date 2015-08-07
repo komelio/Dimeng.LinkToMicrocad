@@ -1,9 +1,20 @@
-﻿.container {
-    width: 980px;
+﻿.container{
+    width:980px;
+}
+
+.homepage .container {
+    padding-top:22px;
+    padding-bottom:50px;
+    padding-left:30px;
+}
+
+#content {
+    background: rgba(51,56,75,1) url(/img/hero-main2.jpg) 450px 10px no-repeat;
+    padding: 100px 20px;
 }
 
 #mainbody {
-        margin-top: 100px;
+    margin-top: 60px;
 }
 
 .navbar {
@@ -20,26 +31,25 @@
     background: rgba(23, 31, 39, 0.95);
     border: 0 none;
     box-shadow: none !important;
-    color:white
+    color: white;
+}
+
+.nav {
+    margin-top:10px;
 }
 
 header {
-    background: linear-gradient(rgba(94,94,94,.5),rgba(94,94,94,.5)),url(/img/header2.jpg) no-repeat center top;
-    padding-top: 250px;
-    background-position: center center;
     background-size: cover;
-    min-height: 700px;
-    width: 100%;
     box-sizing: border-box;
 }
 
 #brand {
-  height: 66px;
-  width: 183px;
-  padding: 20px 18px 20px 1px;
-  display: block;
-  background: url(../img/logo.png) 0 18px no-repeat;
-  background-size: auto 50px;
+    height: 66px;
+    width: 183px;
+    padding: 20px 18px 20px 1px;
+    display: block;
+    background: url(../img/logo.png) 0 18px no-repeat;
+    background-size: auto 50px;
 }
 
 .centered {
@@ -48,15 +58,19 @@ header {
 
 header h1 {
     color: #fff;
-    font-size: 40px;
+    font-size: 36px;
     line-height: 40px;
     letter-spacing: 2px;
     font-weight: 600;
+    max-width: 420px;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
-header h2 {
+.homepage .container h2 {
     color: #fff;
-    font-size: 30px;
+    font-size: 22px;
     line-height: 33px;
     margin-top: 10px;
     margin-bottom: 40px;
@@ -84,7 +98,7 @@ header h2 {
     display: block;
 }
 
-    .bs-footer .copyright {
+.bs-footer .copyright {
         border-top: 1px solid #313a44;
         padding-top: 30px;
         padding-bottom: 10px;
@@ -120,4 +134,37 @@ header h2 {
 .footer-links {
     margin: 10px 0;
     padding-left: 0;
+}
+
+
+.homepage .btn-primary {
+    color: #fff !important;
+    font-size: 13px;
+    font-weight: 600 !important;
+    text-shadow: 0;
+    line-height: 13px !important;
+    background: #fd7d30;
+    -webkit-font-smoothing: antialiased;
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 0 6px 1px rgba(244, 128, 32, 0) !important;
+    -webkit-box-shadow: 0 0 6px 1px rgba(244, 128, 32, 0) !important;
+    border-radius: 20px;
+    padding: 12px 20px;
+    font-family: "Gotham A", "Gotham B", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    border: 1px solid #f36526;
+    background-image: -webkit-linear-gradient(top, #fd8632, #fd7632);
+    background-image: linear-gradient(to bottom, #fd8632, #fd7632);
+}
+
+.homepage .btn-sign-up {
+    font-size: 14px;
+    line-height: 14px !important;
+    padding: 11px 53px;
+    border-radius: 35px;
+    margin-top: 20px;
+}
+
+.dropdown-menu > li > a {
+    color: white;
 }

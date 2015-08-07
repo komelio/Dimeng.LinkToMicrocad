@@ -9,10 +9,17 @@ namespace Dimeng.LinkToMicrocad
     {
         public Texture()
         {
-            A47 = "0.85";
+            Attributes = new List<TextureAttribute>();
         }
         public string ImageName { get; set; }
-        public string A47 { get; set; }
         public string Material { get; set; }
+        public List<TextureAttribute> Attributes { get; private set; }
+    }
+
+    public struct TextureAttribute
+    {
+        public string Name;
+        public bool IsDefault;
+        public string Value;
     }
 }

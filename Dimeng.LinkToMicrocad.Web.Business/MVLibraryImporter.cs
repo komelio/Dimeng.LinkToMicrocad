@@ -45,7 +45,7 @@ namespace Dimeng.LinkToMicrocad.Web.Business
                 foreach (var fi in di.GetFiles("*.cutx"))
                 {
                     Product product = new Product();
-                    product.Category = di.Name;
+                    //product.Category = di.Name;
                     product.Description = string.Empty;
                     product.Name = fi.Name.Substring(0, fi.Name.LastIndexOf(fi.Extension));
                     product.Width = 400;

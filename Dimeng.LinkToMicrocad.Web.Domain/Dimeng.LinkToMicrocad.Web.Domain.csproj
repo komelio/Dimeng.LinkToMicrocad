@@ -69,10 +69,12 @@
     <Compile Include="Abstract\ITextureRepository.cs" />
     <Compile Include="Concrete\EFDbContext.cs" />
     <Compile Include="Concrete\EFMaterialRepository.cs" />
+    <Compile Include="Concrete\EFProductCategoryRepository.cs" />
     <Compile Include="Concrete\EFProductRepository.cs" />
     <Compile Include="Concrete\EFTextureRepository.cs" />
     <Compile Include="Entities\Material.cs" />
     <Compile Include="Entities\Product.cs" />
+    <Compile Include="Entities\ProductCategory.cs" />
     <Compile Include="Entities\Texture.cs" />
     <Compile Include="Entities\Release.cs" />
     <Compile Include="Migrations\201505140304536_InitialCreate.cs" />

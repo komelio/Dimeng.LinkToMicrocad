@@ -32,8 +32,12 @@ namespace PolylineGetter
                             if (kLine.IsColinearTo(bLine, new Tolerance()))
                             {
                                 LinearEntity3d l3 = kLine.Overlap(bLine);
-                                addPointToCollection(l3.StartPoint, points);
-                                addPointToCollection(l3.EndPoint, points);
+
+                                if (l3 != null)
+                                {
+                                    addPointToCollection(l3.StartPoint, points);
+                                    addPointToCollection(l3.EndPoint, points);
+                                }
                             }
                             else
                             {

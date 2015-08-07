@@ -5,55 +5,74 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
-        <h2>产品管理</h2>
-        <div class="pull-right">
-            @Html.ActionLink("导入", "Import", null, new { @class = "btn btn-primary btn-sm" })
-            @Html.ActionLink("创建", "Create", null, new { @class = "btn btn-primary btn-sm" })
-            @Html.ActionLink("生成", "Output", null, new { @class = "btn btn-primary btn-sm" })
-            @Html.ActionLink("清除", "Clear", null, new { @class = "btn btn-primary btn-sm" })
-        </div>
+<script type="text/javascript">
+	<!--
+		var setting = {	};
 
-        <table class="table">
-            <thead>
+        $(document).ready(function () {
+            $.getJSON("/Products/all", null, function (data) { $.fn.zTree.init($("#treeDemo"), setting, data) });
+			;
+		});
+		//-->
+</script>
+<div class="container">
+    <div class="pull-left">
+        @Html.ActionLink("创建分类", "CreateCategory", null, new { @class = "btn btn-primary btn-sm" })
+        @Html.ActionLink("修改分类", "ModifyCategory", null, new { @class = "btn btn-primary btn-sm" })
+    </div>
+    <div class="zTreeDemoBackground left">
+        <ul id="treeDemo" class="ztree"></ul>
+    </div>
+
+    <h2>产品管理</h2>
+    <div class="pull-right">
+        @Html.ActionLink("导入", "Import", null, new { @class = "btn btn-primary btn-sm" })
+        @Html.ActionLink("创建", "Create", null, new { @class = "btn btn-primary btn-sm" })
+        @Html.ActionLink("生成", "Output", null, new { @class = "btn btn-primary btn-sm" })
+        @Html.ActionLink("清除", "Clear", null, new { @class = "btn btn-primary btn-sm" })
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>名称</th>
+                <th>描述</th>
+                <th>离地高度</th>
+                <th>分类</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--
+            @foreach (var p in Model.Products)
+            {
                 <tr>
-                    <th>ID</th>
-                    <th>名称</th>
-                    <th>描述</th>
-                    <th>离地高度</th>
-                    <th>分类</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var p in Model.Products)
-                {
-                    <tr>
-                        <td>@p.Id</td>
-                        <td>@p.Name</td>
-                        <td>@p.Description</td>
-                        <td>@p.Elevation</td>
-                        <td>@p.Category</td>
-                        <td>
-                            @Html.ActionLink("Edit", "Edit", new { productId = p.Id }, new { @class = "btn btn-xs btn-primary" })
-                            @*@Html.ActionLink("Details", "Details", new { id = p.Id }, new { @class = "btn btn-xs btn-primary" })
+                    <td>@p.Id</td>
+                    <td>@p.Name</td>
+                    <td>@p.Description</td>
+                    <td>@p.Elevation</td>
+                    <td>@p.Category</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { productId = p.Id }, new { @class = "btn btn-xs btn-primary" })
+                        @*@Html.ActionLink("Details", "Details", new { id = p.Id }, new { @class = "btn btn-xs btn-primary" })
                             @Html.ActionLink("Delete", "Delete", new { id = p.Id }, new { @class = "btn btn-xs btn-danger" })*@
-                            @*@Ajax.ActionLink("test", "TestAjax", new { name = "test" }, new AjaxOptions()
+                        @*@Ajax.ActionLink("test", "TestAjax", new { name = "test" }, new AjaxOptions()
                             {
                                 UpdateTargetId = "tableData",
                                 LoadingElementId = "loading"
                             })*@
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                    </td>
+                </tr>
+            }-->
+        </tbody>
+    </table>
 
-        <div class="pull-right">
-            <ul class="pagination pagination-sm">
-                @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x, category = @Model.CurrentCategory }))
-            </ul>
-        </div>
+    <div class="pull-right">
+        <ul class="pagination pagination-sm">
+            @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x, category = @Model.CurrentCategory }))
+        </ul>
     </div>
+</div>
 
 

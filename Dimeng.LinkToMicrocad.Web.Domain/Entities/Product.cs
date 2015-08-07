@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Dimeng.LinkToMicrocad.Web.Domain.Entities
 {
@@ -15,10 +17,16 @@ namespace Dimeng.LinkToMicrocad.Web.Domain.Entities
             Depth = 400;
             Elevation = 0;
         }
+        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Category { get; set; }
+
+        public int? CategoryId { get; set; }
+        
+        [ForeignKey("CategoryId")]
+        public ProductCategory Category { get; set; }
+
         public double Width { get; set; }
         public double Height { get; set; }
         public double Depth { get; set; }
