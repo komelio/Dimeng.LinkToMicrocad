@@ -36,8 +36,24 @@ namespace Dimeng.LinkToMicrocad.Drawing
 
                 //Step2:获取孔以MP为原点的坐标，并以此坐标进行旋转
                 Point3d vborePosition = GetBorePosition(vdrill);
-                vborePosition = vborePosition.TransformBy(Matrix3d.AlignCoordinateSystem(new Point3d(), Vector3d.XAxis, Vector3d.YAxis, Vector3d.ZAxis, vdrill.Part.MPPoint, vdrill.Part.MPXAxis, vdrill.Part.MPYAxis, vdrill.Part.MPZAxis));
-                vbore.TransformBy(Matrix3d.AlignCoordinateSystem(new Point3d(), Vector3d.XAxis, Vector3d.YAxis, Vector3d.ZAxis, vborePosition, vdrill.Part.MPXAxis, vdrill.Part.MPYAxis, vdrill.Part.MPZAxis));
+                vborePosition = vborePosition.TransformBy(Matrix3d.AlignCoordinateSystem(new Point3d(), 
+                                                                                         Vector3d.XAxis, 
+                                                                                         Vector3d.YAxis, 
+                                                                                         Vector3d.ZAxis, 
+                                                                                         vdrill.Part.MPPoint, 
+                                                                                         vdrill.Part.MPXAxis, 
+                                                                                         vdrill.Part.MPYAxis, 
+                                                                                         vdrill.Part.MPZAxis));
+                //Logger.GetLogger().Error(vborePosition.ToString());
+
+                vbore.TransformBy(Matrix3d.AlignCoordinateSystem(new Point3d(),
+                                                                 Vector3d.XAxis,
+                                                                 Vector3d.YAxis, 
+                                                                 Vector3d.ZAxis, 
+                                                                 vborePosition, 
+                                                                 vdrill.Part.MPXAxis, 
+                                                                 vdrill.Part.MPYAxis, 
+                                                                 vdrill.Part.MPZAxis));
 
                 panel.BooleanOperation(BooleanOperationType.BoolSubtract, vbore);
             }

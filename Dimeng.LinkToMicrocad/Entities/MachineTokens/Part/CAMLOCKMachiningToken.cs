@@ -95,7 +95,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
                 foreach (double d in this.PointsPosition)
                 {
-                    HDrilling hdrill = new HDrilling(this.FaceNumber, this.EdgeBoreDiameter, this.EdgeBoreDepth, d, this.ZValue, Part, this);
+                    HDrilling hdrill = new HDrilling(this.FaceNumber, this.EdgeBoreDiameter, this.EdgeBoreDepth, d, (this.FaceNumber==5?this.ZValue:this.Part.Thickness-this.ZValue), Part, this);
                     TempHDrills.Add(hdrill);
                 }
 
@@ -140,6 +140,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
         {
             if (string.IsNullOrEmpty(this.Par8))
             {
+                Logger.GetLogger().Debug("Camlock Par8为空");
                 this.CamFaceNumber = 5;
                 return;
             }
@@ -149,17 +150,20 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             {
                 if (value == 5)
                 {
+                    Logger.GetLogger().Debug("Camlock Par8为5");
                     this.CamFaceNumber = 5;
                     return;
                 }
                 else if (value == 6)
                 {
+                    Logger.GetLogger().Debug("Camlock Par8为6");
                     this.CamFaceNumber = 6;
                     return;
                 }
             }
             else
             {
+                Logger.GetLogger().Debug("Camlock Par8无法识别" + this.Par8);
                 this.CamFaceNumber = 5;
                 return;
             }
