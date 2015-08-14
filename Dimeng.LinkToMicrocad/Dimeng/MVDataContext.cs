@@ -103,11 +103,20 @@ namespace Dimeng.LinkToMicrocad
             foreach (var m in materials)
             {
                 Logger.GetLogger().Debug(m.ToString());
-                Texture texture = new Texture()
+                Texture texture = new Texture();
+
+                texture.ImageName = m.Attribute("Texture").Value;
+                texture.Material = m.Attribute("Name").Value;
+
+                if (m.Attribute("IsDoor") != null && m.Attribute("IsDoor").Value == "True")
                 {
-                    ImageName = m.Attribute("Texture").Value,
-                    Material = m.Attribute("Name").Value
-                };
+                    texture.IsDoor = true;
+                }
+                else
+                {
+                    texture.IsDoor = false;
+                }
+
 
                 textures.Add(texture);
             }

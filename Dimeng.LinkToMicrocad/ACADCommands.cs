@@ -40,6 +40,8 @@ namespace Dimeng.LinkToMicrocad
                 BugReportWindow bug = new BugReportWindow(new BugReportViewModel(error.Message));
                 bug.ShowDialog();
             }
+
+            //MessageBox.Show("new_dm");
         }
 
         /// <summary>
@@ -61,6 +63,8 @@ namespace Dimeng.LinkToMicrocad
                 BugReportWindow bug = new BugReportWindow(new BugReportViewModel(error.Message));
                 bug.ShowDialog();
             }
+
+            MessageBox.Show("new_dm");
         }
 
         [CommandMethod("AK", "Del_dm", CommandFlags.Modal)]

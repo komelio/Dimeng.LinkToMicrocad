@@ -76,8 +76,10 @@ namespace Dimeng.LinkToMicrocad
                     Logger.GetLogger().Debug("Offset Vector is " + offsetVector.ToString());
 
                     //write the temp.xml back to autodecco
-                    IEnumerable<string> materialList = getMaterialList(mvProduct);
-                    (new TempXMLWriter()).WriteFile(tempXMLPath, product, materialList);
+                    IEnumerable<TextureMaterialPair> list = getMaterialList2(mvProduct);
+                    (new TempXMLWriter()).WriteFile(tempXMLPath, product, list);
+                    //IEnumerable<string> materialList = getMaterialList(mvProduct);
+                    //(new TempXMLWriter()).WriteFile(tempXMLPath, product, materialList);
 
                     ProductDrawer drawer = new ProductDrawer(offsetVector, Context.GetContext().MVDataContext.GetLatestRelease());
                     drawer.DrawAndSaveAsDWG(mvProduct,
@@ -121,8 +123,10 @@ namespace Dimeng.LinkToMicrocad
                     Logger.GetLogger().Debug("Offset Vector is " + offsetVector.ToString());
 
                     //write the temp.xml back to autodecco
-                    IEnumerable<string> materialList = getMaterialList(mvProduct);
-                    (new TempXMLWriter()).WriteFile(tempXMLPath, product, materialList);
+                    IEnumerable<TextureMaterialPair> list = getMaterialList2(mvProduct);
+                    (new TempXMLWriter()).WriteFile(tempXMLPath, product, list);
+                    //IEnumerable<string> materialList = getMaterialList(mvProduct);
+                    //(new TempXMLWriter()).WriteFile(tempXMLPath, product, materialList);
 
                     ProductDrawer drawer = new ProductDrawer(offsetVector, Context.GetContext().MVDataContext.GetLatestRelease());
                     drawer.DrawAndSaveAsDWG(mvProduct,
@@ -138,6 +142,40 @@ namespace Dimeng.LinkToMicrocad
                 //MessageBox.Show("绘制过程中发生错误，:(");
                 throw new Exception("绘制过程中发生错误，:(", error);
             }
+        }
+
+        private IEnumerable<TextureMaterialPair> getMaterialList2(Product mvProduct)
+        {
+            List<TextureMaterialPair> list = new List<TextureMaterialPair>();
+
+            foreach (var part in mvProduct.CombinedParts)
+            {
+                if (!(part.Material is CutPartMaterial))
+                {
+                    Texture t = Context.GetContext().MVDataContext.GetTexture(part.Material.Name);
+                    if (t != null)
+                    {
+                        TextureMaterialPair tmpair = new TextureMaterialPair();
+                        tmpair.Part = part;
+                        tmpair.Texture = t;
+                        list.Add(tmpair);
+                    }
+                }
+                else
+                {
+                    var find = list.Find(it => it.Texture.Material == part.Material.Name);
+                    if (find == null)
+                    {
+                        Texture t = Context.GetContext().MVDataContext.GetTexture(part.Material.Name);
+                        if (t != null)
+                        {
+                            list.Add(new TextureMaterialPair() { Texture = t });
+                        }
+                    }
+                }
+            }
+
+            return list;
         }
 
         public void CopyProduct()

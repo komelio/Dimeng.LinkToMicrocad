@@ -14,6 +14,8 @@ namespace Dimeng.LinkToMicrocad
         public string ImageName { get; set; }
         public string Material { get; set; }
         public List<TextureAttribute> Attributes { get; private set; }
+
+        public bool IsDoor { get; set; }
     }
 
     public struct TextureAttribute

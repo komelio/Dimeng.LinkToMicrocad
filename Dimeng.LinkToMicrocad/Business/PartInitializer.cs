@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using Dimeng.LinkToMicrocad.Properties;
 
 namespace Dimeng.WoodEngine.Business
 {
@@ -54,6 +55,17 @@ namespace Dimeng.WoodEngine.Business
             bool isDraw3d;
             string layname3d = check.Layname3d(out isDraw3d);
             string layname2d = partRange[0, 36].Text;
+
+            if (!(material is CutPartMaterial))
+            {
+                Settings.Default.TextureCounter++;
+                Settings.Default.Save();
+                layname3d = material.Name + Settings.Default.TextureCounter;
+            }
+            else
+            {
+                layname3d = material.Name;
+            }
 
             if (width <= 0 || length <= 0 || thick <= 0)
             {

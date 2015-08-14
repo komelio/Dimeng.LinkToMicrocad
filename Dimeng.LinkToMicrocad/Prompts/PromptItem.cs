@@ -223,10 +223,10 @@ namespace Dimeng.WoodEngine.Prompts
             }
             else this.ColorIndex = 0;
 
-            int vis;
-            if (int.TryParse(visible, out vis))
+            double vis;
+            if (double.TryParse(visible, out vis))
             {
-                if (vis == 0) this.Visible = false;
+                if (vis == 1) this.Visible = false;
                 else this.Visible = true;
             }
             else this.Visible = true;

@@ -46,5 +46,17 @@ namespace Dimeng.LinkToMicrocad.Properties {
                 this["IsDrawHoles"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public long TextureCounter {
+            get {
+                return ((long)(this["TextureCounter"]));
+            }
+            set {
+                this["TextureCounter"] = value;
+            }
+        }
     }
 }
