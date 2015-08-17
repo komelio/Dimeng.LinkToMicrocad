@@ -95,7 +95,15 @@ namespace Dimeng.WoodEngine.Entities.Checks
                             string.Format("{0} can not be converted to int type!Original data:{1}", errorPrefix, rangeText)
                                       )
                               );
-                return 0;
+
+                if (ranges.Length > 0)
+                {
+                    return ranges[0];
+                }
+                else
+                {
+                    return 0;
+                }
             }
         }
 
