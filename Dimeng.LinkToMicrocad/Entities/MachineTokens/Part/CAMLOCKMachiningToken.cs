@@ -95,7 +95,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
                 foreach (double d in this.PointsPosition)
                 {
-                    HDrilling hdrill = new HDrilling(this.FaceNumber, this.EdgeBoreDiameter, this.EdgeBoreDepth, d, (this.FaceNumber==5?this.ZValue:this.Part.Thickness-this.ZValue), Part, this);
+                    HDrilling hdrill = new HDrilling(this.FaceNumber, this.EdgeBoreDiameter, this.EdgeBoreDepth, d, (this.CamFaceNumber==5?this.ZValue:this.Part.Thickness-this.ZValue), Part, this);
                     TempHDrills.Add(hdrill);
                 }
 
