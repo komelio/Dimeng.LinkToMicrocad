@@ -64,7 +64,7 @@ namespace Dimeng.LinkToMicrocad
                 bug.ShowDialog();
             }
 
-            MessageBox.Show("new_dm");
+            //MessageBox.Show("new_dm");
         }
 
         [CommandMethod("AK", "Del_dm", CommandFlags.Modal)]

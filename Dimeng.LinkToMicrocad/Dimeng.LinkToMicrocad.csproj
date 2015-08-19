@@ -216,6 +216,7 @@
     <Compile Include="Entities\MachineTokens\Part\CORNERNOTCHMachiningToken.cs" />
     <Compile Include="Entities\MachineTokens\Part\CUTOUTMachiningToken.cs" />
     <Compile Include="Entities\MachineTokens\Part\DADOMachiningToken.cs" />
+    <Compile Include="Entities\MachineTokens\Part\FILLETCORNERMachiningToken.cs" />
     <Compile Include="Entities\MachineTokens\Part\HOLESMachiningToken.cs" />
     <Compile Include="Entities\MachineTokens\Part\MITERMachiningToken.cs" />
     <Compile Include="Entities\MachineTokens\Part\MOULDINGMachiningToken.cs" />

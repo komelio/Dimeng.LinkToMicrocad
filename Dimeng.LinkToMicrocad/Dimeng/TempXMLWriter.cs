@@ -266,8 +266,8 @@ namespace Dimeng.LinkToMicrocad
                     xmlGroups.Add(new XElement("G",
                                     new XAttribute("Name", "material" + (mid + i).ToString()),
                                     new XAttribute("HM", 1),
-                                    new XAttribute("Layer", m.Part.LayerName3D),
-                                    new XAttribute("Text", m.Part.LayerName3D),
+                                    new XAttribute("Layer", m.Texture.Material),
+                                    new XAttribute("Text", m.Texture.Material),
                                     new XAttribute("Material", "material" + (mid + i).ToString()),
                                     new XAttribute("A_41", m.Texture.ImageName)
                         //new XAttribute("A_47", texture.A47)
@@ -280,8 +280,8 @@ namespace Dimeng.LinkToMicrocad
                     XElement xg = new XElement("G",
                                     new XAttribute("Name", "material" + (mid + i).ToString()),
                                     new XAttribute("HM", 1),
-                                    new XAttribute("Layer", m.Texture.Material),
-                                    new XAttribute("Text", m.Texture.Material),
+                                    new XAttribute("Layer", m.Part.LayerName3D),
+                                    new XAttribute("Text", m.Part.LayerName3D),
                                     new XAttribute("Material", "material" + (mid + i).ToString()),
                                     new XAttribute("A_41", m.Texture.ImageName)
                                     );
