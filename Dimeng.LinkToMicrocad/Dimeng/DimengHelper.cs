@@ -18,10 +18,10 @@ using System.Xml.Linq;
 
 namespace Dimeng.LinkToMicrocad
 {
-    internal class DimengHelper
+    public class DimengHelper
     {
 
-        internal void ShowPromptAndDrawBlock()
+        public void ShowPromptAndDrawBlock()
         {
             try
             {
@@ -36,11 +36,20 @@ namespace Dimeng.LinkToMicrocad
 
                 Logger.GetLogger().Info("MV Library Path:" + mvDataContextPath);
 
+                string projectName = product.GetUIVarValue("ManufacturingFolder");
+                projectName = projectName.Substring(0, projectName.LastIndexOf("\\"));//去掉dms
+                projectName = projectName.Substring(projectName.LastIndexOf("\\") + 1);
+
+                //MessageBox.Show(Context.GetContext().AKInfo.Path);
+                string projectPath = Path.Combine(Context.GetContext().AKInfo.Path, "Projects", projectName, "DMS");
+                //MessageBox.Show(projectPath);
+
                 MVDataContext mvContext = MVDataContext.GetContext(mvDataContextPath);
                 Context.GetContext().MVDataContext = mvContext;
 
-                var project = ProjectManager.CreateOrOpenProject(
-                    product.GetUIVarValue("ManufacturingFolder"));
+
+
+                var project = ProjectManager.CreateOrOpenProject(projectPath);
 
                 if (product.SubInfo == null)//不是组件
                 {

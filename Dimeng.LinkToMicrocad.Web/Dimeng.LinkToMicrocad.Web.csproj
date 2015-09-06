@@ -150,6 +150,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MaterialsController.cs" />
+    <Compile Include="Controllers\Products2Controller.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\ReleasesController.cs" />
     <Compile Include="Controllers\TexturesController.cs" />
@@ -196,6 +197,7 @@
     <Folder Include="Output\Dms\Material\high\" />
     <Folder Include="Output\Dms\Photos\dmsobj\" />
     <Folder Include="Releases\" />
+    <Folder Include="Views\Products2\" />
     <Folder Include="Views\Releases\" />
   </ItemGroup>
   <ItemGroup>

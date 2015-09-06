@@ -87,53 +87,86 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             FindAssociatedFaces(0, tolerenceDist);
 
             PartFace pf = this.Part.GetPartFaceByNumber(FaceNumber);
-            if (this.AssociatedPartFaces.Count != 0)//数量不为0，说明有关联的板件
+            if (this.AssociatedPartFaces.Count == 0)//数量为0，说明no有关联的板件
             {
-                Logger.GetLogger().Debug("Camlock Faces:" + this.AssociatedPartFaces.Count.ToString());
+                return;
+            }
 
-                List<HDrilling> TempHDrills = new List<HDrilling>();
+            Logger.GetLogger().Debug("Camlock Faces:" + this.AssociatedPartFaces.Count.ToString());
 
-                foreach (double d in this.PointsPosition)
+            List<HDrilling> TempHDrills = new List<HDrilling>();
+
+            foreach (double d in this.PointsPosition)
+            {
+                HDrilling hdrill = new HDrilling(this.FaceNumber, this.EdgeBoreDiameter, this.EdgeBoreDepth,
+                    d, (this.CamFaceNumber == 5 ? this.ZValue : this.Part.Thickness - this.ZValue), Part, this);
+                TempHDrills.Add(hdrill);
+            }
+
+            foreach (StructXY xy in this.ListCamVBoreXY)
+            {
+                VDrilling vdrill = new VDrilling(this.CamFaceNumber, xy.X, xy.Y, this.CamFaceBoreDiameter, this.CamFaceBoreDepth, Part, this);
+                Part.VDrillings.Add(vdrill);
+            }
+
+            foreach (PartFace f in this.AssociatedPartFaces)
+            {
+                Logger.GetLogger().Debug(string.Format("CamlockAssociateFace:{0}/{1}", f.Part.ToString(), f.FaceNumber));
+
+                foreach (HDrilling hdrill in TempHDrills)
                 {
-                    HDrilling hdrill = new HDrilling(this.FaceNumber, this.EdgeBoreDiameter, this.EdgeBoreDepth, d, (this.CamFaceNumber==5?this.ZValue:this.Part.Thickness-this.ZValue), Part, this);
-                    TempHDrills.Add(hdrill);
-                }
+                    Point3d holeposition = hdrill.GetBorePosition();
+                    holeposition = holeposition.TransformBy(Matrix3d.AlignCoordinateSystem(new Point3d(),
+                                                                                           Vector3d.XAxis,
+                                                                                           Vector3d.YAxis,
+                                                                                           Vector3d.ZAxis,
+                                                                                           hdrill.Part.MPPoint,
+                                                                                           hdrill.Part.MPXAxis,
+                                                                                           hdrill.Part.MPYAxis,
+                                                                                           hdrill.Part.MPZAxis));
+                    holeposition = Math.MathHelper.GetRotatedAndMovedPoint(holeposition, Part.TXRotation, Part.TYRotation, Part.TZRotation, Part.CenterVector);
+                    holeposition = holeposition.TransformBy(Matrix3d.AlignCoordinateSystem(f.Part.MovedMPPoint,
+                                                                                           f.Part.MovedMPXAxis,
+                                                                                           f.Part.MovedMPYAxis,
+                                                                                           f.Part.MovedMPZAxis,
+                                                                                           new Point3d(),
+                                                                                           Vector3d.XAxis,
+                                                                                           Vector3d.YAxis,
+                                                                                           Vector3d.ZAxis));
 
-                foreach (StructXY xy in this.ListCamVBoreXY)
-                {
-                    VDrilling vdrill = new VDrilling(this.CamFaceNumber, xy.X, xy.Y, this.CamFaceBoreDiameter, this.CamFaceBoreDepth, Part, this);
-                    Part.VDrillings.Add(vdrill);
-                }
-
-                foreach (PartFace f in this.AssociatedPartFaces)
-                {
-                    Logger.GetLogger().Debug(string.Format("CamlockAssociateFace:{0}/{1}", f.Part.ToString(), f.FaceNumber));
                     if (!f.IsHorizontalFace)//如果关联的面是面5或面6
                     {
-                        foreach (HDrilling hdrill in TempHDrills)
-                        {
-                            Point3d holeposition = hdrill.GetBorePosition();
-                            holeposition = holeposition.TransformBy(Matrix3d.AlignCoordinateSystem(new Point3d(), Vector3d.XAxis, Vector3d.YAxis, Vector3d.ZAxis, hdrill.Part.MPPoint, hdrill.Part.MPXAxis, hdrill.Part.MPYAxis, hdrill.Part.MPZAxis));
-                            holeposition = Math.MathHelper.GetRotatedAndMovedPoint(holeposition, Part.TXRotation, Part.TYRotation, Part.TZRotation, Part.CenterVector);
-                            holeposition = holeposition.TransformBy(Matrix3d.AlignCoordinateSystem(f.Part.MovedMPPoint, f.Part.MovedMPXAxis, f.Part.MovedMPYAxis, f.Part.MovedMPZAxis, new Point3d(), Vector3d.XAxis, Vector3d.YAxis, Vector3d.ZAxis));
-                            double dimx = holeposition.X;
-                            double dimy = holeposition.Y;
+                        double dimx = holeposition.X;
+                        double dimy = holeposition.Y;
 
-                            VDrilling vdrill = new VDrilling(f.FaceNumber, dimx, dimy, this.FaceBoreDiameter, this.FaceBoreDepth, f.Part, this);
-                            f.Part.VDrillings.Add(vdrill);
-                        }
+                        VDrilling vdrill = new VDrilling(f.FaceNumber, dimx, dimy,
+                            this.FaceBoreDiameter, this.FaceBoreDepth, f.Part, this);
+                        f.Part.VDrillings.Add(vdrill);
                     }
-                    else//TODO:如果关联的面是水平面 
+                    else
                     {
+                        double position = 0;
+                        if (f.FaceNumber == 1 || f.FaceNumber == 2)
+                        {
+                            position = holeposition.X;
+                        }
+                        else
+                        {
+                            position = holeposition.Y;
+                        }
 
+                        HDrilling hdrillF = new HDrilling(f.FaceNumber, this.FaceBoreDiameter, this.FaceBoreDepth,
+                            position, holeposition.Z, f.Part, this);
+                        f.Part.HDrillings.Add(hdrillF);
                     }
-                }
-
-                if (this.EdgeBoreDiameter > 0 && this.EdgeBoreDepth > 0)
-                {
-                    Part.HDrillings.AddRange(TempHDrills);
                 }
             }
+
+            if (this.EdgeBoreDiameter > 0 && this.EdgeBoreDepth > 0)
+            {
+                Part.HDrillings.AddRange(TempHDrills);
+            }
+
         }
 
         private void camlockFaceChecker()

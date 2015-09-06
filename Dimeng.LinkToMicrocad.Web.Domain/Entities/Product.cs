@@ -25,7 +25,7 @@ namespace Dimeng.LinkToMicrocad.Web.Domain.Entities
         public int? CategoryId { get; set; }
         
         [ForeignKey("CategoryId")]
-        public ProductCategory Category { get; set; }
+        public Category Category { get; set; }
 
         public double Width { get; set; }
         public double Height { get; set; }

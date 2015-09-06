@@ -56,62 +56,76 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
             PartFace pf = this.Part.GetPartFaceByNumber(FaceNumber);
 
-            if (this.AssociatedPartFaces.Count != 0)//数量不为0，说明有关联的板件
+            if (this.AssociatedPartFaces.Count == 0)//数为0，说明no有关联的板件
             {
-                List<HDrilling> TempHDrills = new List<HDrilling>();
+                return;
+            }
 
-                if (this.EdgeBoreDepth > 0 && this.EdgeBoreDiameter > 0)
+            List<HDrilling> TempHDrills = new List<HDrilling>();
+            if (this.EdgeBoreDepth > 0 && this.EdgeBoreDiameter > 0)
+            {
+                foreach (double d in this.PointsPosition)//遍历所欲的孔位坐标
                 {
-                    foreach (double d in this.PointsPosition)//遍历所欲的孔位坐标
-                    {
-                        HDrilling hdrill = new HDrilling(this.FaceNumber, this.EdgeBoreDiameter, this.EdgeBoreDepth, d, this.ZValue, Part,this);
-                        TempHDrills.Add(hdrill);
-                    }
+                    HDrilling hdrill = new HDrilling(this.FaceNumber, this.EdgeBoreDiameter, this.EdgeBoreDepth, d, this.ZValue, Part, this);
+                    TempHDrills.Add(hdrill);
                 }
+            }
 
-                if (this.FaceBoreDepth > 0 && this.FaceBoreDiameter > 0)
+            if (this.FaceBoreDepth > 0 && this.FaceBoreDiameter > 0)
+            {
+                foreach (PartFace f in this.AssociatedPartFaces)
                 {
-                    foreach (PartFace f in this.AssociatedPartFaces)
+                    foreach (var hdrill in TempHDrills)
                     {
+                        Point3d holeposition = hdrill.GetBorePosition();
+                        holeposition = holeposition.TransformBy(Matrix3d.AlignCoordinateSystem(new Point3d(),
+                                                                                               Vector3d.XAxis,
+                                                                                               Vector3d.YAxis,
+                                                                                               Vector3d.ZAxis,
+                                                                                               hdrill.Part.MPPoint,
+                                                                                               hdrill.Part.MPXAxis,
+                                                                                               hdrill.Part.MPYAxis,
+                                                                                               hdrill.Part.MPZAxis));
+                        holeposition = Math.MathHelper.GetRotatedAndMovedPoint(holeposition, Part.TXRotation, Part.YRotation, Part.ZRotation, Part.CenterVector);
+                        holeposition = holeposition.TransformBy(Matrix3d.AlignCoordinateSystem(f.Part.MovedMPPoint,
+                                                                                               f.Part.MovedMPXAxis,
+                                                                                               f.Part.MovedMPYAxis,
+                                                                                               f.Part.MovedMPZAxis,
+                                                                                               new Point3d(),
+                                                                                               Vector3d.XAxis,
+                                                                                               Vector3d.YAxis,
+                                                                                               Vector3d.ZAxis));
+
                         if (!f.IsHorizontalFace)//如果关联的面是面5或面6
                         {
-                            foreach (var hdrill in TempHDrills)
-                            {
-                                Point3d holeposition = hdrill.GetBorePosition();
-                                holeposition = holeposition.TransformBy(Matrix3d.AlignCoordinateSystem(new Point3d(),
-                                                                                                       Vector3d.XAxis,
-                                                                                                       Vector3d.YAxis,
-                                                                                                       Vector3d.ZAxis,
-                                                                                                       hdrill.Part.MPPoint,
-                                                                                                       hdrill.Part.MPXAxis,
-                                                                                                       hdrill.Part.MPYAxis,
-                                                                                                       hdrill.Part.MPZAxis));
-                                holeposition = Math.MathHelper.GetRotatedAndMovedPoint(holeposition, Part.TXRotation, Part.YRotation, Part.ZRotation, Part.CenterVector);
-                                holeposition = holeposition.TransformBy(Matrix3d.AlignCoordinateSystem(f.Part.MovedMPPoint,
-                                                                                                       f.Part.MovedMPXAxis,
-                                                                                                       f.Part.MovedMPYAxis,
-                                                                                                       f.Part.MovedMPZAxis,
-                                                                                                       new Point3d(),
-                                                                                                       Vector3d.XAxis,
-                                                                                                       Vector3d.YAxis,
-                                                                                                       Vector3d.ZAxis));
-                                double dimx = holeposition.X;
-                                double dimy = holeposition.Y;
+                            double dimx = holeposition.X;
+                            double dimy = holeposition.Y;
 
-                                VDrilling vdrill = new VDrilling(f.FaceNumber, dimx, dimy, this.FaceBoreDiameter, this.FaceBoreDepth, f.Part,this);
-                                f.Part.VDrillings.Add(vdrill);
-                            }
+                            VDrilling vdrill = new VDrilling(f.FaceNumber, dimx, dimy, this.FaceBoreDiameter, this.FaceBoreDepth, f.Part, this);
+                            f.Part.VDrillings.Add(vdrill);
                         }
-                        else//TODO:如果关联的面是水平面
+                        else
                         {
+                            double position = 0;
+                            if (f.FaceNumber == 1 || f.FaceNumber == 2)
+                            {
+                                position = holeposition.X;
+                            }
+                            else
+                            {
+                                position = holeposition.Y;
+                            }
 
+                            HDrilling hdrillF = new HDrilling(f.FaceNumber, this.FaceBoreDiameter, this.FaceBoreDepth,
+                                position, holeposition.Z, f.Part, this);
+                            f.Part.HDrillings.Add(hdrillF);
                         }
                     }
+
                 }
-
-                this.Part.HDrillings.AddRange(TempHDrills);
-
             }
+
+            this.Part.HDrillings.AddRange(TempHDrills);
         }
     }
 }

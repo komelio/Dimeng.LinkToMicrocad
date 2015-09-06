@@ -288,7 +288,7 @@ namespace Dimeng.WoodEngine.Entities
 
                     string path = Path.Combine(this.jobPath, "Subassemblies", string.Format("{0}_({1}){2}.cutx", product.Handle, aksub.TabA.Name, i + 1));
 
-                    File.Copy(files[0], path);
+                    File.Copy(files[0], path, true);
 
                     //拷贝后，把长宽高输入进去
                     var bookS = Factory.GetWorkbook(path);
@@ -364,7 +364,7 @@ namespace Dimeng.WoodEngine.Entities
                 foreach (var file in di.GetFiles(from + "*"))
                 {
                     int index = file.Name.IndexOf('_');
-                    string backName = file.Name.Substring(index+1);
+                    string backName = file.Name.Substring(index + 1);
                     string newName = Path.Combine(this.SubassembliesPath, string.Format("{0}_{1}", to, backName));
                     file.CopyTo(newName, false);
                 }
