@@ -100,9 +100,9 @@ namespace Dimeng.LinkToMicrocad.Drawing
                             //否则就直接绘制出来,目前只针对绘制三角形的情况——针对MITER这个指令                        
                             //这是个倒三角
                             Polyline polyline = new Polyline();
-                            Point2d pt1 = Point2d.Origin;
+                            Point2d pt1 = new Point2d(-0.1, 0);
                             Point2d pt2 = new Point2d(part.Thickness / System.Math.Tan(profile.Angle), part.Thickness);
-                            Point2d pt3 = new Point2d(0, part.Thickness);
+                            Point2d pt3 = new Point2d(-0.1, part.Thickness);
                             polyline.AddVertexAt(0, pt1, 0, 0, 0);
                             polyline.AddVertexAt(1, pt2, 0, 0, 0);
                             polyline.AddVertexAt(2, pt3, 0, 0, 0);
