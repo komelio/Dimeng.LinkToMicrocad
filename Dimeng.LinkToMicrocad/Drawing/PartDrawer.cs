@@ -68,7 +68,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
                 (new HDrillDrawer()).Draw(panel, part);
             }
             (new RouteDrawer(Context.GetContext().MVDataContext.GetLatestRelease().CurrentToolFile)).Draw(panel, part);
-            (new ProfileDrawer(Context.GetContext().MVDataContext.GetLatestRelease().MicrovellumData, db)).Draw(panel, part);
+            (new ProfileDrawer(Context.GetContext().MVDataContext.GetLatestRelease().MicrovellumData + "\\Graphics\\Profiles\\", db)).Draw(panel, part);
 
             panel.TransformBy(Matrix3d.Rotation(part.TXRotation * System.Math.PI / 180, Vector3d.XAxis, Point3d.Origin));
             panel.TransformBy(Matrix3d.Rotation(part.TYRotation * System.Math.PI / 180, Vector3d.YAxis, Point3d.Origin));

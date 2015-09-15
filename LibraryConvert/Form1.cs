@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,11 +18,17 @@ namespace LibraryConvert
         public Form1()
         {
             InitializeComponent();
+
+            tbVersionNumber.Text = DateTime.Now.ToString("yyyy.MM.dd.001");
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string finalPath = @"C:\Users\xspxs_000\Desktop\output";
+            string finalPath = @"C:\Users\xspxs_000\Desktop\output\"+tbVersionNumber.Text;
+            if(!Directory.Exists(finalPath))
+            {
+                Directory.CreateDirectory(finalPath);
+            }
 
             string path1 = @"C:\Users\xspxs_000\Desktop\提供给AD的模型库";
             DirectoryInfo di = new DirectoryInfo(path1);
@@ -189,6 +196,46 @@ namespace LibraryConvert
             doc.Add(root);
 
             doc.Save(Path.Combine(finalPath, "Dms.xml"));
+
+
+
+            generateList(finalPath);
+
+
+
+
+        }
+
+        private void generateList(string finalPath)
+        {
+            string filePath = Path.Combine(finalPath, "list.txt");
+
+            FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Write);
+            StreamWriter sw = new StreamWriter(fs, Encoding.Default);
+
+            DirectoryInfo di = new DirectoryInfo(finalPath);
+            Uri baseUri = new Uri(finalPath);
+
+            foreach(FileInfo fi in di.GetFiles("*.*",SearchOption.AllDirectories))
+            {
+                if(fi.Name=="list.txt")
+                { continue; }
+
+                Uri targetUri = new Uri(fi.FullName);
+                string p = baseUri.MakeRelativeUri(targetUri).ToString().Replace("%20"," ");
+                string md5code = string.Empty;
+
+                MD5 md5 = MD5.Create();
+                using (var stream = File.OpenRead(fi.FullName))
+                {
+                    md5code = BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToUpper();
+                }
+
+                sw.WriteLine(string.Format("{0}|{1}", p, md5code));
+            }
+
+            sw.Close();
+            fs.Close();
         }
 
         private void button2_Click(object sender, EventArgs e)

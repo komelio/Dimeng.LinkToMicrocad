@@ -34,7 +34,8 @@ namespace Dimeng.LinkToMicrocad.Drawing
             Logger.GetLogger().Debug(string.Format("Start drawing hardware:{0}/{1}/{2}/{3}", hw.Name, hw.TXOrigin, hw.TYOrigin, hw.TZOrigin));
             Logger.GetLogger().Debug(string.Format("- Associate Part:{0}", hw.AssociatedPart.PartName));
 
-            string hwDWGFile = Path.Combine(path, string.Format("3D_{0}.dwg", hw.Name));
+            Logger.GetLogger().Info("Drawing hardware:" + string.Format("3D_{0}.dwg", hw.Name));
+            string hwDWGFile = Path.Combine(path, string.Format("3D_{0}.dwg", IOHelper.GetRegularFileName(hw.Name)));
             if (!File.Exists(hwDWGFile))
             {
                 Logger.GetLogger().Info(string.Format("File {0} not found!", hwDWGFile));

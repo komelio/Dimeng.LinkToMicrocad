@@ -16,9 +16,8 @@ namespace Dimeng.LinkToMicrocad.Drawing
 {
     public class ProfileDrawer
     {
-        Database db;
         string graphicPath;
-
+        Database db;
         public ProfileDrawer(string graphicPath, Database db)
         {
             this.db = db;
@@ -40,60 +39,39 @@ namespace Dimeng.LinkToMicrocad.Drawing
                     {
                         if (profile.IsSharpFromFile)
                         {
-                            string file = graphicPath + "\\Graphics\\Profiles\\";
+                            string file = graphicPath;
                             file = Path.Combine(file, profile.SharpFile);
 
                             if (!File.Exists(file))
                             {
                                 Logger.GetLogger().Warn(string.Format("Profile dwg file {0} not found!", file));
                                 return;
-                                //throw new FileNotFoundException(file + " not found!!!!!!By profile drawer");
+                                throw new FileNotFoundException(file + " not found!!!!!!By profile drawer");
                             }
 
                             Entity sectionOld = CADHelper.AddDwgEntities(file, trans, db);
-                            section = CADHelper.RebuildPolyline(sectionOld, db);//.Clone() as Entity;
+                            section = CADHelper.RebuildPolyline(sectionOld, db);
                             sectionOld.Erase();//删去旧的
                             //btr.AppendEntity(section);
                             //trans.AddNewlyCreatedDBObject(section, true);
 
-                            //if (section is Polyline)
+                            //Polyline pl = section as Polyline;
+                            //var points = Dimeng.Math.MathHelper.FindSelfIntersectPline(pl);
+                            //if (points.Count > 0)
                             //{
-                            //    Polyline pl = section as Polyline;
-                            //    var points = Dimeng.WoodEngine.Math.MathHelper.FindSelfIntersectPline(pl);
-                            //    if (points.Count > 0)
-                            //    {
 
-                            //        StringBuilder sb = new StringBuilder();
-                            //        foreach (int i in points)
-                            //        {
-                            //            sb.Append(i);
-                            //            sb.Append(",");
-                            //        }
-                            //        Logger.GetLogger().Warn("Section is intersectSelf!" + sb.ToString());
-                            //        //section.Erase();
-                            //        section.Dispose();
-                            //        continue;
-                            //    }
-                            //}
-                            //else if (section is Polyline2d)
-                            //{
-                            //    Polyline2d pl = section as Polyline2d;
-                            //    var points = Dimeng.WoodEngine.Math.MathHelper.FindSelfIntersectPline(pl);
-                            //    if (points.Count > 0)
+                            //    StringBuilder sb = new StringBuilder();
+                            //    foreach (int i in points)
                             //    {
-
-                            //        StringBuilder sb = new StringBuilder();
-                            //        foreach (int i in points)
-                            //        {
-                            //            sb.Append(i);
-                            //            sb.Append(",");
-                            //        }
-                            //        Logger.GetLogger().Warn("Section is intersectSelf!" + sb.ToString());
-                            //        section.Erase();
-                            //        section.Dispose();
-                            //        continue;
+                            //        sb.Append(i);
+                            //        sb.Append(",");
                             //    }
+                            //    Logger.GetLogger().Warn("Section is intersectSelf!" + sb.ToString());
+                            //    //section.Erase();
+                            //    section.Dispose();
+                            //    continue;
                             //}
+
                         }
                         else
                         {
@@ -114,6 +92,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
                         RotateSection(profile, section, part, out startPt, out endPt);//TODO:这个Section的旋转有问题，有可能会无法扫掠成功
 
                         Line line = new Line(startPt, endPt);//扫掠的路径
+                        line.TransformBy(Matrix3d.Displacement(section.StartPoint - line.StartPoint));
 
                         //btr.AppendEntity(line);
                         //trans.AddNewlyCreatedDBObject(line, true);
@@ -152,7 +131,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
             startPt = part.GetPartPointByNumber(profile.StartPointNumber.ToString());
             endPt = part.GetPartPointByNumber(profile.EndPointNumber.ToString());
 
-            int gap = Math.Abs(profile.StartPointNumber - profile.EndPointNumber);
+            int gap = System.Math.Abs(profile.StartPointNumber - profile.EndPointNumber);
             if (gap == 2 || gap == 6)
             {
                 bool longSide = true;//沿着板件的长度方向    

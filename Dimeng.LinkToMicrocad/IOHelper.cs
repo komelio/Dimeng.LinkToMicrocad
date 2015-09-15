@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Dimeng.LinkToMicrocad
 {
@@ -24,6 +25,17 @@ namespace Dimeng.LinkToMicrocad
                     CopyDirectory(fsi.FullName, destName);
                 }
             }
+        }
+
+        /// <summary>
+        /// 将文件名中不合法的字符进行过滤，如各种/\之类的符号，主要不要包含后缀及文件夹路径
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static string GetRegularFileName(string filename)
+        {
+            Regex containsABadCharacter = new Regex("[\\/:*?\"<>|]+");
+            return containsABadCharacter.Replace(filename, "_");
         }
     }
 }

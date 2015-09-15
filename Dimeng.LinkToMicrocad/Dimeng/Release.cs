@@ -27,15 +27,15 @@ namespace Dimeng.LinkToMicrocad
             //getReleaseNumber(path);
 
             this.Library = Path.Combine(folderPath, "Products");
-            Logger.GetLogger().Debug(string.Format("Product Library:{0}", this.Library));
+            Logger.GetLogger().Info(string.Format("Product Library:{0}", this.Library));
             this.MicrovellumData = folderPath;
-            Logger.GetLogger().Debug(string.Format("MicrovellumData:{0}", this.MicrovellumData));
+            Logger.GetLogger().Info(string.Format("MicrovellumData:{0}", this.MicrovellumData));
             this.Subassemblies = Path.Combine(folderPath, "Subassemblies");
-            Logger.GetLogger().Debug(string.Format("Subassemblies:{0}", this.Subassemblies));
+            Logger.GetLogger().Info(string.Format("Subassemblies:{0}", this.Subassemblies));
             this.Template = Path.Combine(folderPath, "Template");
-            Logger.GetLogger().Debug(string.Format("Template:{0}", this.Template));
+            Logger.GetLogger().Info(string.Format("Template:{0}", this.Template));
             this.Toolfiles = Path.Combine(folderPath, "Toolfiles");
-            Logger.GetLogger().Debug(string.Format("Toolfiles:{0}", this.Toolfiles));
+            Logger.GetLogger().Info(string.Format("Toolfiles:{0}", this.Toolfiles));
 
             loadToolfile();
         }
