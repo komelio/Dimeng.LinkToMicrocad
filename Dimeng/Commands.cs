@@ -57,7 +57,7 @@ namespace Dimeng
                 bug.ShowDialog();
             }
 
-            //MessageBox.Show("new_dm");
+            System.Windows.MessageBox.Show("new_dm");
         }
 
         [CommandMethod("AK", "Del_dm", CommandFlags.Modal)]

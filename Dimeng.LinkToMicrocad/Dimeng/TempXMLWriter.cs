@@ -239,7 +239,7 @@ namespace Dimeng.LinkToMicrocad
 
                     xg.Add(new XAttribute("A_44", xscale));
                     xg.Add(new XAttribute("A_45", yscale));
-                    xg.Add(new XAttribute("A_42", -0.6+(m.Part.CenterVector.X-m.Part.Width/2)/m.Part.Width));//x offset
+                    xg.Add(new XAttribute("A_42", -0.6*1000/m.Part.Width+(m.Part.CenterVector.X-m.Part.Width/2)/m.Part.Width));//x offset
                     xg.Add(new XAttribute("A_43", -(m.Part.CenterVector.Z-m.Part.Length/2)/m.Part.Length));//y offset
                     tabNode.Add(xg);
                     i++;
@@ -291,7 +291,7 @@ namespace Dimeng.LinkToMicrocad
 
                     xg.Add(new XAttribute("A_44", xscale));
                     xg.Add(new XAttribute("A_45", yscale));
-                    xg.Add(new XAttribute("A_42", -0.6+(m.Part.CenterVector.X-m.Part.Width/2)/m.Part.Width));//x offset
+                    xg.Add(new XAttribute("A_42", -600/m.Part.Width+(m.Part.CenterVector.X-m.Part.Width/2)/m.Part.Width));//x offset
                     xg.Add(new XAttribute("A_43", -(m.Part.CenterVector.Z - m.Part.Length / 2) / m.Part.Length));//y offset
                     xmlGroups.Add(xg);
                     i++;
