@@ -25,6 +25,7 @@ using System.Windows.Shapes;
 using SpreadsheetGear;
 using Dimeng.LinkToMicrocad.Logging;
 using Dimeng.LinkToMicrocad.Prompts.Subassemblies;
+using Dimeng.LinkToMicrocad;
 
 namespace Dimeng.WoodEngine.Prompts
 {
@@ -223,6 +224,7 @@ namespace Dimeng.WoodEngine.Prompts
                     tb.SetBinding(TextBox.VisibilityProperty, new Binding("Visible") { Converter = new PromptValueToVisibilityConverter() });
                     tb.SetBinding(TextBox.IsEnabledProperty, new Binding("IsEnabled"));
                     tb.SetBinding(TextBox.ToolTipProperty, new Binding("HelpMessage"));
+                    tb.MouseEnter += mouseEnter;
                     leftSP.Children.Add(tb);
 
                     TextBlock error = new TextBlock();
@@ -243,6 +245,7 @@ namespace Dimeng.WoodEngine.Prompts
                     cb.SetBinding(CheckBox.ContentProperty, new Binding("Name"));
                     cb.SetBinding(CheckBox.VisibilityProperty, new Binding("Visible") { Converter = new PromptValueToVisibilityConverter() });
                     cb.SetBinding(CheckBox.ToolTipProperty, new Binding("HelpMessage"));
+                    cb.MouseEnter += mouseEnter;
                     rightSP.Children.Add(cb);
                 }
                 else if (prompt.ControlType == ControlType.ComboBox)
@@ -262,6 +265,7 @@ namespace Dimeng.WoodEngine.Prompts
                     combo.SetBinding(ComboBox.SelectedValueProperty, new Binding("PromptValue") { Converter = new PromptValueToIntConverter() });//
                     combo.SetBinding(ComboBox.VisibilityProperty, new Binding("Visible") { Converter = new PromptValueToVisibilityConverter() });
                     combo.SetBinding(ComboBox.ToolTipProperty, new Binding("HelpMessage"));
+                    combo.MouseEnter += mouseEnter;
                     combo.ItemsSource = prompt.ComboBoxItemsString.Split('|');
 
                     //DataTemplate dt = new DataTemplate();
@@ -290,6 +294,7 @@ namespace Dimeng.WoodEngine.Prompts
                     rb.SetBinding(RadioButton.ContentProperty, new Binding("Name"));
                     rb.SetBinding(RadioButton.IsCheckedProperty, new Binding("PromptValue") { Converter = new PromptValueToCheckedConverter() });
                     rb.SetBinding(RadioButton.VisibilityProperty, new Binding("Visible") { Converter = new PromptValueToVisibilityConverter() });
+                    rb.MouseEnter += mouseEnter;
                     spinsder.Children.Add(rb);
 
                     for (int x = i + 1; x < prompts.Count; x++)
@@ -308,11 +313,67 @@ namespace Dimeng.WoodEngine.Prompts
                         rb2.SetBinding(RadioButton.ContentProperty, new Binding("Name"));
                         rb2.SetBinding(RadioButton.IsCheckedProperty, new Binding("PromptValue") { Converter = new PromptValueToCheckedConverter() });
                         rb2.SetBinding(RadioButton.VisibilityProperty, new Binding("Visible") { Converter = new PromptValueToVisibilityConverter() });
+                        rb2.MouseEnter += mouseEnter;
                         spinsder.Children.Add(rb2);
 
                     }
                 }
             }
+        }
+
+        void mouseEnter(object sender, MouseEventArgs e)
+        {
+            PromptItem p = ((Control)e.OriginalSource).DataContext as PromptItem;
+            if (p == null)
+            {
+                Logger.GetLogger().Debug("promptItem is null");
+            }
+            //if(string.IsNullOrEmpty(p.Picture))
+            //{
+            //    return;
+            //}
+
+            string imagePath = getImagePath(p);
+
+            if (System.IO.File.Exists(imagePath))
+            {
+                this.image.Source = new BitmapImage(new Uri(imagePath));
+            }
+            else
+            {
+                this.image.Source = null;
+            }
+        }
+
+        void tb_GotFocus(object sender, RoutedEventArgs e)
+        {
+            PromptItem p = ((TextBox)e.OriginalSource).DataContext as PromptItem;
+            if (p == null)
+            {
+                Logger.GetLogger().Debug("promptItem is null");
+            }
+            //if(string.IsNullOrEmpty(p.Picture))
+            //{
+            //    return;
+            //}
+
+            string imagePath = getImagePath(p);
+
+            if (System.IO.File.Exists(imagePath))
+            {
+                this.image.Source = new BitmapImage(new Uri(imagePath));
+            }
+            else
+            {
+                this.image.Source = null;
+            }
+        }
+
+        private static string getImagePath(PromptItem p)
+        {
+            string imagePath = System.IO.Path.Combine(Context.GetContext().MVDataContext.GetLatestRelease().MicrovellumData,
+                "Graphics", "Product Prompt Pictures", p.Picture);
+            return imagePath;
         }
 
         /// <summary>
@@ -408,7 +469,8 @@ namespace Dimeng.WoodEngine.Prompts
 
         private void SubassemblyMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            SubassembliesViewModel viewmodel = new SubassembliesViewModel(this.ViewModel.Book.Worksheets["Subassemblies"].Cells);
+            SubassembliesViewModel viewmodel =
+                new SubassembliesViewModel(this.ViewModel.Book.Worksheets["Subassemblies"].Cells);
             viewmodel.BookSet = this.ViewModel.BookSet;
             viewmodel.Library = this.ViewModel.Library;
             viewmodel.ProjectPath = this.ViewModel.ProjectPath;
@@ -432,6 +494,37 @@ namespace Dimeng.WoodEngine.Prompts
                 item.Header = viewModel.Calcuators[i].Name;
                 this.CalculatorMenuItem.Items.Add(item);
                 this.CalculatorMenuItem.IsEnabled = true;//改为可用
+            }
+        }
+
+        /// <summary>
+        /// 禁止在控件上右键弹出菜单
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tabAll_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DependencyObject depObj = (DependencyObject)e.OriginalSource;
+            Logger.GetLogger().Debug("depObj is " + depObj.GetType());
+            while ((depObj != null) && !(depObj is ComboBox))
+            {
+                depObj = VisualTreeHelper.GetParent(depObj);
+            }
+
+            if (depObj == null)
+            {
+                return;
+            }
+
+            if (!(depObj is ComboBox))
+            {
+                Logger.GetLogger().Debug("depObj is not combox!");
+                tabAll.ContextMenu.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                Logger.GetLogger().Debug("depOjb is combox!");
+                tabAll.ContextMenu.Visibility = Visibility.Collapsed;
             }
         }
     }

@@ -8,61 +8,65 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="45"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
         <Image Source="images/pauchie-title.png" />
-        <Expander Header="产品"  Grid.Row="2" Margin="45,0,45,10" IsExpanded="True" >
-            <ListView Margin="10,0,0,0" BorderBrush="{x:Null}" ItemsSource="{Binding Products}" BorderThickness="0">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="名称" Width="200" DisplayMemberBinding="{Binding Description}"/>
-                        <GridViewColumn Header="编号" Width="120" DisplayMemberBinding="{Binding Handle}"/>
-                        <GridViewColumn Header="宽度" Width="80" DisplayMemberBinding="{Binding Width}"/>
-                        <GridViewColumn Header="高度" Width="80" DisplayMemberBinding="{Binding Height}"/>
-                        <GridViewColumn Header="深度" Width="80" DisplayMemberBinding="{Binding Depth}"/>
-                        <GridViewColumn Header="注解" Width="105" DisplayMemberBinding="{Binding Comments}"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </Expander>
-        <Expander Header="装饰条"  Grid.Row="3" Margin="45,0,45,10" >
-            <ListView Margin="10,0,0,0" BorderBrush="{x:Null}">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="产品"/>
-                        <GridViewColumn Header="产品名"/>
-                        <GridViewColumn Header="产品名称"/>
-                        <GridViewColumn Header="产品名称"/>
-                        <GridViewColumn Header="产品名称"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </Expander>
-        <Expander Header="五金"  Grid.Row="4" Margin="45,0,45,10" >
-            <ListView Margin="10,0,0,0" BorderBrush="{x:Null}" >
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="产品"/>
-                        <GridViewColumn Header="产品名"/>
-                        <GridViewColumn Header="产品名称"/>
-                        <GridViewColumn Header="产品名称"/>
-                        <GridViewColumn Header="产品名称"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </Expander>
+        <ScrollViewer Grid.Row="1" >
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="45"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Expander Header="产品"  Grid.Row="1" Margin="45,0,45,10" IsExpanded="True" >
+                    <ListView Margin="10,0,0,0" BorderBrush="{x:Null}" ItemsSource="{Binding Products}" BorderThickness="0">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="名称" Width="200" DisplayMemberBinding="{Binding Description}"/>
+                                <GridViewColumn Header="编号" Width="120" DisplayMemberBinding="{Binding Handle}"/>
+                                <GridViewColumn Header="宽度" Width="80" DisplayMemberBinding="{Binding Width}"/>
+                                <GridViewColumn Header="高度" Width="80" DisplayMemberBinding="{Binding Height}"/>
+                                <GridViewColumn Header="深度" Width="80" DisplayMemberBinding="{Binding Depth}"/>
+                                <GridViewColumn Header="注解" Width="80" DisplayMemberBinding="{Binding Comments}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Expander>
+                <Expander Header="装饰条"  Grid.Row="2" Margin="45,0,45,10" IsExpanded="True">
+                    <ListView Margin="10,0,0,0" BorderBrush="{x:Null}" ItemsSource="{Binding Mouldings}" BorderThickness="0" >
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="产品" DisplayMemberBinding="{Binding Description}" Width="200"/>
+                                <GridViewColumn Header="类型" DisplayMemberBinding="{Binding Kind}" Width="120"/>
+                                <GridViewColumn Header="长度" DisplayMemberBinding="{Binding Length}" Width="80"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Expander>
+                <Expander Header="五金"  Grid.Row="3" Margin="45,0,45,10" >
+                    <ListView Margin="10,0,0,0" BorderBrush="{x:Null}" >
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="产品"/>
+                                <GridViewColumn Header="产品名"/>
+                                <GridViewColumn Header="产品名称"/>
+                                <GridViewColumn Header="产品名称"/>
+                                <GridViewColumn Header="产品名称"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Expander>
+            </Grid>
+        </ScrollViewer>
         <ProgressBar Grid.Row="6"  x:Name="progressBar" Height="5" VerticalAlignment="Bottom" Background="{x:Null}" Foreground="Red" BorderBrush="{x:Null}" Value="{Binding ProgressValue}" Maximum="{Binding ProgressMax}" BorderThickness="0"/>
         <Grid Grid.Row="7" Background="#FF35302A">
             <Button Content="上传" HorizontalAlignment="Left" Margin="568,10,0,0" VerticalAlignment="Top" Width="90" Height="25" Command="{Binding StartCommand}"/>
             <Button Content="关闭" HorizontalAlignment="Left" Margin="665,10,0,0" VerticalAlignment="Top" Width="90" Height="25" Click="Button_Click" />
             <TextBlock HorizontalAlignment="Left" Margin="29,10,0,0" TextWrapping="Wrap" Text="{Binding CurrentProjectPath}" VerticalAlignment="Top" Foreground="White"/>
             <Button Content="浏览" HorizontalAlignment="Left" Margin="473,10,0,0" VerticalAlignment="Top" Width="90" Height="25" Command="{Binding BrowserCommand}"/>
+            <Button Content="启动CAD" HorizontalAlignment="Left" Margin="378,10,0,0" VerticalAlignment="Top" Width="90" Height="25" Command="{Binding StartCADCommand}"/>
         </Grid>
     </Grid>
 </Window>

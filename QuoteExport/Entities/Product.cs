@@ -15,5 +15,18 @@ namespace QuoteExport.Entities
         public double Height { get; set; }
         public double Depth { get; set; }
         public string Comments { get; set; }
+        public string MatFile { get; set; }//规格组名称
+        public string FileName { get; set; }
+        public string ReleaseNumber { get; set; }
+        public string ReleaseDate { get; set; }
+        public string Parent1 { get; set; }
+        public string Parent2 { get; set; }
+        public string Parent3 { get; set; }
+        public string Parent4 { get; set; }
+        public string Parent5 { get; set; }
+        public string Parent6 { get; set; }
+        public string Parent7 { get; set; }
+        public string Parent8 { get; set; }
+        public string Parent9 { get; set; }
     }
 }

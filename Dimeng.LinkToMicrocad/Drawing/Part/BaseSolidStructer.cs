@@ -14,12 +14,32 @@ namespace Dimeng.LinkToMicrocad.Drawing
 {
     public class BaseSolidStructer
     {
-        public Solid3d Draw(Part part)
+        Database db;
+        public BaseSolidStructer(Database db)
         {
-            //Solid3d solid = new Solid3d();
-            //solid.CreateBox(part.Length, part.Width, part.Thickness);
-            //return solid;
+            this.db = db;
+        }
 
+        public ObjectId Draw(Part part)
+        {
+            using (Transaction trans = db.TransactionManager.StartTransaction())
+            {
+                BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
+                BlockTableRecord btr = (BlockTableRecord)trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
+
+                Solid3d panel = getPartSolid(part);
+
+                var id = btr.AppendEntity(panel);
+                trans.AddNewlyCreatedDBObject(panel, true);
+
+                trans.Commit();
+
+                return id;
+            }
+        }
+
+        private Solid3d getPartSolid(Part part)
+        {
             Polyline routePLine = new Polyline();
             Polyline pline = getRectanglePolyline(part);
             //addToDrawing(pline);

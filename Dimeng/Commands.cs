@@ -6,6 +6,7 @@ using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.EditorInput;
 using Dimeng.LinkToMicrocad;
 using Dimeng.LinkToMicrocad.Logging;
+using System.Windows;
 
 [assembly: CommandClass(typeof(Dimeng.Commands))]
 
@@ -57,7 +58,7 @@ namespace Dimeng
                 bug.ShowDialog();
             }
 
-            System.Windows.MessageBox.Show("new_dm");
+            //MessageBox.Show("new_dm");
         }
 
         [CommandMethod("AK", "Del_dm", CommandFlags.Modal)]

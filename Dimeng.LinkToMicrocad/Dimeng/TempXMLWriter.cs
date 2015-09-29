@@ -155,12 +155,27 @@ namespace Dimeng.LinkToMicrocad
             {
                 if (ui.Value != null)
                 {
-                    xml.Add(new XElement("UIVar",
-                                new XAttribute("Value", ui.Value),
-                                new XAttribute("Name", ui.Name)));
+                    if(ui.Name!="DrawTimeStamp")
+                    {
+                        xml.Add(new XElement("UIVar",
+                                    new XAttribute("Value", ui.Value),
+                                    new XAttribute("Name", ui.Name)));
+                    }
+                    else
+                    {
+                        xml.Add(new XElement("UIVar",
+                                    new XAttribute("Value", DateTime.Now.ToString("yyyyMMddHHmm")),
+                                    new XAttribute("Name", ui.Name)));
+                    }
                 }
             }
 
+            if (akproduct.UIVars.Find(it => it.Name == "DrawTimeStamp") == null)
+            {
+                xml.Add(new XElement("UIVar",
+                    new XAttribute("Value", DateTime.Now.ToString("yyyyMMddHHmm")),
+                    new XAttribute("Name", "DrawTimeStamp")));
+            }
             //getMaterialDictionary(list);
 
             xml.Add(getTab2(akproduct, list));

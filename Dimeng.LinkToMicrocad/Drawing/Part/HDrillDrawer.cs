@@ -12,7 +12,14 @@ namespace Dimeng.LinkToMicrocad.Drawing
 {
     public class HDrillDrawer
     {
-        public void Draw(Solid3d panel, Part p)
+        private Database db;
+
+        public HDrillDrawer(Database db)
+        {
+            this.db = db;
+        }
+
+        public void Draw(ObjectId panelId, Part p)
         {
             if (p.HDrillings.Count > 0)
             {
@@ -30,33 +37,39 @@ namespace Dimeng.LinkToMicrocad.Drawing
                     continue;
                 }
 
-                //Step1:创建三维实体
-                Solid3d hole = new Solid3d();
-                hole.CreateFrustum(hdrill.Depth * 2, hdrill.Diameter / 2, hdrill.Diameter / 2, hdrill.Diameter / 2);
+                using (Transaction tran = db.TransactionManager.StartTransaction())
+                {
+                    Solid3d panel = tran.GetObject(panelId, OpenMode.ForWrite) as Solid3d;
 
-                //Step2：在原点先进行旋转
-                hole.TransformBy(Matrix3d.Rotation(System.Math.PI / 2, GetBoreDirection(hdrill), new Point3d()));//将水平孔的实体根据孔是左右方向或水平方向进行旋转
+                    //Step1:创建三维实体
+                    Solid3d hole = new Solid3d();
+                    hole.CreateFrustum(hdrill.Depth * 2, hdrill.Diameter / 2, hdrill.Diameter / 2, hdrill.Diameter / 2);
 
-                //Step3:获取孔以MP为原点的坐标,并以此坐标进行旋转
-                Point3d holePosition = GetBorePosition(hdrill);
-                holePosition = holePosition.TransformBy(Matrix3d.AlignCoordinateSystem(new Point3d(),
-                                                                                       Vector3d.XAxis,
-                                                                                       Vector3d.YAxis,
-                                                                                       Vector3d.ZAxis,
-                                                                                       hdrill.Part.MPPoint,
-                                                                                       hdrill.Part.MPXAxis,
-                                                                                       hdrill.Part.MPYAxis,
-                                                                                       hdrill.Part.MPZAxis));
+                    //Step2：在原点先进行旋转
+                    hole.TransformBy(Matrix3d.Rotation(System.Math.PI / 2, GetBoreDirection(hdrill), new Point3d()));//将水平孔的实体根据孔是左右方向或水平方向进行旋转
 
-                hole.TransformBy(Matrix3d.AlignCoordinateSystem(new Point3d(),
-                                                                Vector3d.XAxis,
-                                                                Vector3d.YAxis,
-                                                                Vector3d.ZAxis,
-                                                                holePosition,
-                                                                hdrill.Part.MPXAxis,
-                                                                hdrill.Part.MPYAxis,
-                                                                hdrill.Part.MPZAxis));
-                panel.BooleanOperation(BooleanOperationType.BoolSubtract, hole);//对板件的实体做差集，形成孔位
+                    //Step3:获取孔以MP为原点的坐标,并以此坐标进行旋转
+                    Point3d holePosition = GetBorePosition(hdrill);
+                    holePosition = holePosition.TransformBy(Matrix3d.AlignCoordinateSystem(new Point3d(),
+                                                                                           Vector3d.XAxis,
+                                                                                           Vector3d.YAxis,
+                                                                                           Vector3d.ZAxis,
+                                                                                           hdrill.Part.MPPoint,
+                                                                                           hdrill.Part.MPXAxis,
+                                                                                           hdrill.Part.MPYAxis,
+                                                                                           hdrill.Part.MPZAxis));
+
+                    hole.TransformBy(Matrix3d.AlignCoordinateSystem(new Point3d(),
+                                                                    Vector3d.XAxis,
+                                                                    Vector3d.YAxis,
+                                                                    Vector3d.ZAxis,
+                                                                    holePosition,
+                                                                    hdrill.Part.MPXAxis,
+                                                                    hdrill.Part.MPYAxis,
+                                                                    hdrill.Part.MPZAxis));
+                    panel.BooleanOperation(BooleanOperationType.BoolSubtract, hole);//对板件的实体做差集，形成孔位
+                    tran.Commit();
+                }
             }
         }
 

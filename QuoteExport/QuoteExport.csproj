@@ -67,6 +67,7 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="SpreadsheetGear2012.Core, Version=7.1.1.120, Culture=neutral, PublicKeyToken=39c186f5904944ec, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -101,9 +102,12 @@
     <Compile Include="ConfigurationForm.Designer.cs">
       <DependentUpon>ConfigurationForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Entities\Moulding.cs" />
     <Compile Include="FTP\FTPClient.cs" />
     <Compile Include="FTP\FTPdirectory.cs" />
     <Compile Include="FTP\FTPfileInfo.cs" />
+    <Compile Include="IOHelper.cs" />
+    <Compile Include="UnitConverter.cs" />
     <Compile Include="Web References\Pauchie\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

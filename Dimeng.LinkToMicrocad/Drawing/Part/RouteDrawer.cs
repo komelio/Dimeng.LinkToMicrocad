@@ -17,12 +17,15 @@ namespace Dimeng.LinkToMicrocad.Drawing
     public class RouteDrawer
     {
         ToolFile toolfile;
-        public RouteDrawer(ToolFile toolfile)
+        Database db;
+
+        public RouteDrawer(ToolFile toolfile, Database db)
         {
             this.toolfile = toolfile;
+            this.db = db;
         }
 
-        public void Draw(Solid3d solid, Part part)
+        public void Draw(ObjectId panelId, Part part)
         {
             foreach (var r in part.Routings)
             {
@@ -41,9 +44,12 @@ namespace Dimeng.LinkToMicrocad.Drawing
                     throw new Exception("Tool diameter must above zero ! -" + r.ToolName);
                 }
 
+                using (Transaction tran = db.TransactionManager.StartTransaction())
                 using (Polyline3d plSection = getRouteSharp(tool, r))
                 using (Polyline3d plSectionHalf = getRouteSharpHalf(tool, r))
                 {
+                    Solid3d solid = tran.GetObject(panelId, OpenMode.ForWrite) as Solid3d;
+
                     double depth = r.Points.Max(it => it.Z);
 
                     foreach (var s in getPathSolids(plSection, plSectionHalf, r, tool))

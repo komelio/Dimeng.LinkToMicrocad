@@ -317,7 +317,6 @@ namespace Dimeng.WoodEngine.Prompts
             }
         }
 
-
         public string ProjectPath { get; private set; }
 
         public Action<List<PromptItem>> ControlTypeChangedAction { get; set; }

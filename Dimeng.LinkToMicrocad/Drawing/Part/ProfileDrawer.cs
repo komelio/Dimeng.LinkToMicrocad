@@ -24,7 +24,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
             this.graphicPath = graphicPath;
         }
 
-        public void Draw(Solid3d solid, Part part)
+        public void Draw(ObjectId panelId, Part part)
         {
             foreach (var profile in part.Profiles)
             {
@@ -32,6 +32,8 @@ namespace Dimeng.LinkToMicrocad.Drawing
                 {
                     BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
                     BlockTableRecord btr = (BlockTableRecord)trans.GetObject(db.CurrentSpaceId, OpenMode.ForWrite);
+
+                    Solid3d panel = trans.GetObject(panelId, OpenMode.ForWrite) as Solid3d;
 
                     Polyline section;//截面
 
@@ -107,7 +109,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
                         sob.Bank = true;
 
                         proSolid.CreateSweptSolid(section, line, sob.ToSweepOptions());
-                        solid.BooleanOperation(BooleanOperationType.BoolSubtract, proSolid);
+                        panel.BooleanOperation(BooleanOperationType.BoolSubtract, proSolid);
 
                         line.Dispose();
                         proSolid.Dispose();

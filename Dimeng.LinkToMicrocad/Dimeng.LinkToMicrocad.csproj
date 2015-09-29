@@ -137,11 +137,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ACADCommands.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ACADCommands.resx</DependentUpon>
-    </Compile>
     <Compile Include="BugReport\BugReportViewModel.cs" />
     <Compile Include="BugReport\BugReportWindow.xaml.cs">
       <DependentUpon>BugReportWindow.xaml</DependentUpon>
@@ -269,7 +264,6 @@
     <Compile Include="Math\GetOffsetCurveBulge.cs" />
     <Compile Include="Math\MathHelper.cs" />
     <Compile Include="myPlugin.cs" />
-    <Compile Include="ACADCommands.cs" />
     <Compile Include="OffsetForPolyline\CircleEquation.cs" />
     <Compile Include="OffsetForPolyline\Clipping.cs" />
     <Compile Include="OffsetForPolyline\Equation.cs" />
@@ -368,11 +362,6 @@
     <Compile Include="ViewModel\ViewModelLocator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ACADCommands.resx">
-      <DependentUpon>ACADCommands.cs</DependentUpon>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ACADCommands.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="PolylineGetter\Tools\myCommands.resx">
       <DependentUpon>myCommands.cs</DependentUpon>
       <Generator>ResXFileCodeGenerator</Generator>
