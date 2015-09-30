@@ -384,12 +384,27 @@ namespace QuoteExport
                 {
                     conn.Open();
 
-                    string selectStr = string.Format("Select * from ProductList Where Handle='{0}'", x.Attribute("DMID").Value.Replace("_", ""));
+                    string[] dmids = x.Attribute("DMID").Value.Replace("_", "").Split('-');
+
+                    string id = dmids[0];
+                    string timestamp = (dmids.Length > 1) ? dmids[1] : string.Empty;
+
+                    string selectStr = string.Format("Select * from ProductList Where Handle='{0}'", id);
                     var product = conn.Query<Product>(selectStr, null).SingleOrDefault<Product>();
                     if (product == null)
                     {
                         MessageBox.Show(selectStr);
                         continue;
+                    }
+
+                    string timestampPath = Path.Combine(this.currentProjectPath, "DMS", "Output", product.Handle, timestamp + ".time");
+                    if (File.Exists(timestampPath))
+                    {
+                        product.IsDataMatch = true;
+                    }
+                    else
+                    {
+                        product.IsDataMatch = false;
                     }
 
                     Products.Add(product);

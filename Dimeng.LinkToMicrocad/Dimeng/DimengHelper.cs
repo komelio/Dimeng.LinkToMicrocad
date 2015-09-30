@@ -225,7 +225,9 @@ namespace Dimeng.LinkToMicrocad
             //生成各种给erp的文件
             try
             {
-                //Product product = (Product)e.Argument;
+                Product product = (Product)e.Argument;
+
+                TimeStampMarker.Mark(product);
                 //var exporter = new ERPExporter(product);
 
                 //Logger.GetLogger().Info("Start exporting excel files....");

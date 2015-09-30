@@ -43,7 +43,7 @@ namespace ADLauncher
         private void DoWork(object sender, DoWorkEventArgs e)
         {
             this.ProgressValue = 0;
-
+            return;
             try
             {
                 UpdateVersion verLocal = checkLocalVersion();

@@ -28,5 +28,6 @@ namespace QuoteExport.Entities
         public string Parent7 { get; set; }
         public string Parent8 { get; set; }
         public string Parent9 { get; set; }
+        public bool IsDataMatch { get; set; }
     }
 }

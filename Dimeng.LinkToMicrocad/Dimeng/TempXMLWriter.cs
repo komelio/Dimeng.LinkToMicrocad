@@ -101,7 +101,7 @@ namespace Dimeng.LinkToMicrocad
                                     new XAttribute("Text", m.Key),
                                     new XAttribute("Material", "material" + (mid + i).ToString()),
                                     new XAttribute("A_41", texture.ImageName)
-                                    //new XAttribute("A_47", texture.A47)
+                        //new XAttribute("A_47", texture.A47)
                                ));
 
                     i++;
@@ -134,7 +134,7 @@ namespace Dimeng.LinkToMicrocad
                                     new XAttribute("Text", m.Key),
                                     new XAttribute("Material", "material" + (mid + i).ToString()),
                                     new XAttribute("A_41", texture.ImageName)
-                                    //new XAttribute("A_47", texture.A47)
+                        //new XAttribute("A_47", texture.A47)
                                ));
 
                     i++;
@@ -155,18 +155,9 @@ namespace Dimeng.LinkToMicrocad
             {
                 if (ui.Value != null)
                 {
-                    if(ui.Name!="DrawTimeStamp")
-                    {
-                        xml.Add(new XElement("UIVar",
-                                    new XAttribute("Value", ui.Value),
-                                    new XAttribute("Name", ui.Name)));
-                    }
-                    else
-                    {
-                        xml.Add(new XElement("UIVar",
-                                    new XAttribute("Value", DateTime.Now.ToString("yyyyMMddHHmm")),
-                                    new XAttribute("Name", ui.Name)));
-                    }
+                    xml.Add(new XElement("UIVar",
+                                new XAttribute("Value", ui.Value),
+                                new XAttribute("Name", ui.Name)));
                 }
             }
 
@@ -196,7 +187,7 @@ namespace Dimeng.LinkToMicrocad
             tabNode.Add(new XAttribute("File", "DMS.xml"));
             tabNode.Add(new XAttribute("Path", akproduct.GetUIVarValue("CatalogPath")));
             tabNode.Add(new XAttribute("Description", akproduct.Tab.Description));
-            tabNode.Add(new XAttribute("DMID", akproduct.Tab.DMID));
+            tabNode.Add(new XAttribute("DMID", string.Format("{0}-{1}",akproduct.Tab.DMID,DateTime.Now.ToString("yyyyMMddHHmm"))));
             tabNode.Add(new XAttribute("ID", akproduct.Tab.ID));
             tabNode.Add(new XAttribute("Kind", "kDiMengObj"));
             tabNode.Add(new XAttribute("Category", "Accessory"));
@@ -246,7 +237,7 @@ namespace Dimeng.LinkToMicrocad
                                     new XAttribute("Text", m.Part.LayerName3D),
                                     new XAttribute("Material", "material" + (mid + i).ToString()),
                                     new XAttribute("A_41", m.Texture.ImageName)
-                                   
+
                                     );
 
                     double yscale = 600 / m.Part.Length;
@@ -254,8 +245,8 @@ namespace Dimeng.LinkToMicrocad
 
                     xg.Add(new XAttribute("A_44", xscale));
                     xg.Add(new XAttribute("A_45", yscale));
-                    xg.Add(new XAttribute("A_42", -0.6*1000/m.Part.Width+(m.Part.CenterVector.X-m.Part.Width/2)/m.Part.Width));//x offset
-                    xg.Add(new XAttribute("A_43", -(m.Part.CenterVector.Z-m.Part.Length/2)/m.Part.Length));//y offset
+                    xg.Add(new XAttribute("A_42", -0.6 * 1000 / m.Part.Width + (m.Part.CenterVector.X - m.Part.Width / 2) / m.Part.Width));//x offset
+                    xg.Add(new XAttribute("A_43", -(m.Part.CenterVector.Z - m.Part.Length / 2) / m.Part.Length));//y offset
                     tabNode.Add(xg);
                     i++;
                 }
@@ -276,7 +267,7 @@ namespace Dimeng.LinkToMicrocad
             long mid = Context.GetContext().MVDataContext.MaterialCounter;
             foreach (var m in list)
             {
-                if (m.Part== null)
+                if (m.Part == null)
                 {
                     xmlGroups.Add(new XElement("G",
                                     new XAttribute("Name", "material" + (mid + i).ToString()),
@@ -306,7 +297,7 @@ namespace Dimeng.LinkToMicrocad
 
                     xg.Add(new XAttribute("A_44", xscale));
                     xg.Add(new XAttribute("A_45", yscale));
-                    xg.Add(new XAttribute("A_42", -600/m.Part.Width+(m.Part.CenterVector.X-m.Part.Width/2)/m.Part.Width));//x offset
+                    xg.Add(new XAttribute("A_42", -600 / m.Part.Width + (m.Part.CenterVector.X - m.Part.Width / 2) / m.Part.Width));//x offset
                     xg.Add(new XAttribute("A_43", -(m.Part.CenterVector.Z - m.Part.Length / 2) / m.Part.Length));//y offset
                     xmlGroups.Add(xg);
                     i++;

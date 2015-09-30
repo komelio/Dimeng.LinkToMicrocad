@@ -1,4 +1,5 @@
-﻿using Dimeng.LinkToMicrocad.Logging;
+﻿using Dimeng.LinkToMicrocad.Dimeng.Export;
+using Dimeng.LinkToMicrocad.Logging;
 using Dimeng.WoodEngine.Entities;
 using Dimeng.WoodEngine.Entities.MachineTokens;
 using SpreadsheetGear;
@@ -53,9 +54,8 @@ namespace Dimeng.LinkToMicrocad
                 }
             }
 
-            IWorkbook book = Factory.GetWorkbook();
-            (new ExcelBuilder(this.product)).Build(book);
-            book.SaveAs(Path.Combine(path, string.Format("{0}.xlsx", prodakt.Handle)), FileFormat.OpenXMLWorkbook);
+            string xmlPath = Path.Combine(path, string.Format("{0}.xml", prodakt.Handle));
+            (new PushXMLExporter(product, xmlPath)).Build();
 
             string pathToMachineCode = Path.Combine(path, "Machinings");
             if (!Directory.Exists(pathToMachineCode))

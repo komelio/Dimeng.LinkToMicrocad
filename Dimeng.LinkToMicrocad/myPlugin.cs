@@ -15,7 +15,7 @@ namespace Dimeng.LinkToMicrocad
         void IExtensionApplication.Initialize()
         {
 #if DEBUG
-            Dimeng.LinkToMicrocad.Logging.ConsoleHelper.Show();
+            Logging.ConsoleHelper.Show();
 #endif
             Logger.GetLogger().Debug("-----------");
             Logger.GetLogger().Debug("Program started");

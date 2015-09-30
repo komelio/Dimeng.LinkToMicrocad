@@ -47,7 +47,19 @@ namespace Dimeng.LinkToMicrocad
             product.Tab.ID = tabNode.Attribute("ID").Value;
             Logger.GetLogger().Info("Produt ID:" + product.Tab.ID);
 
-            product.Tab.DMID = tabNode.Attribute("DMID").Value.Replace("_", "");
+            //读取dmid和绘制的时间戳
+            string dmid = tabNode.Attribute("DMID").Value.Replace("_", "");//先去掉ad加上的下划线
+            string[] dmids = dmid.Split('-');
+            if (dmids.Length == 1)
+            {
+                product.Tab.DMID = dmid;
+            }
+            else
+            {
+                product.Tab.DMID = dmids[0];
+                product.Tab.TimeStamp = dmids[1];
+            }
+
             product.Tab.Photo = tabNode.Attribute("Photo").Value;
             product.Tab.Description = tabNode.Attribute("Descprition") == null ?
                                         string.Empty : tabNode.Attribute("Description").Value;
@@ -207,6 +219,7 @@ namespace Dimeng.LinkToMicrocad
         public double VarY { get; set; }
         public double VarZ { get; set; }
         public double VarElevation { get; set; }
+        public string TimeStamp { get; set; }//时间戳，用于后期检查数据是否匹配
     }
 
     public class UIVar

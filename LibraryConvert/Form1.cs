@@ -200,10 +200,6 @@ namespace LibraryConvert
 
 
             generateList(finalPath);
-
-
-
-
         }
 
         private void generateList(string finalPath)
