@@ -102,6 +102,8 @@
     <Compile Include="ConfigurationForm.Designer.cs">
       <DependentUpon>ConfigurationForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Converters\ProductDataStatusToColorConverter.cs" />
+    <Compile Include="Entities\Decco.cs" />
     <Compile Include="Entities\Moulding.cs" />
     <Compile Include="FTP\FTPClient.cs" />
     <Compile Include="FTP\FTPdirectory.cs" />

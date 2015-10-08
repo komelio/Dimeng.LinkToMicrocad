@@ -228,6 +228,8 @@ namespace Dimeng.LinkToMicrocad
                 Product product = (Product)e.Argument;
 
                 TimeStampMarker.Mark(product);
+                (new DataExporter(product)).Output();
+                //var exporter = new PartInfoExporter(product.CombinedParts,)
                 //var exporter = new ERPExporter(product);
 
                 //Logger.GetLogger().Info("Start exporting excel files....");

@@ -7,6 +7,11 @@ namespace QuoteExport.Entities
 {
     public class Product
     {
+        public Product()
+        {
+            IsExport = true;
+        }
+        public bool IsExport { get; set; }
         public string Description { get; set; }
         public string Handle { get; set; }
         public string ItemNumber { get; set; }

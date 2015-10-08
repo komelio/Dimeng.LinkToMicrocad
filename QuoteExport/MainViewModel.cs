@@ -160,6 +160,8 @@ namespace QuoteExport
 
                 loadMouldings(xml);
 
+                loadDeccos(xml);
+
                 //把moulding的数据以五金的形式插入到mv的工作任务中
                 //todo：只为了演示使用，将来要剔除
                 InsertMouldingProduct();
@@ -169,6 +171,22 @@ namespace QuoteExport
                 MessageBox.Show(error.Message + error.StackTrace);
             }
 
+        }
+
+        private void loadDeccos(XElement xml)
+        {
+            this.Deccos = new List<Decco>();
+            foreach (var xd in xml.Elements("Decco"))
+            {
+                Decco decco = new Decco();
+                decco.Name = xd.Attribute("Name").Value;
+                decco.Width = double.Parse(xd.Attribute("X").Value);
+                decco.Height = double.Parse(xd.Attribute("Z").Value);
+                decco.Depth = double.Parse(xd.Attribute("Y").Value);
+                decco.Reference = xd.Attribute("Reference").Value;
+
+                this.Deccos.Add(decco);
+            }
         }
 
         private void InsertMouldingProduct()
@@ -475,6 +493,7 @@ namespace QuoteExport
 
         public List<Product> Products { get; private set; }
         public List<Moulding> Mouldings { get; private set; }
+        public List<Decco> Deccos { get; private set; }
         public RelayCommand StartCommand { get; set; }
         public RelayCommand ShowConfiguration { get; set; }
         public RelayCommand BrowserCommand { get; set; }

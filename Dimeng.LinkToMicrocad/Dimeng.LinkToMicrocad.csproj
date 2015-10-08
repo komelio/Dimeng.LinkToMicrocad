@@ -151,9 +151,11 @@
     <Compile Include="Dimeng\AKProduct.cs" />
     <Compile Include="Dimeng\Context.cs" />
     <Compile Include="Dimeng\DimengHelper.cs" />
+    <Compile Include="Dimeng\Export\DataExporter.cs" />
     <Compile Include="Dimeng\Export\ERPExporter.cs" />
     <Compile Include="Dimeng\Export\ExcelBuilder.cs" />
     <Compile Include="Dimeng\Export\MachiningExporter.cs" />
+    <Compile Include="Dimeng\Export\PartInfoExporter.cs" />
     <Compile Include="Dimeng\Export\PartMachiningType.cs" />
     <Compile Include="Dimeng\Export\PauchieDrawerSubassembly.cs" />
     <Compile Include="Dimeng\Export\PauchieHardware.cs" />
