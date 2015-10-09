@@ -107,6 +107,17 @@ namespace Dimeng.LinkToMicrocad
                 product.TabA.ID = tabANode.Attribute("ID").Value;
                 Logger.GetLogger().Info("Produt ID:" + product.TabA.ID);
 
+                string dmid2 = tabANode.Attribute("DMID").Value.Replace("_", "");//先去掉ad加上的下划线
+                string[] dmid2s = dmid2.Split('-');
+                if (dmid2s.Length == 1)
+                {
+                    product.TabA.DMID = dmid2;
+                }
+                else
+                {
+                    product.TabA.DMID = dmid2s[0];
+                    product.TabA.TimeStamp = dmid2s[1];
+                }
                 product.TabA.DMID = tabANode.Attribute("DMID").Value.Replace("_", "");
                 product.TabA.Photo = tabANode.Attribute("Photo").Value;
                 product.TabA.Description = tabANode.Attribute("Descprition") == null ?
@@ -150,7 +161,18 @@ namespace Dimeng.LinkToMicrocad
                 return;
             }
 
-            mainA.Value = mainA.Value.Replace("_", "");//因为所有id都不能包含下划线
+            string dmid = mainA.Value.Replace("_", "");//先去掉ad加上的下划线
+            string[] dmids = dmid.Split('-');
+            if (dmids.Length == 1)
+            {
+                mainA.Value = dmid;
+            }
+            else
+            {
+                mainA.Value = dmids[0];
+                //product.Tab.TimeStamp = dmids[1];
+            }
+            //mainA.Value = mainA.Value.Replace("_", "");//因为所有id都不能包含下划线
 
             var refPoint = product.UIVars.Find(it => it.Name == "RefPoint");
             var position = product.UIVars.Find(it => it.Name == "Position");
