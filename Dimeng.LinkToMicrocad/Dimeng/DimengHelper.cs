@@ -1,4 +1,5 @@
-﻿using Autodesk.AutoCAD.Geometry;
+﻿using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.Geometry;
 using Dimeng.LinkToMicrocad.Drawing;
 using Dimeng.LinkToMicrocad.Logging;
 using Dimeng.WoodEngine.Business;
@@ -23,14 +24,15 @@ namespace Dimeng.LinkToMicrocad
 
         public void ShowPromptAndDrawBlock()
         {
+
+            string folderPath = getTempFolderPath(
+                Context.GetContext().AKInfo.Path);
+            string tempXMLPath = Path.Combine(folderPath,
+                "temp.xml");
+            AKProduct product = AKProduct.Load(tempXMLPath);
+
             try
             {
-                string folderPath = getTempFolderPath(
-                    Context.GetContext().AKInfo.Path);
-                string tempXMLPath = Path.Combine(folderPath,
-                    "temp.xml");
-                AKProduct product = AKProduct.Load(tempXMLPath);
-
                 string mvDataContextPath = product.Tab.CatalogPath;
                 mvDataContextPath = Path.Combine(Context.GetContext().AKInfo.Path, "catalog", "dms", "Library");
 
@@ -148,8 +150,47 @@ namespace Dimeng.LinkToMicrocad
             }
             catch (Exception error)
             {
-                //MessageBox.Show("绘制过程中发生错误，:(");
-                throw new Exception("绘制过程中发生错误，:(", error);
+                Logger.GetLogger().Error(error);
+                BugReportWindow bug = new BugReportWindow(new BugReportViewModel(error.Message));
+                bug.ShowDialog();
+
+                writeWrongDWGFile(product.Tab.VarX, product.Tab.VarZ, product.Tab.VarY, Path.Combine(folderPath, product.Tab.DWG + ".dwg"));
+            }
+        }
+
+        private void writeWrongDWGFile(double w, double h, double d, string savePath)
+        {
+            using (Database db = new Database())
+            {
+                Database oDb = HostApplicationServices.WorkingDatabase;
+                HostApplicationServices.WorkingDatabase = db;//重要，否则会导致很多问题，比如图层加入了却找不到
+
+                using (Transaction tran = db.TransactionManager.StartTransaction())
+                {
+                    BlockTable bt = (BlockTable)tran.GetObject(db.BlockTableId, OpenMode.ForRead);
+                    BlockTableRecord btr = (BlockTableRecord)tran.GetObject(db.CurrentSpaceId, OpenMode.ForWrite);
+
+                    Solid3d solid = new Solid3d();
+                    solid.ColorIndex = 1;
+                    solid.CreateBox(w, d, h);
+                    solid.TransformBy(Matrix3d.Displacement(new Vector3d(w / 2, -d / 2, h / 2)));
+
+                    DBText acText = new DBText();
+                    acText.Position = new Point3d(100, -100, 0);
+                    acText.Height = 50;
+                    acText.ColorIndex = 1;
+                    acText.TextString = "Error!";
+                    btr.AppendEntity(acText);
+                    tran.AddNewlyCreatedDBObject(acText, true);
+
+                    btr.AppendEntity(solid);
+                    tran.AddNewlyCreatedDBObject(solid, true);
+                    tran.Commit();
+                }
+
+                HostApplicationServices.WorkingDatabase = oDb;//重要，否则会导致很多问题，比如图层加入了却找不到
+                //另外先改回，在保存，否则会导致报错
+                db.SaveAs(savePath, DwgVersion.Newest);
             }
         }
 

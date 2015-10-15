@@ -61,16 +61,6 @@ namespace ADLauncher
                 xml.Save(writer);
             }
 
-            //MessageBox.Show("hdhehd");
-
-            //using (FileStream fs = new FileStream(erpxml, FileMode.CreateNew, FileAccess.Write, FileShare.Write))
-            //using (StreamWriter sw = new StreamWriter(fs, Encoding.Default))
-            //{
-            //    sw.WriteLine(@"<?xml version=""1.0"" encoding=""UTF-8"" ?>");
-            //    sw.WriteLine("<root>");
-            //    sw.WriteLine(string.Format(@"<f Name=""{0}"" Description=""{1}"" o=""N"" /> ", this.projectName, this.projectDescription));
-            //    sw.WriteLine(@"</root>");
-            //}
             OnCreate();
         }
 
@@ -110,7 +100,10 @@ namespace ADLauncher
 
             XElement xml = new XElement(
                 new XElement("root",
-                    new XElement("f", new XAttribute("Name", vm.Name), new XAttribute("Description", ""), new XAttribute("o", "M"))));
+                    new XElement("f", 
+                        new XAttribute("Name", vm.Name), 
+                        new XAttribute("Description", ""), 
+                        new XAttribute("o", "M"))));
 
             using (var writer = new XmlTextWriter(erpxml, new UTF8Encoding(false)))
             {

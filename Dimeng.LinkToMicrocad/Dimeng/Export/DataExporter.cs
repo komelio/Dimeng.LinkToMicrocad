@@ -31,6 +31,10 @@ namespace Dimeng.LinkToMicrocad
                 var files = Directory.GetFiles(path);
                 foreach (var f in files)
                 {
+                    if (f.EndsWith(".time"))
+                    {
+                        continue;
+                    }
                     File.Delete(f);
                 }
             }
@@ -49,7 +53,7 @@ namespace Dimeng.LinkToMicrocad
             }
             else
             {
-                foreach (var f in Directory.GetFiles(pathToPartInfo,"*.xml"))
+                foreach (var f in Directory.GetFiles(pathToPartInfo, "*.xml"))
                 {
                     File.Delete(f);
                 }

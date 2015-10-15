@@ -28,8 +28,8 @@ namespace Dimeng.LinkToMicrocad.Drawing
 
             foreach (var hdrill in p.HDrillings)
             {
-                Logger.GetLogger().Debug(string.Format("水平孔信息,直径{0}/孔深{1}/所在面{2}/坐标{3}",
-                                           hdrill.Diameter, hdrill.Depth, hdrill.FaceNumber, hdrill.Position));
+                Logger.GetLogger().Debug(string.Format("水平孔信息,直径{0}/孔深{1}/所在面{2}/坐标{3}/{4}",
+                                           hdrill.Diameter, hdrill.Depth, hdrill.FaceNumber, hdrill.Position, hdrill.Token.Token));
 
                 if (hdrill.Diameter <= 0 || hdrill.Depth <= 0)
                 {

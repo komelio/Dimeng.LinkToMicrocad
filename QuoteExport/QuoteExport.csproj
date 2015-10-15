@@ -104,11 +104,25 @@
     </Compile>
     <Compile Include="Converters\ProductDataStatusToColorConverter.cs" />
     <Compile Include="Entities\Decco.cs" />
+    <Compile Include="Entities\IProduct.cs" />
     <Compile Include="Entities\Moulding.cs" />
+    <Compile Include="Entities\Pauchie\PauchieConverter.cs" />
+    <Compile Include="Entities\Pauchie\PauchieDrawerSubassembly.cs" />
+    <Compile Include="Entities\Pauchie\PauchieExporter.cs" />
+    <Compile Include="Entities\Pauchie\PauchieHardware.cs" />
+    <Compile Include="Entities\Pauchie\PauchiePart.cs" />
+    <Compile Include="Entities\Pauchie\PauchieProduct.cs" />
+    <Compile Include="Entities\Product\Hardware.cs" />
+    <Compile Include="Entities\Product\HDrilling.cs" />
+    <Compile Include="Entities\Product\Part.cs" />
+    <Compile Include="Entities\Product\Subassembly.cs" />
+    <Compile Include="Entities\Product\VDrilling.cs" />
     <Compile Include="FTP\FTPClient.cs" />
     <Compile Include="FTP\FTPdirectory.cs" />
     <Compile Include="FTP\FTPfileInfo.cs" />
     <Compile Include="IOHelper.cs" />
+    <Compile Include="ProductHelper.cs" />
+    <Compile Include="ProductViewModel.cs" />
     <Compile Include="UnitConverter.cs" />
     <Compile Include="Web References\Pauchie\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -123,7 +137,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Entities\Product.cs" />
+    <Compile Include="Entities\Product\Product.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

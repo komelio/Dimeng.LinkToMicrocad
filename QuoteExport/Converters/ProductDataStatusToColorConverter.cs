@@ -11,10 +11,10 @@ namespace QuoteExport
     {
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return new SolidColorBrush(Colors.Red);
+            //return new SolidColorBrush(Colors.Red);
             if(value==null)
             {
-                return null;
+                return new SolidColorBrush(Colors.Black);
             }
             bool v = (bool)value;
 
@@ -24,7 +24,7 @@ namespace QuoteExport
             }
             else
             {
-                return null;
+                return new SolidColorBrush(Colors.Black);
             }
         }
 

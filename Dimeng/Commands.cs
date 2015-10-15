@@ -22,18 +22,8 @@ namespace Dimeng
         public void NewBlock()
         {
             Logger.GetLogger().Info("Call command 'New_dm'");
-
-            try
-            {
-                var dmHelper = new DimengHelper();
-                dmHelper.ShowPromptAndDrawBlock();
-            }
-            catch (System.Exception error)
-            {
-                Logger.GetLogger().Error(error);
-                BugReportWindow bug = new BugReportWindow(new BugReportViewModel(error.Message));
-                bug.ShowDialog();
-            }
+            var dmHelper = new DimengHelper();
+            dmHelper.ShowPromptAndDrawBlock();
 
             //MessageBox.Show("new_dm");
         }

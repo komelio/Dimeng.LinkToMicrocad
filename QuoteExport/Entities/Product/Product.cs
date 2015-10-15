@@ -5,11 +5,14 @@ using System.Text;
 
 namespace QuoteExport.Entities
 {
-    public class Product
+    public class Product:IProduct
     {
         public Product()
         {
             IsExport = true;
+            Parts = new List<Part>();
+            Hardwares = new List<Hardware>();
+            Subassemblies = new List<Subassembly>();
         }
         public bool IsExport { get; set; }
         public string Description { get; set; }
@@ -34,5 +37,9 @@ namespace QuoteExport.Entities
         public string Parent8 { get; set; }
         public string Parent9 { get; set; }
         public bool IsDataMatch { get; set; }
+
+        public List<Part> Parts { get; set; }
+        public List<Hardware> Hardwares { get; set; }
+        public List<Subassembly> Subassemblies { get; set; }
     }
 }

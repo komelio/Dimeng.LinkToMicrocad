@@ -28,8 +28,8 @@ namespace Dimeng.LinkToMicrocad.Drawing
             {
                 using (Transaction tran = db.TransactionManager.StartTransaction())
                 {
-                    Logger.GetLogger().Debug(string.Format("垂直孔信息,直径{0}/孔深{1}/所在面{2}/坐标X{3},Y{4}",
-                                               vdrill.Diameter, vdrill.Depth, vdrill.FaceNumber, vdrill.DimX, vdrill.DimY));
+                    Logger.GetLogger().Debug(string.Format("垂直孔信息,直径{0}/孔深{1}/所在面{2}/坐标X{3},Y{4}/{5}",
+                                               vdrill.Diameter, vdrill.Depth, vdrill.FaceNumber, vdrill.DimX, vdrill.DimY, vdrill.Token.Token));
 
                     if (vdrill.Diameter <= 0 || vdrill.Depth <= 0)
                     {

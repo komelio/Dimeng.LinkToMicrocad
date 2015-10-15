@@ -8,6 +8,12 @@ namespace Dimeng.WoodEngine.Entities
 {
     public class Hardware
     {
+        public Hardware()
+        {
+            Comment = string.Empty;
+            Comment2 = string.Empty;
+            Comment3 = string.Empty;
+        }
         public string Name { get; set; }
         public int Qty { get; set; }
         public double Width { get; set; }

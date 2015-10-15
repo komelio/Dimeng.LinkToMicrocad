@@ -24,6 +24,9 @@ namespace QuoteExport
         private readonly BackgroundWorker worker;
         public MainViewModel(string xmlFileName)
         {
+            PauchieProducts = new List<PauchieProduct>();
+            PauchieHardwares = new List<PauchieHardware>();
+
             StartCommand = new RelayCommand(this.startWork);
             ShowConfiguration = new RelayCommand(this.showConfiguration);
             BrowserCommand = new RelayCommand(this.browser);
@@ -98,43 +101,72 @@ namespace QuoteExport
 
             try
             {
-                FTPclient client = new FTPclient(
-                    Properties.Settings.Default.FTPServer,
-                    Settings.Default.FTPUser,
-                    Settings.Default.FTPPassword);
-
-                string folderName = (new DirectoryInfo(currentProjectPath)).Name;
-                client.FtpCreateDirectory(@"/DASSMDATA/" + folderName);
-                client.FtpCreateDirectory(@"/DASSMDATA/" + folderName + "/BOM Output");
-                client.FtpCreateDirectory(@"/DASSMDATA/" + folderName + "/Machinings");
-
-                this.ProgressMax = Directory.GetFiles(Path.Combine(currentProjectPath, "DMS", "Output"), "*", SearchOption.AllDirectories).Length;
-                //MessageBox.Show(progressMax.ToString());
-
-                foreach (var product in Products)
+                //和普世合作的部分
+                string erpFolder = Path.Combine(currentProjectPath, "DMS", "ERP");
+                if (Directory.Exists(erpFolder))
                 {
-                    string pathToXLS = Path.Combine(currentProjectPath, "DMS", "Output", product.Handle, product.Handle + ".xlsx");
-                    string pathToUploadXLS = string.Format(@"/DASSMDATA/{0}/BOM Output/{1}.xlsx", folderName, product.Handle);
-
-                    client.Upload(pathToXLS, pathToUploadXLS);
-                    this.ProgressValue++;
-
-                    string pathToCSV = Path.Combine(currentProjectPath, "DMS", "Output", product.Handle, "Machinings");
-                    foreach (var f in Directory.GetFiles(pathToCSV, "*.csv"))
+                    //清空已有文件
+                    foreach (var fi in Directory.GetFiles(erpFolder))
                     {
-                        string filename = (new FileInfo(f)).Name;
-                        client.Upload(f, string.Format(@"/DASSMDATA/{0}/Machinings/{1}", folderName, filename));
-                        this.ProgressValue++;
+                        File.Delete(fi);
                     }
                 }
+                else
+                {
+                    Directory.CreateDirectory(erpFolder);
+                }
+
+                for (int i = 0; i < this.Products.Count; i++)
+                {
+                    Product product = this.Products[i];
+                    PauchieConverter converter = new PauchieConverter(product);
+                    PauchieProduct pProduct = converter.GetPauchieProduct();
+                    pProduct.LineNumber = i + 1;//号码
+                    PauchieProducts.Add(pProduct);
+                }
+
+                PauchieExporter exporter = new PauchieExporter(this.PauchieProducts, erpFolder);
+                exporter.Export();
+
+                //之前和启程合作的部分
+
+                //FTPclient client = new FTPclient(
+                //    Properties.Settings.Default.FTPServer,
+                //    Settings.Default.FTPUser,
+                //    Settings.Default.FTPPassword);
+
+                //string folderName = (new DirectoryInfo(currentProjectPath)).Name;
+                //client.FtpCreateDirectory(@"/DASSMDATA/" + folderName);
+                //client.FtpCreateDirectory(@"/DASSMDATA/" + folderName + "/BOM Output");
+                //client.FtpCreateDirectory(@"/DASSMDATA/" + folderName + "/Machinings");
+
+                //this.ProgressMax = Directory.GetFiles(Path.Combine(currentProjectPath, "DMS", "Output"), "*", SearchOption.AllDirectories).Length;
+                ////MessageBox.Show(progressMax.ToString());
+
+                //foreach (var product in Products)
+                //{
+                //    string pathToXLS = Path.Combine(currentProjectPath, "DMS", "Output", product.Handle, product.Handle + ".xlsx");
+                //    string pathToUploadXLS = string.Format(@"/DASSMDATA/{0}/BOM Output/{1}.xlsx", folderName, product.Handle);
+
+                //    client.Upload(pathToXLS, pathToUploadXLS);
+                //    this.ProgressValue++;
+
+                //    string pathToCSV = Path.Combine(currentProjectPath, "DMS", "Output", product.Handle, "Machinings");
+                //    foreach (var f in Directory.GetFiles(pathToCSV, "*.csv"))
+                //    {
+                //        string filename = (new FileInfo(f)).Name;
+                //        client.Upload(f, string.Format(@"/DASSMDATA/{0}/Machinings/{1}", folderName, filename));
+                //        this.ProgressValue++;
+                //    }
+                //}
 
 
-                var service = new Pauchie.PauchieWebServiceService();
-                service.doDASSM("hello", Products.Count, @"/DASSMData/" + folderName);
+                //var service = new Pauchie.PauchieWebServiceService();
+                //service.doDASSM("hello", Products.Count, @"/DASSMData/" + folderName);
             }
             catch (Exception error)
             {
-                MessageBox.Show(error.Message);
+                MessageBox.Show(error.Message + error.StackTrace);
             }
             MessageBox.Show("上传完毕");
         }
@@ -164,7 +196,7 @@ namespace QuoteExport
 
                 //把moulding的数据以五金的形式插入到mv的工作任务中
                 //todo：只为了演示使用，将来要剔除
-                InsertMouldingProduct();
+                //InsertMouldingProduct();
             }
             catch (Exception error)
             {
@@ -415,13 +447,18 @@ namespace QuoteExport
                         continue;
                     }
 
+                    ProductHelper.LoadProduct(product,
+                        Path.Combine(currentProjectPath, "DMS", "Output", product.Handle));
+
                     string timestampPath = Path.Combine(this.currentProjectPath, "DMS", "Output", product.Handle, timestamp + ".time");
+
                     if (File.Exists(timestampPath))
                     {
                         product.IsDataMatch = true;
                     }
                     else
                     {
+                        //MessageBox.Show(timestampPath);
                         product.IsDataMatch = false;
                     }
 
@@ -494,6 +531,8 @@ namespace QuoteExport
         public List<Product> Products { get; private set; }
         public List<Moulding> Mouldings { get; private set; }
         public List<Decco> Deccos { get; private set; }
+        public List<PauchieProduct> PauchieProducts { get; private set; }
+        public List<PauchieHardware> PauchieHardwares { get; private set; }
         public RelayCommand StartCommand { get; set; }
         public RelayCommand ShowConfiguration { get; set; }
         public RelayCommand BrowserCommand { get; set; }

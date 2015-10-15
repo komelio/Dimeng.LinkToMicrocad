@@ -13,8 +13,8 @@
     </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" MinHeight="253"/>
+            <RowDefinition/>
             <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
         <Image Source="images/pauchie-title.png" />
@@ -45,10 +45,19 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 <GridViewColumn Header="编号" Width="120" DisplayMemberBinding="{Binding Handle}"/>
-                                <GridViewColumn Header="宽度" Width="80" DisplayMemberBinding="{Binding Width}"/>
-                                <GridViewColumn Header="高度" Width="80" DisplayMemberBinding="{Binding Height}"/>
-                                <GridViewColumn Header="深度" Width="80" DisplayMemberBinding="{Binding Depth}"/>
-                                <GridViewColumn Header="注解" Width="80" DisplayMemberBinding="{Binding Comments}"/>
+                                <GridViewColumn Header="宽度" Width="60" DisplayMemberBinding="{Binding Width}"/>
+                                <GridViewColumn Header="高度" Width="60" DisplayMemberBinding="{Binding Height}"/>
+                                <GridViewColumn Header="深度" Width="60" DisplayMemberBinding="{Binding Depth}"/>
+                                <GridViewColumn Header="注解" Width="140" DisplayMemberBinding="{Binding Comments}"/>
+                                <GridViewColumn Header="操作" Width="70" >
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button HorizontalAlignment="Stretch" Width="55" Command="{Binding ShowSpreadCommand}">
+                                                五金
+                                            </Button>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
                             </GridView>
                         </ListView.View>
                     </ListView>
@@ -93,11 +102,10 @@
                 </Expander>
             </Grid>
         </ScrollViewer>
-        <ProgressBar Grid.Row="6"  x:Name="progressBar" Height="5" VerticalAlignment="Bottom" Background="{x:Null}" Foreground="Red" BorderBrush="{x:Null}" Value="{Binding ProgressValue}" Maximum="{Binding ProgressMax}" BorderThickness="0"/>
-        <Grid Grid.Row="7" Background="#FF35302A">
+        <ProgressBar Grid.Row="2"  x:Name="progressBar" Height="5" VerticalAlignment="Bottom" Background="{x:Null}" Foreground="Red" BorderBrush="{x:Null}" Value="{Binding ProgressValue}" Maximum="{Binding ProgressMax}" BorderThickness="0"/>
+        <Grid Grid.Row="2" Background="#FF35302A">
             <Button Content="上传" HorizontalAlignment="Left" Margin="568,10,0,0" VerticalAlignment="Top" Width="90" Height="25" Command="{Binding StartCommand}"/>
             <Button Content="关闭" HorizontalAlignment="Left" Margin="665,10,0,0" VerticalAlignment="Top" Width="90" Height="25" Click="Button_Click" />
-            <TextBlock HorizontalAlignment="Left" Margin="29,10,0,0" TextWrapping="Wrap" Text="{Binding CurrentProjectPath}" VerticalAlignment="Top" Foreground="White"/>
             <Button Content="浏览" HorizontalAlignment="Left" Margin="473,10,0,0" VerticalAlignment="Top" Width="90" Height="25" Command="{Binding BrowserCommand}"/>
             <Button Content="启动CAD" HorizontalAlignment="Left" Margin="378,10,0,0" VerticalAlignment="Top" Width="90" Height="25" Command="{Binding StartCADCommand}"/>
         </Grid>
