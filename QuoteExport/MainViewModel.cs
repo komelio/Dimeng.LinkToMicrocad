@@ -44,7 +44,7 @@ namespace QuoteExport
             RegistryKey key = Registry.CurrentUser
                 .OpenSubKey(@"Software\Microvellum\Microvellum Toolbox\R67\Toolbox-Standard\ApplicationSettings");
             string jobpath = key.GetValue("Jobs").ToString();
-            jobpath = Path.Combine(jobpath, "DMS");
+            jobpath = Path.Combine(jobpath, (new DirectoryInfo(this.currentProjectPath)).Name);
 
             if (Directory.Exists(jobpath))
             {
@@ -196,7 +196,7 @@ namespace QuoteExport
 
                 //把moulding的数据以五金的形式插入到mv的工作任务中
                 //todo：只为了演示使用，将来要剔除
-                //InsertMouldingProduct();
+                InsertMouldingProduct();
             }
             catch (Exception error)
             {

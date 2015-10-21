@@ -53,17 +53,17 @@ namespace QuoteExport
             sub.Height = double.Parse(sx.Attribute("Height").Value);
             sub.Depth = double.Parse(sx.Attribute("Depth").Value);
 
-            foreach (var px in sx.Elements("Parts"))
+            foreach (var px in sx.Elements("Parts").Elements("Part"))
             {
                 Part part = loadPartXElement(px, sub);
                 sub.Parts.Add(part);
             }
-            foreach (var hx in sx.Elements("Hardwares"))
+            foreach (var hx in sx.Elements("Hardwares").Elements("Hardware"))
             {
                 Hardware hw = loadHardwareXElement(hx);
                 sub.Hardwares.Add(hw);
             }
-            foreach (var sx2 in sx.Elements("Subassemblies"))
+            foreach (var sx2 in sx.Elements("Subassemblies").Elements("Subassembly"))
             {
                 Subassembly s2 = loadSubXElement(sx2);
                 sub.Subassemblies.Add(s2);
