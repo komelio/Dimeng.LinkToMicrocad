@@ -97,7 +97,10 @@ namespace QuoteExport
 
         private void DoWork(object sender, DoWorkEventArgs e)
         {
+            //初始化
             this.ProgressValue = 0;
+            this.PauchieHardwares.Clear();
+            this.PauchieProducts.Clear();
 
             try
             {
@@ -119,7 +122,14 @@ namespace QuoteExport
                 for (int i = 0; i < this.Products.Count; i++)
                 {
                     Product product = this.Products[i];
-                    PauchieConverter converter = new PauchieConverter(product);
+
+                    if (!product.IsExport)
+                    {
+                        continue;
+                    }
+
+                    PauchieConverter converter = new PauchieConverter(product
+                        , Path.Combine(this.CurrentProjectPath, "DMS", "Output", product.Handle, "Machining"));
                     PauchieProduct pProduct = converter.GetPauchieProduct();
                     pProduct.LineNumber = i + 1;//号码
                     PauchieProducts.Add(pProduct);
@@ -128,47 +138,18 @@ namespace QuoteExport
                 PauchieExporter exporter = new PauchieExporter(this.PauchieProducts, erpFolder);
                 exporter.Export();
 
-                //之前和启程合作的部分
-
-                //FTPclient client = new FTPclient(
-                //    Properties.Settings.Default.FTPServer,
-                //    Settings.Default.FTPUser,
-                //    Settings.Default.FTPPassword);
-
-                //string folderName = (new DirectoryInfo(currentProjectPath)).Name;
-                //client.FtpCreateDirectory(@"/DASSMDATA/" + folderName);
-                //client.FtpCreateDirectory(@"/DASSMDATA/" + folderName + "/BOM Output");
-                //client.FtpCreateDirectory(@"/DASSMDATA/" + folderName + "/Machinings");
-
-                //this.ProgressMax = Directory.GetFiles(Path.Combine(currentProjectPath, "DMS", "Output"), "*", SearchOption.AllDirectories).Length;
-                ////MessageBox.Show(progressMax.ToString());
-
-                //foreach (var product in Products)
-                //{
-                //    string pathToXLS = Path.Combine(currentProjectPath, "DMS", "Output", product.Handle, product.Handle + ".xlsx");
-                //    string pathToUploadXLS = string.Format(@"/DASSMDATA/{0}/BOM Output/{1}.xlsx", folderName, product.Handle);
-
-                //    client.Upload(pathToXLS, pathToUploadXLS);
-                //    this.ProgressValue++;
-
-                //    string pathToCSV = Path.Combine(currentProjectPath, "DMS", "Output", product.Handle, "Machinings");
-                //    foreach (var f in Directory.GetFiles(pathToCSV, "*.csv"))
-                //    {
-                //        string filename = (new FileInfo(f)).Name;
-                //        client.Upload(f, string.Format(@"/DASSMDATA/{0}/Machinings/{1}", folderName, filename));
-                //        this.ProgressValue++;
-                //    }
-                //}
+                //上传
+                Uploader uploader = new Uploader(Settings.Default.FTPServer,
+                    Settings.Default.FTPUser,
+                    Settings.Default.FTPPassword);
 
 
-                //var service = new Pauchie.PauchieWebServiceService();
-                //service.doDASSM("hello", Products.Count, @"/DASSMData/" + folderName);
+                MessageBox.Show("上传完毕");
             }
             catch (Exception error)
             {
                 MessageBox.Show(error.Message + error.StackTrace);
             }
-            MessageBox.Show("上传完毕");
         }
 
         private void showConfiguration()
@@ -446,6 +427,8 @@ namespace QuoteExport
                         MessageBox.Show(selectStr);
                         continue;
                     }
+
+                    product.Reference = x.Attribute("Reference").Value;
 
                     ProductHelper.LoadProduct(product,
                         Path.Combine(currentProjectPath, "DMS", "Output", product.Handle));

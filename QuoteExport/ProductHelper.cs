@@ -115,6 +115,7 @@ namespace QuoteExport
             part.Comment2 = px.Attribute("Comment2").Value;
             part.Comment3 = px.Attribute("Comment3").Value;
             part.FileName = px.Attribute("FileName").Value;
+            part.Face6FileName = px.Attribute("Face6FileName").Value;
             return part;
         }
     }

@@ -37,6 +37,7 @@ namespace QuoteExport.Entities
         public string Comment2 { get; set; }
         public string Comment3 { get; set; }
         public string FileName { get; set; }
+        public string Face6FileName { get; set; }
         public IProduct Parent { get; set; }
 
         public List<VDrilling> VDrillings { get; private set; }

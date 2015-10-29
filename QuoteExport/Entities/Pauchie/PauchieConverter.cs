@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -8,9 +9,11 @@ namespace QuoteExport.Entities
     public class PauchieConverter
     {
         Product product;
+        string machiningPath;
         private List<Subassembly> drawers = new List<Subassembly>();
-        public PauchieConverter(Product product)
+        public PauchieConverter(Product product, string machiningPath)
         {
+            this.machiningPath = machiningPath;
             this.product = product;
 
             foreach (var sub in product.Subassemblies)
@@ -33,6 +36,9 @@ namespace QuoteExport.Entities
             pProduct.Height = product.Height;
             pProduct.Depth = product.Depth;
             pProduct.Qty = product.Qty;
+            pProduct.OrderNumber = string.Empty;
+            pProduct.Category = "柜体";
+            pProduct.ItmId = product.Reference;
 
             var combinedParts = new List<Part>();
             combinedParts.AddRange(product.Parts);
@@ -54,8 +60,8 @@ namespace QuoteExport.Entities
                 pProduct.Parts.Add(getPauchiePart(p));
             }
 
-            
-            foreach(var hw in combinedHwrs)
+
+            foreach (var hw in combinedHwrs)
             {
                 pProduct.Hardwares.Add(getPauchieHardware(hw));
             }
@@ -74,7 +80,8 @@ namespace QuoteExport.Entities
             ppart.SKU = getPartSKU(part);
 
             ppart.Qty = part.Qty;
-            ppart.Model = ((part.Comment3 == null ? string.Empty : part.Comment3).IndexOf("y") > -1) ? "Y" : "N";
+            ppart.Model = ((part.Comment3 == null ? string.Empty :
+                part.Comment3).IndexOf("y") > -1) ? "Y" : "N";
 
             ppart.CutLength = part.CutLength;
             ppart.CutWidth = part.CutWidth;
@@ -101,15 +108,23 @@ namespace QuoteExport.Entities
 
             ppart.MachiningArea = getPartMachiningArea(part);
 
-            //if (part.HasFace5Machining())
-            //{
-            //    ppart.FileName = part.FileName;
-            //}
+            if (File.Exists(Path.Combine(machiningPath, part.FileName + ".csv")))
+            {
+                ppart.FileName = part.FileName;
+            }
+            else
+            {
+                ppart.FileName = string.Empty;
+            }
 
-            //if (part.HasFace6Machining())
-            //{
-            //    ppart.Face6FileName = part.Face6FileName;
-            //}
+            if (File.Exists(Path.Combine(machiningPath, part.Face6FileName + ".csv")))
+            {
+                ppart.Face6FileName = part.Face6FileName;
+            }
+            else
+            {
+                ppart.Face6FileName = string.Empty;
+            }
 
             return ppart;
         }
@@ -164,6 +179,13 @@ namespace QuoteExport.Entities
 
         private string getPartEdgeSKU(Part part, string edgeband, string edgecode, out string color)
         {
+            if (string.IsNullOrEmpty(edgeband))
+            {
+                color = string.Empty;
+                return string.Empty;
+            }
+
+
             var edge = edgeband;
             var cdes = edgecode == null ? new string[] { } : edgecode.Split(';');
 

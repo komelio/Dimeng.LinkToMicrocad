@@ -112,6 +112,7 @@
     <Compile Include="Entities\Pauchie\PauchieHardware.cs" />
     <Compile Include="Entities\Pauchie\PauchiePart.cs" />
     <Compile Include="Entities\Pauchie\PauchieProduct.cs" />
+    <Compile Include="Entities\Pauchie\Uploader.cs" />
     <Compile Include="Entities\Product\Hardware.cs" />
     <Compile Include="Entities\Product\HDrilling.cs" />
     <Compile Include="Entities\Product\Part.cs" />

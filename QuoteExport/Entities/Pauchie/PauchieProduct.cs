@@ -9,6 +9,7 @@ namespace QuoteExport.Entities
     {
         public PauchieProduct()
         {
+            BomId = Guid.NewGuid().ToString();
             Hardwares = new List<PauchieHardware>();
             Parts = new List<PauchiePart>();
         }
@@ -21,6 +22,8 @@ namespace QuoteExport.Entities
         public List<PauchieHardware> Hardwares { get; private set; }
         public List<PauchieDrawerSubassembly> Drawers { get; private set; }
         public string Color { get; set; }
+        public string BomId { get; set; }
+        public string ItmId { get; set; }
 
         public bool IsExport { get; set; }
 
@@ -28,6 +31,6 @@ namespace QuoteExport.Entities
         public double Height { get; set; }
         public double Depth { get; set; }
 
-        
+
     }
 }

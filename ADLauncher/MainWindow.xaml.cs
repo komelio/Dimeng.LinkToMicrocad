@@ -43,6 +43,17 @@ namespace ADLauncher
             : this()
         {
             this.orderNumber = od;
+
+            //step1：查找订单数据
+            string path = System.IO.Path.Combine(adPath, "Projects", orderNumber);
+            if(!System.IO.Directory.Exists(path))
+            {
+                //step2：下载订单数据
+            }
+
+            
+
+            //step3：打开任务或者提示下载覆盖
         }
 
         private void close()

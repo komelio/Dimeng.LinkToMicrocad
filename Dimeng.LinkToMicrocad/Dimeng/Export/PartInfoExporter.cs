@@ -32,7 +32,7 @@ namespace Dimeng.LinkToMicrocad
 
             XElement xParts = new XElement("Parts");
             xProduct.Add(xParts);
-            foreach (var part in this.product.Parts)
+            foreach (var part in this.product.Parts.Where(it=>!it.Material.IsFake))
             {
                 XElement xml = getPartXElement(part);
                 xParts.Add(xml);
@@ -55,7 +55,7 @@ namespace Dimeng.LinkToMicrocad
 
             //计算机加工指令带来的三合一、活动层板孔数量
             var list = new List<Hardware>();
-            foreach (var part in this.product.CombinedParts)
+            foreach (var part in this.product.CombinedParts.Where(it=>!it.Material.IsFake))
             {
                 getPartTokenHardwares(part, list);
             }
@@ -147,7 +147,7 @@ namespace Dimeng.LinkToMicrocad
 
             XElement xParts = new XElement("Parts");
             xml.Add(xParts);
-            foreach (var part in sub.Parts)
+            foreach (var part in sub.Parts.Where(it=>!it.Material.IsFake))
             {
                 xParts.Add(getPartXElement(part));
             }
@@ -212,7 +212,8 @@ namespace Dimeng.LinkToMicrocad
                 new XAttribute("Comment", part.Comment),
                 new XAttribute("Comment2", part.Comment2),
                 new XAttribute("Comment3", part.Comment3),
-                new XAttribute("FileName", part.FileName)
+                new XAttribute("FileName", part.FileName),
+                new XAttribute("Face6FileName",part.Face6FileName)
                 );
             return xml;
         }
