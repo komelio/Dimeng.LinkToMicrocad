@@ -103,6 +103,8 @@
       <DependentUpon>ConfigurationForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Converters\ProductDataStatusToColorConverter.cs" />
+    <Compile Include="Converters\ProductImageConverter.cs" />
+    <Compile Include="Converters\UnBoolConverter.cs" />
     <Compile Include="Entities\Decco.cs" />
     <Compile Include="Entities\IProduct.cs" />
     <Compile Include="Entities\Moulding.cs" />
@@ -222,6 +224,22 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\background.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\t1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\t2.png" />
+    <Resource Include="images\t3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\notFound.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\cloud_upload_355.62007168459px_1187832_easyicon.net.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\error.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

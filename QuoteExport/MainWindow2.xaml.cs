@@ -18,9 +18,11 @@ namespace QuoteExport
     /// </summary>
     public partial class MainWindow2 : Window
     {
-        public MainWindow2()
+        public MainWindow2(string xmlpath)
         {
             InitializeComponent();
+
+            this.DataContext = new MainViewModel(xmlpath);
         }
     }
 }

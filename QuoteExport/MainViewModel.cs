@@ -429,7 +429,6 @@ namespace QuoteExport
                     }
 
                     product.Reference = x.Attribute("Reference").Value;
-
                     ProductHelper.LoadProduct(product,
                         Path.Combine(currentProjectPath, "DMS", "Output", product.Handle));
 

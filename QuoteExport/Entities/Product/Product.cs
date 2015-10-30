@@ -15,6 +15,7 @@ namespace QuoteExport.Entities
             Subassemblies = new List<Subassembly>();
         }
         public string Reference { get; set; }//from ad vinco.xml
+        public string ImagePath { get; set; }//from ad vincodat.xml
         public bool IsExport { get; set; }
         public string Description { get; set; }
         public string Handle { get; set; }

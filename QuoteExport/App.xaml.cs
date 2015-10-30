@@ -21,7 +21,7 @@ namespace QuoteExport
             }
             else
             {
-                MainWindow mainWindow = new MainWindow(e.Args[0]);
+                MainWindow2 mainWindow = new MainWindow2(e.Args[0]);
                 mainWindow.ShowDialog();
             }
         }
