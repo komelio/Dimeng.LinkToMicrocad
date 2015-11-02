@@ -31,12 +31,34 @@ namespace QuoteExport
             ShowConfiguration = new RelayCommand(this.showConfiguration);
             BrowserCommand = new RelayCommand(this.browser);
             StartCADCommand = new RelayCommand(this.startCAD, this.canStartCAD);
+
             init(xmlFileName);
 
             this.worker = new BackgroundWorker();
             this.worker.DoWork += this.DoWork;
             this.worker.ProgressChanged += this.ProgressChanged;
+
+            loadXMLProductsAndConvertToPauchie();
         }
+
+        private void loadXMLProductsAndConvertToPauchie()
+        {
+            var pauchieProductList = new List<PauchieProduct>();
+
+            for (int i = 0; i < this.Products.Count; i++)
+            {
+                Product product = this.Products[i];
+
+                PauchieConverter converter = new PauchieConverter(product
+                    , Path.Combine(this.CurrentProjectPath, "DMS", "Output", product.Handle, "Machining"));
+                PauchieProduct pProduct = converter.GetPauchieProduct();
+                pProduct.LineNumber = i + 1;//号码
+                pauchieProductList.Add(pProduct);
+            }
+
+            this.PauchieProducts = pauchieProductList;
+        }
+
         private string cadDirPath;
         private string cadEXEPath;
         private void startCAD()
@@ -99,8 +121,6 @@ namespace QuoteExport
         {
             //初始化
             this.ProgressValue = 0;
-            this.PauchieHardwares.Clear();
-            this.PauchieProducts.Clear();
 
             try
             {
@@ -119,26 +139,10 @@ namespace QuoteExport
                     Directory.CreateDirectory(erpFolder);
                 }
 
-                for (int i = 0; i < this.Products.Count; i++)
-                {
-                    Product product = this.Products[i];
-
-                    if (!product.IsExport)
-                    {
-                        continue;
-                    }
-
-                    PauchieConverter converter = new PauchieConverter(product
-                        , Path.Combine(this.CurrentProjectPath, "DMS", "Output", product.Handle, "Machining"));
-                    PauchieProduct pProduct = converter.GetPauchieProduct();
-                    pProduct.LineNumber = i + 1;//号码
-                    PauchieProducts.Add(pProduct);
-                }
-
                 PauchieExporter exporter = new PauchieExporter(this.PauchieProducts, erpFolder);
                 exporter.Export();
 
-                //上传
+                //上传到ftp
                 Uploader uploader = new Uploader(Settings.Default.FTPServer,
                     Settings.Default.FTPUser,
                     Settings.Default.FTPPassword);
@@ -513,7 +517,18 @@ namespace QuoteExport
         public List<Product> Products { get; private set; }
         public List<Moulding> Mouldings { get; private set; }
         public List<Decco> Deccos { get; private set; }
-        public List<PauchieProduct> PauchieProducts { get; private set; }
+
+        private List<PauchieProduct> pauchieProducts;
+        public List<PauchieProduct> PauchieProducts
+        {
+            get { return pauchieProducts; }
+            set
+            {
+                pauchieProducts = value;
+                base.RaisePropertyChanged("PauchieProducts");
+            }
+        }
+
         public List<PauchieHardware> PauchieHardwares { get; private set; }
         public RelayCommand StartCommand { get; set; }
         public RelayCommand ShowConfiguration { get; set; }

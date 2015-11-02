@@ -9,14 +9,12 @@ namespace QuoteExport.Entities
     {
         public Product()
         {
-            IsExport = true;
             Parts = new List<Part>();
             Hardwares = new List<Hardware>();
             Subassemblies = new List<Subassembly>();
         }
         public string Reference { get; set; }//from ad vinco.xml
         public string ImagePath { get; set; }//from ad vincodat.xml
-        public bool IsExport { get; set; }
         public string Description { get; set; }
         public string Handle { get; set; }
         public string ItemNumber { get; set; }
@@ -43,5 +41,8 @@ namespace QuoteExport.Entities
         public List<Part> Parts { get; set; }
         public List<Hardware> Hardwares { get; set; }
         public List<Subassembly> Subassemblies { get; set; }
+
+        public int PartsCounter { get; set; }
+        public int HardwaresCounter { get; set; }
     }
 }

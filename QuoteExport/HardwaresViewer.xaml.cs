@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuoteExport.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,20 +15,20 @@ using System.Windows.Shapes;
 namespace QuoteExport
 {
     /// <summary>
-    /// MainWindow2.xaml 的交互逻辑
+    /// HardwaresViewer.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow2 : Window
+    public partial class HardwaresViewer : Window
     {
-        public MainWindow2(string xmlpath)
+        public HardwaresViewer(List<PauchieHardware> hwrs)
         {
             InitializeComponent();
 
-            this.DataContext = new MainViewModel(xmlpath);
+            this.DataContext = new HardwaresViewerViewModel(hwrs);
         }
 
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-
+            this.Close();
         }
     }
 }

@@ -41,5 +41,7 @@ namespace QuoteExport.Entities
         public string FileName { get; set; }
 
         public object Face6FileName { get; set; }
+
+        public string Material { get; set; }
     }
 }

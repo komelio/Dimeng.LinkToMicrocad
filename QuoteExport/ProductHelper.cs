@@ -18,6 +18,10 @@ namespace QuoteExport
                 return;
             }
 
+            product.Parts.Clear();
+            product.Hardwares.Clear();
+            product.Subassemblies.Clear();
+
             XElement xml = XElement.Load(filename);
             var partsX = from p in xml.Elements("Parts").Elements("Part")
                          select p;
@@ -42,6 +46,40 @@ namespace QuoteExport
                 Subassembly sub = loadSubXElement(sx);
                 product.Subassemblies.Add(sub);
             }
+
+
+            //get total qty
+            product.PartsCounter = 0; product.HardwaresCounter = 0;
+            foreach(var part in product.Parts)
+            {
+                product.PartsCounter += part.Qty;
+            }
+            foreach(var hw in product.Hardwares)
+            {
+                product.HardwaresCounter += hw.Qty;
+            }
+            foreach(var sub in product.Subassemblies)
+            {
+                foreach (var part in sub.Parts)
+                {
+                    product.PartsCounter += part.Qty;
+                }
+                foreach (var hw in sub.Hardwares)
+                {
+                    product.HardwaresCounter += hw.Qty;
+                }
+                foreach(var sub2 in sub.Subassemblies)
+                {
+                    foreach (var part in sub2.Parts)
+                    {
+                        product.PartsCounter += part.Qty;
+                    }
+                    foreach (var hw in sub2.Hardwares)
+                    {
+                        product.HardwaresCounter += hw.Qty;
+                    }
+                }
+            }
         }
 
         private static Subassembly loadSubXElement(XElement sx)
@@ -57,6 +95,7 @@ namespace QuoteExport
             {
                 Part part = loadPartXElement(px, sub);
                 sub.Parts.Add(part);
+                
             }
             foreach (var hx in sx.Elements("Hardwares").Elements("Hardware"))
             {

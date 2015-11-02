@@ -39,6 +39,9 @@ namespace QuoteExport.Entities
             pProduct.OrderNumber = string.Empty;
             pProduct.Category = "柜体";
             pProduct.ItmId = product.Reference;
+            pProduct.PartsCounter = product.PartsCounter;
+            pProduct.HardwaresCounter = product.HardwaresCounter;
+            pProduct.IsDataMatch = product.IsDataMatch;
 
             var combinedParts = new List<Part>();
             combinedParts.AddRange(product.Parts);
@@ -76,7 +79,7 @@ namespace QuoteExport.Entities
             ppart.Color = part.Material;
             ppart.PartName = part.PartName;
             ppart.Category = part.PartName;
-
+            ppart.Material = part.Material;
             ppart.SKU = getPartSKU(part);
 
             ppart.Qty = part.Qty;
