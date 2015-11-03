@@ -528,7 +528,7 @@
             </Setter>
         </Style>
         <DataTemplate x:Key="DataTemplate1">
-            <Grid Margin="0,5">
+            <Grid Margin="0,5" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="150" />
                     <ColumnDefinition Width="*" />
@@ -771,6 +771,116 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="ListBoxItemStyle1" TargetType="{x:Type ListBoxItem}">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Padding" Value="4,1"/>
+            <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}"/>
+            <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FocusVisualStyle">
+                <Setter.Value>
+                    <Style>
+                        <Setter Property="Control.Template">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <Rectangle Margin="2" SnapsToDevicePixels="True" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <Border x:Name="Bd" BorderThickness="1" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True" BorderBrush="{x:Null}" Background="#FFF0F0E8">
+                            <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" TargetName="Bd" Value="#1F26A0DA"/>
+                                <Setter Property="BorderBrush" TargetName="Bd" Value="#A826A0DA"/>
+                            </MultiTrigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <DataTemplate x:Key="DataTemplate2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="120" />
+                </Grid.RowDefinitions>
+                <Image Source="{Binding ImagePath}" />
+                <Grid Grid.Column="1" Margin="5,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.ColumnSpan="5" Margin="0,5">
+                        <TextBlock Text="{Binding Name}"  FontSize="18" FontWeight="Bold" />
+                    </StackPanel>
+                    <CheckBox IsChecked="{Binding IsExport}" Content="导出" Grid.Row="1" Grid.ColumnSpan="4"/>
+                    <TextBlock Grid.Row="2" Grid.ColumnSpan="4">
+                        <Run Text="型号:" />
+                        <Run Text=" "/>
+                        <Run Text="{Binding Reference}"  />
+                    </TextBlock>
+                    <TextBlock Text="宽度:" Grid.Row="3" FontWeight="Bold" />
+                    <TextBlock Text="{Binding Width}" Grid.Column="1" Grid.Row="3"/>
+                    <TextBlock Text="高度:" Grid.Row="3" Grid.Column="3" FontWeight="Bold" />
+                    <TextBlock Text="{Binding Height}" Grid.Column="4"  Grid.Row="3"/>
+                    <TextBlock Text="深度:" Grid.Row="3" Grid.Column="6" FontWeight="Bold" />
+                    <TextBlock Text="{Binding Depth}" Grid.Column="7"  Grid.Row="3"/>
+                </Grid>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="DataTemplate3">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding Description}"  FontSize="14" FontWeight="Bold" />
+                <CheckBox IsChecked="{Binding IsExport}" Content="导出"  Grid.Column="2"/>
+                <TextBlock Grid.Row="2" Grid.Column="4">
+                        <Run Text="型号:" />
+                        <Run Text=" "/>
+                        <Run Text="{Binding Kind}"  />
+                </TextBlock>
+            </Grid>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -812,7 +922,7 @@
                         <TextBlock Text="产品" VerticalAlignment="Center"  Margin="5,0,10,0" />
                     </StackPanel>
                 </TabItem.Header>
-                <ListBox BorderThickness="0" ItemsSource="{Binding PauchieProducts}" ItemTemplate="{DynamicResource DataTemplate1}" Background="{x:Null}" Style="{DynamicResource ListBoxStyle1}" />
+                <ListBox BorderThickness="0" ItemsSource="{Binding PauchieProducts}" ItemTemplate="{DynamicResource DataTemplate1}" Background="{x:Null}" Style="{DynamicResource ListBoxStyle1}" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" />
             </TabItem>
             <TabItem Background="{x:Null}" BorderBrush="{x:Null}">
                 <TabItem.Header>
@@ -821,6 +931,11 @@
                         <TextBlock Text="家具" VerticalAlignment="Center" Margin="5,0,10,0"/>
                     </StackPanel>
                 </TabItem.Header>
+                <TabItem.Content>
+                    <ListBox BorderThickness="0" ItemsSource="{Binding Deccos}" ItemTemplate="{DynamicResource DataTemplate2}" Style="{DynamicResource ListBoxStyle1}">
+
+                    </ListBox>
+                </TabItem.Content>
             </TabItem>
             <TabItem Background="{x:Null}" BorderBrush="{x:Null}">
                 <TabItem.Header>
@@ -829,8 +944,10 @@
                         <TextBlock Text="装饰件" VerticalAlignment="Center" Margin="5,0,10,0"/>
                     </StackPanel>
                 </TabItem.Header>
-            </TabItem>
+                <ListBox ItemsSource="{Binding Mouldings}" BorderBrush="{x:Null}" BorderThickness="0" ItemTemplate="{DynamicResource DataTemplate3}" >
 
+                </ListBox>
+            </TabItem>
         </TabControl>
         <ProgressBar Grid.Row="1" Background="{x:Null}" BorderThickness="0" Foreground="#FFA21E1E" Value="{Binding ProgressValue}" Maximum="{Binding ProgressMax}"/>
         <Label Content="{Binding CurrentProjectPath}" HorizontalAlignment="Left" Margin="10,155,0,0" Grid.Row="5" VerticalAlignment="Top"/>

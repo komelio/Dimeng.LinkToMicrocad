@@ -50,6 +50,17 @@ namespace Dimeng.WoodEngine.Business
                 hwr.IsHaveAssocaitedRotation = isHaveAssociateRotation;
                 hwr.TAssociatedRotation = tAssociateAngle;
 
+                string[] comments = partRow[0, 26].Text.Split('|');
+                hwr.Comment = comments[0];
+                if (comments.Length >= 2)
+                {
+                    hwr.Comment2 = comments[1];
+                }
+                if (comments.Length >= 3)
+                {
+                    hwr.Comment3 = comments[2];
+                }
+
                 bool isEQ = check.IsEQ();
                 if (isEQ)
                 {
@@ -79,6 +90,9 @@ namespace Dimeng.WoodEngine.Business
                         cloneHwr.TXOrigin = d[0];
                         cloneHwr.TYOrigin = d[1];
                         cloneHwr.TZOrigin = d[2];
+                        cloneHwr.Comment = hwr.Comment;
+                        cloneHwr.Comment2 = hwr.Comment2;
+                        cloneHwr.Comment3 = hwr.Comment3;
 
                         tempHardwares.Add(cloneHwr);
                         Logger.GetLogger().Debug(string.Format("Add hardware {0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}/{8}",

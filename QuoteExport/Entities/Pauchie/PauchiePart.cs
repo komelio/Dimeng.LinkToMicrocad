@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Command;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,54 @@ namespace QuoteExport.Entities
         public PauchiePart(Part part)
         {
             this.Part = part;
+            this.ShowFace5MachiningCommand = new RelayCommand(this.showFace5,
+                () =>
+                {
+                    if (string.IsNullOrEmpty(this.Face5FullName))
+                    {
+                        return false;
+                    }
+                    return true;
+                });
+
+            this.ShowFace6MachiningCommand = new RelayCommand(this.showFace6,
+                () =>
+                {
+                    if (string.IsNullOrEmpty(this.Face6FullName))
+                    {
+                        return false;
+                    }
+                    return true;
+                }
+                );
         }
+
+        private void showFace5()
+        {
+            try
+            {
+                MachiningViewer mv = new MachiningViewer(this.Face5FullName);
+                mv.ShowDialog();
+            }
+            catch(Exception error)
+            {
+                System.Windows.MessageBox.Show(error.Message + error.StackTrace);
+            }
+        }
+
+        private void showFace6()
+        {
+            try
+            {
+                MachiningViewer mv = new MachiningViewer(this.Face6FullName);
+                mv.ShowDialog();
+            }
+            catch (Exception error)
+            {
+                System.Windows.MessageBox.Show(error.Message + error.StackTrace);
+            }
+        }
+
         public Part Part { get; private set; }
 
         public int Index { get; set; }
@@ -43,5 +91,11 @@ namespace QuoteExport.Entities
         public object Face6FileName { get; set; }
 
         public string Material { get; set; }
+
+        public string Face5FullName { get; set; }
+        public string Face6FullName { get; set; }
+
+        public RelayCommand ShowFace5MachiningCommand { get; private set; }
+        public RelayCommand ShowFace6MachiningCommand { get; private set; }
     }
 }

@@ -32,7 +32,7 @@ namespace Dimeng.LinkToMicrocad
 
             XElement xParts = new XElement("Parts");
             xProduct.Add(xParts);
-            foreach (var part in this.product.Parts.Where(it=>!it.Material.IsFake))
+            foreach (var part in this.product.Parts.Where(it => !it.Material.IsFake))
             {
                 XElement xml = getPartXElement(part);
                 xParts.Add(xml);
@@ -55,7 +55,7 @@ namespace Dimeng.LinkToMicrocad
 
             //计算机加工指令带来的三合一、活动层板孔数量
             var list = new List<Hardware>();
-            foreach (var part in this.product.CombinedParts.Where(it=>!it.Material.IsFake))
+            foreach (var part in this.product.CombinedParts.Where(it => !it.Material.IsFake))
             {
                 getPartTokenHardwares(part, list);
             }
@@ -76,11 +76,11 @@ namespace Dimeng.LinkToMicrocad
                 {
                     if (hd.Token.Token.IndexOf("三合一") > -1)
                     {
-                        addHardwareToList("三合一拉杆", "", "个", 1, list);
+                        addHardwareToList("班尔奇三合一拉杆", "101230", "EACH", 1, list);
                     }
                     else if (hd.Token.Token.IndexOf("木榫") > -1)
                     {
-                        addHardwareToList("木榫", "", "个", 1, list);
+                        addHardwareToList("[WP]木榫(木梢)8*30", "81444", "EACH", 1, list);
                     }
                 }
             }
@@ -99,12 +99,13 @@ namespace Dimeng.LinkToMicrocad
                     {
                         if (vd.Diameter == camlock.CamFaceBoreDiameter)
                         {
-                            addHardwareToList("三合一锁扣盖", "", "个", 1, list);
-                            addHardwareToList("三合一锁扣", "", "个", 1, list);
+                            addHardwareToList("班尔奇三合一胶盖白色", "101226", "EACH", 1, list);
+                            addHardwareToList("班尔奇三合一锁扣（大/班尔奇）", "101228", "EACH", 1, list);
+                            addHardwareToList("班尔奇三合一拉杆", "101230", "EACH", 1, list);
                         }
                         else if (vd.Diameter == camlock.FaceBoreDiameter)
                         {
-                            addHardwareToList("三合一胶粒", "", "个", 1, list);
+                            addHardwareToList("班尔奇三合一胶粒", "101231", "EACH", 1, list);
                         }
                     }
                     else if (vd.Token.Token.IndexOf("二合一") > -1)
@@ -117,7 +118,7 @@ namespace Dimeng.LinkToMicrocad
                 }
                 else if (vd.Token.Token.IndexOf("活动层板") > -1)
                 {
-                    addHardwareToList("活动层板托", "", "个", 1, list);
+                    addHardwareToList("[PQ]活动层板托", "81434", "个", 1, list);
                 }
             }
         }
@@ -127,7 +128,7 @@ namespace Dimeng.LinkToMicrocad
             var hw = hwrs.Find(it => it.Name.ToUpper() == name.ToUpper());
             if (hw == null)
             {
-                hwrs.Add(new Hardware() { Name = name, Qty = qty });
+                hwrs.Add(new Hardware() { Name = name, Qty = qty, HardwareType = new HardwareType(name, sku + "|" + unit, null) });
             }
             else
             {
@@ -147,7 +148,7 @@ namespace Dimeng.LinkToMicrocad
 
             XElement xParts = new XElement("Parts");
             xml.Add(xParts);
-            foreach (var part in sub.Parts.Where(it=>!it.Material.IsFake))
+            foreach (var part in sub.Parts.Where(it => !it.Material.IsFake))
             {
                 xParts.Add(getPartXElement(part));
             }
@@ -213,7 +214,7 @@ namespace Dimeng.LinkToMicrocad
                 new XAttribute("Comment2", part.Comment2),
                 new XAttribute("Comment3", part.Comment3),
                 new XAttribute("FileName", part.FileName),
-                new XAttribute("Face6FileName",part.Face6FileName)
+                new XAttribute("Face6FileName", part.Face6FileName)
                 );
             return xml;
         }

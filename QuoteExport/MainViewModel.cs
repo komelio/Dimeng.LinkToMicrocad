@@ -50,7 +50,7 @@ namespace QuoteExport
                 Product product = this.Products[i];
 
                 PauchieConverter converter = new PauchieConverter(product
-                    , Path.Combine(this.CurrentProjectPath, "DMS", "Output", product.Handle, "Machining"));
+                    , Path.Combine(this.CurrentProjectPath, "DMS", "Output", product.Handle, "Machinings"));
                 PauchieProduct pProduct = converter.GetPauchieProduct();
                 pProduct.LineNumber = i + 1;//号码
                 pauchieProductList.Add(pProduct);
@@ -201,6 +201,7 @@ namespace QuoteExport
                 decco.Height = double.Parse(xd.Attribute("Z").Value);
                 decco.Depth = double.Parse(xd.Attribute("Y").Value);
                 decco.Reference = xd.Attribute("Reference").Value;
+                decco.ImagePath = xd.Attribute("Photo") == null ? string.Empty : xd.Attribute("Photo").Value;
 
                 this.Deccos.Add(decco);
             }

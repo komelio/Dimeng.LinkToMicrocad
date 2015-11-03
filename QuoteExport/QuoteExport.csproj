@@ -107,6 +107,13 @@
     <Compile Include="Converters\ProductDataStatusToColorConverter.cs" />
     <Compile Include="Converters\ProductImageConverter.cs" />
     <Compile Include="Converters\UnBoolConverter.cs" />
+    <Compile Include="Dimensions\BorderSeq.cs" />
+    <Compile Include="Dimensions\Drawer.cs" />
+    <Compile Include="Dimensions\DrillInfo.cs" />
+    <Compile Include="Dimensions\HdrillSeq.cs" />
+    <Compile Include="Dimensions\Part.cs" />
+    <Compile Include="Dimensions\RouteSeq.cs" />
+    <Compile Include="Dimensions\VdrillSeq.cs" />
     <Compile Include="Entities\Decco.cs" />
     <Compile Include="Entities\IProduct.cs" />
     <Compile Include="Entities\Moulding.cs" />
@@ -130,6 +137,12 @@
     </Compile>
     <Compile Include="HardwaresViewerViewModel.cs" />
     <Compile Include="IOHelper.cs" />
+    <Compile Include="MachiningViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MachiningViewer.Designer.cs">
+      <DependentUpon>MachiningViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow2.xaml.cs">
       <DependentUpon>MainWindow2.xaml</DependentUpon>
     </Compile>
@@ -149,20 +162,12 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\Product\Product.cs" />
     <Compile Include="MainViewModel.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Page Include="MainWindow2.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -188,6 +193,9 @@
     </Compile>
     <EmbeddedResource Include="ConfigurationFOrm.resx">
       <DependentUpon>ConfigurationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MachiningViewer.resx">
+      <DependentUpon>MachiningViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

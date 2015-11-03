@@ -18,5 +18,7 @@ namespace QuoteExport.Entities
         public double Height { get; set; }
         public double Depth { get; set; }
         public bool IsExport { get; set; }
+
+        public string ImagePath { get; set; }
     }
 }

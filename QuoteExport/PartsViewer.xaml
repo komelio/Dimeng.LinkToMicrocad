@@ -10,13 +10,23 @@
         <ListView ItemsSource="{Binding Parts}" Margin="4" >
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="板件名称" Width="120" DisplayMemberBinding="{Binding PartName}"/>
-                    <GridViewColumn Header="数量" Width="45"  DisplayMemberBinding="{Binding Qty}"/>
-                    <GridViewColumn Header="长度" Width="60" DisplayMemberBinding="{Binding Length}"/>
-                    <GridViewColumn Header="宽度" Width="60" DisplayMemberBinding="{Binding Width}"/>
-                    <GridViewColumn Header="切长" Width="60" DisplayMemberBinding="{Binding CutLength}"/>
-                    <GridViewColumn Header="切宽" Width="60" DisplayMemberBinding="{Binding CutWidth}"/>
-                    <GridViewColumn Header="材料" Width="180" DisplayMemberBinding="{Binding Material}"/>
+                    <GridViewColumn Header="板件名称" Width="80" DisplayMemberBinding="{Binding PartName}"/>
+                    <GridViewColumn Header="数量" Width="35"  DisplayMemberBinding="{Binding Qty}"/>
+                    <GridViewColumn Header="长度" Width="50" DisplayMemberBinding="{Binding Length}"/>
+                    <GridViewColumn Header="宽度" Width="50" DisplayMemberBinding="{Binding Width}"/>
+                    <GridViewColumn Header="切长" Width="50" DisplayMemberBinding="{Binding CutLength}"/>
+                    <GridViewColumn Header="切宽" Width="50" DisplayMemberBinding="{Binding CutWidth}"/>
+                    <GridViewColumn Header="材料" Width="auto" DisplayMemberBinding="{Binding Material}"/>
+                    <GridViewColumn Header="操作" Width="auto" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="正面机加工" Command="{Binding ShowFace5MachiningCommand}" />
+                                    <Button Content="反面机加工" Command="{Binding ShowFace6MachiningCommand}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

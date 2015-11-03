@@ -114,6 +114,7 @@ namespace QuoteExport.Entities
             if (File.Exists(Path.Combine(machiningPath, part.FileName + ".csv")))
             {
                 ppart.FileName = part.FileName;
+                ppart.Face5FullName = Path.Combine(machiningPath, part.FileName + ".csv");
             }
             else
             {
@@ -123,6 +124,7 @@ namespace QuoteExport.Entities
             if (File.Exists(Path.Combine(machiningPath, part.Face6FileName + ".csv")))
             {
                 ppart.Face6FileName = part.Face6FileName;
+                ppart.Face6FullName = Path.Combine(machiningPath, part.Face6FileName + ".csv");
             }
             else
             {

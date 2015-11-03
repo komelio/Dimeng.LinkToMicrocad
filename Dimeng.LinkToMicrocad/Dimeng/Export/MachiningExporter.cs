@@ -1,4 +1,6 @@
-﻿using Dimeng.WoodEngine.Entities;
+﻿using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.Geometry;
+using Dimeng.WoodEngine.Entities;
 using Dimeng.WoodEngine.Entities.Machines.Tools;
 using Dimeng.WoodEngine.Entities.Machinings;
 using System;
@@ -147,6 +149,9 @@ namespace Dimeng.LinkToMicrocad
                     throw new Exception("未找到合适的刀具:" + r.ToolName);
                 }
 
+                double offsetStartX = 0, offsetStartY = 0;
+                getOffsetStartXY(out offsetStartX, out offsetStartY, r, tool.Diameter);
+
                 sb.Append("RouteSetMillSequence,");
                 sb.Append(r.Points[0].X);
                 sb.Append(",");
@@ -154,7 +159,9 @@ namespace Dimeng.LinkToMicrocad
                 sb.Append(",");
                 sb.Append(r.Points[0].Z);
                 sb.Append(",");
+                sb.Append(offsetStartX);
                 sb.Append(",");//start offsetx
+                sb.Append(offsetStartY);
                 sb.Append(",");//startoofsety
                 sb.Append(tool.Diameter);
                 sb.Append(",");
@@ -270,6 +277,37 @@ namespace Dimeng.LinkToMicrocad
                     sb.Append(Environment.NewLine);
                 }
             }
+        }
+
+        private void getOffsetStartXY(out double offsetStartX, out double offsetStartY, Routing r, double dia)
+        {
+            if (r.ToolComp == ToolComp.None)//无偏移
+            {
+                offsetStartX = r.Points[0].X;
+                offsetStartY = r.Points[0].Y;
+                return;
+            }
+
+
+            using (Polyline pline = new Polyline())
+            {
+                pline.AddVertexAt(0, new Point2d(r.Points[0].X, r.Points[0].Y), r.Bulges[0], 0, 0);
+                pline.AddVertexAt(1, new Point2d(r.Points[1].X, r.Points[1].Y), r.Bulges[1], 0, 0);
+
+                double offset = dia / 2;
+                if (r.ToolComp == ToolComp.Right)
+                {
+                    offset = -offset;
+                }
+
+                DBObjectCollection dbos = pline.GetOffsetCurves(offset);
+                Curve curve = dbos[0] as Curve;
+                offsetStartX = curve.StartPoint.X;
+                offsetStartY = curve.StartPoint.Y;
+                dbos.Dispose();
+                curve.Dispose();
+            }
+
         }
 
         private void getHdrillString(StringBuilder sb)
@@ -409,7 +447,7 @@ namespace Dimeng.LinkToMicrocad
             sb.Append(",");
             sb.Append(part.PartName.Replace(",", ";"));
             sb.Append(",");
-            sb.Append("1");//partqty
+            sb.Append("1,");//partqty
             sb.Append(panelCutWidth);
             sb.Append(",");
             sb.Append(part.CutLength);
