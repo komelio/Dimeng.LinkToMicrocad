@@ -77,6 +77,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ADLauncher\ADLauncher.csproj">
+      <Project>{a49696f8-7169-4f9b-8075-e0f6f671937d}</Project>
+      <Name>ADLauncher</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Dimeng.LinkToMicrocad\Dimeng.LinkToMicrocad.csproj">
       <Project>{971bf3b9-1fa5-4d52-861c-d3d7e4193e72}</Project>
       <Name>Dimeng.LinkToMicrocad</Name>

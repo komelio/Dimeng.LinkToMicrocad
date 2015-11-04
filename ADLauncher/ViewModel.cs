@@ -61,7 +61,16 @@ namespace ADLauncher
                 xml.Save(writer);
             }
 
+            //MessageBox.Show("haha");
+
             OnCreate();
+        }
+
+        public void CreateNewProject(string projectName)
+        {
+            this.ProjectName = projectName;
+            this.ProjectDescription = projectName;
+            this.createNew();
         }
 
         public string ADTempPath { get; set; }
@@ -100,9 +109,9 @@ namespace ADLauncher
 
             XElement xml = new XElement(
                 new XElement("root",
-                    new XElement("f", 
-                        new XAttribute("Name", vm.Name), 
-                        new XAttribute("Description", ""), 
+                    new XElement("f",
+                        new XAttribute("Name", vm.Name),
+                        new XAttribute("Description", ""),
                         new XAttribute("o", "M"))));
 
             using (var writer = new XmlTextWriter(erpxml, new UTF8Encoding(false)))
@@ -110,6 +119,11 @@ namespace ADLauncher
                 xml.Save(writer);
             }
             OnCreate();
+        }
+        public void OpenProject(string projectName)
+        {
+            ProjectViewModel pvm = new ProjectViewModel(projectName, string.Empty);
+            openProject(pvm);
         }
 
         private string projectName = string.Empty;

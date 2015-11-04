@@ -15,21 +15,32 @@ namespace ADLauncher
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            MainWindow window = new MainWindow();
-            UpdateWindow uw = new UpdateWindow();
-            if (uw.ShowDialog() == true)
+            //UpdateWindow uw = new UpdateWindow();
+            //if (uw.ShowDialog() == true)
+            //{
+            if (e.Args.Length >= 1)
             {
-                if (e.Args.Length >= 1)
+                try
                 {
-                    window = new MainWindow(ParamHelper.GetOrderNumber(e.Args[0]));
+                    MainWindow window = new MainWindow(
+                        ParamHelper.GetOrderNumber(e.Args[0])
+                        );
                     window.ShowDialog();
+                    this.Shutdown();
                 }
-                else
+                catch (Exception error)
                 {
-                    window.ShowDialog();
+                    MessageBox.Show(error.Message + error.StackTrace);
                 }
             }
-            this.Shutdown();
+            else
+            {
+                MainWindow window = new ADLauncher.MainWindow();
+                window.ShowDialog();
+                this.Shutdown();
+            }
+            //}
+
         }
     }
 }

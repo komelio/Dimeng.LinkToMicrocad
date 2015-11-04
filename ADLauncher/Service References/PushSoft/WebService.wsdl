@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="GetToken">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="userId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTokenResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTokenResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPlates">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPlatesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetPlatesResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetHardwares">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetHardwaresResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetHardwaresResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetEdges">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetEdgesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetEdgesResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="OrderDesign">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="orderNum" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="orderLine" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="OrderDesignResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="OrderDesignResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="OrderCancelDesign">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="orderNum" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="orderLine" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="OrderCancelDesignResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="OrderCancelDesignResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="OrderCanEdit">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="orderNum" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="orderLine" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="OrderCanEditResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="OrderCanEditResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Optimized">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="numAtCrd" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="OptimizedResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="OptimizedResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetTokenSoapIn">
+    <wsdl:part name="parameters" element="tns:GetToken" />
+  </wsdl:message>
+  <wsdl:message name="GetTokenSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTokenResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPlatesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPlates" />
+  </wsdl:message>
+  <wsdl:message name="GetPlatesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPlatesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetHardwaresSoapIn">
+    <wsdl:part name="parameters" element="tns:GetHardwares" />
+  </wsdl:message>
+  <wsdl:message name="GetHardwaresSoapOut">
+    <wsdl:part name="parameters" element="tns:GetHardwaresResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetEdgesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetEdges" />
+  </wsdl:message>
+  <wsdl:message name="GetEdgesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetEdgesResponse" />
+  </wsdl:message>
+  <wsdl:message name="OrderDesignSoapIn">
+    <wsdl:part name="parameters" element="tns:OrderDesign" />
+  </wsdl:message>
+  <wsdl:message name="OrderDesignSoapOut">
+    <wsdl:part name="parameters" element="tns:OrderDesignResponse" />
+  </wsdl:message>
+  <wsdl:message name="OrderCancelDesignSoapIn">
+    <wsdl:part name="parameters" element="tns:OrderCancelDesign" />
+  </wsdl:message>
+  <wsdl:message name="OrderCancelDesignSoapOut">
+    <wsdl:part name="parameters" element="tns:OrderCancelDesignResponse" />
+  </wsdl:message>
+  <wsdl:message name="OrderCanEditSoapIn">
+    <wsdl:part name="parameters" element="tns:OrderCanEdit" />
+  </wsdl:message>
+  <wsdl:message name="OrderCanEditSoapOut">
+    <wsdl:part name="parameters" element="tns:OrderCanEditResponse" />
+  </wsdl:message>
+  <wsdl:message name="OptimizedSoapIn">
+    <wsdl:part name="parameters" element="tns:Optimized" />
+  </wsdl:message>
+  <wsdl:message name="OptimizedSoapOut">
+    <wsdl:part name="parameters" element="tns:OptimizedResponse" />
+  </wsdl:message>
+  <wsdl:portType name="WebServiceSoap">
+    <wsdl:operation name="GetToken">
+      <wsdl:input message="tns:GetTokenSoapIn" />
+      <wsdl:output message="tns:GetTokenSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPlates">
+      <wsdl:input message="tns:GetPlatesSoapIn" />
+      <wsdl:output message="tns:GetPlatesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetHardwares">
+      <wsdl:input message="tns:GetHardwaresSoapIn" />
+      <wsdl:output message="tns:GetHardwaresSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEdges">
+      <wsdl:input message="tns:GetEdgesSoapIn" />
+      <wsdl:output message="tns:GetEdgesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="OrderDesign">
+      <wsdl:input message="tns:OrderDesignSoapIn" />
+      <wsdl:output message="tns:OrderDesignSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="OrderCancelDesign">
+      <wsdl:input message="tns:OrderCancelDesignSoapIn" />
+      <wsdl:output message="tns:OrderCancelDesignSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="OrderCanEdit">
+      <wsdl:input message="tns:OrderCanEditSoapIn" />
+      <wsdl:output message="tns:OrderCanEditSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Optimized">
+      <wsdl:input message="tns:OptimizedSoapIn" />
+      <wsdl:output message="tns:OptimizedSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WebServiceSoap" type="tns:WebServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetToken">
+      <soap:operation soapAction="http://tempuri.org/GetToken" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPlates">
+      <soap:operation soapAction="http://tempuri.org/GetPlates" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHardwares">
+      <soap:operation soapAction="http://tempuri.org/GetHardwares" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEdges">
+      <soap:operation soapAction="http://tempuri.org/GetEdges" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OrderDesign">
+      <soap:operation soapAction="http://tempuri.org/OrderDesign" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OrderCancelDesign">
+      <soap:operation soapAction="http://tempuri.org/OrderCancelDesign" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OrderCanEdit">
+      <soap:operation soapAction="http://tempuri.org/OrderCanEdit" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Optimized">
+      <soap:operation soapAction="http://tempuri.org/Optimized" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WebServiceSoap12" type="tns:WebServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetToken">
+      <soap12:operation soapAction="http://tempuri.org/GetToken" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPlates">
+      <soap12:operation soapAction="http://tempuri.org/GetPlates" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHardwares">
+      <soap12:operation soapAction="http://tempuri.org/GetHardwares" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEdges">
+      <soap12:operation soapAction="http://tempuri.org/GetEdges" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OrderDesign">
+      <soap12:operation soapAction="http://tempuri.org/OrderDesign" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OrderCancelDesign">
+      <soap12:operation soapAction="http://tempuri.org/OrderCancelDesign" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OrderCanEdit">
+      <soap12:operation soapAction="http://tempuri.org/OrderCanEdit" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Optimized">
+      <soap12:operation soapAction="http://tempuri.org/Optimized" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WebService">
+    <wsdl:port name="WebServiceSoap" binding="tns:WebServiceSoap">
+      <soap:address location="http://www.pauchie.com.cn:81/pauchie/Furnit/WebService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WebServiceSoap12" binding="tns:WebServiceSoap12">
+      <soap12:address location="http://www.pauchie.com.cn:81/pauchie/Furnit/WebService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
