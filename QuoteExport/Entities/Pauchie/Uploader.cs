@@ -19,13 +19,10 @@ namespace QuoteExport.Entities
             this.pw = password;
         }
 
-        public void Upload(IEnumerable<string> files)
+        public void Upload(string sourcepath,string destinPath)
         {
-            //ftp上传
             FTPclient client = new FTPclient(server, user, pw);
-            
-
-            //使用服务通知服务器
+            client.Upload(sourcepath, destinPath);
         }
     }
 }

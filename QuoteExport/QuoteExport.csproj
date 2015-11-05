@@ -129,6 +129,7 @@
     <Compile Include="Entities\Product\Part.cs" />
     <Compile Include="Entities\Product\Subassembly.cs" />
     <Compile Include="Entities\Product\VDrilling.cs" />
+    <Compile Include="ERP\PushConnector.cs" />
     <Compile Include="FTP\FTPClient.cs" />
     <Compile Include="FTP\FTPdirectory.cs" />
     <Compile Include="FTP\FTPfileInfo.cs" />
@@ -149,12 +150,12 @@
     <Compile Include="PartsViewerViewModel.cs" />
     <Compile Include="ProductHelper.cs" />
     <Compile Include="ProductViewModel.cs" />
-    <Compile Include="UnitConverter.cs" />
-    <Compile Include="Web References\Pauchie\Reference.cs">
+    <Compile Include="Service References\Push\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="UnitConverter.cs" />
     <Compile Include="PartsViewer.xaml.cs">
       <DependentUpon>PartsViewer.xaml</DependentUpon>
     </Compile>
@@ -201,21 +202,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="app.config" />
+    <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="Web References\Pauchie\PAUCHIEWEBSERVICE.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Web References\Pauchie\PauchieWebServiceService.wsdl" />
-    <None Include="Web References\Pauchie\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
+    <None Include="Service References\Push\WebService.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="pack2.png" />
@@ -228,19 +222,6 @@
   </ItemGroup>
   <ItemGroup>
     <WebReferences Include="Web References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WebReferenceUrl Include="http://c1993319.oicp.net:8000/soap/PAUCHIEWEBSERVICE%3fwsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\Pauchie\</RelPath>
-      <UpdateFromURL>http://c1993319.oicp.net:8000/soap/PAUCHIEWEBSERVICE%3fwsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>QuoteExport_Pauchie_PauchieWebServiceService</CachedSettingsPropName>
-    </WebReferenceUrl>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="2015062603524335_easyicon_net_32.ico" />
@@ -266,6 +247,24 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\Push\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\Push\WebService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\Push\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\Push\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\Push\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -62,12 +62,33 @@ namespace QuoteExport.Entities
                     x.Add(new XAttribute("Width", part.Width));
                     x.Add(new XAttribute("Length", part.Length));
                     x.Add(new XAttribute("IsSculpt", "N"));
-                    x.Add(new XAttribute("EdgeItmID4", part.EdgeSKU4));
-                    x.Add(new XAttribute("EdgeItmID3", part.EdgeSKU3));
-                    x.Add(new XAttribute("EdgeItmID2", part.EdgeSKU2));
-                    x.Add(new XAttribute("EdgeItmID1", part.EdgeSKU1));
+                    if (!string.IsNullOrEmpty(part.EdgeSKU4))
+                    {
+                        x.Add(new XAttribute("EdgeItmID4", part.EdgeSKU4));
+                    }
+                    if (!string.IsNullOrEmpty(part.EdgeSKU3))
+                    {
+                        x.Add(new XAttribute("EdgeItmID3", part.EdgeSKU3));
+                    } 
+                    if (!string.IsNullOrEmpty(part.EdgeSKU2))
+                    {
+                        x.Add(new XAttribute("EdgeItmID2", part.EdgeSKU2));
+                    } 
+                    if (!string.IsNullOrEmpty(part.EdgeSKU1))
+                    {
+                        x.Add(new XAttribute("EdgeItmID1", part.EdgeSKU1));
+                    }
                     x.Add(new XAttribute("MetItmID", part.SKU));
                     xParts.Add(x);
+
+                    if (!string.IsNullOrEmpty(part.Face5FullName))
+                    {
+                        Files.Add(part.Face5FullName);
+                    }
+                    if (!string.IsNullOrEmpty(part.Face6FullName))
+                    {
+                        Files.Add(part.Face6FullName);
+                    }
                 }
 
                 XElement xHwrs = new XElement("Hardwares");

@@ -22,8 +22,13 @@ namespace ADLauncher
             {
                 try
                 {
+                    string order;
+                    string lineNumber;
+                    order = ParamHelper.GetOrderNumber(e.Args[0], out lineNumber);
+                    MessageBox.Show(order+","+lineNumber);
+                    
                     MainWindow window = new MainWindow(
-                        ParamHelper.GetOrderNumber(e.Args[0])
+                        order, lineNumber
                         );
                     window.ShowDialog();
                     this.Shutdown();

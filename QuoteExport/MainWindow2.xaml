@@ -885,7 +885,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="82"/>
-            <RowDefinition Height="3"/>
+            <RowDefinition Height="5"/>
             <RowDefinition Height="10"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="80"/>

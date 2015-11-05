@@ -16,6 +16,7 @@ using System.ComponentModel;
 using SpreadsheetGear;
 using Microsoft.Win32;
 using System.Diagnostics;
+using QuoteExport.ERP;
 
 namespace QuoteExport
 {
@@ -142,13 +143,24 @@ namespace QuoteExport
                 PauchieExporter exporter = new PauchieExporter(this.PauchieProducts, erpFolder);
                 exporter.Export();
 
+                this.ProgressMax = exporter.Files.Count;
+                MessageBox.Show("生成完毕");
                 //上传到ftp
                 Uploader uploader = new Uploader(Settings.Default.FTPServer,
                     Settings.Default.FTPUser,
                     Settings.Default.FTPPassword);
+                foreach (var file in exporter.Files)
+                {
+                    FileInfo fi = new FileInfo(file);
+                    string uploadPath = "/" + this.CurrentProjectName.Replace("-", "/") + "/ERP/" + fi.Name;
+                    uploader.Upload(file, uploadPath);
+                    this.ProgressValue++;
+                }
+                
+                //PushConnector.GetToken();
+                MessageBox.Show(PushConnector.OrderDesign(this.CurrentProjectName));
 
-
-                MessageBox.Show("上传完毕");
+                MessageBox.Show("OrderDesign完毕");
             }
             catch (Exception error)
             {
@@ -512,6 +524,15 @@ namespace QuoteExport
             {
                 currentProjectPath = value;
                 base.RaisePropertyChanged("CurrentProjectPath");
+            }
+        }
+
+        public string CurrentProjectName
+        {
+            get
+            {
+                DirectoryInfo di = new DirectoryInfo(this.currentProjectPath);
+                return di.Name;
             }
         }
 

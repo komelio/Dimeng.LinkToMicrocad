@@ -14,7 +14,7 @@ namespace ADLauncher
             try
             {
                 PushSoft.WebServiceSoapClient client = new PushSoft.WebServiceSoapClient();
-                return client.GetToken(string.Empty, string.Empty);
+                return client.GetToken("DM01", "DM01");
             }
             catch (Exception error)
             {

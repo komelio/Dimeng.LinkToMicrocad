@@ -25,7 +25,7 @@ namespace QuoteExport.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("ftp://c1993319.oicp.net")]
+        [global::System.Configuration.DefaultSettingValueAttribute("ftp://www.pauchie.com.cn")]
         public string FTPServer {
             get {
                 return ((string)(this["FTPServer"]));
@@ -37,7 +37,7 @@ namespace QuoteExport.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("p2admin")]
+        [global::System.Configuration.DefaultSettingValueAttribute("push")]
         public string FTPUser {
             get {
                 return ((string)(this["FTPUser"]));
@@ -49,23 +49,13 @@ namespace QuoteExport.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("311@ftp.com")]
+        [global::System.Configuration.DefaultSettingValueAttribute("pauchie")]
         public string FTPPassword {
             get {
                 return ((string)(this["FTPPassword"]));
             }
             set {
                 this["FTPPassword"] = value;
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://c1993319.oicp.net:8000/soap/PAUCHIEWEBSERVICE")]
-        public string QuoteExport_Pauchie_PauchieWebServiceService {
-            get {
-                return ((string)(this["QuoteExport_Pauchie_PauchieWebServiceService"]));
             }
         }
     }

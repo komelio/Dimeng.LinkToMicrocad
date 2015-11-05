@@ -52,19 +52,18 @@ namespace ADLauncher
             }
         }
 
-        public MainWindow(string od)
+        public MainWindow(string od, string lineNumber)
             : this()
         {
-            this.ContentRendered+=MainWindow_ContentRendered;
-            this.orderNumber = od;
-
-            
+            this.ContentRendered += MainWindow_ContentRendered;
+            this.orderNumber = string.Format("{0}-{1}", od, lineNumber);
         }
 
         private void MainWindow_ContentRendered(object sender, EventArgs e)
         {
             //step0:连接pushsoft的验证服务器，获取登陆token
-            //string token = PushHelper.GetToken();
+            string token = PushHelper.GetToken();
+            MessageBox.Show(token);
             //PushHelper.SaveToken(token);
 
             //step1：查找订单数据

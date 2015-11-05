@@ -46,5 +46,17 @@ namespace ADLauncher.Properties {
                 this["ClientPassword"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ConnectToken {
+            get {
+                return ((string)(this["ConnectToken"]));
+            }
+            set {
+                this["ConnectToken"] = value;
+            }
+        }
     }
 }
