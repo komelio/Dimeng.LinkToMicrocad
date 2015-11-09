@@ -885,7 +885,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="82"/>
-            <RowDefinition Height="5"/>
+            <RowDefinition Height="8"/>
             <RowDefinition Height="10"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="80"/>
@@ -909,6 +909,7 @@
                     <TextBlock Text="上传ERP" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
+            <TextBlock Grid.Column="2" HorizontalAlignment="Left" Margin="3,13,0,0" TextWrapping="Wrap" Text="{Binding OrderState}" VerticalAlignment="Top" Width="69" Foreground="Red"/>
         </Grid>
         <Grid Grid.Row="2" Background="Black" >
             <TextBlock Text="| 个性定制 | 衣帽间 · 衣柜 · 移门" Foreground="White" Margin="50,0,0,0" FontSize="8"/>
@@ -949,7 +950,7 @@
                 </ListBox>
             </TabItem>
         </TabControl>
-        <ProgressBar Grid.Row="1" Background="{x:Null}" BorderThickness="0" Foreground="#FFA21E1E" Value="{Binding ProgressValue}" Maximum="{Binding ProgressMax}"/>
+        <ProgressBar Grid.Row="1" Background="{x:Null}" BorderThickness="0" Foreground="#FFDE4848" Value="{Binding ProgressValue}" Maximum="{Binding ProgressMax}"/>
         <Label Content="{Binding CurrentProjectPath}" HorizontalAlignment="Left" Margin="10,155,0,0" Grid.Row="5" VerticalAlignment="Top"/>
     </Grid>
 </Window>

@@ -28,19 +28,46 @@ namespace QuoteExport
             PauchieProducts = new List<PauchieProduct>();
             PauchieHardwares = new List<PauchieHardware>();
 
-            StartCommand = new RelayCommand(this.startWork);
+            StartCommand = new RelayCommand(this.startWork, this.canStart);
             ShowConfiguration = new RelayCommand(this.showConfiguration);
-            BrowserCommand = new RelayCommand(this.browser);
-            StartCADCommand = new RelayCommand(this.startCAD, this.canStartCAD);
 
             init(xmlFileName);
 
             this.worker = new BackgroundWorker();
             this.worker.DoWork += this.DoWork;
             this.worker.ProgressChanged += this.ProgressChanged;
+            this.worker.RunWorkerCompleted += worker_RunWorkerCompleted;
 
             loadXMLProductsAndConvertToPauchie();
+
+            IsConnected = true;
         }
+
+        void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            this.isUploading = false;
+        }
+
+        private bool canStart()
+        {
+            if (this.CurrentProjectName.Split('-').Length != 2)
+            {
+                this.OrderState = "离线";
+                return false;
+            }
+
+            string message;
+            if (!PushConnector.OrderCanEdit(this.CurrentProjectName, out message))
+            {
+                this.OrderState = "已设计";
+                return false;
+            }
+
+            return !isUploading;
+        }
+
+        private bool isUploading = false;
+
 
         private void loadXMLProductsAndConvertToPauchie()
         {
@@ -58,59 +85,6 @@ namespace QuoteExport
             }
 
             this.PauchieProducts = pauchieProductList;
-        }
-
-        private string cadDirPath;
-        private string cadEXEPath;
-        private void startCAD()
-        {
-            RegistryKey key = Registry.CurrentUser
-                .OpenSubKey(@"Software\Microvellum\Microvellum Toolbox\R67\Toolbox-Standard\ApplicationSettings");
-            string jobpath = key.GetValue("Jobs").ToString();
-            jobpath = Path.Combine(jobpath, (new DirectoryInfo(this.currentProjectPath)).Name);
-
-            if (Directory.Exists(jobpath))
-            {
-                Directory.Delete(jobpath, true);
-            }
-
-            IOHelper.CopyDirectory(Path.Combine(this.currentProjectPath, "DMS"), jobpath);
-
-            Process myProcess = new Process();
-
-            myProcess.StartInfo.UseShellExecute = true;
-            // You can start any process, HelloWorld is a do-nothing example.
-            myProcess.StartInfo.FileName = this.cadEXEPath;
-            myProcess.StartInfo.CreateNoWindow = true;
-            myProcess.StartInfo.WorkingDirectory = this.cadDirPath;
-            myProcess.Start();
-            //System.Diagnostics.Process.Start(this.cadEXEPath);
-        }
-
-        private bool canStartCAD()
-        {
-            try
-            {
-                RegistryKey key = Registry.CurrentUser
-                    .OpenSubKey(@"Software\Microvellum\Microvellum ToolBox\R67\Toolbox-Standard");
-                string path = key.GetValue("Last AutoCAD Path").ToString();
-                if (!Directory.Exists(path))
-                {
-                    return false;
-                }
-                this.cadDirPath = path;
-                this.cadEXEPath = Path.Combine(path, "ACAD.exe");
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private void browser()
-        {
-            System.Diagnostics.Process.Start("Explorer.exe", "/select,\"" + Path.Combine(currentProjectPath, "DMS") + "\"");
         }
 
         private void ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -144,7 +118,7 @@ namespace QuoteExport
                 exporter.Export();
 
                 this.ProgressMax = exporter.Files.Count;
-                MessageBox.Show("生成完毕");
+                //MessageBox.Show("生成完毕");
                 //上传到ftp
                 Uploader uploader = new Uploader(Settings.Default.FTPServer,
                     Settings.Default.FTPUser,
@@ -156,15 +130,22 @@ namespace QuoteExport
                     uploader.Upload(file, uploadPath);
                     this.ProgressValue++;
                 }
-                
-                //PushConnector.GetToken();
-                MessageBox.Show(PushConnector.OrderDesign(this.CurrentProjectName));
 
-                MessageBox.Show("OrderDesign完毕");
+                //PushConnector.GetToken();
+                string message;
+                if (PushConnector.OrderDesign(this.CurrentProjectName, out message))
+                {
+                    MessageBox.Show("上传成功！");
+                }
+                else
+                {
+                    MessageBox.Show("上传失败！" + message);
+                }
             }
             catch (Exception error)
             {
-                MessageBox.Show(error.Message + error.StackTrace);
+                this.isUploading = false;
+                MessageBox.Show("上传ERP失败!" + Environment.NewLine + error.Message + error.StackTrace);
             }
         }
 
@@ -483,13 +464,15 @@ namespace QuoteExport
 
         private void startWork()
         {
-            try
+            PushConnectionWindow pcw = new PushConnectionWindow();
+            if (pcw.ShowDialog() == true)
             {
-                worker.RunWorkerAsync();
-            }
-            catch (Exception error)
-            {
-                MessageBox.Show("上传过程中发生了错误!" + error.Message + error.StackTrace);
+                if (MessageBox.Show("是否要将当前数据上传到ERP?", "班尔奇", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                {
+                    isUploading = true;
+                    this.StartCommand.RaiseCanExecuteChanged();
+                    worker.RunWorkerAsync();
+                }
             }
         }
 
@@ -535,6 +518,30 @@ namespace QuoteExport
                 return di.Name;
             }
         }
+
+        private bool isConnected;
+
+        public bool IsConnected
+        {
+            get { return isConnected; }
+            set
+            {
+                isConnected = value;
+                base.RaisePropertyChanged("IsConnected");
+            }
+        }
+
+        private string orderState;
+        public string OrderState
+        {
+            get { return orderState; }
+            set
+            {
+                orderState = value;
+                base.RaisePropertyChanged("OrderState");
+            }
+        }
+
 
         public List<Product> Products { get; private set; }
         public List<Moulding> Mouldings { get; private set; }

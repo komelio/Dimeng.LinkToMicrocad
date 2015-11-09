@@ -1,4 +1,5 @@
-﻿using Dimeng.WoodEngine.Entities;
+﻿using Dimeng.LinkToMicrocad.Logging;
+using Dimeng.WoodEngine.Entities;
 using Dimeng.WoodEngine.Entities.MachineTokens;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,7 @@ namespace Dimeng.LinkToMicrocad
 
             XElement xParts = new XElement("Parts");
             xProduct.Add(xParts);
+
             foreach (var part in this.product.Parts.Where(it => !it.Material.IsFake))
             {
                 XElement xml = getPartXElement(part);
@@ -55,7 +57,7 @@ namespace Dimeng.LinkToMicrocad
 
             //计算机加工指令带来的三合一、活动层板孔数量
             var list = new List<Hardware>();
-            foreach (var part in this.product.CombinedParts.Where(it => !it.Material.IsFake))
+            foreach (var part in this.product.CombinedParts)
             {
                 getPartTokenHardwares(part, list);
             }
@@ -74,13 +76,10 @@ namespace Dimeng.LinkToMicrocad
             {
                 if (hd.Token != null)
                 {
-                    if (hd.Token.Token.IndexOf("三合一") > -1)
-                    {
-                        addHardwareToList("班尔奇三合一拉杆", "101230", "EACH", 1, list);
-                    }
-                    else if (hd.Token.Token.IndexOf("木榫") > -1)
+                    if (hd.Token.Token.IndexOf("木榫") > -1)
                     {
                         addHardwareToList("[WP]木榫(木梢)8*30", "81444", "EACH", 1, list);
+                        Logger.GetLogger().Debug(string.Format("{0}/{1}/{2}/{3}/{4}/{5}", hd.FaceNumber, hd.Position, hd.Token.Token, hd.Part.Length, hd.Part.Width, hd.Part.PartName));
                     }
                 }
             }

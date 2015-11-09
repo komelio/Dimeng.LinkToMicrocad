@@ -24,7 +24,7 @@ namespace LibraryConvert
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string finalPath = @"C:\Users\xspxs_000\Desktop\output\"+tbVersionNumber.Text;
+            string finalPath = @"C:\Users\xspxs_000\Desktop\output\";// +tbVersionNumber.Text;
             if(!Directory.Exists(finalPath))
             {
                 Directory.CreateDirectory(finalPath);

@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using ADLauncher.Properties;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
@@ -16,9 +17,10 @@ namespace ADLauncher
     public class ViewModel : ViewModelBase
     {
         public ViewModel(string orderNumber)
-            : this()
         {
             this.ProjectName = orderNumber;
+
+            CreateProjectCommand = new RelayCommand(this.createNew, this.canCreateNew);
         }
 
         public ViewModel()
@@ -151,7 +153,7 @@ namespace ADLauncher
         public List<ProjectViewModel> Projects { get; private set; }
 
         public RelayCommand CreateProjectCommand { get; private set; }
-
+        public RelayCommand StateCommand { get; private set; }
         public Action OnCreate { get; set; }
     }
 }

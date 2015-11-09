@@ -25,12 +25,19 @@ namespace ADLauncher
                     string order;
                     string lineNumber;
                     order = ParamHelper.GetOrderNumber(e.Args[0], out lineNumber);
-                    MessageBox.Show(order+","+lineNumber);
-                    
-                    MainWindow window = new MainWindow(
-                        order, lineNumber
-                        );
-                    window.ShowDialog();
+                    MainWindow window = new ADLauncher.MainWindow();
+                    PushConnectionWindow pcw = new PushConnectionWindow(order, lineNumber);
+                    if (pcw.ShowDialog() == true)
+                    {
+
+                        //MessageBox.Show(order+","+lineNumber);
+
+                        window = new MainWindow(
+                            order, lineNumber
+                            );
+                        window.ShowDialog();
+                    }
+
                     this.Shutdown();
                 }
                 catch (Exception error)

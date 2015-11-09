@@ -80,6 +80,7 @@ namespace Dimeng.WoodEngine.Business
                 }
             }
 
+
             product.CombinedHardwares.ForEach(it => it.FindAssociatedPart(product, library.CurrentToolFile));
             product.CombinedParts.ForEach(p => p.MachineTokens.ForEach(m => m.ToMachining(1, library.CurrentToolFile)));//todo:关联距离是1
         }

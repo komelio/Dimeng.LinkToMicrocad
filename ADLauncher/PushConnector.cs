@@ -1,20 +1,37 @@
-﻿using System;
+﻿using ADLauncher.PushSoft;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Windows;
+using System.Xml.Linq;
 
 namespace ADLauncher
 {
     public class PushHelper
     {
-        public static string GetToken()
+        public static bool GetToken(string username, string password, out string token)
         {
             try
             {
-                PushSoft.WebServiceSoapClient client = new PushSoft.WebServiceSoapClient();
-                return client.GetToken("DM01", "DM01");
+                WebServiceSoapClient client
+                    = new WebServiceSoapClient(new BasicHttpBinding(), new EndpointAddress("http://www.pauchie.com.cn:81/pauchie/Furnit/WebService.asmx"));
+                string result = client.GetToken(username, password);
+
+                XElement xml = XElement.Parse(result);
+
+                if (xml.Elements("Success").SingleOrDefault().Value == "Y")
+                {
+                    token = xml.Elements("DataSource").SingleOrDefault().Value;
+                    return true;
+                }
+                else
+                {
+                    token = string.Empty;
+                    return false;
+                }
             }
             catch (Exception error)
             {
@@ -23,40 +40,55 @@ namespace ADLauncher
             }
         }
 
-        public static void SaveToken(string token)
+        public static bool OrderCanEdit(string token, string order, string linenumber)
         {
-            string path = Directory.GetCurrentDirectory();
-            path = Path.Combine(path, "pushsoft.txt");
-            if (File.Exists(path))
+            try
             {
-                File.Delete(path);
-            }
-            else
-            {
-                using (FileStream fs = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.Write))
-                using (StreamWriter sw = new StreamWriter(fs, Encoding.Default))
+                WebServiceSoapClient client
+                    = new WebServiceSoapClient(new BasicHttpBinding(), new EndpointAddress("http://www.pauchie.com.cn:81/pauchie/Furnit/WebService.asmx"));
+                string result = client.OrderCanEdit(token, order, int.Parse(linenumber));
+
+                XElement xml = XElement.Parse(result);
+                //MessageBox.Show(xml.Elements("DataSource").SingleOrDefault().Value);
+                if (xml.Elements("DataSource").SingleOrDefault().Value == "Y")
                 {
-                    sw.WriteLine(token);
-                    sw.Close();
-                    fs.Close();
+                    return true;
                 }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message);
+                throw error;
             }
         }
 
-        public static string LoadToken()
+        public static bool OrderCancelDesign(string token, string order, string linenumber)
         {
-            string path = Directory.GetCurrentDirectory();
-            path = Path.Combine(path, "pushsoft.txt");
-
-            using (FileStream fs = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.Write))
-            using (StreamReader sr = new StreamReader(fs, Encoding.Default))
+            try
             {
-                string line = sr.ReadLine();
+                WebServiceSoapClient client
+                    = new WebServiceSoapClient(new BasicHttpBinding(), new EndpointAddress("http://www.pauchie.com.cn:81/pauchie/Furnit/WebService.asmx"));
+                string result = client.OrderCancelDesign(token, order, int.Parse(linenumber));
 
-                sr.Close();
-                fs.Close();
+                XElement xml = XElement.Parse(result);
 
-                return line;
+                if (xml.Elements("Success").SingleOrDefault().Value == "Y")
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message);
+                throw error;
             }
         }
     }

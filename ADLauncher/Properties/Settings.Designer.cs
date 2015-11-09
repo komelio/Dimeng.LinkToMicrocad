@@ -25,7 +25,7 @@ namespace ADLauncher.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("00001")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string ClientId {
             get {
                 return ((string)(this["ClientId"]));
@@ -37,25 +37,13 @@ namespace ADLauncher.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("12341234")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string ClientPassword {
             get {
                 return ((string)(this["ClientPassword"]));
             }
             set {
                 this["ClientPassword"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ConnectToken {
-            get {
-                return ((string)(this["ConnectToken"]));
-            }
-            set {
-                this["ConnectToken"] = value;
             }
         }
     }

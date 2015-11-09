@@ -1,9 +1,11 @@
-﻿using Dimeng.WoodEngine.Entities;
+﻿using Dimeng.LinkToMicrocad.Logging;
+using Dimeng.WoodEngine.Entities;
 using SpreadsheetGear;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Dimeng.WoodEngine.Entities.Checks
 {
@@ -41,7 +43,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
                 {
                     errors.Add(new ModelError(string.Format("Material [{0}] not found", materialText)));
                 }
-                material = m;
+                material = new Material(m.Name, m.Thickness, m.Code);
             }
             //缓存中没有数据
             else
@@ -89,6 +91,7 @@ namespace Dimeng.WoodEngine.Entities.Checks
 
             //根据以上逻辑,这里material不能为null
             material.IsFake = isFakeMaterial;
+            //Logger.GetLogger().Warn(string.Format("{0}/{1}", material.Name, material.IsFake));
             if (material.Thickness <= 0)
             {
                 return 0;

@@ -53,19 +53,23 @@ namespace ADLauncher
         }
 
         public MainWindow(string od, string lineNumber)
-            : this()
         {
+            InitializeComponent();
+            initADInfo();
+
+            var viewmodel = new ViewModel(od);
+            //viewmodel.IsConnected = false;
+            viewmodel.ADTempPath = this.adTempPath;
+            viewmodel.OnCreate = this.close;
+            viewmodel.ADProjectsPath = System.IO.Path.Combine(adPath, "Projects");
+            this.DataContext = viewmodel;
+
             this.ContentRendered += MainWindow_ContentRendered;
             this.orderNumber = string.Format("{0}-{1}", od, lineNumber);
         }
 
         private void MainWindow_ContentRendered(object sender, EventArgs e)
         {
-            //step0:连接pushsoft的验证服务器，获取登陆token
-            string token = PushHelper.GetToken();
-            MessageBox.Show(token);
-            //PushHelper.SaveToken(token);
-
             //step1：查找订单数据
             string path = System.IO.Path.Combine(adPath, "Projects", orderNumber);
             if (!System.IO.Directory.Exists(path))
@@ -77,6 +81,7 @@ namespace ADLauncher
             }
             else
             {
+                //MessageBox.Show("OpenProject!");
                 //打开订单数据
                 this.Viewmodel.OpenProject(this.orderNumber);
             }
