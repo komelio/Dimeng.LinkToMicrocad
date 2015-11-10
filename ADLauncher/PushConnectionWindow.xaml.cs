@@ -43,6 +43,7 @@ namespace ADLauncher
             {
                 Settings.Default.ClientId = this.tbUserName.Text;
                 Settings.Default.ClientPassword = passwordbox.Password;
+                Settings.Default.ClientToken = token;
                 Settings.Default.Save();
 
                 if (!PushHelper.OrderCanEdit(token, this.orderNumber, this.lineNumber))

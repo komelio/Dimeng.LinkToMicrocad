@@ -8,5 +8,17 @@
     <Setting Name="ClientPassword" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="ClientToken" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="FTPServer" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ftp://www.pauchie.com.cn</Value>
+    </Setting>
+    <Setting Name="FTPClient" Type="System.String" Scope="User">
+      <Value Profile="(Default)">push</Value>
+    </Setting>
+    <Setting Name="FTPPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)">pauchie</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

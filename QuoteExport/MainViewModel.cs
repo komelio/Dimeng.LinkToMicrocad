@@ -56,13 +56,6 @@ namespace QuoteExport
                 return false;
             }
 
-            string message;
-            if (!PushConnector.OrderCanEdit(this.CurrentProjectName, out message))
-            {
-                this.OrderState = "已设计";
-                return false;
-            }
-
             return !isUploading;
         }
 
@@ -114,19 +107,29 @@ namespace QuoteExport
                     Directory.CreateDirectory(erpFolder);
                 }
 
-                PauchieExporter exporter = new PauchieExporter(this.PauchieProducts, erpFolder);
+                PauchieExporter exporter = new PauchieExporter(this.PauchieProducts, currentProjectPath);
                 exporter.Export();
+                ProjectExporter exporter2 = new ProjectExporter(this.currentProjectPath);
+                exporter2.GetFiles();
 
-                this.ProgressMax = exporter.Files.Count;
+                this.ProgressMax = exporter.Files.Count + exporter2.Files.Count;
                 //MessageBox.Show("生成完毕");
                 //上传到ftp
                 Uploader uploader = new Uploader(Settings.Default.FTPServer,
                     Settings.Default.FTPUser,
                     Settings.Default.FTPPassword);
+                uploader.DeleteDirectoryFiles("/" + this.CurrentProjectName.Replace("-", "/") + "/ERP/");
                 foreach (var file in exporter.Files)
                 {
                     FileInfo fi = new FileInfo(file);
                     string uploadPath = "/" + this.CurrentProjectName.Replace("-", "/") + "/ERP/" + fi.Name;
+                    uploader.Upload(file, uploadPath);
+                    this.ProgressValue++;
+                }
+                foreach (var file in exporter2.Files)
+                {
+                    FileInfo fi = new FileInfo(file);
+                    string uploadPath = "/" + this.CurrentProjectName.Replace("-", "/") + "/Project/" + fi.Name;
                     uploader.Upload(file, uploadPath);
                     this.ProgressValue++;
                 }
@@ -467,7 +470,24 @@ namespace QuoteExport
             PushConnectionWindow pcw = new PushConnectionWindow();
             if (pcw.ShowDialog() == true)
             {
-                if (MessageBox.Show("是否要将当前数据上传到ERP?", "班尔奇", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                bool confirmUpload = true;
+                string message;
+                if (!PushConnector.OrderCanEdit(this.CurrentProjectName, out message))
+                {
+                    if (MessageBox.Show("当前订单号" + this.CurrentProjectName + "已上传过数据，是否仍然要上传？" + Environment.NewLine + message,
+                            "班尔奇", MessageBoxButton.OKCancel)
+                                != MessageBoxResult.OK)
+                    {
+                        confirmUpload = false;
+                    }
+                }
+
+                if (MessageBox.Show("是否要将当前数据上传到ERP?", "班尔奇", MessageBoxButton.OKCancel) != MessageBoxResult.OK)
+                {
+                    confirmUpload = false;
+                }
+
+                if (confirmUpload)
                 {
                     isUploading = true;
                     this.StartCommand.RaiseCanExecuteChanged();

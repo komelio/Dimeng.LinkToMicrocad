@@ -46,5 +46,53 @@ namespace ADLauncher.Properties {
                 this["ClientPassword"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ClientToken {
+            get {
+                return ((string)(this["ClientToken"]));
+            }
+            set {
+                this["ClientToken"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ftp://www.pauchie.com.cn")]
+        public string FTPServer {
+            get {
+                return ((string)(this["FTPServer"]));
+            }
+            set {
+                this["FTPServer"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("push")]
+        public string FTPClient {
+            get {
+                return ((string)(this["FTPClient"]));
+            }
+            set {
+                this["FTPClient"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("pauchie")]
+        public string FTPPassword {
+            get {
+                return ((string)(this["FTPPassword"]));
+            }
+            set {
+                this["FTPPassword"] = value;
+            }
+        }
     }
 }

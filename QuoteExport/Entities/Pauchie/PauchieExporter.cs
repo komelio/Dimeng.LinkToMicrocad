@@ -25,7 +25,7 @@ namespace QuoteExport.Entities
 
             foreach (var product in products)
             {
-                string xmlPath = Path.Combine(folderPath, product.BomId + ".xml");
+                string xmlPath = Path.Combine(folderPath, "DMS", "ERP", product.BomId + ".xml");
                 XDocument doc = new XDocument(new XDeclaration("1.0", "utf8", "no"));
 
                 XElement xml = new XElement("Product");
@@ -69,11 +69,11 @@ namespace QuoteExport.Entities
                     if (!string.IsNullOrEmpty(part.EdgeSKU3))
                     {
                         x.Add(new XAttribute("EdgeItmID3", part.EdgeSKU3));
-                    } 
+                    }
                     if (!string.IsNullOrEmpty(part.EdgeSKU2))
                     {
                         x.Add(new XAttribute("EdgeItmID2", part.EdgeSKU2));
-                    } 
+                    }
                     if (!string.IsNullOrEmpty(part.EdgeSKU1))
                     {
                         x.Add(new XAttribute("EdgeItmID1", part.EdgeSKU1));
@@ -110,7 +110,7 @@ namespace QuoteExport.Entities
 
         private void outputListXML()
         {
-            string path = Path.Combine(folderPath, "bom.xml");
+            string path = Path.Combine(folderPath, "DMS", "ERP", "bom.xml");
             XDocument doc = new XDocument(new XDeclaration("1.0", "utf8", "no"));
 
             XElement xml = new XElement("Products");

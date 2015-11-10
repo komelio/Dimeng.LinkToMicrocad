@@ -64,7 +64,7 @@ namespace QuoteExport.ERP
         {
             try
             {
-                MessageBox.Show(string.Format("{0}/{1}/",adProjectName,Settings.Default.ClientToken));
+                //MessageBox.Show(string.Format("{0}/{1}/",adProjectName,Settings.Default.ClientToken));
                 string[] words = adProjectName.Split('-');
 
                 Push.WebServiceSoapClient client
@@ -72,7 +72,7 @@ namespace QuoteExport.ERP
                 string result = client.OrderCanEdit(Settings.Default.ClientToken, words[0], int.Parse(words[1]));
 
                 XElement xml = XElement.Parse(result);
-                MessageBox.Show(xml.Elements("DataSource").SingleOrDefault().Value);
+                //MessageBox.Show(xml.Elements("DataSource").SingleOrDefault().Value);
                 if (xml.Elements("DataSource").SingleOrDefault().Value == "Y")
                 {
                     message = "Success!";

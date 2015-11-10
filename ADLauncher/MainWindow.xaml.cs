@@ -1,7 +1,10 @@
-﻿using Microsoft.Win32;
+﻿using ADLauncher.Properties;
+using Ionic.Zip;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -23,13 +26,12 @@ namespace ADLauncher
     /// </summary>
     public partial class MainWindow : Window
     {
-        [DllImport("kernel32.dll")]
-        public static extern int WinExec(string exeName, int operType);
-
         string orderNumber;
         string adPath;
         string adTempPath;
         string adExePath;
+        string od;
+        string line;
 
         public MainWindow()
         {
@@ -55,6 +57,10 @@ namespace ADLauncher
         public MainWindow(string od, string lineNumber)
         {
             InitializeComponent();
+
+            this.od = od;
+            this.line = lineNumber;
+
             initADInfo();
 
             var viewmodel = new ViewModel(od);
@@ -70,23 +76,55 @@ namespace ADLauncher
 
         private void MainWindow_ContentRendered(object sender, EventArgs e)
         {
-            //step1：查找订单数据
             string path = System.IO.Path.Combine(adPath, "Projects", orderNumber);
-            if (!System.IO.Directory.Exists(path))
-            {
-                //todo：下载订单数据
 
-                //创建订单数据
-                this.Viewmodel.CreateNewProject(this.orderNumber);
+            //step1：查找订单数据
+            if (!PushHelper.OrderCanEdit(Settings.Default.ClientToken, od, line))
+            {
+                if (Directory.Exists(path))
+                {
+                    if (MessageBox.Show("本地已存在任务数据" + orderNumber + ",是否进行覆盖?", "班尔奇", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                    {
+                        downloadProjectData(path);
+                    }
+                }
+                else
+                {
+                    downloadProjectData(path);
+                }
+
+                this.Viewmodel.OpenProject(this.orderNumber);
             }
             else
             {
-                //MessageBox.Show("OpenProject!");
-                //打开订单数据
-                this.Viewmodel.OpenProject(this.orderNumber);
-            }
+                if (!System.IO.Directory.Exists(path))
+                {
+                    //todo：下载订单数据
 
-            //step3：打开任务或者提示下载覆盖
+                    //创建订单数据
+                    this.Viewmodel.CreateNewProject(this.orderNumber);
+                }
+                else
+                {
+                    //MessageBox.Show("OpenProject!");
+                    //打开订单数据
+                    this.Viewmodel.OpenProject(this.orderNumber);
+                }
+            }
+        }
+
+        private void downloadProjectData(string path)
+        {
+            FTPclient client = new FTPclient(Settings.Default.FTPServer, Settings.Default.FTPClient, Settings.Default.FTPPassword);
+            client.Download("/" + od + "/" + line + "/Project/project_temp.dwg", System.IO.Path.Combine(path, "project.dwg"), true);
+
+            string tempDMS = System.IO.Path.GetTempFileName();
+            client.Download("/" + od + "/" + line + "/Project/DMS.zip", tempDMS, true);
+
+            using (ZipFile zipfile = new ZipFile(tempDMS, Encoding.Default))
+            {
+                zipfile.ExtractAll(System.IO.Path.Combine(path, "DMS"));
+            }
         }
 
         private void close()

@@ -50,6 +50,7 @@ namespace ADLauncher
 
                 XElement xml = XElement.Parse(result);
                 //MessageBox.Show(xml.Elements("DataSource").SingleOrDefault().Value);
+                //MessageBox.Show(xml.Elements("Success").SingleOrDefault().Value);
                 if (xml.Elements("DataSource").SingleOrDefault().Value == "Y")
                 {
                     return true;

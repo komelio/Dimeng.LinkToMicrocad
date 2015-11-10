@@ -557,12 +557,12 @@
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Horizontal" Grid.ColumnSpan="5" Margin="0,5">
+                    <StackPanel Orientation="Horizontal" Grid.ColumnSpan="7" Margin="0,5">
                         <TextBlock Text="{Binding Description}"  FontSize="18" FontWeight="Bold" />
                         <Image Source="images/error.png" Width="20" Height="20" Margin="10,0" ToolTip="数据与图形不匹配，请重新绘制此产品" Visibility="{Binding IsDataMatch, Converter={StaticResource UnBoolConverter}}"/>
                     </StackPanel>
-                    <CheckBox IsChecked="{Binding IsExport}" Content="导出" Grid.Row="1" Grid.ColumnSpan="4"/>
-                    <TextBlock Grid.Row="2" Grid.ColumnSpan="4">
+                    <CheckBox IsChecked="{Binding IsExport}" Content="导出" Grid.Row="1" Grid.ColumnSpan="7"/>
+                    <TextBlock Grid.Row="2" Grid.ColumnSpan="7">
                         <Run Text="型号:" />
                         <Run Text=" "/>
                         <Run Text="{Binding ItmId}"  />

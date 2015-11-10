@@ -22,11 +22,7 @@ namespace QuoteExport
             }
             else
             {
-                MainWindow2 mainWindow = new MainWindow2(e.Args[0]);
-
-                //todo:
-                //增加认证部分
-
+                MainWindow2 mainWindow = new MainWindow2(e.Args[0]);                
                 mainWindow.ShowDialog();
             }
         }
