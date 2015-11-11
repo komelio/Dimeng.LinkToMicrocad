@@ -107,7 +107,7 @@ namespace QuoteExport
                     Directory.CreateDirectory(erpFolder);
                 }
 
-                PauchieExporter exporter = new PauchieExporter(this.PauchieProducts, currentProjectPath);
+                PauchieExporter exporter = new PauchieExporter(this.PauchieProducts, currentProjectPath, this.CurrentProjectName);
                 exporter.Export();
                 ProjectExporter exporter2 = new ProjectExporter(this.currentProjectPath);
                 exporter2.GetFiles();

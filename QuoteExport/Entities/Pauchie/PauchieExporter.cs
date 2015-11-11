@@ -9,14 +9,25 @@ namespace QuoteExport.Entities
 {
     public class PauchieExporter
     {
+        string orderNumber;
+        string lineNumber;
         List<PauchieProduct> products;
         string folderPath;
         public List<string> Files { get; private set; }
-        public PauchieExporter(List<PauchieProduct> products, string folderPath)
+        public PauchieExporter(List<PauchieProduct> products, string folderPath, string orderName)
         {
-            this.products = products;
+            this.products = products.Where(it => it.IsExport).ToList();
             this.folderPath = folderPath;
             this.Files = new List<string>();
+
+            string[] values = orderName.Split('-');
+            if (values.Length != 2)
+            {
+                throw new Exception("任务名称数据有误");
+            }
+
+            orderNumber = values[0];
+            lineNumber = values[1];
         }
 
         public void Export()
@@ -38,8 +49,8 @@ namespace QuoteExport.Entities
                 xml.Add(new XAttribute("ItmName", product.Description));
                 xml.Add(new XAttribute("ItmID", product.ItmId));
                 //xml.Add(new XAttribute("OrderLine", product.LineNumber));
-                xml.Add(new XAttribute("OrderNum", string.Empty));//from erp
-                xml.Add(new XAttribute("OrderLine", string.Empty));//from erp
+                xml.Add(new XAttribute("OrderNum", orderNumber));//from erp
+                xml.Add(new XAttribute("OrderLine", lineNumber));//from erp
                 xml.Add(new XAttribute("LineNum", product.LineNumber));
                 xml.Add(new XAttribute("BomID", product.BomId));
 
