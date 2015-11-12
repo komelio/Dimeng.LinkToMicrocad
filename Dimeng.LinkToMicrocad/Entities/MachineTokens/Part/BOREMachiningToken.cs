@@ -1,4 +1,5 @@
-﻿using Dimeng.WoodEngine.Entities.Checks;
+﻿using Dimeng.LinkToMicrocad.Logging;
+using Dimeng.WoodEngine.Entities.Checks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,7 +67,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                         System.Math.Abs(PosStartX - PosEndX) * System.Math.Abs(PosStartX - PosEndX) +
                         System.Math.Abs(PosStartY - PosEndY) * System.Math.Abs(PosStartY - PosEndY)
                         );
-            if (HoleGap < 1)//避免太小的间距
+            if (HoleGap < 1)//避免太小的间距，导致下面计算number时overflow
                 HoleGap = 1;
 
             number = (int)System.Math.Floor(dist / HoleGap) + 1;
@@ -152,6 +153,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             {
                 if (IsLineHoles)
                 {
+                    Logger.GetLogger().Debug(string.Format("Bore number:{0}/HoleGap:{1}", number, HoleGap));
                     for (int i = 0; i < number; i++)
                     {
                         Machinings.VDrilling vdrill = new Machinings.VDrilling(
@@ -166,8 +168,10 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                         Part.VDrillings.Add(vdrill);
                     }
                 }
-
-                Part.VDrillings.Add(new Machinings.VDrilling(this.FaceNumber, PosStartX, PosStartY, Diameter, PosStartZ, Part, this));
+                else
+                {
+                    Part.VDrillings.Add(new Machinings.VDrilling(this.FaceNumber, PosStartX, PosStartY, Diameter, PosStartZ, Part, this));
+                }
             }
         }
     }

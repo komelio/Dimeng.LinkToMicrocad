@@ -154,7 +154,10 @@ namespace QuoteExport.Dimensions
             border.Face5Only = border.FileName != "" & border.Face6FileName == "";
             border.Face6Only = border.FileName == "" & !border.FoundRouting & !border.FoundSawing & !border.FoundVdrill;
             border.DoubleFace5 = border.FileName != "" & border.Face6FileName != "";
-            border.DoubleFace6 = border.FileName == "" & border.Face6FileName != "" & (border.FoundVdrill | border.FoundRouting | border.FoundSawing);
+            border.DoubleFace6 = 
+                border.FileName == "" 
+                & border.Face6FileName != "" 
+                & (border.FoundVdrill | border.FoundRouting | border.FoundSawing);
             return border;
         }
     }

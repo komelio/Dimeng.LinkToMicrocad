@@ -87,18 +87,12 @@ namespace Dimeng.LinkToMicrocad
             }
             else//只有面6的情况，需要翻转
             {
+                //因为只有面6，所有加工都是在面6的
                 this.VDrillings = part.VDrillings;
                 this.Routings = part.Routings;
                 this.Sawings = part.Sawings;
 
-                if (part.VDrillings.Count == 0 && part.Routings.Count == 0 && part.Sawings.Count == 0)
-                {
-                    this.MachiningType = PartMachiningType.SingleFace5;
-                }
-                else
-                {
-                    this.MachiningType = PartMachiningType.SingleFace6;
-                }
+                this.MachiningType = PartMachiningType.SingleFace6;
             }
         }
 
@@ -126,7 +120,7 @@ namespace Dimeng.LinkToMicrocad
                 StringBuilder sb2 = new StringBuilder();
                 getBorderString(sb2, false);
                 getVdrillString(sb2, this.VDrillingsFace6);
-                getRoutingString(sb, this.RoutingsFace6);
+                getRoutingString(sb2, this.RoutingsFace6);
 
                 using (FileStream fs = new FileStream(Path.Combine(this.path, part.Face6FileName + ".csv"), FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
                 using (StreamWriter sw = new StreamWriter(fs, Encoding.Default))
@@ -441,9 +435,9 @@ namespace Dimeng.LinkToMicrocad
             sb.Append(",");//FieldOffsetZ
             sb.Append(",");//JobName
             sb.Append(",");//ItemNumber
-            sb.Append(part.FileName);//Filename
+            sb.Append((onFace5) ? part.FileName : "");//Filename
             sb.Append(",");
-            sb.Append(part.Face6FileName);//Face6FileName
+            sb.Append((part.HasFace6Machining()) ? part.Face6FileName : "");//Face6FileName
             sb.Append(",");
             sb.Append(part.PartName.Replace(",", ";"));
             sb.Append(",");
@@ -498,6 +492,7 @@ namespace Dimeng.LinkToMicrocad
             sb.Append(",");//grainflag
             sb.Append(",");//part counter
 
+            //FoundHDrilling
             if (this.HDrillings.Count > 0)
             {
                 sb.Append("TRUE");
@@ -508,6 +503,7 @@ namespace Dimeng.LinkToMicrocad
             }
             sb.Append(",");
 
+            //FoundVdrilling
             if (this.VDrillings.Count > 0)
             {
                 sb.Append("TRUE");
@@ -518,6 +514,7 @@ namespace Dimeng.LinkToMicrocad
             }
             sb.Append(",");
 
+            //FoundVdrilling6
             if (this.VDrillingsFace6.Count > 0)
             {
                 sb.Append("TRUE");
@@ -528,6 +525,7 @@ namespace Dimeng.LinkToMicrocad
             }
             sb.Append(",");
 
+            //FoundRouting
             if (this.Routings.Count > 0)
             {
                 sb.Append("TRUE");
@@ -538,6 +536,7 @@ namespace Dimeng.LinkToMicrocad
             }
             sb.Append(",");
 
+            //FoundRouting6
             if (this.RoutingsFace6.Count > 0)
             {
                 sb.Append("TRUE");
@@ -548,6 +547,7 @@ namespace Dimeng.LinkToMicrocad
             }
             sb.Append(",");
 
+            //FoundSawings
             if (this.Sawings.Count > 0)
             {
                 sb.Append("TRUE");
@@ -558,6 +558,7 @@ namespace Dimeng.LinkToMicrocad
             }
             sb.Append(",");
 
+            //FoundSawing6
             if (this.SawingsFace6.Count > 0)
             {
                 sb.Append("TRUE");
@@ -568,15 +569,20 @@ namespace Dimeng.LinkToMicrocad
             }
             sb.Append(",");
 
+            //FoundFace6Program
             if (onFace5)
             {
-                sb.Append("FALSE");//found face6 program}
+                if (this.MachiningType == PartMachiningType.SingleFace6)
+                { sb.Append("TRUE"); }
+                else
+                { sb.Append("FALSE"); }//found face6 program}
             }
             else
             {
                 sb.Append("TRUE");
             }
             sb.Append(",");
+
             sb.Append("FALSE");//found nesting
             sb.Append(",");
             sb.Append(",");//firstPassDepth
