@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.DatabaseServices;
+using Dimeng.LinkToMicrocad.Logging;
 
 namespace Dimeng.WoodEngine.Entities
 {
@@ -150,12 +151,17 @@ namespace Dimeng.WoodEngine.Entities
                 //先把世界坐标系下的pt转换成face坐标系下
                 pt = pt.TransformBy(Matrix3d.AlignCoordinateSystem(this.Point1,
                                                                    this.Point2 - this.Point1,
-                                                                   this.Point3 - this.Point1,
+                                                                   this.Point4 - this.Point1,
                                                                    this.Normal,
                                                                    Point3d.Origin,
                                                                    Vector3d.XAxis,
                                                                    Vector3d.YAxis,
                                                                    Vector3d.ZAxis));
+                //Logger.GetLogger().Warn(string.Format("pt:{0}", pt));
+                //Logger.GetLogger().Warn(string.Format("Point1:{0}", this.Point1));
+                //Logger.GetLogger().Warn(string.Format("X:{0}", this.Point2 - this.Point1));
+                //Logger.GetLogger().Warn(string.Format("Y:{0}", this.Point4 - this.Point1));
+                //Logger.GetLogger().Warn(string.Format("Normal:{0}", this.Normal));
             }
             //取有效数字两个，是为了避免精确计算的情况下的误差导致判断错误
             double z = System.Math.Round(pt.Z, 2);
@@ -172,7 +178,10 @@ namespace Dimeng.WoodEngine.Entities
                 zlimitUp = this.Part.Thickness + associateDist + tolerenceDist;
                 zlimitDown = this.Part.Thickness + associateDist - tolerenceDist;
             }
-            //todo 面1-4怎么办
+            else//todo 面1-4怎么办
+            {
+                zlimitDown = -tolerenceDist;
+            }
 
             //板件是否旋转，判断的区间也不同
             if (this.Part.MachinePoint.IsRotated)
@@ -199,34 +208,91 @@ namespace Dimeng.WoodEngine.Entities
                 throw new Exception("Tolerence dist value could not below zero!");
             }
 
-            //先把世界坐标系下的pt转换成mp坐标系下
-            pt = pt.TransformBy(Matrix3d.AlignCoordinateSystem(this.Part.MovedMPPoint,
-                                                               this.Part.MovedMPXAxis,
-                                                               this.Part.MovedMPYAxis,
-                                                               this.Part.MovedMPZAxis,
-                                                               Point3d.Origin,
-                                                               Vector3d.XAxis,
-                                                               Vector3d.YAxis,
-                                                               Vector3d.ZAxis));
-            //取有效数字两个，是为了避免精确计算的情况下的误差导致判断错误
-            double x = System.Math.Round(pt.X, 2);
-            double y = System.Math.Round(pt.Y, 2);
-            double z = System.Math.Round(pt.Z, 2);
+            if (this.FaceNumber == 5 || this.FaceNumber == 6)//面5或面6的情况
+            {
+                //先把世界坐标系下的pt转换成mp坐标系下
+                pt = pt.TransformBy(Matrix3d.AlignCoordinateSystem(this.Part.MovedMPPoint,
+                                                                   this.Part.MovedMPXAxis,
+                                                                   this.Part.MovedMPYAxis,
+                                                                   this.Part.MovedMPZAxis,
+                                                                   Point3d.Origin,
+                                                                   Vector3d.XAxis,
+                                                                   Vector3d.YAxis,
+                                                                   Vector3d.ZAxis));
+                //取有效数字两个，是为了避免精确计算的情况下的误差导致判断错误
+                double x = System.Math.Round(pt.X, 2);
+                double y = System.Math.Round(pt.Y, 2);
+                double z = System.Math.Round(pt.Z, 2);
 
-            //板件是否旋转，判断的区间也不同
-            if (this.Part.MachinePoint.IsRotated)
-            {
-                if (x >= 0 && x <= this.Part.Width
-                    && y >= 0 && y <= this.Part.Length)
-                { return true; }
+                //板件是否旋转，判断的区间也不同
+                if (this.Part.MachinePoint.IsRotated)
+                {
+                    if (x >= 0 && x <= this.Part.Width
+                        && y >= 0 && y <= this.Part.Length)
+                    { return true; }
+                }
+                else
+                {
+                    if (x >= 0 && x <= this.Part.Length
+                        && y >= 0 && y <= this.Part.Width)
+                    { return true; }
+                }
+                return false;
             }
-            else
+            else//边对边的情况
             {
-                if (x >= 0 && x <= this.Part.Length
-                    && y >= 0 && y <= this.Part.Width)
-                { return true; }
+                //先把世界坐标系下的pt转换成face坐标系下
+                pt = pt.TransformBy(Matrix3d.AlignCoordinateSystem(this.Point1,
+                                                                   this.Point2 - this.Point1,
+                                                                   this.Point4 - this.Point1,
+                                                                   this.Normal,
+                                                                   Point3d.Origin,
+                                                                   Vector3d.XAxis,
+                                                                   Vector3d.YAxis,
+                                                                   Vector3d.ZAxis));
+                //取有效数字两个，是为了避免精确计算的情况下的误差导致判断错误
+                double x = System.Math.Round(pt.X, 2);
+                double y = System.Math.Round(pt.Y, 2);
+                double z = System.Math.Round(pt.Z, 2);
+
+                double length, width;
+                if (this.Point1.DistanceTo(this.Point2) - this.Part.Thickness <= 0.01)//Point2-Point1得到的是厚度方向
+                {
+                    if (!this.Part.MachinePoint.IsRotated)
+                    {
+                        width = this.Part.Thickness;
+                        length = (this.FaceNumber == 1 || this.FaceNumber == 2) ? this.Part.Length : this.Part.Width;
+                    }
+                    else
+                    {
+                        width = this.Part.Thickness;
+                        length = (this.FaceNumber == 1 || this.FaceNumber == 2) ? this.Part.Width : this.Part.Length;
+                    } 
+                    
+                    if (x >= 0 && x <= width
+                         && y >= 0 && y <= length)
+                    { return true; }
+                    return false;
+                }
+                else
+                {
+                    if (!this.Part.MachinePoint.IsRotated)
+                    {
+                        width = this.Part.Thickness;
+                        length = (this.FaceNumber == 1 || this.FaceNumber == 2) ? this.Part.Width : this.Part.Length;
+                    }
+                    else
+                    {
+                        width = this.Part.Thickness;
+                        length = (this.FaceNumber == 1 || this.FaceNumber == 2) ? this.Part.Width : this.Part.Length;
+                    }
+
+                    if (x >= 0 && x <= length
+                        && y >= 0 && y <= width)
+                    { return true; }
+                    return false;
+                }
             }
-            return false;
         }
 
         /// <summary>
