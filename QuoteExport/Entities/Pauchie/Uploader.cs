@@ -40,7 +40,7 @@ namespace QuoteExport.Entities
                 {
                     if (!client.FtpDelete(path + "/" + file))
                     {
-                        MessageBox.Show(file);
+                        MessageBox.Show("文件[" + file + "]上传失败!");
                     }
                 }
                 //client.FtpDeleteDirectory(path);

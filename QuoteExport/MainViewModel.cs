@@ -112,17 +112,25 @@ namespace QuoteExport
                 ProjectExporter exporter2 = new ProjectExporter(this.currentProjectPath);
                 exporter2.GetFiles();
 
-                this.ProgressMax = exporter.Files.Count + exporter2.Files.Count;
+                this.ProgressMax = exporter.Files.Count + exporter.MachiningFiles.Count + exporter2.Files.Count;
                 //MessageBox.Show("生成完毕");
                 //上传到ftp
                 Uploader uploader = new Uploader(Settings.Default.FTPServer,
                     Settings.Default.FTPUser,
                     Settings.Default.FTPPassword);
                 uploader.DeleteDirectoryFiles("/" + this.CurrentProjectName.Replace("-", "/") + "/ERP/");
+                uploader.DeleteDirectoryFiles("/" + this.CurrentProjectName.Replace("-", "/") + "/Project/");
                 foreach (var file in exporter.Files)
                 {
                     FileInfo fi = new FileInfo(file);
                     string uploadPath = "/" + this.CurrentProjectName.Replace("-", "/") + "/ERP/" + fi.Name;
+                    uploader.Upload(file, uploadPath);
+                    this.ProgressValue++;
+                }
+                foreach (var file in exporter.MachiningFiles)
+                {
+                    FileInfo fi = new FileInfo(file);
+                    string uploadPath = "/" + this.CurrentProjectName.Replace("-", "/") + "/Project/" + fi.Name;
                     uploader.Upload(file, uploadPath);
                     this.ProgressValue++;
                 }

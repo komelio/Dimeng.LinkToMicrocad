@@ -14,11 +14,14 @@ namespace QuoteExport.Entities
         List<PauchieProduct> products;
         string folderPath;
         public List<string> Files { get; private set; }
+        public List<string> MachiningFiles { get; private set; }
+
         public PauchieExporter(List<PauchieProduct> products, string folderPath, string orderName)
         {
             this.products = products.Where(it => it.IsExport).ToList();
             this.folderPath = folderPath;
             this.Files = new List<string>();
+            this.MachiningFiles = new List<string>();
 
             string[] values = orderName.Split('-');
             if (values.Length != 2)
@@ -67,7 +70,9 @@ namespace QuoteExport.Entities
                     x.Add(new XAttribute("ItmName", part.PartName));
                     x.Add(new XAttribute("ItmID", part.PartName));
                     x.Add(new XAttribute("LineNum", partLineNum));
+                    x.Add(new XAttribute("RouID", 1));
                     x.Add(new XAttribute("Instruct", part.FileName));
+                    x.Add(new XAttribute("Instruct2", part.Face6FileName));
                     x.Add(new XAttribute("Drawer", part.DrawerNumber));
                     x.Add(new XAttribute("Station", part.MachiningArea));
                     x.Add(new XAttribute("Width", part.Width));
@@ -94,11 +99,11 @@ namespace QuoteExport.Entities
 
                     if (!string.IsNullOrEmpty(part.Face5FullName))
                     {
-                        Files.Add(part.Face5FullName);
+                        MachiningFiles.Add(part.Face5FullName);
                     }
                     if (!string.IsNullOrEmpty(part.Face6FullName))
                     {
-                        Files.Add(part.Face6FullName);
+                        MachiningFiles.Add(part.Face6FullName);
                     }
                 }
 
