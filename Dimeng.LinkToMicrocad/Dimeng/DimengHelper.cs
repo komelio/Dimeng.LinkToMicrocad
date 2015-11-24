@@ -49,8 +49,6 @@ namespace Dimeng.LinkToMicrocad
                 MVDataContext mvContext = MVDataContext.GetContext(mvDataContextPath);
                 Context.GetContext().MVDataContext = mvContext;
 
-
-
                 var project = ProjectManager.CreateOrOpenProject(projectPath);
 
                 if (product.SubInfo == null)//不是组件
@@ -247,8 +245,8 @@ namespace Dimeng.LinkToMicrocad
             foreach (var s in ss)
             {
                 string projectPath = s.Attribute("ManufacturingFolder").Value;
-                string from = s.Attribute("From").Value.Replace("_", "");
-                string to = s.Attribute("To").Value.Replace("_", "");
+                string from = getDMID(s.Attribute("From").Value);
+                string to = getDMID(s.Attribute("To").Value);
 
                 Logger.GetLogger().Debug(projectPath);
                 Logger.GetLogger().Debug(from);
@@ -259,6 +257,20 @@ namespace Dimeng.LinkToMicrocad
             }
 
             File.Delete(copyXMLPath);
+        }
+
+        private string getDMID(string p)
+        {
+            string dmid = p.Replace("_", "");//先去掉ad加上的下划线
+            string[] dmids = dmid.Split('-');
+            if (dmids.Length == 1)
+            {
+                return dmid;
+            }
+            else
+            {
+                return dmids[0];
+            }
         }
 
         void worker_DoWork(object sender, DoWorkEventArgs e)
