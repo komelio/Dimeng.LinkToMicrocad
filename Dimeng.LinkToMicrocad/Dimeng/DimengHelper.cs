@@ -253,6 +253,10 @@ namespace Dimeng.LinkToMicrocad
                 Logger.GetLogger().Debug(to);
 
                 var project = ProjectManager.CreateOrOpenProject(projectPath);
+                if (project.Products.Single(it => it.Handle == from) == null)
+                {
+                    throw new Exception("当前任务数据已不包含此产品信息，图形数据不匹配，请删除此产品！");
+                }
                 project.CopyProduct(from, to);
             }
 
