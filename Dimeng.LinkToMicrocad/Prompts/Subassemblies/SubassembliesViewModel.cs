@@ -24,6 +24,7 @@ namespace Dimeng.LinkToMicrocad.Prompts.Subassemblies
             this.ShowPromptCommand = new RelayCommand(this.showPrompt);
             this.ShowPropertyCommand = new RelayCommand(this.showProperty);
             this.DeleteCommand = new RelayCommand(this.delete);
+            this.CopyCommand = new RelayCommand(this.copy);
             this.cells = subCells;
 
             for (int i = 0; i < cells.Rows.RowCount; i++)
@@ -55,7 +56,7 @@ namespace Dimeng.LinkToMicrocad.Prompts.Subassemblies
         public RelayCommand ShowPromptCommand { get; private set; }
         public RelayCommand ShowPropertyCommand { get; private set; }
         public RelayCommand DeleteCommand { get; private set; }
-
+        public RelayCommand CopyCommand { get; private set; }
         private SubassemblyViewModel selectedItem;
         public SubassemblyViewModel SelectedItem
         {
@@ -163,6 +164,85 @@ namespace Dimeng.LinkToMicrocad.Prompts.Subassemblies
             else
             {
                 this.selectedItem.Qty.PropertyValue = "0";
+            }
+        }
+
+        void copy()
+        {
+            if (this.selectedItem == null)
+            {
+                return;
+            }
+            else
+            {
+                //第一步，获取组件的cutx文件，可能是目前已经存在的，也可能是需要到库里查找的
+                string subFilename1 = Path.Combine(this.ProjectPath, "Subassemblies",
+                    string.Format("{0}_({1}){2}.cutx", this.Handle, SelectedItem.Name, SelectedItem.RowIndex + 1));
+                string subFilename = subFilename1;
+
+                if (!File.Exists(subFilename1))
+                {
+                    Logger.GetLogger().Debug(subFilename1 + " not Found");
+
+                    string subFilename2 = Path.Combine(this.ProjectPath, "Subassemblies", string.Format("{0}.cutx", selectedItem.Name));
+                    if (!File.Exists(subFilename2))
+                    {
+                        Logger.GetLogger().Debug(subFilename2 + " not found and start searching.");
+
+                        string[] files = Directory.GetFiles(Library.Subassemblies, string.Format("{0}.cutx", selectedItem.Name), SearchOption.AllDirectories);
+                        if (files.Length == 0)
+                        {
+                            throw new Exception("Can`t find subasembliy from library:" + selectedItem.Name);
+                        }
+
+                        File.Copy(files[0], subFilename1);
+                    }
+                    else
+                    {
+                        subFilename = subFilename2;
+                    }
+                }
+
+                //第二步，复制数据
+                for (int i = 0; i < this.cells.RowCount; i++)
+                {
+                    string name = this.cells[i, 16].Text;
+                    if (!string.IsNullOrEmpty(name))
+                    {
+                        continue;
+                    }
+
+                    this.cells[i, 16].EntireRow.Insert(InsertShiftDirection.Down);
+
+                    this.cells[i, 16].Value = this.SelectedItem.Name.PropertyValue;
+                    this.cells[i, 17].Value = this.SelectedItem.Qty.PropertyValue;
+                    this.cells[i, 18].Value = this.SelectedItem.Width.PropertyValue;
+                    this.cells[i, 19].Value = this.SelectedItem.Height.PropertyValue;
+                    this.cells[i, 20].Value = this.SelectedItem.Depth.PropertyValue;
+                    this.cells[i, 29].Value = this.SelectedItem.XOrigin.PropertyValue;
+                    this.cells[i, 30].Value = this.SelectedItem.YOrigin.PropertyValue;
+                    this.cells[i, 31].Value = this.SelectedItem.ZOrigin.PropertyValue;
+                    this.cells[i, 34].Value = this.SelectedItem.ZRotation.PropertyValue;
+                    //this.cells[i + 1, 16].Value = string.Empty;//防止下一行为非空行导致错误
+
+                    IRange row = this.cells[i, 16].EntireRow;
+
+                    SubassemblyViewModel item = new SubassemblyViewModel();
+                    //item.Handle = new PropertyElement(row[0, 1]);
+                    item.Name = new PropertyElement(row[0, 16]);
+                    item.Qty = new PropertyElement(row[0, 17]);
+                    item.Width = new PropertyElement(row[0, 18]);
+                    item.Height = new PropertyElement(row[0, 19]);
+                    item.Depth = new PropertyElement(row[0, 20]);
+                    item.XOrigin = new PropertyElement(row[0, 29]);
+                    item.YOrigin = new PropertyElement(row[0, 30]);
+                    item.ZOrigin = new PropertyElement(row[0, 31]);
+                    item.ZRotation = new PropertyElement(row[0, 34]);
+                    item.RowIndex = i;
+
+                    this.Items.Add(item);
+                    break;
+                }
             }
         }
     }

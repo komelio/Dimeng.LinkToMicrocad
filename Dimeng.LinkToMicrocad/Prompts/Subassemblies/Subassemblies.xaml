@@ -34,6 +34,7 @@
                     <MenuItem Header="提示屏" Command="{Binding ShowPromptCommand}"/>
                     <MenuItem Header="属性" Command="{Binding ShowPropertyCommand}"/>
                     <MenuItem Header="删除" Command="{Binding DeleteCommand}"/>
+                    <MenuItem Header="复制" Command="{Binding CopyCommand}" />
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.View>
