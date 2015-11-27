@@ -241,6 +241,10 @@ namespace Dimeng.LinkToMicrocad.Prompts.Subassemblies
                     item.RowIndex = i;
 
                     this.Items.Add(item);
+
+                    File.Copy(subFilename,
+                        Path.Combine(this.ProjectPath, "Subassemblies",
+                            string.Format("{0}_({1}){2}.cutx", this.Handle, SelectedItem.Name, i + 1)));
                     break;
                 }
             }
