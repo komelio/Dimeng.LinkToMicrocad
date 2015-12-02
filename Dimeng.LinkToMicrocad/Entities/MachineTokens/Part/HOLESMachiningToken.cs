@@ -26,8 +26,8 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             EdgeBoreDiameter = check.GetDoubleValue(this.Par2, @"HOLES/边孔直径", true, this.Errors);
             EdgeBoreDepth = check.GetDoubleValue(this.Par3, @"HOLES/边孔深度", true, this.Errors);
 
-            ZValue = (string.IsNullOrEmpty(this.Par4)) ? Part.Thickness / 2
-                : check.GetDoubleValue(this.Par4, @"Camlock/par4", true, this.Errors);
+            ZValue = (string.IsNullOrEmpty(this.Par8)) ? Part.Thickness / 2
+                : check.GetDoubleValue(this.Par8, @"Camlock/par4", true, this.Errors);
 
             FaceBoreDiameter = check.GetDoubleValue(this.Par5, @"HOLES/面孔直径", true, this.Errors);
             FaceBoreDepth = check.GetDoubleValue(this.Par6, @"HOLES/面孔深度", true, this.Errors);
