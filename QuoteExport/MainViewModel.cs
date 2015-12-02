@@ -183,15 +183,40 @@ namespace QuoteExport
 
                 loadDeccos(xml);
 
+                cleanProducts();
+
                 //把moulding的数据以五金的形式插入到mv的工作任务中
                 //todo：只为了演示使用，将来要剔除
-                InsertMouldingProduct();
+                //InsertMouldingProduct();
             }
             catch (Exception error)
             {
                 MessageBox.Show(error.Message + error.StackTrace);
             }
 
+        }
+
+        private void cleanProducts()
+        {
+            string connectStr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source="
+               + Path.Combine(this.currentProjectPath, "DMS", "ProductList.mdb");
+            using (OleDbConnection conn = new OleDbConnection(connectStr))
+            {
+                conn.Open();
+
+                OleDbCommand cmd = new OleDbCommand("Select * from ProductList", conn);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    string handle = reader["Handle"].ToString();
+                    if (Products.Find(it => it.Handle == handle) == null)
+                    {
+                        OleDbCommand cmdDelete = new OleDbCommand("Delete From ProductList where Handle='" + handle + "'", conn);
+                        cmdDelete.ExecuteNonQuery();
+                    }
+                }
+            }
         }
 
         private void loadDeccos(XElement xml)
