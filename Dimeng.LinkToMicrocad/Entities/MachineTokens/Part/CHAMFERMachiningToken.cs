@@ -22,7 +22,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
             DistX = check.GetDoubleValue(Par1, "CHAMFER/X距离", true, this.Errors);
             DistY = check.GetDoubleValue(Par2, "CHAMFER/Y距离", true, this.Errors);
-            Depth = check.GetDoubleValue(Par2, "CHAMFER/深度", true, this.Errors);
+            Depth = check.GetDoubleValue(Par3, "CHAMFER/深度", true, this.Errors);
 
             this.LeadIn = check.GetDoubleValue(Par4, "CHAMFER/下刀引线长度", true, this.Errors);
 
