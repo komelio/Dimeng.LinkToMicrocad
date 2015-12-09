@@ -62,7 +62,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                     new Point3d(highX,highY,Depth),
                     new Point3d(highX,lowY,Depth),
                     new Point3d(lowX,lowY,Depth),
-                    new Point3d(lowX,lowY+highY/4-lowY/4,Depth),
+                    new Point3d(lowX,lowY+highY/4*3-lowY/4*3,Depth),
                 };
             List<double> bulges = new List<double>() { 0, 0, 0, 0, 0, 0, 0 };
             Machinings.Routing route = new Machinings.Routing();

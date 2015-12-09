@@ -106,7 +106,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                 route.Points = new List<Point3d>() { firstPt, secondPt, thirdPt, forthPt };
                 route.Part = Part;
                 route.ToolComp = comp;
-                route.Bulges = (new double[] { 0, firstBulge, 0, 0 }).ToList();
+                route.Bulges = (new double[] { -firstBulge, firstBulge, -firstBulge, 0 }).ToList();
                 if (FaceNumber == 5) route.OnFace5 = true;
                 else route.OnFace5 = false;
 
