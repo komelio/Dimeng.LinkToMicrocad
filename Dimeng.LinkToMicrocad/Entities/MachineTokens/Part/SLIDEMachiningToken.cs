@@ -73,7 +73,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
             int facenumber = getRealFacenumber();//由于MV的Slide指令是从面1所在的那个面来算的
 
-            base.FindAssociatedFaces(this.AssociateGap, AssociatedDist);
+            base.FindAssociatedFaces(this.AssociateGap, AssociatedDist, false);
             Logger.GetLogger().Debug("Slide associated parts total:" + this.AssociatedPartFaces.Count.ToString());
             Logger.GetLogger().Debug("Slide actual part face number:" + facenumber.ToString());
 

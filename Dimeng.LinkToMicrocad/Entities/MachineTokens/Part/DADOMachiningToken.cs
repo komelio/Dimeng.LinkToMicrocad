@@ -62,7 +62,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
 
             //得到当前面的关联面
-            base.FindAssociatedFaces(this.Penetration, tolerenceDist);
+            base.FindAssociatedFaces(this.Penetration, tolerenceDist,false);
 
             //当前的face
             var currentFace = this.Part.GetPartFaceByNumber(this.FaceNumber);
@@ -231,7 +231,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             {
                 if (lines.Count == 0 || lines.Count > 1)
                 {
-                    throw new Exception("Wrong offset data when calculating DADO thickness");
+                    throw new Exception(string.Format("Wrong offset data when calculating DADO thickness!{0}[{1}]", Part.PartName, this.Token));
                 }
 
                 using (Line l = lines[0] as Line)
@@ -254,7 +254,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             {
                 comp = ToolComp.Left;
             }
-            else { throw new Exception("Wrong point when calculating Toolcomp for DADO!"); }
+            else { throw new Exception(string.Format("Wrong point when calculating Toolcomp for DADO!{0}{1}....AssicatePart:[{2}]{3}", Part.PartName, this.Token, this.AssociatedPartFaces[0].Part.PartName, this.AssociatedPartFaces[0].FaceNumber)); }
             return comp;
         }
 

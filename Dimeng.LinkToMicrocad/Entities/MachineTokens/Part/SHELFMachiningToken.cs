@@ -49,7 +49,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         public override void ToMachining(double AssociatedDist, ToolFile toolFile)
         {
-            base.FindAssociatedFaces(this.GapDist, AssociatedDist);
+            base.FindAssociatedFaces(this.GapDist, AssociatedDist,false);
 
             PartFace pf = this.Part.GetPartFaceByNumber(FaceNumber);
 

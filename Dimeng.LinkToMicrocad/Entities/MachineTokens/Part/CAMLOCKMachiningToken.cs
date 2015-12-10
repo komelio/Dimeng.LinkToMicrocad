@@ -84,7 +84,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
         public override void ToMachining(double tolerenceDist, Entities.ToolFile toolFile)
         {
             Logger.GetLogger().Debug(string.Format("Camlock ToMachining!{0}/{1}/{2}/{3}/{4}/{5}", this.Token, this.Par1, this.Par2, this.Par3, this.Par4, this.Part));
-            FindAssociatedFaces(0, tolerenceDist);
+            FindAssociatedFaces(0, tolerenceDist, true);
 
             PartFace pf = this.Part.GetPartFaceByNumber(FaceNumber);
             if (this.AssociatedPartFaces.Count == 0)//数量为0，说明no有关联的板件

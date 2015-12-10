@@ -66,7 +66,7 @@ namespace Dimeng.WoodEngine.Entities
 
         public Plane Plane { get; set; }//面所在的CAD平面，用于一些面的关系的判断，如平行、距离
 
-        public bool IsAssocaitedWithAnotherFace(PartFace anotherFace, double associateDist, double tolerenceDist)
+        public bool IsAssocaitedWithAnotherFace(PartFace anotherFace, double associateDist, double tolerenceDist, bool canAssociateHorizontalFaces)
         {
             /*
              * 判断原则
@@ -96,7 +96,7 @@ namespace Dimeng.WoodEngine.Entities
             }
 
             //z值要刚好位于设定的位置上
-            if (!anotherFace.IsPointZFit(this.Point1, associateDist, tolerenceDist))
+            if (!anotherFace.IsPointZFit(this.Point1, associateDist, tolerenceDist, canAssociateHorizontalFaces))
             {
                 return false;
             }
@@ -127,7 +127,7 @@ namespace Dimeng.WoodEngine.Entities
 
         public bool IsHorizontalFace { get; set; }
 
-        public bool IsPointZFit(Point3d pt, double associateDist, double tolerenceDist)
+        public bool IsPointZFit(Point3d pt, double associateDist, double tolerenceDist, bool canAssociateHorizontalFaces)
         {
             if (tolerenceDist < 0)
             {
@@ -148,20 +148,23 @@ namespace Dimeng.WoodEngine.Entities
             }
             else
             {
-                //先把世界坐标系下的pt转换成face坐标系下
-                pt = pt.TransformBy(Matrix3d.AlignCoordinateSystem(this.Point1,
-                                                                   this.Point2 - this.Point1,
-                                                                   this.Point4 - this.Point1,
-                                                                   this.Normal,
-                                                                   Point3d.Origin,
-                                                                   Vector3d.XAxis,
-                                                                   Vector3d.YAxis,
-                                                                   Vector3d.ZAxis));
-                //Logger.GetLogger().Warn(string.Format("pt:{0}", pt));
-                //Logger.GetLogger().Warn(string.Format("Point1:{0}", this.Point1));
-                //Logger.GetLogger().Warn(string.Format("X:{0}", this.Point2 - this.Point1));
-                //Logger.GetLogger().Warn(string.Format("Y:{0}", this.Point4 - this.Point1));
-                //Logger.GetLogger().Warn(string.Format("Normal:{0}", this.Normal));
+                if (canAssociateHorizontalFaces)
+                {
+                    //先把世界坐标系下的pt转换成face坐标系下
+                    pt = pt.TransformBy(Matrix3d.AlignCoordinateSystem(this.Point1,
+                                                                       this.Point2 - this.Point1,
+                                                                       this.Point4 - this.Point1,
+                                                                       this.Normal,
+                                                                       Point3d.Origin,
+                                                                       Vector3d.XAxis,
+                                                                       Vector3d.YAxis,
+                                                                       Vector3d.ZAxis));
+                    //Logger.GetLogger().Warn(string.Format("pt:{0}", pt));
+                    //Logger.GetLogger().Warn(string.Format("Point1:{0}", this.Point1));
+                    //Logger.GetLogger().Warn(string.Format("X:{0}", this.Point2 - this.Point1));
+                    //Logger.GetLogger().Warn(string.Format("Y:{0}", this.Point4 - this.Point1));
+                    //Logger.GetLogger().Warn(string.Format("Normal:{0}", this.Normal));
+                }
             }
             //取有效数字两个，是为了避免精确计算的情况下的误差导致判断错误
             double z = System.Math.Round(pt.Z, 2);
@@ -267,8 +270,8 @@ namespace Dimeng.WoodEngine.Entities
                     {
                         width = this.Part.Thickness;
                         length = (this.FaceNumber == 1 || this.FaceNumber == 2) ? this.Part.Width : this.Part.Length;
-                    } 
-                    
+                    }
+
                     if (x >= 0 && x <= width
                          && y >= 0 && y <= length)
                     { return true; }

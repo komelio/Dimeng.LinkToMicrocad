@@ -52,7 +52,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             //step1 查找关联的板件
             //step2 建立一个临时的水平孔列表，把孔位坐标转换为水平机加工
             //setp3 把关联的垂直钻添加到关联的板件
-            FindAssociatedFaces(0, tolerenceDist);
+            FindAssociatedFaces(0, tolerenceDist,true);
 
             PartFace pf = this.Part.GetPartFaceByNumber(FaceNumber);
 

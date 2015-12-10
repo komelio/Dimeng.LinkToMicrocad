@@ -37,7 +37,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
         /// 用来查找关联面的函数
         /// </summary>
         /// <param name="associateDist"></param>
-        public void FindAssociatedFaces(double associateDist, double tolerenceDist)
+        public void FindAssociatedFaces(double associateDist, double tolerenceDist, bool canAssociateHorizontalFaces)
         {
             PartFace pf = this.Part.GetPartFaceByNumber(this.FaceNumber);
 
@@ -72,7 +72,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
                     foreach (PartFace face in part.Faces)
                     {
-                        if (pf.IsAssocaitedWithAnotherFace(face, associateDist, tolerenceDist))
+                        if (pf.IsAssocaitedWithAnotherFace(face, associateDist, tolerenceDist, canAssociateHorizontalFaces))
                         {
                             this.AssociatedPartFaces.Add(face);//添加关联板件
                         }
