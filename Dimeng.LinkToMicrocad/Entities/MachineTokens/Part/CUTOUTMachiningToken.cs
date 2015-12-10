@@ -45,7 +45,6 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
         public double EndY { get; set; }
         public bool IsPocket { get; set; }
         public string ToolName { get; set; }
-        public bool OnFace5 { get; set; }
 
         private double lowX;
         private double lowY;
@@ -70,7 +69,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             route.Points = points;
             route.ToolComp = ToolComp.Left;
             route.Part = this.Part;
-            route.OnFace5 = this.OnFace5;
+            route.OnFace5 = this.FaceNumber == 5 ? true : false;
             route.ToolName = this.ToolName;
 
             Part.Routings.Add(route);
@@ -128,7 +127,7 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             route.Points = points;
             route.ToolComp = ToolComp.Left;
             route.Part = this.Part;
-            route.OnFace5 = this.OnFace5;
+            route.OnFace5 = this.FaceNumber == 5 ? true : false;
             route.ToolName = this.ToolName;
 
             Part.Routings.Add(route);
