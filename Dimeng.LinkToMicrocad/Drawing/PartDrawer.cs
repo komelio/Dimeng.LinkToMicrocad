@@ -52,8 +52,9 @@ namespace Dimeng.LinkToMicrocad.Drawing
                 (new VDrillDrawer(db)).Draw(panelId, part);
                 (new HDrillDrawer(db)).Draw(panelId, part);
             }
-            (new RouteDrawer(Context.GetContext().MVDataContext.GetLatestRelease().CurrentToolFile,db)).Draw(panelId, part);
+            (new RouteDrawer(Context.GetContext().MVDataContext.GetLatestRelease().CurrentToolFile, db)).Draw(panelId, part);
             (new ProfileDrawer(Context.GetContext().MVDataContext.GetLatestRelease().MicrovellumData + "\\Graphics\\Profiles\\", db)).Draw(panelId, part);
+            (new PocketDrawer(db)).Draw(panelId, part);
 
             panelId = moveAndRotatePart(part, panelId);
         }

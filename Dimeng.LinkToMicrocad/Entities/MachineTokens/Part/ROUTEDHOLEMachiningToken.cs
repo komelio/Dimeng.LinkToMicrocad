@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Autodesk.AutoCAD.Geometry;
 using Dimeng.WoodEngine.Entities.Checks;
+using Dimeng.WoodEngine.Entities.Machinings;
 
 namespace Dimeng.WoodEngine.Entities.MachineTokens
 {
@@ -56,15 +57,15 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             List<Point3d> points = new List<Point3d>();
             List<double> bulges = new List<double>();
 
-            points.Add(new Point3d(StartX - Radius + smallRadius, StartY + smallRadius, 0));//下刀深度为0
+            //points.Add(new Point3d(StartX - Radius + smallRadius, StartY + smallRadius, 0));//下刀深度为0
             points.Add(new Point3d(StartX - Radius, StartY, Depth));
             points.Add(new Point3d(StartX, StartY - Radius, Depth));
             points.Add(new Point3d(StartX + Radius, StartY, Depth));
             points.Add(new Point3d(StartX, StartY + Radius, Depth));
             points.Add(new Point3d(StartX - Radius, StartY, Depth));
-            points.Add(new Point3d(StartX - Radius + smallRadius, StartY - smallRadius, 0));
-            bulges.AddRange(new double[] { -0.414214, -0.414214, -0.414214, -0.414214, -0.414214, -0.414214, -0.414214 });
-
+            //points.Add(new Point3d(StartX - Radius + smallRadius, StartY - smallRadius, 0));
+            //bulges.AddRange(new double[] { -0.414214, -0.414214, -0.414214, -0.414214, -0.414214, -0.414214, -0.414214 });
+            bulges.AddRange(new double[] { -0.414214, -0.414214, -0.414214, -0.414214, -0.414214 });
             Machinings.Routing route = new Machinings.Routing();
             route.Bulges = bulges;
             route.Points = points;
@@ -75,8 +76,20 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
             Part.Routings.Add(route);
 
-            if (IsPocket)
+            if (IsPocket || this.Depth >= Part.Thickness)
             {
+                var pocket = new Pocket();
+                pocket.Points.Add(new Point3d(StartX - Radius + diameter / 2, StartY, Depth));
+                pocket.Points.Add(new Point3d(StartX, StartY - Radius + diameter / 2, Depth));
+                pocket.Points.Add(new Point3d(StartX + Radius - diameter / 2, StartY, Depth));
+                pocket.Points.Add(new Point3d(StartX, StartY + Radius - diameter / 2, Depth));
+                pocket.Bulges.AddRange(new double[] { -0.414214, -0.414214, -0.414214, -0.414214 });
+                pocket.FaceNumber = this.FaceNumber;
+                pocket.Part = this.Part;
+                pocket.Depth = this.Depth;
+
+                Part.Pockets.Add(pocket);
+
                 //TODO:这个未完成
                 PocketMachining(diameter);
             }

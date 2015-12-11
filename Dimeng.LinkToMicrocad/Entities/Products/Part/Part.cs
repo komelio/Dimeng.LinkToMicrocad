@@ -20,6 +20,7 @@ namespace Dimeng.WoodEngine.Entities
             Routings = new List<Routing>();
             Faces = new List<PartFace>();
             Profiles = new List<Profile>();
+            Pockets = new List<Pocket>();
 
             IsBend = false;
         }
@@ -218,6 +219,7 @@ namespace Dimeng.WoodEngine.Entities
         public List<Routing> Routings { get; private set; }
         public List<Sawing> Sawings { get; private set; }
         public List<Profile> Profiles { get; private set; }
+        public List<Pocket> Pockets { get; private set; }
         public Molding Molding { get; set; }
 
         public string FileName { get; set; }

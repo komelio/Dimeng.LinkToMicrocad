@@ -180,6 +180,7 @@
     <Compile Include="Drawing\PartMoldingDrawer.cs" />
     <Compile Include="Drawing\Part\BaseSolidStructer.cs" />
     <Compile Include="Drawing\Part\HDrillDrawer.cs" />
+    <Compile Include="Drawing\Part\PocketDrawer.cs" />
     <Compile Include="Drawing\Part\ProfileDrawer.cs" />
     <Compile Include="Drawing\Part\RouteDrawer.cs" />
     <Compile Include="Drawing\Part\VDrillDrawer.cs" />
@@ -233,6 +234,7 @@
     <Compile Include="Entities\MachineTokens\Part\UnAssociativeToken.cs" />
     <Compile Include="Entities\Machinings\HDrilling.cs" />
     <Compile Include="Entities\Machinings\Molding.cs" />
+    <Compile Include="Entities\Machinings\Pocket.cs" />
     <Compile Include="Entities\Machinings\Profile.cs" />
     <Compile Include="Entities\Machinings\Routing.cs" />
     <Compile Include="Entities\Machinings\Sawing.cs" />

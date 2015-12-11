@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Autodesk.AutoCAD.Geometry;
 using Dimeng.WoodEngine.Entities.Checks;
+using Dimeng.WoodEngine.Entities.Machinings;
 
 namespace Dimeng.WoodEngine.Entities.MachineTokens
 {
@@ -76,8 +77,19 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
             //TODO:不知道刀的大小，如何生成Pocket的路径？
             //可能需要在分析时再来生成路径，晕死
-            if (IsPocket)
+            if (IsPocket || this.Depth > Part.Thickness)
             {
+                var pocket = new Pocket();
+                pocket.Points.Add(new Point3d(lowX, lowY, Depth));
+                pocket.Points.Add(new Point3d(highX, lowY, Depth));
+                pocket.Points.Add(new Point3d(highX, highY, Depth));
+                pocket.Points.Add(new Point3d(lowX, highY, Depth));
+                pocket.Bulges.AddRange(new double[] { 0, 0, 0, 0 });
+                pocket.FaceNumber = this.FaceNumber;
+                pocket.Part = this.Part;
+                pocket.Depth = this.Depth;
+
+                Part.Pockets.Add(pocket);
                 PocketMachining(toolFile);
             }
         }

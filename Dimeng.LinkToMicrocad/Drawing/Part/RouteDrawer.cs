@@ -29,10 +29,14 @@ namespace Dimeng.LinkToMicrocad.Drawing
         {
             foreach (var r in part.Routings)
             {
-                if (r.Points.Count > 2)
+                if (r.HasChangedPartRectangleBorder || r.Points.Count > 2)
                 {
-                    continue;//绘制有问题，先跳过复杂的铣型，后面再来改进
+                    continue;
                 }
+                //if (r.Points.Count > 2)
+                //{
+                //    continue;//绘制有问题，先跳过复杂的铣型，后面再来改进
+                //}
 
                 Tool tool = toolfile.GetRouteToolByName(r.ToolName);
                 if (tool == null)
@@ -124,10 +128,10 @@ namespace Dimeng.LinkToMicrocad.Drawing
                 //扫掠
                 Solid3d curveSolid = new Solid3d();
                 SweepOptionsBuilder sob = new SweepOptionsBuilder();
-                sob.Align = SweepOptionsAlignOption.AlignSweepEntityToPath;
-                sob.BasePoint = curve.StartPoint;
+                //sob.Align = SweepOptionsAlignOption.AlignSweepEntityToPath;
+                //sob.BasePoint = curve.StartPoint;
 
-                sob.Bank = true;
+                //sob.Bank = true;
                 curveSolid.CreateSweptSolid(plSectionClone, curve, sob.ToSweepOptions());
 
                 //模拟下刀点起始的圆
@@ -146,7 +150,6 @@ namespace Dimeng.LinkToMicrocad.Drawing
 
                 solids.Add(curveSolid);
 
-                solidToolFrustum.Dispose();
                 curve.Dispose();
                 plSectionClone.Dispose();
 
@@ -154,7 +157,7 @@ namespace Dimeng.LinkToMicrocad.Drawing
 
                 //pathSolid.BooleanOperation(BooleanOperationType.BoolUnite, line);
             }
-
+            solidToolFrustum.Dispose();
             return solids;
         }
 

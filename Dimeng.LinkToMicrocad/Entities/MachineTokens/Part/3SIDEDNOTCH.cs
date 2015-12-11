@@ -16,8 +16,8 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
 
         public override bool Valid(MachineTokenChecker check)
         {
-            this.FaceNumber = check.FaceNumber(Token, 13, new int[] { 1, 2, 3, 4 }, Errors);
-            this.EdgeNumber = check.EdgeNumber(Token, 11, new int[] { 5, 6 }, this.Errors);
+            this.FaceNumber = check.FaceNumber(Token, 11, new int[] { 5, 6 }, Errors);
+            this.EdgeNumber = check.EdgeNumber(Token, 13, new int[] { 1, 2, 3, 4 }, this.Errors);
 
             StartX = check.GetDoubleValue(Par1, "三面切口指令/X起始坐标", false, this.Errors);
             StartY = check.GetDoubleValue(Par2, "三面切口指令/Y起始坐标", false, this.Errors);
@@ -82,7 +82,14 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                 Points.Add(thirdPt);
                 Points.Add(forthPt);
 
-                comp = ToolComp.Left;
+                if (StartX < EndX)
+                {
+                    comp = ToolComp.Left;
+                }
+                else
+                {
+                    comp = ToolComp.Right;
+                }
 
                 Machinings.Routing route = new Machinings.Routing();
                 route.ToolName = ToolName;
@@ -108,7 +115,14 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                 Points.Add(thirdPt);
                 Points.Add(forthPt);
 
-                comp = ToolComp.Right;
+                if (StartX < EndX)
+                {
+                    comp = ToolComp.Right;
+                }
+                else
+                {
+                    comp = ToolComp.Left;
+                }
 
                 Machinings.Routing route = new Machinings.Routing();
                 route.ToolName = ToolName;
@@ -134,8 +148,14 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                 Points.Add(thirdPt);
                 Points.Add(forthPt);
 
-                comp = ToolComp.Right;
-
+                if (StartY < EndY)
+                {
+                    comp = ToolComp.Right;
+                }
+                else
+                {
+                    comp = ToolComp.Left;
+                }
                 Machinings.Routing route = new Machinings.Routing();
                 route.ToolName = ToolName;
                 route.Points = Points;
@@ -160,7 +180,14 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
                 Points.Add(thirdPt);
                 Points.Add(forthPt);
 
-                comp = ToolComp.Left;
+                if (StartY < EndY)
+                {
+                    comp = ToolComp.Left;
+                }
+                else
+                {
+                    comp = ToolComp.Right;
+                }
 
                 Machinings.Routing route = new Machinings.Routing();
                 route.ToolName = ToolName;
