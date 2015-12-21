@@ -23,7 +23,15 @@ namespace Dimeng.WoodEngine.Entities.MachineTokens
             this.StartDepth = check.GetDoubleValue(Par3, "直线立铣/起始深度", true, this.Errors);
             this.PosEndX = check.GetDoubleValue(Par4, "直线立铣/X终止位置", false, this.Errors);
             this.PosEndY = check.GetDoubleValue(Par5, "直线立铣/Y终止位置", false, this.Errors);
-            this.EndDepth = check.GetDoubleValue(Par6, "直线立铣/终止深度", true, this.Errors);
+            double depth;
+            if (double.TryParse(this.Par6, out depth))
+            {
+                this.EndDepth = depth;
+            }
+            else
+            {
+                this.EndDepth = this.StartDepth;
+            }
             this.ToolName = check.ToolName(Par7, "直线立铣/刀具名称", this.Errors);
 
             if (Par8 == "R")
